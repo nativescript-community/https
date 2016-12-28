@@ -1,7 +1,7 @@
 {
 	"name": "nativescript-https",
 	"version": "1.0.1",
-	"description": "Secure HTTPS client with SSL pinning for Nativescript - iOS/Android.",
+	"description": "Secure HTTP client with SSL pinning for Nativescript - iOS/Android.",
 	"main": "https",
 	"typings": "index.d.ts",
 	"nativescript": {

@@ -5,11 +5,11 @@
         "declaration": false,
         "removeComments": true,
         "noLib": false,
+		"skipLibCheck": true,
+		"skipDefaultLibCheck": true,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
-        "lib": [
-            "dom"
-        ],
+		"lib": ["es2016"],
         "sourceMap": true,
         "pretty": true,
         "allowUnreachableCode": false,
@@ -20,11 +20,8 @@
         "noImplicitReturns": true,
         "noImplicitUseStrict": false,
         "noFallthroughCasesInSwitch": true,
-        "typeRoots": [
-            "./node_modules/@types",
-            "./node_modules"
-        ],
-        "types": []
+		"typeRoots": ["./node_modules/@types", "./node_modules"],
+		"types": []
     },
     "exclude": [
         "node_modules",

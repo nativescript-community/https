@@ -1,8 +1,8 @@
 {
 	"folders": [{
-		"path": "./",
+		"path": ".",
 		"folder_exclude_patterns": ["node_modules", "demo/platforms", "lib", "hooks"],
-		"file_exclude_patterns": [".git*", "*.js", "*.map", "*.npmignore"]
+		"file_exclude_patterns": ["*.js", "*.map"]
 	}]
 }
 

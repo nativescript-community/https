@@ -6,3 +6,6 @@ screenshots/
 *.map
 *.ts
 !*.d.ts
+*.sublime-project
+*.idea
+*.DS_STORE

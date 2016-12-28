@@ -1,7 +1,11 @@
-export declare class Common {
-    message: string;
-    constructor();
+import { HttpRequestOptions, Headers } from 'http';
+export interface HttpsSSLPinningOptions {
+    host: string;
+    certificate: string;
+    allowInvalidCertificates?: boolean;
+    validatesDomainName?: boolean;
 }
-export declare class Utils {
-    static SUCCESS_MSG(): string;
+export interface HttpsRequestOptions extends HttpRequestOptions {
+    method: 'GET' | 'POST';
+    headers?: Headers;
 }

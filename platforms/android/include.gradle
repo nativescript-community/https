@@ -1,0 +1,14 @@
+// 
+
+dependencies {
+	compile 'com.squareup.okhttp3:okhttp:3.5.0'
+}
+
+android {
+	productFlavors {
+		"nativescripthttps" {
+			dimension "nativescripthttps"
+		}
+	}
+}
+

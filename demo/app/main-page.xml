@@ -1,5 +1,18 @@
-<Page xmlns="http://schemas.nativescript.org/tns.xsd" loaded="pageLoaded">
-  <StackLayout>
-    <Label text="{{ message }}" class="message" textWrap="true"/>
-  </StackLayout>
+<!--  -->
+
+<Page loaded="onLoaded" unloaded="onUnloaded">
+
+    <Page.actionBar>
+        <ActionBar title="HTTPS Playground"></ActionBar>
+    </Page.actionBar>
+
+    <GridLayout rows="*">
+        <StackLayout>
+            <Button text="Test HTTPS" tap="testit" />
+            <Button text="Enable SSL" tap="enableSSL" />
+            <Button text="Disable SSL" tap="disableSSL" />
+        </StackLayout>
+    </GridLayout>
+
 </Page>
+

@@ -4,7 +4,7 @@ Easily integrate the most reliable native networking libraries with the latest a
 #### A drop-in replacement for the [default http module](https://docs.nativescript.org/cookbook/http#get-response-status-code).
 
 ## Features
-- Modern TLS security features
+- Modern TLS & SSL security features
 - Shared connection pooling reduces request latency
 - Silently recovers from common connection problems
 - Everything runs on a native background thread
@@ -128,6 +128,19 @@ Option | Description
 `certificate: string` | The uri path to your `.cer` certificate file.
 `allowInvalidCertificates?: boolean` | Default: `false`. This should **always** be `false` if you are using SSL pinning. Set this to `true` if you're using a self-signed certificate.
 `validatesDomainName?: boolean` | Default: `true`. Determines if the domain name should be validated with your pinned certificate.
+
+## `iOS` Troubleshooting
+> ### Please educate yourself on iOS's [App Transport Security](https://github.com/codepath/ios_guides/wiki/App-Transport-Security) before starting beef!
+If you try and hit an `https` route without adding it to App Transport Security's whitelist it will not work!
+You can bypass this behavior by adding the following to your projects `Info.plist`:
+```xml
+<key>NSAppTransportSecurity</key>
+<dict>
+    <key>NSAllowsArbitraryLoads</key>
+    <true/>
+</dict>
+```
+> This plugin **does not** add `NSAllowsArbitraryLoads` to your projects `Info.plist` for you.
 
 
 

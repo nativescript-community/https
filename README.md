@@ -131,6 +131,7 @@ Option | Description
 
 ## `iOS` Troubleshooting
 > ### Please educate yourself on iOS's [App Transport Security](https://github.com/codepath/ios_guides/wiki/App-Transport-Security) before starting beef!
+
 If you try and hit an `https` route without adding it to App Transport Security's whitelist it will not work!
 You can bypass this behavior by adding the following to your projects `Info.plist`:
 ```xml

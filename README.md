@@ -143,7 +143,11 @@ You can bypass this behavior by adding the following to your projects `Info.plis
 ```
 > This plugin **does not** add `NSAllowsArbitraryLoads` to your projects `Info.plist` for you.
 
-
+# Thanks
+Who | Why
+------------ | -------------
+[AFNetworking](https://github.com/AFNetworking) | [AFNetworking](https://github.com/AFNetworking/AFNetworking) A delightful networking framework for iOS, OS X, watchOS, and tvOS.
+[Square](http://square.github.io/) | [okhttp](https://github.com/square/okhttp) An HTTP+HTTP/2 client for Android and Java applications.
 
 
 

@@ -112,7 +112,7 @@ import * as Https from 'nativescript-https'
 Https.disableSSLPinning()
 ```
 
-#### Pinning Options
+## Options
 ```typescript
 export interface HttpsSSLPinningOptions {
 	host: string

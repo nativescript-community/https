@@ -14,6 +14,7 @@ export interface HttpsSSLPinningOptions {
 export interface HttpsRequestOptions extends HttpRequestOptions {
 	method: 'GET' | 'POST'
 	headers?: Headers
+	content?: string
 }
 
 

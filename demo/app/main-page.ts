@@ -30,8 +30,8 @@ export function testit(args: EventData) {
 	let view = args.object as View
 	let page = view.page as Page
 	let context = page.bindingContext as MainPage
-	
-	let opts: Https.HttpsRequestOptions = {
+
+	Https.request({
 		url: 'https://wegossipapp.com/api/newuser',
 		method: 'GET',
 		// method: 'POST',
@@ -40,8 +40,7 @@ export function testit(args: EventData) {
 			'x-env': 'DEVELOPMENT',
 		},
 		// content: JSON.stringify({ dis: 'is awesome' })
-	}
-	Https.request(opts).then(function(response) {
+	}).then(function(response) {
 		console.log('Https.request response', response)
 		console.dump(response)
 	}).catch(function(error) {
@@ -59,3 +58,42 @@ export function enableSSL(args: EventData) {
 export function disableSSL(args: EventData) {
 	Https.disableSSLPinning()
 }
+
+
+
+
+
+Https.request({
+	url: 'https://wegossipapp.com/api/newuser',
+	method: 'POST',
+	headers: {
+		'Authorization': 'Basic ZWx1c3VhcmlvOnlsYWNsYXZl',
+		'x-uuid': 'aHR0cHdhdGNoOmY',
+		'x-version': '4.2.0',
+		'x-env': 'DEVELOPMENT',
+	},
+	content: JSON.stringify({
+		'username': 'roblav96',
+		'password': 'password',
+	})
+}).then(function(response) {
+	console.log('Https.request response', response)
+}).catch(function(error) {
+	console.error('Https.request error', error)
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

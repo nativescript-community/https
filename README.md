@@ -111,8 +111,9 @@ Once you've enabled SSL pinning you **CAN NOT** re-enable with a different `host
 import * as Https from 'nativescript-https'
 Https.disableSSLPinning()
 ```
+All requests after calling this method will no longer utilize SSL pinning until it is re-enabled once again.
 
-## Options
+### Options
 ```typescript
 export interface HttpsSSLPinningOptions {
 	host: string

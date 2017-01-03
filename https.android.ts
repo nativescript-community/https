@@ -163,7 +163,7 @@ function getClient(reload: boolean = false): okhttp3.OkHttpClient {
 	return Client
 }
 
-export function request(opts: Https.HttpsRequestOptions): Promise<HttpResponse> {
+export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsResponse> {
 	return new Promise(function(resolve, reject) {
 		try {
 			let client = getClient()

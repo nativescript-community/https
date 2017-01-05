@@ -57,8 +57,8 @@ function AFSuccess(resolve, task: NSURLSessionDataTask, data: NSDictionary<strin
 			// 	content[k] = v
 			// })
 			let serial = NSJSONSerialization.dataWithJSONObjectOptionsError(data, NSJSONWritingOptions.PrettyPrinted)
-			let results = NSString.alloc().initWithDataEncoding(serial, NSUTF8StringEncoding)
-			content = JSON.parse(results.toString())
+			content = NSString.alloc().initWithDataEncoding(serial, NSUTF8StringEncoding).toString()
+			// console.log('content', content)
 		} else if (data.class().name == 'NSData') {
 			content = NSString.alloc().initWithDataEncoding(data, NSASCIIStringEncoding).toString()
 			// } else if (data.class().name == 'NSArray') {
@@ -80,9 +80,15 @@ function AFSuccess(resolve, task: NSURLSessionDataTask, data: NSDictionary<strin
 		} else {
 			content = data
 		}
+
+		try {
+			content = JSON.parse(content)
+		} catch (e) { }
+
 	} else {
 		content = data
 	}
+
 	resolve({ task, content })
 }
 
@@ -92,9 +98,12 @@ function AFFailure(resolve, reject, task: NSURLSessionDataTask, error: NSError) 
 	// console.log('error.userInfo.description', error.userInfo.description)
 	// console.log('error.localizedDescription', error.localizedDescription)
 	let data: NSData = error.userInfo.valueForKey(AFNetworkingOperationFailingURLResponseDataErrorKey)
-	let body = NSString.alloc().initWithDataEncoding(data, NSUTF8StringEncoding)
+	let body = NSString.alloc().initWithDataEncoding(data, NSUTF8StringEncoding).toString()
+	try {
+		body = JSON.parse(body)
+	} catch (e) { }
 	let content: any = {
-		body: body.description,
+		body,
 		description: error.description,
 		reason: error.localizedDescription,
 		url: error.userInfo.objectForKey('NSErrorFailingURLKey').description
@@ -134,7 +143,7 @@ export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsRes
 
 			let manager = AFHTTPSessionManager.manager()
 
-			if (opts.headers['Content-Type'] == 'application/json') {
+			if (opts.headers && opts.headers['Content-Type'] == 'application/json') {
 				manager.requestSerializer = AFJSONRequestSerializer.serializer()
 				manager.responseSerializer = AFJSONResponseSerializer.serializerWithReadingOptions(NSJSONReadingOptions.AllowFragments)
 			} else {
@@ -156,8 +165,8 @@ export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsRes
 			}
 
 			let dict: NSMutableDictionary<string, any> = null
-			if (opts.content) {
-				let cont = JSON.parse(opts.content as any)
+			if (opts.body) {
+				let cont = opts.body
 				if (isObject(cont)) {
 					dict = NSMutableDictionary.new<string, any>()
 					Object.keys(cont).forEach(function(key) {
@@ -166,19 +175,33 @@ export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsRes
 				}
 			}
 
-			if (opts.method == 'GET') {
-				manager.GETParametersSuccessFailure(opts.url, dict, function success(task: NSURLSessionDataTask, data: any) {
-					AFSuccess(resolve, task, data)
-				}, function failure(task, error) {
-					AFFailure(resolve, reject, task, error)
-				})
-			} else if (opts.method == 'POST') {
-				manager.POSTParametersSuccessFailure(opts.url, dict, function success(task: NSURLSessionDataTask, data: any) {
-					AFSuccess(resolve, task, data)
-				}, function failure(task, error) {
-					AFFailure(resolve, reject, task, error)
-				})
+			let methods = {
+				'GET': 'GETParametersSuccessFailure',
+				'POST': 'POSTParametersSuccessFailure',
+				'PUT': 'PUTParametersSuccessFailure',
+				'DELETE': 'DELETEParametersSuccessFailure',
+				'PATCH': 'PATCHParametersSuccessFailure',
+				'HEAD': 'HEADParametersSuccessFailure',
 			}
+			manager[methods[opts.method]](opts.url, dict, function success(task: NSURLSessionDataTask, data: any) {
+				AFSuccess(resolve, task, data)
+			}, function failure(task, error) {
+				AFFailure(resolve, reject, task, error)
+			})
+
+			// if (opts.method == 'GET') {
+			// 	manager.GETParametersSuccessFailure(opts.url, dict, function success(task: NSURLSessionDataTask, data: any) {
+			// 		AFSuccess(resolve, task, data)
+			// 	}, function failure(task, error) {
+			// 		AFFailure(resolve, reject, task, error)
+			// 	})
+			// } else if (opts.method == 'POST') {
+			// 	manager.POSTParametersSuccessFailure(opts.url, dict, function success(task: NSURLSessionDataTask, data: any) {
+			// 		AFSuccess(resolve, task, data)
+			// 	}, function failure(task, error) {
+			// 		AFFailure(resolve, reject, task, error)
+			// 	})
+			// }
 
 		} catch (error) {
 			reject(error)

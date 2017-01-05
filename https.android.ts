@@ -171,26 +171,68 @@ export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsRes
 			let request = new okhttp3.Request.Builder()
 			request.url(opts.url)
 
-			let reqheads = opts.headers
-			Object.keys(reqheads).forEach(function(key) {
-				request.addHeader(key, reqheads[key] as any)
-			})
-
-			if (opts.method == 'GET') {
-				request.get()
-			} else if (opts.method == 'POST') {
-				let type = okhttp3.MediaType.parse('application/json')
-				let body = okhttp3.RequestBody.create(type, opts.content as any)
-				request.post(body)
+			if (opts.headers) {
+				Object.keys(opts.headers).forEach(function(key) {
+					request.addHeader(key, opts.headers[key] as any)
+				})
 			}
+
+			let methods = {
+				'GET': 'get',
+				'HEAD': 'head',
+
+				'DELETE': 'delete',
+
+				'POST': 'post',
+				'PUT': 'put',
+				'PATCH': 'patch',
+			}
+			if (
+				(['GET', 'HEAD'].indexOf(opts.method) != -1)
+				||
+				(opts.method == 'DELETE' && !isDefined(opts.body))
+			) {
+				request[methods[opts.method]]()
+			} else {
+				let type = <string>opts.headers['Content-Type'] || 'application/json'
+				let body = <any>opts.body || {}
+				try {
+					body = JSON.stringify(body)
+				} catch (e) { }
+				request[methods[opts.method]](okhttp3.RequestBody.create(
+					okhttp3.MediaType.parse(type),
+					body
+				))
+			}
+
 			client.newCall(request.build()).enqueue(new okhttp3.Callback({
 				onResponse: function(task, response) {
-					let content: any
+					// console.log('onResponse')
+					// console.keys('response', response)
+					// console.log('onResponse > response.isSuccessful()', response.isSuccessful())
+
+					// let body = response.body()//.bytes()
+					// console.keys('body', body)
+					// console.log('body.contentType()', body.contentType())
+					// console.log('body.contentType().toString()', body.contentType().toString())
+					// console.log('body.bytes()', body.bytes())
+					// console.dump('wtf', wtf)
+					// console.log('opts.url', opts.url)
+					// console.log('body.string()', body.string())
+
+					// let content: any = response.body().string()
+					// console.log('content', content)
+					// try {
+					// 	content = JSON.parse(response.body().string())
+					// } catch (error) {
+					// 	return reject(error)
+					// }
+
+					let content = response.body().string()
 					try {
-						content = JSON.parse(response.body().string())
-					} catch (error) {
-						return reject(error)
-					}
+						content = JSON.parse(content)
+					} catch (e) { }
+
 					let statusCode = response.code()
 
 					let headers = {}

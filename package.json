@@ -3,7 +3,7 @@
 	"version": "1.0.2",
 	"description": "Secure HTTP client with SSL pinning for Nativescript - iOS/Android.",
 	"main": "https",
-	"typings": "index.d.ts",
+	"typings": "https.d.ts",
 	"nativescript": {
 		"platforms": {
 			"android": "2.3.0",

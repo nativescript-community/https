@@ -107,6 +107,7 @@ function getClient(reload) {
     Client = client.build();
     return Client;
 }
+var strictModeThreadPolicyPermitAll = new android.os.StrictMode.ThreadPolicy.Builder().permitAll().build();
 function request(opts) {
     return new Promise(function (resolve, reject) {
         try {
@@ -140,6 +141,7 @@ function request(opts) {
                 catch (e) { }
                 request_1[methods[opts.method]](okhttp3.RequestBody.create(okhttp3.MediaType.parse(type), body));
             }
+            android.os.StrictMode.setThreadPolicy(strictModeThreadPolicyPermitAll);
             client.newCall(request_1.build()).enqueue(new okhttp3.Callback({
                 onResponse: function (task, response) {
                     var content = response.body().string();

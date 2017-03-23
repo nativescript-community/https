@@ -163,6 +163,11 @@ function getClient(reload: boolean = false): okhttp3.OkHttpClient {
 	return Client
 }
 
+// We have to allow networking on the main thread because larger responses will crash the app with an NetworkOnMainThreadException.
+// Note that it would be better to offload it to an AsyncTask but that has to run natively to work properly.
+// No time for that now, and actually it only concerns the '.string()' call of response.body().string() below.
+const strictModeThreadPolicyPermitAll = new android.os.StrictMode.ThreadPolicy.Builder().permitAll().build()
+
 export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsResponse> {
 	return new Promise(function(resolve, reject) {
 		try {
@@ -204,6 +209,9 @@ export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsRes
 					body
 				))
 			}
+
+			// enable our policy
+			android.os.StrictMode.setThreadPolicy(strictModeThreadPolicyPermitAll)
 
 			client.newCall(request.build()).enqueue(new okhttp3.Callback({
 				onResponse: function(task, response) {

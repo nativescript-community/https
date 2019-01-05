@@ -1,8 +1,0 @@
-{
-	"folders": [{
-		"path": ".",
-		"folder_exclude_patterns": ["node_modules", "demo/platforms", "lib", "hooks"],
-		"file_exclude_patterns": ["*.js", "*.map"]
-	}]
-}
-

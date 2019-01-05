@@ -2,15 +2,14 @@
     "compilerOptions": {
         "target": "es5",
         "module": "commonjs",
-        "declaration": false,
+        "declaration": true,
         "removeComments": true,
         "noLib": false,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
-        "lib": [
-            "es6",
-            "dom"
-        ],
+        "skipLibCheck": true,
+        "lib": ["es6", "dom"],
+        "sourceMap": true,
         "pretty": true,
         "allowUnreachableCode": false,
         "allowUnusedLabels": false,
@@ -19,25 +18,10 @@
         "noImplicitAny": false,
         "noImplicitReturns": true,
         "noImplicitUseStrict": false,
-        "noFallthroughCasesInSwitch": true,
-        "baseUrl": ".",
-        "paths": {
-            "*": [
-                "./node_modules/*"
-            ],
-            "~/*": [
-                "app/*"
-            ]
-        }
+        "noFallthroughCasesInSwitch": true
     },
-    "include": [
-        "../src",
-        "**/*"
-    ],
     "exclude": [
-        "../src/node_modules",
-        "node_modules",
-        "platforms"
+        "node_modules"
     ],
     "compileOnSave": false
 }

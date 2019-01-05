@@ -1,24 +1,25 @@
 {
-  "nativescript": {
-    "id": "org.nativescript.demo",
-    "tns-android": {
-      "version": "2.4.1"
+    "nativescript": {
+        "id": "org.nativescript.demo",
+        "tns-android": {
+            "version": "5.1.0"
+        },
+        "tns-ios": {
+            "version": "5.1.0"
+        }
     },
-    "tns-ios": {
-      "version": "2.4.0"
-    }
-  },
-  "dependencies": {
-    "nativescript-https": "file:..",
-    "tns-core-modules": "latest"
-  },
-  "devDependencies": {
-    "tns-platform-declarations": "latest",
-    "babel-traverse": "latest",
-    "babel-types": "latest",
-    "babylon": "latest",
-    "lazy": "latest",
-    "nativescript-dev-typescript": "latest",
-    "typescript": "latest"
-  }
+    "main": "app.js",
+    "description": "NativeScript Application",
+    "license": "SEE LICENSE IN <your-license-filename>",
+    "repository": "<fill-your-repository-here>",
+    "dependencies": {
+        "nativescript-https": "file:..",
+        "nativescript-theme-core": "~1.0.4",
+        "tns-core-modules": "~5.1.0"
+    },
+    "devDependencies": {
+        "nativescript-dev-typescript": "~0.7.0",
+        "nativescript-dev-webpack": "~0.18.0"
+    },
+    "readme": "NativeScript Application"
 }

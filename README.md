@@ -35,7 +35,7 @@ npm run demo.android
 ```
 
 ## Installation
-#### Add `tns-platform-declarations` for Android and iOS to your `reference.d.ts`!
+#### Add `tns-platform-declarations` for Android and iOS to your `references.d.ts`!
 ```typescript
 /// <reference path="./node_modules/tns-platform-declarations/android.d.ts" />
 /// <reference path="./node_modules/tns-platform-declarations/ios.d.ts" />

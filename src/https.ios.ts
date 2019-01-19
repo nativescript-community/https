@@ -47,7 +47,7 @@ console.info('nativescript-https > Disabled SSL pinning by default')
 function AFSuccess(resolve, task: NSURLSessionDataTask, data: NSDictionary<string, any> & NSData & NSArray<any>) {
 	// console.log('AFSuccess')
 	let content: any
-	if (data && data.class) {
+	if (data && data.class()) {
 		// console.log('data.class().name', data.class().name)
 		if (data.enumerateKeysAndObjectsUsingBlock || data.class().name == 'NSArray') {
 			// content = {}

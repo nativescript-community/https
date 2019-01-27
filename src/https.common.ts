@@ -1,6 +1,5 @@
-// 
 
-import { HttpRequestOptions, Headers } from 'http'
+import { HttpRequestOptions, Headers } from 'tns-core-modules/http'
 
 
 
@@ -30,15 +29,5 @@ export interface HttpsResponse {
 	reason?: string
 	reject?: boolean
 }
-
-
-
-
-
-
-
-
-
-
 
 

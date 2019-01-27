@@ -1,4 +1,1 @@
-﻿button {
-    font-size: 30;
-}
-
+﻿@import '~nativescript-theme-core/css/core.light.css';

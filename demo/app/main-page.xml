@@ -1,18 +1,14 @@
-<!--  -->
+<Page class="page" navigatingTo="onNavigatingTo">
+	<Page.actionBar>
+		<ActionBar title="HTTPS Playground" class="action-bar"></ActionBar>
+	</Page.actionBar>
 
-<Page loaded="onLoaded" unloaded="onUnloaded">
-
-    <Page.actionBar>
-        <ActionBar title="HTTPS Playground"></ActionBar>
-    </Page.actionBar>
-
-    <GridLayout rows="*">
-        <StackLayout>
-            <Button text="Test HTTPS" tap="testit" />
-            <Button text="Enable SSL" tap="enableSSL" />
-            <Button text="Disable SSL" tap="disableSSL" />
-        </StackLayout>
-    </GridLayout>
+	<StackLayout class="p-20">
+		<Label class="h1 text-center" color="{{ enabled ? 'green' : 'red' }}" text="{{ enabled ? 'Httpbin SSL Pinning Enabled' : 'SSL Pinning Disabled' }}" />
+		<Button text="Httpbin" tap="getHttpbin" class="t-20 btn btn-primary btn-active" />
+		<Button text="Mockbin" tap="getMockbin" class="t-20 btn btn-primary btn-active" />
+		<Button text="Enable Httpbin SSL Pinning" tap="enableSSLPinning" class="t-20 btn btn-primary btn-active" />
+		<Button text="Disable SSL Pinning" tap="disableSSLPinning" class="t-20 btn btn-primary btn-active" />
+	</StackLayout>
 
 </Page>
-

@@ -1,99 +1,43 @@
-// 
 
-import * as application from 'application'
-import { Observable, EventData } from 'data/observable'
-import { Page, NavigatedData } from 'ui/page'
-import { View } from 'ui/core/view'
-import { File, Folder, knownFolders, path } from 'file-system'
+import * as Observable from 'tns-core-modules/data/observable'
+import * as Page from 'tns-core-modules/ui/page'
+import * as fs from 'tns-core-modules/file-system'
+import * as dialogs from 'tns-core-modules/ui/dialogs'
 import * as Https from 'nativescript-https'
 
 
 
-export function onLoaded(args: EventData) {
-	let page: Page = <Page>args.object
-	page.bindingContext = new MainPage()
+export function onNavigatingTo(args: Page.NavigatedData) {
+	let page = args.object as Page.Page
+	page.bindingContext = Observable.fromObject({ enabled: false })
 }
 
-export function onUnloaded(args: EventData) {
-	let page: Page = <Page>args.object
-}
-
-class MainPage extends Observable {
-
-	constructor() {
-		super()
-	}
-
-}
-
-export function testit(args: EventData) {
-	let view = args.object as View
-	let page = view.page as Page
-	let context = page.bindingContext as MainPage
-
+function getRequest(url: string) {
 	Https.request({
-		url: 'https://wegossipapp.com/api/newuser',
-		method: 'GET',
-		// method: 'POST',
-		headers: {
-			'x-version': '4.2.0',
-			'x-env': 'DEVELOPMENT',
-		},
-		// content: JSON.stringify({ dis: 'is awesome' })
+		url, method: 'GET',
 	}).then(function(response) {
 		console.log('Https.request response', response)
-		console.dump(response)
 	}).catch(function(error) {
 		console.error('Https.request error', error)
+		dialogs.alert(error)
 	})
-
 }
 
-export function enableSSL(args: EventData) {
-	let dir = knownFolders.currentApp().getFolder('certs')
-	let certificate = dir.getFile('wegossipapp.com.cer').path
-	Https.enableSSLPinning({ host: 'wegossipapp.com', certificate })
+export function getHttpbin() { getRequest('https://httpbin.org/get') }
+export function getMockbin() { getRequest('https://mockbin.com/request') }
+
+export function enableSSLPinning(args: Observable.EventData) {
+	let dir = fs.knownFolders.currentApp().getFolder('assets')
+	let certificate = dir.getFile('httpbin.org.cer').path
+	Https.enableSSLPinning({ host: 'httpbin.org', certificate })
+	let context = (args.object as Page.View).bindingContext as Observable.Observable
+	context.set('enabled', true)
 }
 
-export function disableSSL(args: EventData) {
+export function disableSSLPinning(args: Observable.EventData) {
 	Https.disableSSLPinning()
+	let context = (args.object as Page.View).bindingContext as Observable.Observable
+	context.set('enabled', false)
 }
-
-
-
-
-
-// Https.request({
-// 	url: 'https://wegossipapp.com/api/newuser',
-// 	method: 'POST',
-// 	headers: {
-// 		'Authorization': 'Basic ZWx1c3VhcmlvOnlsYWNsYXZl',
-// 		'x-uuid': 'aHR0cHdhdGNoOmY',
-// 		'x-version': '4.2.0',
-// 		'x-env': 'DEVELOPMENT',
-// 	},
-// 	content: JSON.stringify({
-// 		'username': 'roblav96',
-// 		'password': 'password',
-// 	})
-// }).then(function(response) {
-// 	console.log('Https.request response', response)
-// }).catch(function(error) {
-// 	console.error('Https.request error', error)
-// })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

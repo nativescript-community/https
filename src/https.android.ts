@@ -1,10 +1,8 @@
-// 
 
-
-import * as application from 'application'
-import { HttpRequestOptions, Headers, HttpResponse } from 'http'
-import { isDefined, isNullOrUndefined } from 'utils/types'
 import * as Https from './https.common'
+import * as application from 'tns-core-modules/application'
+import { HttpRequestOptions, Headers, HttpResponse } from 'tns-core-modules/http'
+import { isDefined, isNullOrUndefined } from 'tns-core-modules/utils/types'
 
 
 
@@ -139,7 +137,7 @@ function getClient(reload: boolean = false): okhttp3.OkHttpClient {
 			if (peer.validatesDomainName == true) {
 				try {
 					client.hostnameVerifier(new javax.net.ssl.HostnameVerifier({
-						verify: function(hostname: string, session: javax.net.ssl.ISSLSession): boolean {
+						verify: function(hostname: string, session: javax.net.ssl.SSLSession): boolean {
 							let pp = session.getPeerPrincipal().getName()
 							let hv = javax.net.ssl.HttpsURLConnection.getDefaultHostnameVerifier()
 							return (
@@ -282,19 +280,5 @@ export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsRes
 	// }
 
 }
-
-
-
-export * from './https.common'
-
-
-
-
-
-
-
-
-
-
 
 

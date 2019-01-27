@@ -31,14 +31,13 @@ iOS |  Android
 ## Demo
 ```shell
 git clone https://github.com/gethuman/nativescript-https
-cd nativescript-https
-npm run setup
+cd nativescript-https/src
 npm run demo.ios
 npm run demo.android
 ```
 
 ## Installation
-#### Add `tns-platform-declarations` for Android and iOS to your `reference.d.ts`!
+#### Add `tns-platform-declarations` for Android and iOS to your `references.d.ts`!
 ```typescript
 /// <reference path="./node_modules/tns-platform-declarations/android.d.ts" />
 /// <reference path="./node_modules/tns-platform-declarations/ios.d.ts" />
@@ -56,36 +55,8 @@ tns plugin add nativescript-https
 ```typescript
 import * as Https from 'nativescript-https'
 Https.request({
-	url: 'https://wegossipapp.com/api/newuser',
+	url: 'https://httpbin.org/get',
 	method: 'GET',
-	headers: {
-		'Authorization': 'Basic ZWx1c3VhcmlvOnlsYWNsYXZl',
-		'x-uuid': 'aHR0cHdhdGNoOmY',
-		'x-version': '4.2.0',
-		'x-env': 'DEVELOPMENT',
-	},
-}).then(function(response) {
-	console.log('Https.request response', response)
-}).catch(function(error) {
-	console.error('Https.request error', error)
-})
-```
-### Hitting an API using `POST` method with JSON body
-```typescript
-import * as Https from 'nativescript-https'
-Https.request({
-	url: 'https://wegossipapp.com/api/newuser',
-	method: 'POST',
-	headers: {
-		'Authorization': 'Basic ZWx1c3VhcmlvOnlsYWNsYXZl',
-		'x-uuid': 'aHR0cHdhdGNoOmY',
-		'x-version': '4.2.0',
-		'x-env': 'DEVELOPMENT',
-	},
-	content: JSON.stringify({
-		'username': 'roblav96',
-		'password': 'password',
-	})
 }).then(function(response) {
 	console.log('Https.request response', response)
 }).catch(function(error) {
@@ -95,7 +66,7 @@ Https.request({
 
 ## Configuration
 ### Installing your SSL certificate
-Create a folder called `certs` in your projects `app` folder like so `project_root/app/certs`. Using chrome, go to the URL where the SSL certificate resides. View the details then drag and drop the certificate image into the `certs` folder.
+Create a folder called `assets` in your projects `app` folder like so `<project>/app/assets`. Using chrome, go to the URL where the SSL certificate resides. View the details then drag and drop the certificate image into the `assets` folder.
 
 ![Installing your SSL certificate](http://i.imgur.com/hn4duT3.gif)
 
@@ -103,9 +74,9 @@ Create a folder called `certs` in your projects `app` folder like so `project_ro
 ```typescript
 import { knownFolders } from 'file-system'
 import * as Https from 'nativescript-https'
-let dir = knownFolders.currentApp().getFolder('certs')
-let certificate = dir.getFile('wegossipapp.com.cer').path
-Https.enableSSLPinning({ host: 'wegossipapp.com', certificate })
+let dir = knownFolders.currentApp().getFolder('assets')
+let certificate = dir.getFile('httpbin.org.cer').path
+Https.enableSSLPinning({ host: 'httpbin.org', certificate })
 ```
 Once you've enabled SSL pinning you **CAN NOT** re-enable with a different `host` or `certificate` file.
 
@@ -127,7 +98,7 @@ export interface HttpsSSLPinningOptions {
 ```
 Option | Description
 ------------ | -------------
-`host: string` | This must be the top level domain name eg `wegossipapp.com` or `www.wegossipapp.com`.
+`host: string` | This must be the top level domain name eg `httpbin.org`.
 `certificate: string` | The uri path to your `.cer` certificate file.
 `allowInvalidCertificates?: boolean` | Default: `false`. This should **always** be `false` if you are using SSL pinning. Set this to `true` if you're using a self-signed certificate.
 `validatesDomainName?: boolean` | Default: `true`. Determines if the domain name should be validated with your pinned certificate.

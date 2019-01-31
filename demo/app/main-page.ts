@@ -26,7 +26,7 @@ function postRequest(url: string, body: any) {
 	Https.request({
 		url,
 		method: 'POST',
-    body
+		body
 	}).then(function(response) {
 		console.log('Https.request response', response)
 	}).catch(function(error) {

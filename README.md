@@ -1,5 +1,4 @@
 # NativeScript-HTTPS
-
 ### The definitive way to hit HTTP based APIs in Nativescript.
 Easily integrate the most reliable native networking libraries with the latest and greatest HTTPS security features.
 #### A drop-in replacement for the [default http module](https://docs.nativescript.org/cookbook/http#get-response-status-code).

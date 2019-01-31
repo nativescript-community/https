@@ -41,6 +41,11 @@
 	},
 	"bootstrapper": "nativescript-plugin-seed",
 	"author": "Robert Laverty <roblav96@gmail.com> (https://github.com/roblav96)",
+	"contributors": [{
+		"name": "Eddy Verbruggen",
+		"email": "eddyverbruggen@gmail.com",
+		"url": "https://github.com/EddyVerbruggen",
+	}],
 	"repository": "github:gethuman/nativescript-https",
 	"homepage": "https://github.com/gethuman/nativescript-https",
 	"bugs": "https://github.com/gethuman/nativescript-https/issues",

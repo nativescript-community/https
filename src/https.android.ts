@@ -1,26 +1,5 @@
-
 import * as Https from './https.common'
-import * as application from 'tns-core-modules/application'
-import { HttpRequestOptions, Headers, HttpResponse } from 'tns-core-modules/http'
-import { isDefined, isNullOrUndefined } from 'tns-core-modules/utils/types'
-
-
-
-// declare var java: any
-// declare var javax: any
-// java.security.cert.Certificate as any
-// declare module java {
-// 	export module security {
-// 		export module cert {
-// 			export interface Certificate { }
-// 		}
-// 	}
-// 	export module io {
-// 		export interface FileInputStream { }
-// 	}
-// }
-
-
+import { isDefined } from 'tns-core-modules/utils/types'
 
 interface Ipeer {
 	enabled: boolean
@@ -30,6 +9,7 @@ interface Ipeer {
 	certificate?: string
 	x509Certificate?: java.security.cert.Certificate
 }
+
 let peer: Ipeer = {
 	enabled: false,
 	allowInvalidCertificates: false,
@@ -70,14 +50,13 @@ export function enableSSLPinning(options: Https.HttpsSSLPinningOptions) {
 	getClient(true)
 	console.log('nativescript-https > Enabled SSL pinning')
 }
+
 export function disableSSLPinning() {
 	peer.enabled = false
 	getClient(true)
 	console.log('nativescript-https > Disabled SSL pinning')
 }
 console.info('nativescript-https > Disabled SSL pinning by default')
-
-
 
 let Client: okhttp3.OkHttpClient
 function getClient(reload: boolean = false): okhttp3.OkHttpClient {
@@ -161,11 +140,6 @@ function getClient(reload: boolean = false): okhttp3.OkHttpClient {
 	return Client
 }
 
-// We have to allow networking on the main thread because larger responses will crash the app with an NetworkOnMainThreadException.
-// Note that it would be better to offload it to an AsyncTask but that has to run natively to work properly.
-// No time for that now, and actually it only concerns the '.string()' call of response.body().string() below.
-const strictModeThreadPolicyPermitAll = new android.os.StrictMode.ThreadPolicy.Builder().permitAll().build()
-
 export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsResponse> {
 	return new Promise(function(resolve, reject) {
 		try {
@@ -208,8 +182,13 @@ export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsRes
 				))
 			}
 
-			// enable our policy
-			android.os.StrictMode.setThreadPolicy(strictModeThreadPolicyPermitAll)
+
+			// We have to allow networking on the main thread because larger responses will crash the app with an NetworkOnMainThreadException.
+			// Note that it would probably be better to offload it to a Worker or (natively running) AsyncTask.
+			// Also note that once set, this policy remains active until the app is killed.
+			if (opts.allowLargeResponse) {
+				android.os.StrictMode.setThreadPolicy(android.os.StrictMode.ThreadPolicy.LAX)
+			}
 
 			client.newCall(request.build()).enqueue(new okhttp3.Callback({
 				onResponse: function(task, response) {

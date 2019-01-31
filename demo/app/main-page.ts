@@ -1,20 +1,19 @@
-
 import * as Observable from 'tns-core-modules/data/observable'
 import * as Page from 'tns-core-modules/ui/page'
 import * as fs from 'tns-core-modules/file-system'
 import * as dialogs from 'tns-core-modules/ui/dialogs'
 import * as Https from 'nativescript-https'
 
-
-
 export function onNavigatingTo(args: Page.NavigatedData) {
 	let page = args.object as Page.Page
 	page.bindingContext = Observable.fromObject({ enabled: false })
 }
 
-function getRequest(url: string) {
+function getRequest(url: string, allowLargeResponse = false) {
 	Https.request({
-		url, method: 'GET',
+		url,
+		method: 'GET',
+		allowLargeResponse
 	}).then(function(response) {
 		console.log('Https.request response', response)
 	}).catch(function(error) {
@@ -23,7 +22,22 @@ function getRequest(url: string) {
 	})
 }
 
+function postRequest(url: string, body: any) {
+	Https.request({
+		url,
+		method: 'POST',
+    body
+	}).then(function(response) {
+		console.log('Https.request response', response)
+	}).catch(function(error) {
+		console.error('Https.request error', error)
+		dialogs.alert(error)
+	})
+}
+
+export function postHttpbin() { postRequest('https://httpbin.org/post', {"foo": "bar", "baz": undefined, "plaz": null}) }
 export function getHttpbin() { getRequest('https://httpbin.org/get') }
+export function getHttpbinLargeResponse() { getRequest('https://httpbin.org/bytes/100000', true) }
 export function getMockbin() { getRequest('https://mockbin.com/request') }
 
 export function enableSSLPinning(args: Observable.EventData) {

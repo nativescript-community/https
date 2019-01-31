@@ -115,6 +115,10 @@ You can bypass this behavior by adding the following to your projects `Info.plis
 ```
 > This plugin **does not** add `NSAllowsArbitraryLoads` to your projects `Info.plist` for you.
 
+## `Android` troubleshooting
+If you app crashes with a message that it's doing too much networkin on the main thread,
+then pass the option `allowLargeResponse` with value `true` to the `request` function.
+
 # Thanks
 Who | Why
 ------------ | -------------

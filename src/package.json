@@ -44,7 +44,7 @@
 	"contributors": [{
 		"name": "Eddy Verbruggen",
 		"email": "eddyverbruggen@gmail.com",
-		"url": "https://github.com/EddyVerbruggen",
+		"url": "https://github.com/EddyVerbruggen"
 	}],
 	"repository": "github:gethuman/nativescript-https",
 	"homepage": "https://github.com/gethuman/nativescript-https",

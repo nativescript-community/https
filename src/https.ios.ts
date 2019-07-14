@@ -1,10 +1,5 @@
-
 import * as Https from './https.common'
-import * as application from 'tns-core-modules/application'
-import { HttpRequestOptions, Headers, HttpResponse } from 'tns-core-modules/http'
 import { isDefined, isNullOrUndefined, isObject } from 'tns-core-modules/utils/types'
-
-
 
 interface Ipolicies {
 	def: AFSecurityPolicy
@@ -41,8 +36,6 @@ export function disableSSLPinning() {
 	console.log('nativescript-https > Disabled SSL pinning')
 }
 console.info('nativescript-https > Disabled SSL pinning by default')
-
-
 
 function AFSuccess(resolve, task: NSURLSessionDataTask, data: NSDictionary<string, any> & NSData & NSArray<any>) {
 	// console.log('AFSuccess')
@@ -140,7 +133,7 @@ export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsRes
 	return new Promise(function(resolve, reject) {
 		try {
 
-			let manager = AFHTTPSessionManager.manager()
+			const manager = AFHTTPSessionManager.alloc().initWithBaseURL(NSURL.URLWithString(opts.url));
 
 			if (opts.headers && opts.headers['Content-Type'] == 'application/json') {
 				manager.requestSerializer = AFJSONRequestSerializer.serializer()

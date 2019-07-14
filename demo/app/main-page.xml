@@ -5,10 +5,14 @@
 
 	<StackLayout class="p-20">
 		<Label class="h1 text-center" color="{{ enabled ? 'green' : 'red' }}" text="{{ enabled ? 'Httpbin SSL Pinning Enabled' : 'SSL Pinning Disabled' }}" />
-		<Button text="Httpbin" tap="getHttpbin" class="t-20 btn btn-primary btn-active" />
-		<Button text="Mockbin" tap="getMockbin" class="t-20 btn btn-primary btn-active" />
+		<Button text="GET Mockbin" tap="getMockbin" class="t-20 btn btn-primary btn-active" />
+		<Button text="GET Httpbin" tap="getHttpbin" class="t-20 btn btn-primary btn-active" />
+		<Button text="GET Httpbin (large response)" tap="getHttpbinLargeResponse" class="t-20 btn btn-primary btn-active" />
+		<Button text="POST Httpbin " tap="postHttpbin" class="t-20 btn btn-primary btn-active" />
 		<Button text="Enable Httpbin SSL Pinning" tap="enableSSLPinning" class="t-20 btn btn-primary btn-active" />
 		<Button text="Disable SSL Pinning" tap="disableSSLPinning" class="t-20 btn btn-primary btn-active" />
+		<Label text="Here's a spinner to show the main thread is not blocked by network IO" textWrap="true" class="m-20"/>
+		<ActivityIndicator busy="true" />
 	</StackLayout>
 
 </Page>

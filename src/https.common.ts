@@ -1,7 +1,4 @@
-
-import { HttpRequestOptions, Headers } from 'tns-core-modules/http'
-
-
+import { Headers } from 'tns-core-modules/http'
 
 export interface HttpsSSLPinningOptions {
 	host: string
@@ -19,7 +16,13 @@ export interface HttpsRequestOptions {
 	method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'HEAD'
 	headers?: Headers
 	params?: HttpsRequestObject
-	body?: HttpsRequestObject
+	body?: HttpsRequestObject,
+	/**
+	 * On Android large responses may crash the app (fi. https://httpbin.org/bytes/10000).
+	 * By setting this to true we allow large responses on the main thread (which this plugin currently does).
+	 * Note that once set to true, this policy remains active until the app is killed.
+	 */
+	allowLargeResponse?: boolean;
 }
 
 export interface HttpsResponse {

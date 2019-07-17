@@ -1,67 +1,69 @@
 {
-	"name": "nativescript-https",
-	"version": "1.0.3",
-	"description": "Secure HTTP client with SSL pinning for Nativescript - iOS/Android.",
-	"main": "https",
-	"typings": "index.d.ts",
-	"nativescript": {
-		"platforms": {
-			"android": "5.1.0",
-			"ios": "5.1.0"
-		}
-	},
-	"scripts": {
-		"tsc": "tsc",
-		"build": "npm run tsc",
-		"postclone": "npm i && node scripts/postclone.js && cd ../demo && npm i && npx rimraf -- package-lock.json && cd ../src",
-		"test.android": "npm run tsc && npm run tslint && cd ../demo && tns build android && tns test android --justlaunch",
-		"test.ios": "npm run tsc && npm run tslint && cd ../demo && tns build ios && tns test ios --justlaunch",
-		"tslint": "cd .. && tslint \"**/*.ts\" --config tslint.json --exclude \"**/node_modules/**\"",
-		"plugin.tscwatch": "npm run tsc -- -w",
-		"demo.ios": "npm run tsc && cd ../demo && tns run ios --syncAllFiles",
-		"demo.android": "npm run tsc && cd ../demo && tns run android --syncAllFiles",
-		"demo.reset": "cd ../demo && npx rimraf -- hooks node_modules platforms package-lock.json",
-		"plugin.prepare": "npm run build && cd ../demo && tns plugin remove nativescript-https && tns plugin add ../src",
-		"clean": "npm run demo.reset && npx rimraf -- node_modules package-lock.json && npm i",
-		"ci.tslint": "npm i && tslint '**/*.ts' --config '../tslint.json' --exclude '**/node_modules/**'",
-		"generate.typings.ios": "cd ../demo && TNS_DEBUG_METADATA_PATH=\"$(pwd)/metadata\" tns build ios && TNS_TYPESCRIPT_DECLARATIONS_PATH=\"$(pwd)/typings\" tns build ios && echo 'Now look for your library typings in demo/typings!'",
-		"generate.typings.android": "echo '##### Download the latest .jar file from https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp and move it to the plugin /src folder' && java -jar ../../android-dts-generator/dts-generator/build/libs/dts-generator.jar -input ./*.jar -output platforms/android/typings/ && rimraf *.jar && echo '##### Done! Deleted the jar, and generated typings in src/platforms/android/typings/'"
-	},
-	"dependencies": {},
-	"devDependencies": {
-		"tns-core-modules": "~5.4.0",
-		"tns-platform-declarations": "~5.4.0",
-		"typescript": "~2.9.0",
-		"prompt": "^1.0.0",
-		"rimraf": "^2.6.2",
-		"tslint": "^5.11.0",
-		"semver": "^5.6.0"
-	},
-	"bootstrapper": "nativescript-plugin-seed",
-	"author": "Robert Laverty <roblav96@gmail.com> (https://github.com/roblav96)",
-	"contributors": [{
-		"name": "Eddy Verbruggen",
-		"email": "eddyverbruggen@gmail.com",
-		"url": "https://github.com/EddyVerbruggen"
-	}],
-	"repository": "github:gethuman/nativescript-https",
-	"homepage": "https://github.com/gethuman/nativescript-https",
-	"bugs": "https://github.com/gethuman/nativescript-https/issues",
-	"license": "MIT",
-	"readmeFilename": "README.md",
-	"keywords": [
-		"secure",
-		"https",
-		"http",
-		"ssl",
-		"tls",
-		"pinning",
-		"nativescript",
-		"ecosystem:nativescript",
-		"nativescript-android",
-		"nativescript-ios",
-		"JavaScript",
-		"Android",
-		"iOS"
-	]
+  "name": "nativescript-https",
+  "version": "1.1.0",
+  "description": "Secure HTTP client with SSL pinning for Nativescript - iOS/Android.",
+  "main": "https",
+  "typings": "index.d.ts",
+  "nativescript": {
+    "platforms": {
+      "android": "5.1.0",
+      "ios": "5.1.0"
+    }
+  },
+  "scripts": {
+    "tsc": "tsc -skipLibCheck",
+    "build": "npm run tsc",
+    "postclone": "npm i && node scripts/postclone.js && cd ../demo && npm i && npx rimraf -- package-lock.json && cd ../src",
+    "test.android": "npm run tsc && npm run tslint && cd ../demo && tns build android && tns test android --justlaunch",
+    "test.ios": "npm run tsc && npm run tslint && cd ../demo && tns build ios && tns test ios --justlaunch",
+    "tslint": "cd .. && tslint \"**/*.ts\" --config tslint.json --exclude '**/node_modules/**' --exclude '**/typings/**'",
+    "plugin.tscwatch": "npm run tsc -- -w",
+    "demo.ios": "npm run tsc && cd ../demo && tns run ios --syncAllFiles",
+    "demo.android": "npm run tsc && cd ../demo && tns run android --syncAllFiles",
+    "demo.reset": "cd ../demo && npx rimraf -- hooks node_modules platforms package-lock.json",
+    "plugin.prepare": "npm run build && cd ../demo && tns plugin remove nativescript-https && tns plugin add ../src",
+    "clean": "npm run demo.reset && npx rimraf -- node_modules package-lock.json && npm i",
+    "ci.tslint": "npm i && tslint '**/*.ts' --config '../tslint.json' --exclude '**/node_modules/**' --exclude '**/typings/**'",
+    "generate.typings.ios": "cd ../demo && TNS_DEBUG_METADATA_PATH=\"$(pwd)/metadata\" tns build ios && TNS_TYPESCRIPT_DECLARATIONS_PATH=\"$(pwd)/typings\" tns build ios && echo 'Now look for your library typings in demo/typings!'",
+    "generate.typings.android": "echo '##### Download the latest .jar file from https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp and move it to the plugin /src folder' && java -jar ../../android-dts-generator/dts-generator/build/libs/dts-generator.jar -input ./*.jar -output platforms/android/typings/ && rimraf *.jar && echo '##### Done! Deleted the jar, and generated typings in src/platforms/android/typings/'"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "tns-core-modules": "~5.4.0",
+    "tns-platform-declarations": "~5.4.0",
+    "typescript": "~2.9.0",
+    "prompt": "^1.0.0",
+    "rimraf": "^2.6.2",
+    "tslint": "^5.11.0",
+    "semver": "^5.6.0"
+  },
+  "author": "Eddy Verbruggen <eddyverbruggen@gmail.com> (https://github.com/EddyVerbruggen)",
+  "contributors": [
+    {
+      "name": "Robert Laverty",
+      "email": "roblav96@gmail.com",
+      "url": "https://github.com/roblav96"
+    }
+  ],
+  "repository": "github:gethuman/nativescript-https",
+  "homepage": "https://github.com/gethuman/nativescript-https",
+  "bugs": "https://github.com/gethuman/nativescript-https/issues",
+  "license": "MIT",
+  "readmeFilename": "README.md",
+  "bootstrapper": "nativescript-plugin-seed",
+  "keywords": [
+    "secure",
+    "https",
+    "http",
+    "ssl",
+    "tls",
+    "pinning",
+    "nativescript",
+    "ecosystem:nativescript",
+    "nativescript-android",
+    "nativescript-ios",
+    "JavaScript",
+    "Android",
+    "iOS"
+  ]
 }

@@ -1,6 +1,6 @@
 {
   "nativescript": {
-    "id": "org.nativescript.demo",
+    "id": "org.nativescript.plugindemo.https",
     "tns-android": {
       "version": "5.4.0"
     },

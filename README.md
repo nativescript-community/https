@@ -1,6 +1,22 @@
 # NativeScript-HTTPS
+
+[![NPM version][npm-image]][npm-url]
+[![Downloads][downloads-image]][npm-url]
+[![TotalDownloads][total-downloads-image]][npm-url]
+[![Twitter Follow][twitter-image]][twitter-url]
+
+[build-status]:https://travis-ci.org/EddyVerbruggen/nativescript-https.svg?branch=master
+[build-url]:https://travis-ci.org/EddyVerbruggen/nativescript-https
+[npm-image]:http://img.shields.io/npm/v/nativescript-https.svg
+[npm-url]:https://npmjs.org/package/nativescript-https
+[downloads-image]:http://img.shields.io/npm/dm/nativescript-https.svg
+[total-downloads-image]:http://img.shields.io/npm/dt/nativescript-https.svg?label=total%20downloads
+[twitter-image]:https://img.shields.io/twitter/follow/eddyverbruggen.svg?style=social&label=Follow%20me
+[twitter-url]:https://twitter.com/eddyverbruggen
+
 ### The definitive way to hit HTTP based APIs in Nativescript.
 Easily integrate the most reliable native networking libraries with the latest and greatest HTTPS security features.
+
 #### A drop-in replacement for the [default http module](https://docs.nativescript.org/cookbook/http#get-response-status-code).
 
 ## Features

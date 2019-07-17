@@ -61,6 +61,14 @@ export function enableSSLPinning(args: Observable.EventData) {
   context.set('enabled', true);
 }
 
+export function enableSSLPinningExpired(args: Observable.EventData) {
+  let dir = fs.knownFolders.currentApp().getFolder('assets');
+  let certificate = dir.getFile('httpbin.org.expired.cer').path;
+  Https.enableSSLPinning({host: 'httpbin.org', certificate});
+  let context = (args.object as Page.View).bindingContext as Observable.Observable;
+  context.set('enabled', true);
+}
+
 export function disableSSLPinning(args: Observable.EventData) {
   Https.disableSSLPinning();
   let context = (args.object as Page.View).bindingContext as Observable.Observable;

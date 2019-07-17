@@ -9,8 +9,9 @@
         <Button text="GET Httpbin" tap="getHttpbin" class="t-20 btn btn-primary btn-active"/>
         <Button text="GET Httpbin (large response)" tap="getHttpbinLargeResponse" class="t-20 btn btn-primary btn-active"/>
         <Button text="POST Httpbin " tap="postHttpbin" class="t-20 btn btn-primary btn-active"/>
-        <Button text="Enable Httpbin SSL Pinning" tap="enableSSLPinning" class="t-20 btn btn-primary btn-active"/>
-        <Button text="Disable SSL Pinning" tap="disableSSLPinning" class="t-20 btn btn-primary btn-active"/>
+        <Button text="Httpbin Pinning ON" tap="enableSSLPinning" class="t-20 btn btn-primary btn-active"/>
+        <Button text="Httpbin Pinning ON, expired cert" tap="enableSSLPinningExpired" class="t-20 btn btn-primary btn-active"/>
+        <Button text="Httpbin Pinning OFF" tap="disableSSLPinning" class="t-20 btn btn-primary btn-active"/>
         <Label text="Here's a spinner to show the main thread is not blocked by network IO" textWrap="true" class="m-20"/>
         <ActivityIndicator busy="true"/>
     </StackLayout>

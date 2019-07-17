@@ -121,13 +121,6 @@ then pass the option `allowLargeResponse` with value `true` to the `request` fun
 # Thanks
 Who | Why
 ------------ | -------------
+[Robert Laverty](https://github.com/roblav96) | For creating and maintaining this plugin for a long time, before transfering it to me, with the help of Jeff Whelpley of [GetHuman](https://github.com/gethuman).
 [AFNetworking](https://github.com/AFNetworking) | [AFNetworking](https://github.com/AFNetworking/AFNetworking) A delightful networking framework for iOS, OS X, watchOS, and tvOS.
 [Square](http://square.github.io/) | [okhttp](https://github.com/square/okhttp) An HTTP+HTTP/2 client for Android and Java applications.
-
-
-
-
-
-
-
-

@@ -27,11 +27,6 @@ Easily integrate the most reliable native networking libraries with the latest a
 - Transparent GZIP
 - HTTP/2 support
 
-## Libraries
-iOS |  Android
--------- | ---------
-[AFNetworking](https://github.com/AFNetworking/AFNetworking) | [okhttp3](https://github.com/square/okhttp)
-
 ## FAQ
 > What the flip is SSL pinning and all this security mumbo jumbo?
 
@@ -43,7 +38,7 @@ iOS |  Android
 
 ## Demo
 ```shell
-git clone https://github.com/gethuman/nativescript-https
+git clone https://github.com/EddyVerbruggen/nativescript-https
 cd nativescript-https/src
 npm run demo.ios
 npm run demo.android
@@ -115,6 +110,10 @@ Option | Description
 `certificate: string` | The uri path to your `.cer` certificate file.
 `allowInvalidCertificates?: boolean` | Default: `false`. This should **always** be `false` if you are using SSL pinning. Set this to `true` if you're using a self-signed certificate.
 `validatesDomainName?: boolean` | Default: `true`. Determines if the domain name should be validated with your pinned certificate.
+
+## Webpack / bundling
+Since you're probably shipping a certificate with your app (like [our demo does](https://github.com/EddyVerbruggen/nativescript-https/tree/master/demo/app/assets)),
+make sure it's bundled by Webpack as well. You can do this by [adding the certificate(s) with the `CopyWebpackPlugin`](https://github.com/EddyVerbruggen/nativescript-https/blob/a5c841c0af7ff6d9994fa23f7fba0df0514c58f1/demo/webpack.config.js#L240).
 
 ## `iOS` Troubleshooting
 > ### Please educate yourself on iOS's [App Transport Security](https://github.com/codepath/ios_guides/wiki/App-Transport-Security) before starting beef!

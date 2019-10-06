@@ -186,6 +186,15 @@ export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsRes
       if (opts.allowLargeResponse) {
         android.os.StrictMode.setThreadPolicy(android.os.StrictMode.ThreadPolicy.LAX);
       }
+	  
+	  //set connection timeout to override okhttp3 default
+      if (opts.timeout) {
+                client = client.newBuilder()
+                .connectTimeout(opts.timeout, java.util.concurrent.TimeUnit.MILLISECONDS)
+                .writeTimeout(opts.timeout, java.util.concurrent.TimeUnit.MILLISECONDS)
+                .readTimeout(opts.timeout, java.util.concurrent.TimeUnit.MILLISECONDS)
+                .build();
+            }
 
       client.newCall(request.build()).enqueue(new okhttp3.Callback({
         onResponse: (task, response) => {

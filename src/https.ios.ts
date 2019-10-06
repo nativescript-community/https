@@ -166,6 +166,10 @@ export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsRes
           Object.keys(cont).forEach(key => dict.setValueForKey(cont[key] as any, key));
         }
       }
+	  
+	  if (opts.timeout) {
+          manager.requestSerializer.timeoutInterval = opts.timeout / 1000;
+      }
 
       let methods = {
         'GET': 'GETParametersSuccessFailure',

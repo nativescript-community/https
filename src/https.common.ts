@@ -23,6 +23,9 @@ export interface HttpsRequestOptions {
    * Note that once set to true, this policy remains active until the app is killed.
    */
   allowLargeResponse?: boolean;
+  /**
+   * Default 10 (seconds).
+   */
   timeout?: number;
 }
 

@@ -65,6 +65,7 @@ import * as Https from 'nativescript-https'
 Https.request({
 	url: 'https://httpbin.org/get',
 	method: 'GET',
+	timeout: 30 // seconds (default 10)
 }).then(function(response) {
 	console.log('Https.request response', response)
 }).catch(function(error) {

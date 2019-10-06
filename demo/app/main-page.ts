@@ -1,8 +1,8 @@
+import * as Https from 'nativescript-https';
 import * as Observable from 'tns-core-modules/data/observable';
-import * as Page from 'tns-core-modules/ui/page';
 import * as fs from 'tns-core-modules/file-system';
 import * as dialogs from 'tns-core-modules/ui/dialogs';
-import * as Https from 'nativescript-https';
+import * as Page from 'tns-core-modules/ui/page';
 
 export function onNavigatingTo(args: Page.NavigatedData) {
   let page = args.object as Page.Page;
@@ -14,6 +14,7 @@ function getRequest(url: string, allowLargeResponse = false) {
       {
         url,
         method: 'GET',
+        timeout: 1,
         allowLargeResponse
       })
       .then(response => console.log('Https.request response', response))
@@ -57,22 +58,19 @@ export function enableSSLPinning(args: Observable.EventData) {
   let dir = fs.knownFolders.currentApp().getFolder('assets');
   let certificate = dir.getFile('httpbin.org.cer').path;
   Https.enableSSLPinning({host: 'httpbin.org', certificate});
-  let context = (args.object as Page.View).bindingContext as Observable.Observable;
-  context.set('enabled', true);
+  console.log('enabled');
 }
 
 export function enableSSLPinningExpired(args: Observable.EventData) {
   let dir = fs.knownFolders.currentApp().getFolder('assets');
   let certificate = dir.getFile('httpbin.org.expired.cer').path;
   Https.enableSSLPinning({host: 'httpbin.org', certificate});
-  let context = (args.object as Page.View).bindingContext as Observable.Observable;
-  context.set('enabled', true);
+  console.log('enabled');
 }
 
 export function disableSSLPinning(args: Observable.EventData) {
   Https.disableSSLPinning();
-  let context = (args.object as Page.View).bindingContext as Observable.Observable;
-  context.set('enabled', false);
+  console.log('disabled');
 }
 
 

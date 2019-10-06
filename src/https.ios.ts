@@ -151,7 +151,6 @@ export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsRes
       }
       manager.requestSerializer.allowsCellularAccess = true;
       manager.securityPolicy = (policies.secured === true) ? policies.secure : policies.def;
-      manager.requestSerializer.timeoutInterval = 10;
 
       let heads = opts.headers;
       if (heads) {
@@ -166,10 +165,8 @@ export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsRes
           Object.keys(cont).forEach(key => dict.setValueForKey(cont[key] as any, key));
         }
       }
-	  
-	  if (opts.timeout) {
-          manager.requestSerializer.timeoutInterval = opts.timeout / 1000;
-      }
+
+      manager.requestSerializer.timeoutInterval = opts.timeout ? opts.timeout : 10;
 
       let methods = {
         'GET': 'GETParametersSuccessFailure',

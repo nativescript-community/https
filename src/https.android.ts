@@ -62,7 +62,7 @@ console.info('nativescript-https > Disabled SSL pinning by default');
 
 let Client: okhttp3.OkHttpClient;
 
-function getClient(reload: boolean = false): okhttp3.OkHttpClient {
+function getClient(reload: boolean = false, timeout: number = 10): okhttp3.OkHttpClient {
   // if (!Client) {
   // 	Client = new okhttp3.OkHttpClient()
   // }
@@ -139,6 +139,15 @@ function getClient(reload: boolean = false): okhttp3.OkHttpClient {
       console.warn('nativescript-https > Undefined host or certificate. SSL pinning NOT working!!!');
     }
   }
+
+  // set connection timeout to override okhttp3 default
+  if (timeout) {
+    client
+        .connectTimeout(timeout, java.util.concurrent.TimeUnit.SECONDS)
+        .writeTimeout(timeout, java.util.concurrent.TimeUnit.SECONDS)
+        .readTimeout(timeout, java.util.concurrent.TimeUnit.SECONDS);
+  }
+
   Client = client.build();
   return Client;
 }
@@ -179,22 +188,12 @@ export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsRes
         ));
       }
 
-
       // We have to allow networking on the main thread because larger responses will crash the app with an NetworkOnMainThreadException.
       // Note that it would probably be better to offload it to a Worker or (natively running) AsyncTask.
       // Also note that once set, this policy remains active until the app is killed.
       if (opts.allowLargeResponse) {
         android.os.StrictMode.setThreadPolicy(android.os.StrictMode.ThreadPolicy.LAX);
       }
-	  
-	  //set connection timeout to override okhttp3 default
-      if (opts.timeout) {
-                client = client.newBuilder()
-                .connectTimeout(opts.timeout, java.util.concurrent.TimeUnit.MILLISECONDS)
-                .writeTimeout(opts.timeout, java.util.concurrent.TimeUnit.MILLISECONDS)
-                .readTimeout(opts.timeout, java.util.concurrent.TimeUnit.MILLISECONDS)
-                .build();
-            }
 
       client.newCall(request.build()).enqueue(new okhttp3.Callback({
         onResponse: (task, response) => {

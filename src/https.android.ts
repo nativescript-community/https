@@ -16,6 +16,8 @@ let peer: Ipeer = {
   validatesDomainName: true
 };
 
+let _timeout = 10;
+
 export function enableSSLPinning(options: Https.HttpsSSLPinningOptions) {
   // console.log('options', options)
   if (!peer.host && !peer.certificate) {
@@ -70,9 +72,11 @@ function getClient(reload: boolean = false, timeout: number = 10): okhttp3.OkHtt
   // 	Client.connectionPool().evictAll()
   // 	Client = null
   // }
-  if (Client && reload === false) {
+  if (Client && reload === false && _timeout === timeout) {
     return Client;
   }
+
+  _timeout = timeout;
 
   let client = new okhttp3.OkHttpClient.Builder();
   if (peer.enabled === true) {
@@ -155,7 +159,7 @@ function getClient(reload: boolean = false, timeout: number = 10): okhttp3.OkHtt
 export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsResponse> {
   return new Promise((resolve, reject) => {
     try {
-      let client = getClient();
+      let client = getClient(false, opts.timeout);
 
       let request = new okhttp3.Request.Builder();
       request.url(opts.url);

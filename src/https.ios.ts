@@ -160,13 +160,12 @@ export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsRes
       let dict = null;
       if (opts.body) {
         let cont = opts.body;
-		 if (Array.isArray(cont)) {
-			dict = NSMutableArray.new();
-			cont.forEach(function (item, idx) {
-				dict.addObject(item);
-			});
-        }
-        else if (isObject(cont)) {
+        if (Array.isArray(cont)) {
+          dict = NSMutableArray.new();
+          cont.forEach(function (item, idx) {
+            dict.addObject(item);
+          });
+        } else if (isObject(cont)) {
           dict = NSMutableDictionary.new<string, any>();
           Object.keys(cont).forEach(key => dict.setValueForKey(cont[key] as any, key));
         }

@@ -47,7 +47,7 @@ export function getHttpbin() {
 }
 
 export function getHttpbinLargeResponse() {
-  getRequest('https://httpbin.org/bytes/100000', true); 
+  getRequest('https://httpbin.org/bytes/100000', true);
 }
 
 export function getMockbin() {

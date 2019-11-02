@@ -6,6 +6,7 @@ interface Ipeer {
   allowInvalidCertificates: boolean;
   validatesDomainName: boolean;
   host?: string;
+  commonName?: string;
   certificate?: string;
   x509Certificate?: java.security.cert.Certificate;
 }
@@ -41,6 +42,10 @@ export function enableSSLPinning(options: Https.HttpsSSLPinningOptions) {
       return;
     }
     peer.host = options.host;
+    peer.commonName = options.host;
+    if ( options.commonName != null ) {
+      peer.commonName = options.commonName;
+    }
     peer.certificate = certificate;
     if (options.allowInvalidCertificates === true) {
       peer.allowInvalidCertificates = true;
@@ -130,7 +135,7 @@ function getClient(reload: boolean = false, timeout: number = 10): okhttp3.OkHtt
                   hv.verify(peer.host, session) &&
                   peer.host === hostname &&
                   peer.host === session.getPeerHost() &&
-                  pp.indexOf(peer.host) !== -1
+                  pp.indexOf(peer.commonName) !== -1
               );
             },
           }));
@@ -180,7 +185,7 @@ export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsRes
       if ((['GET', 'HEAD'].indexOf(opts.method) !== -1) || (opts.method === 'DELETE' && !isDefined(opts.body))) {
         request[methods[opts.method]]();
       } else {
-        let type = <string>opts.headers['Content-Type'] || 'application/json';
+        let type = opts.headers && opts.headers['Content-Type'] ? <string>opts.headers['Content-Type'] : 'application/json';
         let body = <any>opts.body || {};
         try {
           body = JSON.stringify(body);
@@ -223,10 +228,10 @@ export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsRes
           // }
 
           let content = response.body().string();
-          try {
-            content = JSON.parse(content);
-          } catch (e) {
-          }
+            try {
+              content = JSON.parse(content);
+            } catch (e) {
+            }
 
           let statusCode = response.code();
 

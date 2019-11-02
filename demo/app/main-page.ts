@@ -47,7 +47,7 @@ export function getHttpbin() {
 }
 
 export function getHttpbinLargeResponse() {
-  getRequest('https://httpbin.org/bytes/100000', true);
+  getRequest('https://httpbin.org/bytes/100000', true); 
 }
 
 export function getMockbin() {
@@ -57,7 +57,7 @@ export function getMockbin() {
 export function enableSSLPinning(args: Observable.EventData) {
   let dir = fs.knownFolders.currentApp().getFolder('assets');
   let certificate = dir.getFile('httpbin.org.cer').path;
-  Https.enableSSLPinning({host: 'httpbin.org', certificate});
+  Https.enableSSLPinning({host: 'httpbin.org', commonName: "httpbin.org", certificate});
   console.log('enabled');
 }
 

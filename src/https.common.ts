@@ -5,6 +5,7 @@ export interface HttpsSSLPinningOptions {
   certificate: string;
   allowInvalidCertificates?: boolean;
   validatesDomainName?: boolean;
+  commonName?: string;
 }
 
 export interface HttpsRequestObject {

@@ -43,8 +43,8 @@ export function enableSSLPinning(options: Https.HttpsSSLPinningOptions) {
     }
     peer.host = options.host;
     peer.commonName = options.host;
-    if( options.commonName != null ){
-      peer.commonName = options.commonName
+    if ( options.commonName != null ) {
+      peer.commonName = options.commonName;
     }
     peer.certificate = certificate;
     if (options.allowInvalidCertificates === true) {
@@ -135,7 +135,7 @@ function getClient(reload: boolean = false, timeout: number = 10): okhttp3.OkHtt
                   hv.verify(peer.host, session) &&
                   peer.host === hostname &&
                   peer.host === session.getPeerHost() &&
-                  pp.indexOf(peer.commonName) != -1 
+                  pp.indexOf(peer.commonName) !== -1
               );
             },
           }));
@@ -228,10 +228,10 @@ export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsRes
           // }
 
           let content = response.body().string();
-          try {
-            content = JSON.parse(content);
-          } catch (e) {
-          }
+            try {
+              content = JSON.parse(content);
+            } catch (e) {
+            }
 
           let statusCode = response.code();
 

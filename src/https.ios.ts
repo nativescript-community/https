@@ -44,7 +44,7 @@ function AFSuccess(resolve, task: NSURLSessionDataTask, data: NSDictionary<strin
   let content: any;
   if (data && data.class) {
     // console.log('data.class().name', data.class().name)
-    if (data.enumerateKeysAndObjectsUsingBlock || <any>(data) instanceof NSArray) {
+    if (data.enumerateKeysAndObjectsUsingBlock || (<any>data) instanceof NSArray) {
       // content = {}
       // data.enumerateKeysAndObjectsUsingBlock(function(k, v) {
       // 	console.log('v.description', v.description)
@@ -53,7 +53,7 @@ function AFSuccess(resolve, task: NSURLSessionDataTask, data: NSDictionary<strin
       let serial = NSJSONSerialization.dataWithJSONObjectOptionsError(data, NSJSONWritingOptions.PrettyPrinted);
       content = NSString.alloc().initWithDataEncoding(serial, NSUTF8StringEncoding).toString();
       // console.log('content', content)
-    } else if (<any>(data) instanceof NSData) {
+    } else if ((<any>data) instanceof NSData) {
       content = NSString.alloc().initWithDataEncoding(data, NSASCIIStringEncoding).toString();
       // } else if (data.class().name == 'NSArray') {
       // 	content = []

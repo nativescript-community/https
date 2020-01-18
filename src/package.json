@@ -43,7 +43,13 @@
       "name": "Robert Laverty",
       "email": "roblav96@gmail.com",
       "url": "https://github.com/roblav96"
+    },
+    {
+      "name": "Kefah BADER ALDIN",
+      "email": "kefah.bader@gmail.com",
+      "url": "https://github.com/kefahB"
     }
+
   ],
   "repository": "github:gethuman/nativescript-https",
   "homepage": "https://github.com/gethuman/nativescript-https",

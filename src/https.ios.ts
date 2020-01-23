@@ -136,11 +136,8 @@ function AFFailure(resolve, reject, task: NSURLSessionDataTask, error: NSError) 
 export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsResponse> {
   return new Promise((resolve, reject) => {
     try {
-
       const manager = AFHTTPSessionManager.alloc().initWithBaseURL(NSURL.URLWithString(opts.url));
-      
       let contentType = opts.headers['Content-Type'].substring(0, 16);
-
       if (opts.headers && contentType === 'application/json') {
           manager.requestSerializer = AFJSONRequestSerializer.serializer();
           manager.responseSerializer = AFJSONResponseSerializer.serializerWithReadingOptions(NSJSONReadingOptions.AllowFragments);

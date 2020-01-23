@@ -138,10 +138,12 @@ export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsRes
     try {
 
       const manager = AFHTTPSessionManager.alloc().initWithBaseURL(NSURL.URLWithString(opts.url));
+      
+      let contentType = opts.headers['Content-Type'].substring(0, 16);
 
-      if (opts.headers && opts.headers['Content-Type'] === 'application/json') {
-        manager.requestSerializer = AFJSONRequestSerializer.serializer();
-        manager.responseSerializer = AFJSONResponseSerializer.serializerWithReadingOptions(NSJSONReadingOptions.AllowFragments);
+      if (opts.headers && contentType === 'application/json') {
+          manager.requestSerializer = AFJSONRequestSerializer.serializer();
+          manager.responseSerializer = AFJSONResponseSerializer.serializerWithReadingOptions(NSJSONReadingOptions.AllowFragments);
       } else {
         manager.requestSerializer = AFHTTPRequestSerializer.serializer();
         // manager.responseSerializer = AFXMLParserResponseSerializer.serializer()

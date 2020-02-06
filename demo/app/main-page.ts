@@ -42,6 +42,23 @@ export function postHttpbin() {
   postRequest('https://httpbin.org/post', {"foo": "bar", "baz": undefined, "plaz": null});
 }
 
+export function postHttpbinWithUTF8() {
+    Https.request(
+        {
+          url: 'https://httpbin.org/post',
+          method: 'POST',
+          body: {"foo": "bar", "baz": undefined, "plaz": null},
+          headers: {
+              'Content-Type': "application/json; charset=utf-8"
+          }
+        })
+        .then(response => console.log('Https.request response', response))
+        .catch(error => {
+          console.error('Https.request error', error);
+          dialogs.alert(error);
+        });
+  }  
+
 export function getHttpbin() {
   getRequest('https://httpbin.org/get');
 }

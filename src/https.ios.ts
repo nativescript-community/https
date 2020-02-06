@@ -137,9 +137,7 @@ export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsRes
   return new Promise((resolve, reject) => {
     try {
       const manager = AFHTTPSessionManager.alloc().initWithBaseURL(NSURL.URLWithString(opts.url));
-      //const contentType = (<any>opts.headers['Content-Type']).substring(0, 16);
       if (opts.headers && (<any>opts.headers['Content-Type']).substring(0, 16) === 'application/json') {
-          console.log(opts.headers['Content-Type'])
           manager.requestSerializer = AFJSONRequestSerializer.serializer();
           manager.responseSerializer = AFJSONResponseSerializer.serializerWithReadingOptions(NSJSONReadingOptions.AllowFragments);
       } else {

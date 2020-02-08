@@ -80,7 +80,7 @@ export function enableSSLPinning(args: Observable.EventData) {
 
 export function enableSSLPinningExpired(args: Observable.EventData) {
   let dir = fs.knownFolders.currentApp().getFolder('assets');
-  let certificate = dir.getFile('httpbin.org.cer').path;
+  let certificate = dir.getFile('httpbin.org.expired.cer').path;
   Https.enableSSLPinning({host: 'httpbin.org', certificate});
   console.log('enabled');
 }

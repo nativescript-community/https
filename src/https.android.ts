@@ -131,7 +131,7 @@ function getClient(reload: boolean = false, timeout: number = 10): okhttp3.OkHtt
             verify: (hostname: string, session: javax.net.ssl.SSLSession): boolean => {
               let pp = session.getPeerPrincipal().getName();
               let hv = javax.net.ssl.HttpsURLConnection.getDefaultHostnameVerifier();
-              if(peer.commonName && peer.commonName[0] === "*") {
+              if (peer.commonName && peer.commonName[0] === "*") {
                 return (hv.verify(peer.host, session) &&
                     hostname.indexOf(peer.host) > -1 &&
                     hostname.indexOf(session.getPeerHost()) > -1 &&

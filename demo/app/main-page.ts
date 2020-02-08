@@ -57,7 +57,7 @@ export function postHttpbinWithUTF8() {
           console.error('Https.request error', error);
           dialogs.alert(error);
         });
-  }  
+  }
 
 export function getHttpbin() {
   getRequest('https://httpbin.org/get');

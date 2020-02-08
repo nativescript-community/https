@@ -44,6 +44,9 @@ export function enableSSLPinning(options: Https.HttpsSSLPinningOptions) {
     peer.host = options.host;
     peer.commonName = options.commonName || options.host;
     peer.certificate = certificate;
+    if (options.commonName) {
+        peer.commonName = options.commonName;
+    }
     if (options.allowInvalidCertificates === true) {
       peer.allowInvalidCertificates = true;
     }
@@ -128,12 +131,18 @@ function getClient(reload: boolean = false, timeout: number = 10): okhttp3.OkHtt
             verify: (hostname: string, session: javax.net.ssl.SSLSession): boolean => {
               let pp = session.getPeerPrincipal().getName();
               let hv = javax.net.ssl.HttpsURLConnection.getDefaultHostnameVerifier();
-              return (
-                  hv.verify(peer.host, session) &&
-                  peer.host === hostname &&
-                  peer.host === session.getPeerHost() &&
-                  pp.indexOf(peer.commonName) !== -1
-              );
+              if (peer.commonName && peer.commonName[0] === "*") {
+                return (hv.verify(peer.host, session) &&
+                    hostname.indexOf(peer.host) > -1 &&
+                    hostname.indexOf(session.getPeerHost()) > -1 &&
+                    pp.indexOf(peer.commonName) !== -1);
+                }
+                else {
+                    return (hv.verify(peer.host, session) &&
+                        peer.host === hostname &&
+                        peer.host === session.getPeerHost() &&
+                        pp.indexOf(peer.host) !== -1);
+                }
             },
           }));
         } catch (error) {

@@ -44,9 +44,6 @@ export function enableSSLPinning(options: Https.HttpsSSLPinningOptions) {
     peer.host = options.host;
     peer.commonName = options.commonName || options.host;
     peer.certificate = certificate;
-    if (options.commonName) {
-        peer.commonName = options.commonName;
-    }
     if (options.allowInvalidCertificates === true) {
       peer.allowInvalidCertificates = true;
     }

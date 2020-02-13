@@ -44,7 +44,7 @@ function AFSuccess(resolve, task: NSURLSessionDataTask, data: NSDictionary<strin
   let content: any;
   if (data && data.class) {
     // console.log('data.class().name', data.class().name)
-    if (data.enumerateKeysAndObjectsUsingBlock || data.class().name === 'NSArray') {
+    if (data.enumerateKeysAndObjectsUsingBlock || (<any>data) instanceof NSArray) {
       // content = {}
       // data.enumerateKeysAndObjectsUsingBlock(function(k, v) {
       // 	console.log('v.description', v.description)
@@ -53,7 +53,7 @@ function AFSuccess(resolve, task: NSURLSessionDataTask, data: NSDictionary<strin
       let serial = NSJSONSerialization.dataWithJSONObjectOptionsError(data, NSJSONWritingOptions.PrettyPrinted);
       content = NSString.alloc().initWithDataEncoding(serial, NSUTF8StringEncoding).toString();
       // console.log('content', content)
-    } else if (data.class().name === 'NSData') {
+    } else if ((<any>data) instanceof NSData) {
       content = NSString.alloc().initWithDataEncoding(data, NSASCIIStringEncoding).toString();
       // } else if (data.class().name == 'NSArray') {
       // 	content = []
@@ -136,12 +136,10 @@ function AFFailure(resolve, reject, task: NSURLSessionDataTask, error: NSError) 
 export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsResponse> {
   return new Promise((resolve, reject) => {
     try {
-
       const manager = AFHTTPSessionManager.alloc().initWithBaseURL(NSURL.URLWithString(opts.url));
-
-      if (opts.headers && opts.headers['Content-Type'] === 'application/json') {
-        manager.requestSerializer = AFJSONRequestSerializer.serializer();
-        manager.responseSerializer = AFJSONResponseSerializer.serializerWithReadingOptions(NSJSONReadingOptions.AllowFragments);
+      if (opts.headers && (<any>opts.headers['Content-Type']).substring(0, 16) === 'application/json') {
+          manager.requestSerializer = AFJSONRequestSerializer.serializer();
+          manager.responseSerializer = AFJSONResponseSerializer.serializerWithReadingOptions(NSJSONReadingOptions.AllowFragments);
       } else {
         manager.requestSerializer = AFHTTPRequestSerializer.serializer();
         // manager.responseSerializer = AFXMLParserResponseSerializer.serializer()

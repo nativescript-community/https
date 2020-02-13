@@ -1,6 +1,7 @@
 .vscode
 .idea
 .DS_Store
+*.history
 *.esm.json
 *.js
 *.js.map

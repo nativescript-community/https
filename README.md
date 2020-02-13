@@ -109,7 +109,7 @@ export interface HttpsSSLPinningOptions {
 Option | Description
 ------------ | -------------
 `host: string` | This must be the request domain name eg `sales.company.org`.
-`commonName?: string` | Default: options.host, set if certificate CN is different from the host eg `*.company.org`
+`commonName?: string` | Default: options.host, set if certificate CN is different from the host eg `*.company.org` (Android specific)
 `certificate: string` | The uri path to your `.cer` certificate file.
 `allowInvalidCertificates?: boolean` | Default: `false`. This should **always** be `false` if you are using SSL pinning. Set this to `true` if you're using a self-signed certificate.
 `validatesDomainName?: boolean` | Default: `true`. Determines if the domain name should be validated with your pinned certificate.

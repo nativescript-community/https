@@ -123,14 +123,12 @@ function AFFailure(resolve, reject, task: NSURLSessionDataTask, error: NSError) 
     url: error.userInfo.objectForKey('NSErrorFailingURLKey').description
   };
   */
-
   let failure: any = {
     body: content,
     description: error.description,
     reason: error.localizedDescription,
     url: error.userInfo.objectForKey('NSErrorFailingURLKey').description
-  }
-
+  };
   // console.log('content.url', content.url)
   // try {
   // 	content.body = JSON.parse(body.description)

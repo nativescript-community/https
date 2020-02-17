@@ -59,27 +59,48 @@ function AFSuccess(resolve, task: NSURLSessionDataTask, data: NSDictionary<strin
 }
 
 function AFFailure(resolve, reject, task: NSURLSessionDataTask, error: NSError) {
-  let data: NSData = error.userInfo.valueForKey(AFNetworkingOperationFailingURLResponseDataErrorKey);
-  let body = NSString.alloc().initWithDataEncoding(data, NSUTF8StringEncoding).toString();
+    let data: NSDictionary<string, any> & NSData & NSArray<any> = error.userInfo.valueForKey(AFNetworkingOperationFailingURLResponseDataErrorKey);
+    let content: any;
+    if (data && data.class) {
+        if (data.enumerateKeysAndObjectsUsingBlock || (<any>data) instanceof NSArray) {
+        let serial = NSJSONSerialization.dataWithJSONObjectOptionsError(data, NSJSONWritingOptions.PrettyPrinted);
+        content = NSString.alloc().initWithDataEncoding(serial, NSUTF8StringEncoding).toString();
+        } else if ((<any>data) instanceof NSData) {
+        content = NSString.alloc().initWithDataEncoding(data, NSASCIIStringEncoding).toString();
+        } else {
+        content = data;
+        }
 
-  try {
-    body = JSON.parse(body);
-  } catch (ignore) {
-  }
-
-  let content: any = {
-    body,
-    description: error.description,
-    reason: error.localizedDescription,
-    url: error.userInfo.objectForKey('NSErrorFailingURLKey').description
-  };
-
-  if (policies.secured === true) {
-    content.description = 'nativescript-https > Invalid SSL certificate! ' + content.description;
-  }
-
-  let reason = error.localizedDescription;
-  resolve({task, content, reason});
+        try {
+        content = JSON.parse(content);
+        } catch (e) {
+        }
+    } else {
+        content = data;
+    }
+    /*let body = NSString.alloc().initWithDataEncoding(data, NSUTF8StringEncoding).toString();
+    try {
+        body = JSON.parse(body);
+    } catch (e) {
+    }
+    let content: any = {
+        body,
+        description: error.description,
+        reason: error.localizedDescription,
+        url: error.userInfo.objectForKey('NSErrorFailingURLKey').description
+    };
+    */
+    let failure: any = {
+        body: content,
+        description: error.description,
+        reason: error.localizedDescription,
+        url: error.userInfo.objectForKey('NSErrorFailingURLKey').description
+    };
+    if (policies.secured === true) {
+        failure.description = 'nativescript-https > Invalid SSL certificate! ' + error.description;
+    }
+    let reason = error.localizedDescription;
+    resolve({task, content, reason, failure: failure});
 }
 
 export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsResponse> {

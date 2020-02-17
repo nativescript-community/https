@@ -92,8 +92,26 @@ function AFFailure(resolve, reject, task: NSURLSessionDataTask, error: NSError) 
   // console.log('error.description', error.description)
   // console.log('error.userInfo.description', error.userInfo.description)
   // console.log('error.localizedDescription', error.localizedDescription)
-  let data: NSData = error.userInfo.valueForKey(AFNetworkingOperationFailingURLResponseDataErrorKey);
-  let body = NSString.alloc().initWithDataEncoding(data, NSUTF8StringEncoding).toString();
+  let data: NSDictionary<string, any> & NSData & NSArray<any> = error.userInfo.valueForKey(AFNetworkingOperationFailingURLResponseDataErrorKey);
+  let content: any;
+  if (data && data.class) {
+    if (data.enumerateKeysAndObjectsUsingBlock || (<any>data) instanceof NSArray) {
+      let serial = NSJSONSerialization.dataWithJSONObjectOptionsError(data, NSJSONWritingOptions.PrettyPrinted);
+      content = NSString.alloc().initWithDataEncoding(serial, NSUTF8StringEncoding).toString();
+    } else if ((<any>data) instanceof NSData) {
+      content = NSString.alloc().initWithDataEncoding(data, NSASCIIStringEncoding).toString();
+    } else {
+      content = data;
+    }
+
+    try {
+      content = JSON.parse(content);
+    } catch (e) {
+    }
+  } else {
+    content = data;
+  }
+  /*let body = NSString.alloc().initWithDataEncoding(data, NSUTF8StringEncoding).toString();
   try {
     body = JSON.parse(body);
   } catch (e) {
@@ -104,6 +122,15 @@ function AFFailure(resolve, reject, task: NSURLSessionDataTask, error: NSError) 
     reason: error.localizedDescription,
     url: error.userInfo.objectForKey('NSErrorFailingURLKey').description
   };
+  */
+
+  let failure: any = {
+    body: content,
+    description: error.description,
+    reason: error.localizedDescription,
+    url: error.userInfo.objectForKey('NSErrorFailingURLKey').description
+  }
+
   // console.log('content.url', content.url)
   // try {
   // 	content.body = JSON.parse(body.description)
@@ -111,7 +138,7 @@ function AFFailure(resolve, reject, task: NSURLSessionDataTask, error: NSError) 
   if (policies.secured === true) {
     // console.log('error.description', error.description)
     // console.log('error.userInfo.description', error.userInfo.description)
-    content.description = 'nativescript-https > Invalid SSL certificate! ' + content.description;
+    failure.description = 'nativescript-https > Invalid SSL certificate! ' + error.description;
     // return reject(content)
   }
   // }
@@ -130,7 +157,7 @@ function AFFailure(resolve, reject, task: NSURLSessionDataTask, error: NSError) 
   // 	content.URL = task.response.URL
   // }
   let reason = error.localizedDescription;
-  resolve({task, content, reason});
+  resolve({task, content, reason, failure: failure});
 }
 
 export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsResponse> {

@@ -6,6 +6,7 @@ export interface HttpsSSLPinningOptions {
   allowInvalidCertificates?: boolean;
   validatesDomainName?: boolean;
   commonName?: string;
+  useLegacy?: boolean;
 }
 
 export interface HttpsRequestObject {
@@ -36,4 +37,5 @@ export interface HttpsResponse {
   content?: any;
   reason?: string;
   reject?: boolean;
+  failure?: any;
 }

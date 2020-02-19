@@ -7,6 +7,8 @@ interface Ipolicies {
   secure?: AFSecurityPolicy;
 }
 
+let useLegacy: boolean = false;
+
 let policies: Ipolicies = {
   def: AFSecurityPolicy.defaultPolicy(),
   secured: false,
@@ -23,6 +25,7 @@ export function enableSSLPinning(options: Https.HttpsSSLPinningOptions) {
     let data = NSData.dataWithContentsOfFile(options.certificate);
     policies.secure.pinnedCertificates = NSSet.setWithObject(data);
   }
+  useLegacy = (isDefined(options.useLegacy)) ? options.useLegacy : false;
   policies.secured = true;
   console.log('nativescript-https > Enabled SSL pinning');
 }
@@ -35,72 +38,41 @@ export function disableSSLPinning() {
 console.info('nativescript-https > Disabled SSL pinning by default');
 
 function AFSuccess(resolve, task: NSURLSessionDataTask, data: NSDictionary<string, any> & NSData & NSArray<any>) {
-  let content: any;
-  if (data && data.class) {
-    if (data.enumerateKeysAndObjectsUsingBlock || (<any>data) instanceof NSArray) {
-      let serial = NSJSONSerialization.dataWithJSONObjectOptionsError(data, NSJSONWritingOptions.PrettyPrinted);
-      content = NSString.alloc().initWithDataEncoding(serial, NSUTF8StringEncoding).toString();
-    } else if ((<any>data) instanceof NSData) {
-      content = NSString.alloc().initWithDataEncoding(data, NSASCIIStringEncoding).toString();
-    } else {
-      content = data;
-    }
-
-    try {
-      content = JSON.parse(content);
-    } catch (ignore) {
-    }
-
-  } else {
-    content = data;
-  }
-
+  let content = getData(data);
   resolve({task, content});
 }
 
 function AFFailure(resolve, reject, task: NSURLSessionDataTask, error: NSError) {
     let data: NSDictionary<string, any> & NSData & NSArray<any> = error.userInfo.valueForKey(AFNetworkingOperationFailingURLResponseDataErrorKey);
-    let content: any;
-    if (data && data.class) {
-        if (data.enumerateKeysAndObjectsUsingBlock || (<any>data) instanceof NSArray) {
-        let serial = NSJSONSerialization.dataWithJSONObjectOptionsError(data, NSJSONWritingOptions.PrettyPrinted);
-        content = NSString.alloc().initWithDataEncoding(serial, NSUTF8StringEncoding).toString();
-        } else if ((<any>data) instanceof NSData) {
-        content = NSString.alloc().initWithDataEncoding(data, NSASCIIStringEncoding).toString();
-        } else {
-        content = data;
+    let parsedData = getData(data);
+    if (useLegacy) {
+        let failure: any = {
+           body: parsedData,
+           description: error.description,
+           reason: error.localizedDescription,
+           url: error.userInfo.objectForKey('NSErrorFailingURLKey').description
+       };
+       if (policies.secured === true) {
+           failure.description = 'nativescript-https > Invalid SSL certificate! ' + error.description;
+       }
+       let reason = error.localizedDescription;
+       let content = parsedData;
+       resolve({task: task, content: content, reason: reason, failure: failure});
+    } else {
+        let content: any = {
+            body: parsedData,
+            description: error.description,
+            reason: error.localizedDescription,
+            url: error.userInfo.objectForKey('NSErrorFailingURLKey').description
+        };
+
+        if (policies.secured === true) {
+            content.description = 'nativescript-https > Invalid SSL certificate! ' + content.description;
         }
 
-        try {
-        content = JSON.parse(content);
-        } catch (e) {
-        }
-    } else {
-        content = data;
+        let reason = error.localizedDescription;
+        resolve({task, content, reason});
     }
-    /*let body = NSString.alloc().initWithDataEncoding(data, NSUTF8StringEncoding).toString();
-    try {
-        body = JSON.parse(body);
-    } catch (e) {
-    }
-    let content: any = {
-        body,
-        description: error.description,
-        reason: error.localizedDescription,
-        url: error.userInfo.objectForKey('NSErrorFailingURLKey').description
-    };
-    */
-    let failure: any = {
-        body: content,
-        description: error.description,
-        reason: error.localizedDescription,
-        url: error.userInfo.objectForKey('NSErrorFailingURLKey').description
-    };
-    if (policies.secured === true) {
-        failure.description = 'nativescript-https > Invalid SSL certificate! ' + error.description;
-    }
-    let reason = error.localizedDescription;
-    resolve({task, content, reason, failure: failure});
 }
 
 export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsResponse> {
@@ -179,4 +151,26 @@ export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsRes
 
     return Promise.resolve(sendi);
   });
+}
+
+function getData(data) {
+    let content: any;
+    if (data && data.class) {
+        if (data.enumerateKeysAndObjectsUsingBlock || (<any>data) instanceof NSArray) {
+            let serial = NSJSONSerialization.dataWithJSONObjectOptionsError(data, NSJSONWritingOptions.PrettyPrinted);
+            content = NSString.alloc().initWithDataEncoding(serial, NSUTF8StringEncoding).toString();
+        } else if ((<any>data) instanceof NSData) {
+            content = NSString.alloc().initWithDataEncoding(data, NSASCIIStringEncoding).toString();
+        } else {
+            content = data;
+        }
+
+        try {
+            content = JSON.parse(content);
+        } catch (e) {
+        }
+    } else {
+        content = data;
+    }
+    return content;
 }

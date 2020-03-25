@@ -8,11 +8,18 @@ export interface HttpsSSLPinningOptions {
   commonName?: string;
   useLegacy?: boolean;
 }
+export interface CacheOptions {
+  diskLocation: string;
+  diskSize: number;
+  memorySize?: number;
+}
 
 export interface HttpsRequestObject {
   [key: string]: string | number;
 }
 
+
+export type CachePolicy = 'noCache' | 'onlyCache' | 'ignoreCache'; 
 export interface HttpsRequestOptions {
   url: string;
   method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'HEAD';
@@ -29,6 +36,8 @@ export interface HttpsRequestOptions {
    * Default 10 (seconds).
    */
   timeout?: number;
+
+  cachePolicy?:CachePolicy
 }
 
 export interface HttpsResponse {

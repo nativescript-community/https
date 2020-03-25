@@ -17,6 +17,24 @@ let peer: Ipeer = {
   validatesDomainName: true
 };
 
+let cache:okhttp3.Cache;
+
+export function setCache(options?: Https.CacheOptions) {
+  if (options) {
+    cache = new okhttp3.Cache(new java.io.File(options.diskLocation), options.diskSize);
+  } else {
+    cache = null
+  }
+  if (Client) {
+    getClient(true);
+  }
+}
+export function clearCache() {
+  if (cache) {
+    cache.evictAll();
+  }
+}
+
 let _timeout = 10;
 
 export function enableSSLPinning(options: Https.HttpsSSLPinningOptions) {
@@ -152,6 +170,10 @@ function getClient(reload: boolean = false, timeout: number = 10): okhttp3.OkHtt
     }
   }
 
+  if (cache) {
+    client.cache(cache);
+  }
+
   // set connection timeout to override okhttp3 default
   if (timeout) {
     client
@@ -174,6 +196,22 @@ export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsRes
 
       if (opts.headers) {
         Object.keys(opts.headers).forEach(key => request.addHeader(key, opts.headers[key] as any));
+      }
+
+      if (opts.cachePolicy) {
+        let cacheControlBuilder = new okhttp3.CacheControl.Builder();
+        switch (opts.cachePolicy) {
+            case "noCache":
+                cacheControlBuilder = cacheControlBuilder.noStore();
+                break;
+            case "onlyCache":
+                cacheControlBuilder = cacheControlBuilder.onlyIfCached();
+                break;
+            case "ignoreCache":
+                cacheControlBuilder = cacheControlBuilder.noCache();
+                break;
+        }
+        request.cacheControl(cacheControlBuilder.build());
       }
 
       const methods = {

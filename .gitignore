@@ -25,3 +25,6 @@ publish/src
 publish/package
 demo/report/report.html
 demo/report/stats.json
+*.aar
+/src/pnpm-lock.yaml
+package-lock.json

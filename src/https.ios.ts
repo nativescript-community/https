@@ -53,7 +53,7 @@ export function enableSSLPinning(options: Https.HttpsSSLPinningOptions) {
 export function disableSSLPinning() {
     policies.secured = false;
   console.log('nativescript-https > Disabled SSL pinning');
-}
+    }
 
 console.info('nativescript-https > Disabled SSL pinning by default');
 
@@ -92,6 +92,24 @@ function AFFailure(resolve, reject, task: NSURLSessionDataTask, error: NSError) 
     let reason = error.localizedDescription;
     resolve({ task, content, reason });
 }
+}
+
+function bodyToNative(cont) {
+  let dict;
+  if (Array.isArray(cont)) {
+      dict = NSArray.arrayWithArray(cont.map(item=>bodyToNative(item)));
+      // cont.forEach(function(item, idx) {
+      //     dict.addObject(bodyToNative(item));
+      // });
+  } else if (isObject(cont)) {
+      dict = NSMutableDictionary.new<string, any>();
+      Object.keys(cont).forEach(key =>
+          dict.setValueForKey(bodyToNative(cont[key]), key)
+      );
+  } else {
+    dict = cont;
+  }
+  return dict;
 }
 
 export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsResponse> {
@@ -133,23 +151,25 @@ export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsRes
 
             let dict = null;
             if (opts.body) {
-                let cont = opts.body;
-                if (Array.isArray(cont)) {
-                    dict = NSMutableArray.new();
-                    cont.forEach(function(item, idx) {
-                        dict.addObject(item);
-                    });
-                } else if (isObject(cont)) {
-                    dict = NSMutableDictionary.new<string, any>();
-          Object.keys(cont).forEach(key => dict.setValueForKey(cont[key] as any, key));
-                }
+              dict = bodyToNative(opts.body);
+            } else if (opts.content) {
+              dict = opts.content;
             }
 
       manager.requestSerializer.timeoutInterval = opts.timeout ? opts.timeout : 10;
 
-      const headers = null;
-
-      const success = (task: NSURLSessionDataTask, data?: any) => {
+            let methods = {
+                GET: "GETParametersSuccessFailure",
+                POST: "POSTParametersSuccessFailure",
+                PUT: "PUTParametersSuccessFailure",
+                DELETE: "DELETEParametersSuccessFailure",
+                PATCH: "PATCHParametersSuccessFailure",
+                HEAD: "HEADParametersSuccessFailure",
+            };
+            manager[methods[opts.method]](
+                opts.url,
+                dict,
+                function success(task: NSURLSessionDataTask, data: any) {
                     AFSuccess(resolve, task, data);
       };
 
@@ -173,7 +193,7 @@ export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsRes
         manager.PATCHParametersHeadersSuccessFailure(opts.url, dict, headers, success, failure);
       } else if (opts.method === "HEAD") {
         manager.HEADParametersHeadersSuccessFailure(opts.url, dict, headers, success, failure);
-      }
+                }
 
 
         } catch (error) {

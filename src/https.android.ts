@@ -37,6 +37,24 @@ export function clearCache() {
 
 let _timeout = 10;
 
+class Callback extends com.nativescript.https.OkhttpCallback{
+  resolve
+  reject
+  onStringResponse (content, statusCode, heads) {
+    let headers = {};
+          // let heads: okhttp3.Headers = resp.headers();
+          let i: number, len: number = heads.size();
+          for (i = 0; i < len; i++) {
+            let key = heads.name(i);
+            headers[key] = heads.value(i);
+          } 
+          this.resolve({content, statusCode, headers});
+  }
+  onFailure (task, error) {
+    this.reject(error);
+  }
+}
+
 export function enableSSLPinning(options: Https.HttpsSSLPinningOptions) {
   // console.log('options', options)
   if (!peer.host && !peer.certificate) {
@@ -185,12 +203,10 @@ function getClient(reload: boolean = false, timeout: number = 10): okhttp3.OkHtt
   Client = client.build();
   return Client;
 }
-
 export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsResponse> {
   return new Promise((resolve, reject) => {
     try {
       let client = getClient(false, opts.timeout);
-
       let request = new okhttp3.Request.Builder();
       request.url(opts.url);
 
@@ -222,20 +238,25 @@ export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsRes
         'PUT': 'put',
         'PATCH': 'patch'
       };
-
-      if ((['GET', 'HEAD'].indexOf(opts.method) !== -1) || (opts.method === 'DELETE' && !isDefined(opts.body))) {
+      let type
+      if ((['GET', 'HEAD'].indexOf(opts.method) !== -1) || (opts.method === 'DELETE' && !isDefined(opts.body) && !isDefined(opts.content))) {
         request[methods[opts.method]]();
       } else {
-        let type = opts.headers && opts.headers['Content-Type'] ? <string>opts.headers['Content-Type'] : 'application/json';
-        let body = <any>opts.body || {};
-        try {
-          body = JSON.stringify(body);
-        } catch (ignore) {
+        type = opts.headers && opts.headers['Content-Type'] ? <string>opts.headers['Content-Type'] : 'application/json';
+
+        let body;
+        if (opts.body) {
+          try {
+            body = JSON.stringify(opts.body);
+          } catch (ignore) {
+          }
+        } else if (opts.content) {
+          body = opts.content
         }
         request[methods[opts.method]](okhttp3.RequestBody.create(
-            okhttp3.MediaType.parse(type),
-            body
-        ));
+          okhttp3.MediaType.parse(type),
+          body
+      ));
       }
 
       // We have to allow networking on the main thread because larger responses will crash the app with an NetworkOnMainThreadException.
@@ -244,53 +265,10 @@ export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsRes
       if (opts.allowLargeResponse) {
         android.os.StrictMode.setThreadPolicy(android.os.StrictMode.ThreadPolicy.LAX);
       }
-
-      client.newCall(request.build()).enqueue(new okhttp3.Callback({
-        onResponse: (task, response) => {
-          // console.log('onResponse')
-          // console.keys('response', response)
-          // console.log('onResponse > response.isSuccessful()', response.isSuccessful())
-
-          // let body = response.body()//.bytes()
-          // console.keys('body', body)
-          // console.log('body.contentType()', body.contentType())
-          // console.log('body.contentType().toString()', body.contentType().toString())
-          // console.log('body.bytes()', body.bytes())
-          // console.dump('wtf', wtf)
-          // console.log('opts.url', opts.url)
-          // console.log('body.string()', body.string())
-
-          // let content: any = response.body().string()
-          // console.log('content', content)
-          // try {
-          // 	content = JSON.parse(response.body().string())
-          // } catch (error) {
-          // 	return reject(error)
-          // }
-
-          let content = response.body().string();
-            try {
-              content = JSON.parse(content);
-            } catch (e) {
-            }
-
-          let statusCode = response.code();
-
-          let headers = {};
-          let heads: okhttp3.Headers = response.headers();
-          let i: number, len: number = heads.size();
-          for (i = 0; i < len; i++) {
-            let key = heads.name(i);
-            headers[key] = heads.value(i);
-          }
-
-          resolve({content, statusCode, headers});
-        },
-        onFailure: (task, error) => {
-          reject(error);
-        },
-      }));
-
+      const callback = new Callback();
+      callback.resolve = resolve;
+      callback.reject = reject;
+      client.newCall(request.build()).enqueue(callback);
     } catch (error) {
       reject(error);
     }

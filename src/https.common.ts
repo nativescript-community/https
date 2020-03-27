@@ -15,7 +15,7 @@ export interface CacheOptions {
 }
 
 export interface HttpsRequestObject {
-  [key: string]: string | number;
+  [key: string]: string | number | boolean | HttpsRequestObject | Array<any>;
 }
 
 
@@ -26,6 +26,7 @@ export interface HttpsRequestOptions {
   headers?: Headers;
   params?: HttpsRequestObject;
   body?: HttpsRequestObject;
+  content?: string;
   /**
    * On Android large responses may crash the app (fi. https://httpbin.org/bytes/10000).
    * By setting this to true we allow large responses on the main thread (which this plugin currently does).

@@ -14,8 +14,15 @@ export interface CacheOptions {
   memorySize?: number;
 }
 
+export interface HttpsFormDataParam {
+  data: any
+  parameterName: string
+  fileName?: string
+  contentType?: string
+}
+
 export interface HttpsRequestObject {
-  [key: string]: string | number | boolean | HttpsRequestObject | Array<any>;
+  [key: string]: string | number | boolean | HttpsRequestObject | Array<any> | HttpsFormDataParam;
 }
 
 

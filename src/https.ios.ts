@@ -115,8 +115,11 @@ function bodyToNative(cont) {
 export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsResponse> {
     return new Promise((resolve, reject) => {
         try {
-      const manager = AFHTTPSessionManager.alloc().initWithBaseURL(NSURL.URLWithString(opts.url));
-      if (opts.headers && (<any>opts.headers['Content-Type']).substring(0, 16) === 'application/json') {
+            const manager = AFHTTPSessionManager.alloc().initWithBaseURL(
+                NSURL.URLWithString(opts.url)
+            );
+            const type = opts.headers && opts.headers['Content-Type'] ? <string>opts.headers['Content-Type'] : 'application/json';
+            if (type ===  "application/json") {
                 manager.requestSerializer = AFJSONRequestSerializer.serializer();
         manager.responseSerializer = AFJSONResponseSerializer.serializerWithReadingOptions(NSJSONReadingOptions.AllowFragments);
             } else {
@@ -127,7 +130,6 @@ export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsRes
       manager.securityPolicy = (policies.secured === true) ? policies.secure : policies.def;
 
             if (opts.cachePolicy) {
-                let cacheControlBuilder = new okhttp3.CacheControl.Builder();
                 switch (opts.cachePolicy) {
                     case "noCache":
                         manager.setDataTaskWillCacheResponseBlock((session, task, cacheResponse) => {
@@ -158,23 +160,11 @@ export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsRes
 
       manager.requestSerializer.timeoutInterval = opts.timeout ? opts.timeout : 10;
 
-            let methods = {
-                GET: "GETParametersSuccessFailure",
-                POST: "POSTParametersSuccessFailure",
-                PUT: "PUTParametersSuccessFailure",
-                DELETE: "DELETEParametersSuccessFailure",
-                PATCH: "PATCHParametersSuccessFailure",
-                HEAD: "HEADParametersSuccessFailure",
-            };
-            manager[methods[opts.method]](
-                opts.url,
-                dict,
-                function success(task: NSURLSessionDataTask, data: any) {
-                    AFSuccess(resolve, task, data);
-      };
-
-      const failure = (task, error) => {
-                    AFFailure(resolve, reject, task, error);
+            const success = function (task: NSURLSessionDataTask, data?: any) {
+                AFSuccess(resolve, task, data);
+            }
+            const failure = function (task: NSURLSessionDataTask, error: any) {
+                AFFailure(resolve, reject, task, error);
       };
 
       const progress = (progress: NSProgress) => {
@@ -193,9 +183,49 @@ export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsRes
         manager.PATCHParametersHeadersSuccessFailure(opts.url, dict, headers, success, failure);
       } else if (opts.method === "HEAD") {
         manager.HEADParametersHeadersSuccessFailure(opts.url, dict, headers, success, failure);
+            }
+            if (type ===  "application/json") {
+                switch(opts.method) {
+                    case 'POST' :
+                        manager.POSTParametersConstructingBodyWithBlockSuccessFailure(opts.url,  null,(formData)=>{
+                            Object.keys(opts.body).forEach(k=>{
+                                const param  =opts.body[k] as Https.HttpsFormDataParam;
+                                if (param.fileName && param.contentType) {
+                                    formData.appendPartWithFileDataNameFileNameMimeType(param.data, param.parameterName, param.fileName, param.contentType);
+                                } else {
+                                    formData.appendPartWithFormDataName(NSString.stringWithString(param.data).dataUsingEncoding(NSUTF8StringEncoding), param.parameterName)
+                                }
+                              })
+                        }, success, failure);
+                        break;
+                    default:
+                        reject(new Error('method_not_supported_multipart'));
+                    }
+            } else {
+                switch(opts.method) {
+                    case 'GET' :
+                        manager.GETParametersSuccessFailure(opts.url,  dict,success, failure);
+                        break;
+                    case 'POST' :
+                        manager.POSTParametersSuccessFailure(opts.url,  dict,success, failure);
+                        break;
+                    case 'PUT' :
+                        manager.PUTParametersSuccessFailure(opts.url,  dict,success, failure);
+                        break;
+                    case 'DELETE' :
+                        manager.DELETEParametersSuccessFailure(opts.url,  dict,success, failure);
+                        break;
+                    case 'PATCH' :
+                        manager.PATCHParametersSuccessFailure(opts.url,  dict,success, failure);
+                        break;
+                    case 'HEAD' :
+                        manager.HEADParametersSuccessFailure(opts.url,  dict,success, failure);
+                        break;
+                        default:
+                            reject(new Error('method_not_supported_multipart'));
                 }
-
-
+            }
+            
         } catch (error) {
             reject(error);
         }

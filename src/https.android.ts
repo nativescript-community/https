@@ -243,20 +243,38 @@ export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsRes
         request[methods[opts.method]]();
       } else {
         type = opts.headers && opts.headers['Content-Type'] ? <string>opts.headers['Content-Type'] : 'application/json';
-
-        let body;
-        if (opts.body) {
-          try {
-            body = JSON.stringify(opts.body);
-          } catch (ignore) {
+        const MEDIA_TYPE = okhttp3.MediaType.parse(type);
+        let okHttpBody: okhttp3.RequestBody;
+        if (type === 'multipart/form-data')  {
+          let builder = new okhttp3.MultipartBody.Builder();
+          builder.setType(MEDIA_TYPE);
+          Object.keys(opts.body).forEach(k=>{
+            const param  =opts.body[k] as Https.HttpsFormDataParam;
+            if (param.fileName && param.contentType) {
+              const MEDIA_TYPE = okhttp3.MediaType.parse(param.contentType);
+              builder.addFormDataPart(param.parameterName, param.fileName, okhttp3.RequestBody.create(MEDIA_TYPE, param.data));
+          } else {
+              builder.addFormDataPart(param.parameterName, param.data);
           }
-        } else if (opts.content) {
-          body = opts.content
+          })
+          okHttpBody = builder.build();
+        } else {
+          let body;
+          if (opts.body) {
+            try {
+              body = JSON.stringify(opts.body);
+            } catch (ignore) {
+            }
+          } else if (opts.content) {
+            body = opts.content
+          }
+          okHttpBody = okhttp3.RequestBody.create(
+            okhttp3.MediaType.parse(type),
+            body
+          )
         }
-        request[methods[opts.method]](okhttp3.RequestBody.create(
-          okhttp3.MediaType.parse(type),
-          body
-      ));
+        request[methods[opts.method]](okHttpBody);
+        
       }
 
       // We have to allow networking on the main thread because larger responses will crash the app with an NetworkOnMainThreadException.

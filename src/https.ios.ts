@@ -188,8 +188,8 @@ export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsRes
                 switch(opts.method) {
                     case 'POST' :
                         manager.POSTParametersConstructingBodyWithBlockSuccessFailure(opts.url,  null,(formData)=>{
-                            Object.keys(opts.body).forEach(k=>{
-                                const param  =opts.body[k] as Https.HttpsFormDataParam;
+                            (opts.body as Https.HttpsFormDataParam[]).forEach(param=>{
+                                // const param  =opts.body[k] as Https.HttpsFormDataParam;
                                 if (param.fileName && param.contentType) {
                                     formData.appendPartWithFileDataNameFileNameMimeType(param.data, param.parameterName, param.fileName, param.contentType);
                                 } else {

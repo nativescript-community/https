@@ -211,6 +211,7 @@ export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsRes
       request.url(opts.url);
 
       if (opts.headers) {
+        console.log('adding request header', opts.headers)
         Object.keys(opts.headers).forEach(key => request.addHeader(key, opts.headers[key] as any));
       }
 
@@ -248,8 +249,10 @@ export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsRes
         if (type === 'multipart/form-data')  {
           let builder = new okhttp3.MultipartBody.Builder();
           builder.setType(MEDIA_TYPE);
-          Object.keys(opts.body).forEach(k=>{
-            const param  =opts.body[k] as Https.HttpsFormDataParam;
+
+          (opts.body as Https.HttpsFormDataParam[]).forEach(param=>{
+            // const param  =opts.body[k] as Https.HttpsFormDataParam;
+            console.log('handling multipart2', param.parameterName, param.data,param.fileName, param.contentType)
             if (param.fileName && param.contentType) {
               const MEDIA_TYPE = okhttp3.MediaType.parse(param.contentType);
               builder.addFormDataPart(param.parameterName, param.fileName, okhttp3.RequestBody.create(MEDIA_TYPE, param.data));

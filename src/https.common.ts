@@ -32,7 +32,7 @@ export interface HttpsRequestOptions {
   method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'HEAD';
   headers?: Headers;
   params?: HttpsRequestObject;
-  body?: HttpsRequestObject;
+  body?: HttpsRequestObject | HttpsFormDataParam[];
   content?: string;
   /**
    * On Android large responses may crash the app (fi. https://httpbin.org/bytes/10000).

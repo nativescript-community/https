@@ -184,7 +184,7 @@ export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsRes
       } else if (opts.method === "HEAD") {
         manager.HEADParametersHeadersSuccessFailure(opts.url, dict, headers, success, failure);
             }
-            if (type ===  "application/json") {
+            if (type ===  "multipart/form-data") {
                 switch(opts.method) {
                     case 'POST' :
                         manager.POSTParametersConstructingBodyWithBlockSuccessFailure(opts.url,  null,(formData)=>{

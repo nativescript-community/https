@@ -34,7 +34,7 @@ export function disableSSLPinning() {
 
 console.info('nativescript-https > Disabled SSL pinning by default');
 
-function AFSuccess(resolve, task: NSURLSessionDataTask, data: NSDictionary<string, any> & NSData & NSArray<any>) {
+function AFSuccess(resolve, task: NSURLSessionDataTask, data?: NSDictionary<string, any> & NSData & NSArray<any>) {
   let content: any;
   if (data && data.class) {
     if (data.enumerateKeysAndObjectsUsingBlock || (<any>data) instanceof NSArray) {
@@ -117,19 +117,34 @@ export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsRes
 
       manager.requestSerializer.timeoutInterval = opts.timeout ? opts.timeout : 10;
 
-      let methods = {
-        'GET': 'GETParametersSuccessFailure',
-        'POST': 'POSTParametersSuccessFailure',
-        'PUT': 'PUTParametersSuccessFailure',
-        'DELETE': 'DELETEParametersSuccessFailure',
-        'PATCH': 'PATCHParametersSuccessFailure',
-        'HEAD': 'HEADParametersSuccessFailure',
-      };
-      manager[methods[opts.method]](opts.url, dict, function success(task: NSURLSessionDataTask, data: any) {
+      const headers = null;
+
+      const success = (task: NSURLSessionDataTask, data?: any) => {
         AFSuccess(resolve, task, data);
-      }, function failure(task, error) {
+      };
+
+      const failure = (task, error) => {
         AFFailure(resolve, reject, task, error);
-      });
+      };
+
+      const progress = (progress: NSProgress) => {
+        // console.log("Finished?: " + progress.finished);
+      };
+
+      if (opts.method === "GET") {
+        manager.GETParametersHeadersProgressSuccessFailure(opts.url, dict, headers, progress, success, failure);
+      } else if (opts.method === "POST") {
+        manager.POSTParametersHeadersProgressSuccessFailure(opts.url, dict, headers, progress, success, failure);
+      } else if (opts.method === "PUT") {
+        manager.PUTParametersHeadersSuccessFailure(opts.url, dict, headers, success, failure);
+      } else if (opts.method === "DELETE") {
+        manager.DELETEParametersHeadersSuccessFailure(opts.url, dict, headers, success, failure);
+      } else if (opts.method === "PATCH") {
+        manager.PATCHParametersHeadersSuccessFailure(opts.url, dict, headers, success, failure);
+      } else if (opts.method === "HEAD") {
+        manager.HEADParametersHeadersSuccessFailure(opts.url, dict, headers, success, failure);
+      }
+
 
     } catch (error) {
       reject(error);

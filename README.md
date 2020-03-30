@@ -17,6 +17,8 @@
 ### The definitive way to hit HTTP based APIs in Nativescript.
 Easily integrate the most reliable native networking libraries with the latest and greatest HTTPS security features.
 
+> Plugin version 2.0.0 bumps `AFNetworking` on iOS to [4.0.0](https://github.com/AFNetworking/AFNetworking/releases/tag/4.0.0) which no longer relies on `UIWebView`. Make sure to run `pod repo update` to get the latest `AFNetworking` pod on your development machine.
+
 #### A drop-in replacement for the [default http module](https://docs.nativescript.org/cookbook/http#get-response-status-code).
 
 ## Features

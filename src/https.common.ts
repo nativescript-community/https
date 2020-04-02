@@ -53,6 +53,8 @@ export interface HttpsResponse {
   statusCode?: number;
   content?: any;
   reason?: string;
+  description?: string;
+  url?: string;
   reject?: boolean;
   failure?: any;
 }

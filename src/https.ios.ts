@@ -127,7 +127,9 @@ export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsRes
                 manager.responseSerializer = AFHTTPResponseSerializer.serializer();
             }
             manager.requestSerializer.allowsCellularAccess = true;
-      manager.securityPolicy = (policies.secured === true) ? policies.secure : policies.def;
+            manager.requestSerializer.HTTPShouldHandleCookies = true;
+            manager.securityPolicy =
+                policies.secured === true ? policies.secure : policies.def;
 
             if (opts.cachePolicy) {
                 switch (opts.cachePolicy) {

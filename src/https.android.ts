@@ -101,7 +101,8 @@ export function disableSSLPinning() {
 console.info('nativescript-https > Disabled SSL pinning by default');
 
 let Client: okhttp3.OkHttpClient;
-
+let cookieJar: com.nativescript.https.QuotePreservingCookieJar;
+let cookieManager: java.net.CookieManager;
 function getClient(reload: boolean = false, timeout: number = 10): okhttp3.OkHttpClient {
   // if (!Client) {
   // 	Client = new okhttp3.OkHttpClient()
@@ -112,6 +113,11 @@ function getClient(reload: boolean = false, timeout: number = 10): okhttp3.OkHtt
   // }
   if (Client && reload === false && _timeout === timeout) {
     return Client;
+  }
+  if (!cookieJar) {
+    cookieManager = new java.net.CookieManager();
+    cookieManager.setCookiePolicy(java.net.CookiePolicy.ACCEPT_ALL);
+    cookieJar = new com.nativescript.https.QuotePreservingCookieJar(cookieManager);
   }
 
   _timeout = timeout;
@@ -191,6 +197,9 @@ function getClient(reload: boolean = false, timeout: number = 10): okhttp3.OkHtt
   if (cache) {
     client.cache(cache);
   }
+  if (cookieJar) {
+    client.cookieJar(cookieJar)
+  }
 
   // set connection timeout to override okhttp3 default
   if (timeout) {
@@ -211,7 +220,7 @@ export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsRes
       request.url(opts.url);
 
       if (opts.headers) {
-        // console.log('adding request header', opts.headers)
+        console.log('adding request header', opts.headers)
         Object.keys(opts.headers).forEach(key => request.addHeader(key, opts.headers[key] as any));
       }
 

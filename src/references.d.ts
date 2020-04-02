@@ -14,6 +14,9 @@ declare namespace com {
                 public constructor();
                 onStringResponse( responseString:string,  statusCode: number,  headers: okhttp3.Headers)
             }
+            class QuotePreservingCookieJar extends okhttp3.CookieJar {
+                constructor(cookieHandler:java.net.CookieHandler)
+            }
         }
     }
 }

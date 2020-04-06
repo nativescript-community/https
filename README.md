@@ -115,6 +115,7 @@ Option | Description
 `certificate: string` | The uri path to your `.cer` certificate file.
 `allowInvalidCertificates?: boolean` | Default: `false`. This should **always** be `false` if you are using SSL pinning. Set this to `true` if you're using a self-signed certificate.
 `validatesDomainName?: boolean` | Default: `true`. Determines if the domain name should be validated with your pinned certificate.
+`useLegacy?: boolean` | Default: `false`. [IOS only] set to true in order to get the response data (when status >= 300)in the `content` directly instead of `response.body.content`.
 
 ## Webpack / bundling
 Since you're probably shipping a certificate with your app (like [our demo does](https://github.com/EddyVerbruggen/nativescript-https/tree/master/demo/app/assets)),

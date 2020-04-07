@@ -43,36 +43,35 @@ function AFSuccess(resolve, task: NSURLSessionDataTask, data?: NSDictionary<stri
 }
 
 function AFFailure(resolve, reject, task: NSURLSessionDataTask, error: NSError) {
-    let data: NSDictionary<string, any> & NSData & NSArray<any> = error.userInfo.valueForKey(AFNetworkingOperationFailingURLResponseDataErrorKey);
-    let parsedData = getData(data);
-    if (useLegacy) {
-        let failure: any = {
-           body: parsedData,
-           description: error.description,
-           reason: error.localizedDescription,
-           url: error.userInfo.objectForKey('NSErrorFailingURLKey').description
-       };
-       if (policies.secured === true) {
-           failure.description = 'nativescript-https > Invalid SSL certificate! ' + error.description;
-       }
-       let reason = error.localizedDescription;
-       let content = parsedData;
-       resolve({task: task, content: content, reason: reason, failure: failure});
-    } else {
-        let content: any = {
-            body: parsedData,
-            description: error.description,
-            reason: error.localizedDescription,
-            url: error.userInfo.objectForKey('NSErrorFailingURLKey').description
-        };
-
-        if (policies.secured === true) {
-            content.description = 'nativescript-https > Invalid SSL certificate! ' + content.description;
-        }
-
-        let reason = error.localizedDescription;
-        resolve({task, content, reason});
+  let data: NSDictionary<string, any> & NSData & NSArray<any> = error.userInfo.valueForKey(AFNetworkingOperationFailingURLResponseDataErrorKey);
+  let parsedData = getData(data);
+  if (useLegacy) {
+    let failure: any = {
+      body: parsedData,
+      description: error.description,
+      reason: error.localizedDescription,
+      url: error.userInfo.objectForKey('NSErrorFailingURLKey').description
+    };
+    if (policies.secured === true) {
+      failure.description = 'nativescript-https > Invalid SSL certificate! ' + error.description;
     }
+    let reason = error.localizedDescription;
+    resolve({task: task, content: parsedData, reason: reason, failure: failure});
+  } else {
+    let content: any = {
+      body: parsedData,
+      description: error.description,
+      reason: error.localizedDescription,
+      url: error.userInfo.objectForKey('NSErrorFailingURLKey').description
+    };
+
+    if (policies.secured === true) {
+      content.description = 'nativescript-https > Invalid SSL certificate! ' + content.description;
+    }
+
+    let reason = error.localizedDescription;
+    resolve({task, content, reason});
+  }
 }
 
 export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsResponse> {
@@ -169,23 +168,23 @@ export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsRes
 }
 
 function getData(data) {
-    let content: any;
-    if (data && data.class) {
-        if (data.enumerateKeysAndObjectsUsingBlock || (<any>data) instanceof NSArray) {
-            let serial = NSJSONSerialization.dataWithJSONObjectOptionsError(data, NSJSONWritingOptions.PrettyPrinted);
-            content = NSString.alloc().initWithDataEncoding(serial, NSUTF8StringEncoding).toString();
-        } else if ((<any>data) instanceof NSData) {
-            content = NSString.alloc().initWithDataEncoding(data, NSASCIIStringEncoding).toString();
-        } else {
-            content = data;
-        }
-
-        try {
-            content = JSON.parse(content);
-        } catch (e) {
-        }
+  let content: any;
+  if (data && data.class) {
+    if (data.enumerateKeysAndObjectsUsingBlock || (<any>data) instanceof NSArray) {
+      let serial = NSJSONSerialization.dataWithJSONObjectOptionsError(data, NSJSONWritingOptions.PrettyPrinted);
+      content = NSString.alloc().initWithDataEncoding(serial, NSUTF8StringEncoding).toString();
+    } else if ((<any>data) instanceof NSData) {
+      content = NSString.alloc().initWithDataEncoding(data, NSASCIIStringEncoding).toString();
     } else {
-        content = data;
+      content = data;
     }
-    return content;
+
+    try {
+      content = JSON.parse(content);
+    } catch (ignore) {
+    }
+  } else {
+    content = data;
+  }
+  return content;
 }

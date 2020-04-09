@@ -220,7 +220,6 @@ export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsRes
       request.url(opts.url);
 
       if (opts.headers) {
-        console.log('adding request header', opts.headers)
         Object.keys(opts.headers).forEach(key => request.addHeader(key, opts.headers[key] as any));
       }
 

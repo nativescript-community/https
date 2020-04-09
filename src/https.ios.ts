@@ -54,7 +54,6 @@ export function disableSSLPinning() {
     policies.secured = false;
   console.log('nativescript-https > Disabled SSL pinning');
     }
-    console.log('AFSuccess', task)
 
 console.info('nativescript-https > Disabled SSL pinning by default');
 
@@ -244,7 +243,6 @@ export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsRes
             };
 
             let response = AFResponse.task.response as NSHTTPURLResponse;
-            console.log('response', response, AFResponse.task.error, AFResponse.task.state)
             if (!isNullOrUndefined(response)) {
                 sendi.statusCode = response.statusCode;
                 let dict = response.allHeaderFields;

@@ -89,16 +89,16 @@ export function enableSSLPinning(options: Https.HttpsSSLPinningOptions) {
   }
   peer.enabled = true;
   getClient(true);
-  console.log('nativescript-https > Enabled SSL pinning');
+  // console.log('nativescript-https > Enabled SSL pinning');
 }
 
 export function disableSSLPinning() {
   peer.enabled = false;
   getClient(true);
-  console.log('nativescript-https > Disabled SSL pinning');
+  // console.log('nativescript-https > Disabled SSL pinning');
 }
 
-console.info('nativescript-https > Disabled SSL pinning by default');
+// console.info('nativescript-https > Disabled SSL pinning by default');
 
 let Client: okhttp3.OkHttpClient;
 let cookieJar: com.nativescript.https.QuotePreservingCookieJar;

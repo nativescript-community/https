@@ -28,6 +28,9 @@ Easily integrate the most reliable native networking libraries with the latest a
 - Everything runs on a native background thread
 - Transparent GZIP
 - HTTP/2 support
+- Multiform part
+- Cache
+- Basic Cookie support
 
 ## FAQ
 > What the flip is SSL pinning and all this security mumbo jumbo?
@@ -98,6 +101,39 @@ Https.disableSSLPinning()
 ```
 All requests after calling this method will no longer utilize SSL pinning until it is re-enabled once again.
 
+
+### Cookie
+
+By default basic Cookie support is enabled to work like in {N} `http` module.
+In the future more options will be added
+
+### Enabling Cache
+
+```typescript
+import { knownFolders, path } from '@nativescript/core/file-system';
+import * as Https from 'nativescript-https'
+Https.setCache({
+    diskLocation: path.join(knownFolders.documents().path, 'httpcache'),
+    diskSize: 10 * 1024 * 1024 // 10 MiB
+});
+
+/// later on when calling your request you can use the cachePolicy option
+```
+
+### Multipart form data
+
+If you set the `Content-Type` header to `"multipart/form-data"` the request body will be evaluated as a multipart form data. Each body parameter is expected to be in this format:
+```typescript
+{
+	data: any
+    parameterName: string,
+    fileName?: string
+    contentType?: string
+}
+
+```
+if `fileName` and `contentType` are set then data is expected to be either a `NSData` on iOS or a `native.Array<number>` on Android.
+
 ### Options
 ```typescript
 export interface HttpsSSLPinningOptions {
@@ -106,6 +142,9 @@ export interface HttpsSSLPinningOptions {
 	allowInvalidCertificates?: boolean
 	validatesDomainName?: boolean
 	commonName?: string
+	useLegacy?: boolean
+	cachePolicy?: 'noCache' | 'onlyCache' | 'ignoreCache'
+	onProgress?: (current: number, total: number) => void
 }
 ```
 Option | Description
@@ -116,6 +155,8 @@ Option | Description
 `allowInvalidCertificates?: boolean` | Default: `false`. This should **always** be `false` if you are using SSL pinning. Set this to `true` if you're using a self-signed certificate.
 `validatesDomainName?: boolean` | Default: `true`. Determines if the domain name should be validated with your pinned certificate.
 `useLegacy?: boolean` | Default: `false`. [IOS only] set to true in order to get the response data (when status >= 300)in the `content` directly instead of `response.body.content`.
+`cachePolicy?: 'noCache' | 'onlyCache' | 'ignoreCache'` | Set the cache policy to use with that request. This only works with GET requests for now.
+`onProgress?: (current: number, total: number) => void` | [IOS only] Set the progress callback.
 
 ## Webpack / bundling
 Since you're probably shipping a certificate with your app (like [our demo does](https://github.com/EddyVerbruggen/nativescript-https/tree/master/demo/app/assets)),

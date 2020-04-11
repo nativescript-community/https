@@ -1,5 +1,9 @@
-import { isDefined, isNullOrUndefined, isObject } from 'tns-core-modules/utils/types';
-import * as Https from './https.common';
+import {
+    isDefined,
+    isNullOrUndefined,
+    isObject,
+} from "tns-core-modules/utils/types";
+import * as Https from "./https.common";
 
 let useLegacy: boolean = false;
 
@@ -39,89 +43,130 @@ policies.def.validatesDomainName = false;
 
 export function enableSSLPinning(options: Https.HttpsSSLPinningOptions) {
     if (!policies.secure) {
-    policies.secure = AFSecurityPolicy.policyWithPinningMode(AFSSLPinningMode.PublicKey);
-    policies.secure.allowInvalidCertificates = (isDefined(options.allowInvalidCertificates)) ? options.allowInvalidCertificates : false;
-    policies.secure.validatesDomainName = (isDefined(options.validatesDomainName)) ? options.validatesDomainName : true;
+        policies.secure = AFSecurityPolicy.policyWithPinningMode(
+            AFSSLPinningMode.PublicKey
+        );
+        policies.secure.allowInvalidCertificates = isDefined(
+            options.allowInvalidCertificates
+        )
+            ? options.allowInvalidCertificates
+            : false;
+        policies.secure.validatesDomainName = isDefined(
+            options.validatesDomainName
+        )
+            ? options.validatesDomainName
+            : true;
         let data = NSData.dataWithContentsOfFile(options.certificate);
         policies.secure.pinnedCertificates = NSSet.setWithObject(data);
     }
-  useLegacy = (isDefined(options.useLegacy)) ? options.useLegacy : false;
+    useLegacy = isDefined(options.useLegacy) ? options.useLegacy : false;
     policies.secured = true;
-  console.log('nativescript-https > Enabled SSL pinning');
+    console.log("nativescript-https > Enabled SSL pinning");
 }
 
 export function disableSSLPinning() {
     policies.secured = false;
-  console.log('nativescript-https > Disabled SSL pinning');
-    }
+    console.log("nativescript-https > Disabled SSL pinning");
+}
 
-console.info('nativescript-https > Disabled SSL pinning by default');
+console.info("nativescript-https > Disabled SSL pinning by default");
 
-function AFSuccess(resolve, task: NSURLSessionDataTask, data?: NSDictionary<string, any> & NSData & NSArray<any>) {
-  let content = getData(data);
+function AFSuccess(
+    resolve,
+    task: NSURLSessionDataTask,
+    data?: NSDictionary<string, any> & NSData & NSArray<any>
+) {
+    let content = getData(data);
     resolve({ task, content });
 }
 
-function AFFailure(resolve, reject, task: NSURLSessionDataTask, error: NSError) {
-  let data: NSDictionary<string, any> & NSData & NSArray<any> = error.userInfo.valueForKey(AFNetworkingOperationFailingURLResponseDataErrorKey);
-  let parsedData = getData(data);
-  if (useLegacy) {
-    let failure: any = {
-      body: parsedData,
-      description: error.description,
-      reason: error.localizedDescription,
-      url: error.userInfo.objectForKey('NSErrorFailingURLKey').description
-    };
-    if (policies.secured === true) {
-      failure.description = 'nativescript-https > Invalid SSL certificate! ' + error.description;
-    }
-    let reason = error.localizedDescription;
-    resolve({task: task, content: parsedData, reason: reason, failure: failure});
-  } else {
-    let content: any = {
-      body: parsedData,
-        description: error.description,
-        reason: error.localizedDescription,
-      url: error.userInfo.objectForKey('NSErrorFailingURLKey').description
-    };
+function AFFailure(
+    resolve,
+    reject,
+    task: NSURLSessionDataTask,
+    error: NSError
+) {
+    let data: NSDictionary<string, any> &
+        NSData &
+        NSArray<any> = error.userInfo.valueForKey(
+        AFNetworkingOperationFailingURLResponseDataErrorKey
+    );
+    let parsedData = getData(data);
+    if (useLegacy) {
+        let failure: any = {
+            body: parsedData,
+            description: error.description,
+            reason: error.localizedDescription,
+            url: error.userInfo.objectForKey("NSErrorFailingURLKey")
+                .description,
+        };
+        if (policies.secured === true) {
+            failure.description =
+                "nativescript-https > Invalid SSL certificate! " +
+                error.description;
+        }
+        let reason = error.localizedDescription;
+        resolve({
+            task: task,
+            content: parsedData,
+            reason: reason,
+            failure: failure,
+        });
+    } else {
+        let content: any = {
+            body: parsedData,
+            description: error.description,
+            reason: error.localizedDescription,
+            url: error.userInfo.objectForKey("NSErrorFailingURLKey")
+                .description,
+        };
 
-    if (policies.secured === true) {
-      content.description = 'nativescript-https > Invalid SSL certificate! ' + content.description;
-    }
+        if (policies.secured === true) {
+            content.description =
+                "nativescript-https > Invalid SSL certificate! " +
+                content.description;
+        }
 
-    let reason = error.localizedDescription;
-    resolve({ task, content, reason });
-}
+        let reason = error.localizedDescription;
+        resolve({ task, content, reason });
+    }
 }
 
 function bodyToNative(cont) {
-  let dict;
-  if (Array.isArray(cont)) {
-      dict = NSArray.arrayWithArray(cont.map(item=>bodyToNative(item)));
-      // cont.forEach(function(item, idx) {
-      //     dict.addObject(bodyToNative(item));
-      // });
-  } else if (isObject(cont)) {
-      dict = NSMutableDictionary.new<string, any>();
-      Object.keys(cont).forEach(key =>
-          dict.setValueForKey(bodyToNative(cont[key]), key)
-      );
-  } else {
-    dict = cont;
-  }
-  return dict;
+    let dict;
+    if (Array.isArray(cont)) {
+        dict = NSArray.arrayWithArray(cont.map((item) => bodyToNative(item)));
+        // cont.forEach(function(item, idx) {
+        //     dict.addObject(bodyToNative(item));
+        // });
+    } else if (isObject(cont)) {
+        dict = NSMutableDictionary.new<string, any>();
+        Object.keys(cont).forEach((key) =>
+            dict.setValueForKey(bodyToNative(cont[key]), key)
+        );
+    } else {
+        dict = cont;
+    }
+    return dict;
 }
 
-export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsResponse> {
+export function request(
+    opts: Https.HttpsRequestOptions
+): Promise<Https.HttpsResponse> {
     return new Promise((resolve, reject) => {
         try {
             const manager = AFHTTPSessionManager.alloc().initWithBaseURL(
                 NSURL.URLWithString(opts.url)
             );
-            const type = opts.headers && opts.headers['Content-Type'] ? <string>opts.headers['Content-Type'] : 'application/json';
-            if (type ===  "application/json") {
+            const type =
+                opts.headers && opts.headers["Content-Type"]
+                    ? <string>opts.headers["Content-Type"]
+                    : "application/json";
+            if (type === "application/json") {
                 manager.requestSerializer = AFJSONRequestSerializer.serializer();
-        manager.responseSerializer = AFJSONResponseSerializer.serializerWithReadingOptions(NSJSONReadingOptions.AllowFragments);
+                manager.responseSerializer = AFJSONResponseSerializer.serializerWithReadingOptions(
+                    NSJSONReadingOptions.AllowFragments
+                );
             } else {
                 manager.requestSerializer = AFHTTPRequestSerializer.serializer();
                 manager.responseSerializer = AFHTTPResponseSerializer.serializer();
@@ -134,9 +179,11 @@ export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsRes
             if (opts.cachePolicy) {
                 switch (opts.cachePolicy) {
                     case "noCache":
-                        manager.setDataTaskWillCacheResponseBlock((session, task, cacheResponse) => {
-                          return null;
-                        });
+                        manager.setDataTaskWillCacheResponseBlock(
+                            (session, task, cacheResponse) => {
+                                return null;
+                            }
+                        );
                         break;
                     case "onlyCache":
                         manager.requestSerializer.cachePolicy =
@@ -149,93 +196,151 @@ export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsRes
                 }
             }
             let heads = opts.headers;
+            let headers: NSMutableDictionary<string, any> = null;
             if (heads) {
-        Object.keys(heads).forEach(key => manager.requestSerializer.setValueForHTTPHeaderField(heads[key] as any, key));
+                headers = NSMutableDictionary.dictionary();
+                Object.keys(heads).forEach(
+                    (key) => headers.setValueForKey(heads[key], key)
+                    // manager.requestSerializer.setValueForHTTPHeaderField(
+                    //     heads[key] as any,
+                    //     key
+                    // )
+                );
             }
 
             let dict = null;
             if (opts.body) {
-              dict = bodyToNative(opts.body);
+                dict = bodyToNative(opts.body);
             } else if (opts.content) {
-              dict = opts.content;
+                dict = opts.content;
             }
 
-      manager.requestSerializer.timeoutInterval = opts.timeout ? opts.timeout : 10;
+            manager.requestSerializer.timeoutInterval = opts.timeout
+                ? opts.timeout
+                : 10;
 
             const success = function (task: NSURLSessionDataTask, data?: any) {
                 AFSuccess(resolve, task, data);
-            }
+            };
             const failure = function (task: NSURLSessionDataTask, error: any) {
                 AFFailure(resolve, reject, task, error);
-      };
+            };
 
-      const progress = (progress: NSProgress) => {
-        // console.log("Finished?: " + progress.finished);
-      };
+            const progress = opts.onProgress ? (progress: NSProgress) => {
+                opts.onProgress(progress.completedUnitCount, progress.totalUnitCount)
+            }: null;
 
-      if (opts.method === "GET") {
-        manager.GETParametersHeadersProgressSuccessFailure(opts.url, dict, headers, progress, success, failure);
-      } else if (opts.method === "POST") {
-        manager.POSTParametersHeadersProgressSuccessFailure(opts.url, dict, headers, progress, success, failure);
-      } else if (opts.method === "PUT") {
-        manager.PUTParametersHeadersSuccessFailure(opts.url, dict, headers, success, failure);
-      } else if (opts.method === "DELETE") {
-        manager.DELETEParametersHeadersSuccessFailure(opts.url, dict, headers, success, failure);
-      } else if (opts.method === "PATCH") {
-        manager.PATCHParametersHeadersSuccessFailure(opts.url, dict, headers, success, failure);
-      } else if (opts.method === "HEAD") {
-        manager.HEADParametersHeadersSuccessFailure(opts.url, dict, headers, success, failure);
-            }
-            if (type ===  "multipart/form-data") {
-                switch(opts.method) {
-                    case 'POST' :
-                        manager.POSTParametersConstructingBodyWithBlockSuccessFailure(opts.url,  null,(formData)=>{
-                            (opts.body as Https.HttpsFormDataParam[]).forEach(param=>{
-                                // const param  =opts.body[k] as Https.HttpsFormDataParam;
-                                if (param.fileName && param.contentType) {
-                                    formData.appendPartWithFileDataNameFileNameMimeType(param.data, param.parameterName, param.fileName, param.contentType);
-                                } else {
-                                    formData.appendPartWithFormDataName(NSString.stringWithString(param.data).dataUsingEncoding(NSUTF8StringEncoding), param.parameterName)
-                                }
-                              })
-                        }, success, failure);
+            if (type === "multipart/form-data") {
+                switch (opts.method) {
+                    case "POST":
+                        manager.POSTParametersHeadersConstructingBodyWithBlockProgressSuccessFailure(
+                            opts.url,
+                            null,
+                            headers,
+                            (formData) => {
+                                (opts.body as Https.HttpsFormDataParam[]).forEach(
+                                    (param) => {
+                                        if (
+                                            param.fileName &&
+                                            param.contentType
+                                        ) {
+                                            formData.appendPartWithFileDataNameFileNameMimeType(
+                                                param.data,
+                                                param.parameterName,
+                                                param.fileName,
+                                                param.contentType
+                                            );
+                                        } else {
+                                            formData.appendPartWithFormDataName(
+                                                NSString.stringWithString(
+                                                    param.data
+                                                ).dataUsingEncoding(
+                                                    NSUTF8StringEncoding
+                                                ),
+                                                param.parameterName
+                                            );
+                                        }
+                                    }
+                                );
+                            },
+                            progress,
+                            success,
+                            failure
+                        );
                         break;
                     default:
-                        reject(new Error('method_not_supported_multipart'));
-                    }
+                        reject(new Error("method_not_supported_multipart"));
+                }
             } else {
-                switch(opts.method) {
-                    case 'GET' :
-                        manager.GETParametersSuccessFailure(opts.url,  dict,success, failure);
+                switch (opts.method) {
+                    case "GET":
+                        manager.GETParametersHeadersProgressSuccessFailure(
+                            opts.url,
+                            dict,
+                            headers,
+                            progress,
+                            success,
+                            failure
+                        );
                         break;
-                    case 'POST' :
-                        manager.POSTParametersSuccessFailure(opts.url,  dict,success, failure);
+                    case "POST":
+                        manager.POSTParametersHeadersProgressSuccessFailure(
+                            opts.url,
+                            dict,
+                            headers,
+                            progress,
+                            success,
+                            failure
+                        );
                         break;
-                    case 'PUT' :
-                        manager.PUTParametersSuccessFailure(opts.url,  dict,success, failure);
+                    case "PUT":
+                        manager.PUTParametersHeadersSuccessFailure(
+                            opts.url,
+                            dict,
+                            headers,
+                            success,
+                            failure
+                        );
                         break;
-                    case 'DELETE' :
-                        manager.DELETEParametersSuccessFailure(opts.url,  dict,success, failure);
+                    case "DELETE":
+                        manager.DELETEParametersHeadersSuccessFailure(
+                            opts.url,
+                            dict,
+                            headers,
+                            success,
+                            failure
+                        );
                         break;
-                    case 'PATCH' :
-                        manager.PATCHParametersSuccessFailure(opts.url,  dict,success, failure);
+                    case "PATCH":
+                        manager.PATCHParametersHeadersSuccessFailure(
+                            opts.url,
+                            dict,
+                            headers,
+                            success,
+                            failure
+                        );
                         break;
-                    case 'HEAD' :
-                        manager.HEADParametersSuccessFailure(opts.url,  dict,success, failure);
+                    case "HEAD":
+                        manager.HEADParametersHeadersSuccessFailure(
+                            opts.url,
+                            dict,
+                            headers,
+                            success,
+                            failure
+                        );
                         break;
-                        default:
-                            reject(new Error('method_not_supported_multipart'));
+                    default:
+                        reject(new Error("method_not_supported_multipart"));
                 }
             }
-            
         } catch (error) {
             reject(error);
         }
-
-  }).then((AFResponse: {
-    task: NSURLSessionDataTask
-    content: any
-    reason?: string
+    }).then(
+        (AFResponse: {
+            task: NSURLSessionDataTask;
+            content: any;
+            reason?: string;
         }) => {
             let sendi: Https.HttpsResponse = {
                 content: AFResponse.content,
@@ -246,7 +351,9 @@ export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsRes
             if (!isNullOrUndefined(response)) {
                 sendi.statusCode = response.statusCode;
                 let dict = response.allHeaderFields;
-      dict.enumerateKeysAndObjectsUsingBlock((k, v) => sendi.headers[k] = v);
+                dict.enumerateKeysAndObjectsUsingBlock(
+                    (k, v) => (sendi.headers[k] = v)
+                );
             }
 
             if (AFResponse.reason) {
@@ -254,27 +361,37 @@ export function request(opts: Https.HttpsRequestOptions): Promise<Https.HttpsRes
             }
 
             return Promise.resolve(sendi);
-  });
+        }
+    );
 }
 
 function getData(data) {
-  let content: any;
-  if (data && data.class) {
-    if (data.enumerateKeysAndObjectsUsingBlock || (<any>data) instanceof NSArray) {
-      let serial = NSJSONSerialization.dataWithJSONObjectOptionsError(data, NSJSONWritingOptions.PrettyPrinted);
-      content = NSString.alloc().initWithDataEncoding(serial, NSUTF8StringEncoding).toString();
-    } else if ((<any>data) instanceof NSData) {
-      content = NSString.alloc().initWithDataEncoding(data, NSASCIIStringEncoding).toString();
-    } else {
-      content = data;
-    }
+    let content: any;
+    if (data && data.class) {
+        if (
+            data.enumerateKeysAndObjectsUsingBlock ||
+            <any>data instanceof NSArray
+        ) {
+            let serial = NSJSONSerialization.dataWithJSONObjectOptionsError(
+                data,
+                NSJSONWritingOptions.PrettyPrinted
+            );
+            content = NSString.alloc()
+                .initWithDataEncoding(serial, NSUTF8StringEncoding)
+                .toString();
+        } else if (<any>data instanceof NSData) {
+            content = NSString.alloc()
+                .initWithDataEncoding(data, NSASCIIStringEncoding)
+                .toString();
+        } else {
+            content = data;
+        }
 
-    try {
-      content = JSON.parse(content);
-    } catch (ignore) {
+        try {
+            content = JSON.parse(content);
+        } catch (ignore) {}
+    } else {
+        content = data;
     }
-  } else {
-    content = data;
-  }
-  return content;
+    return content;
 }

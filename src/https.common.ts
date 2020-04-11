@@ -45,6 +45,11 @@ export interface HttpsRequestOptions {
    */
   timeout?: number;
 
+  /**
+   * iOS for now
+   */
+  onProgress?: (current: number, total: number) => void
+
   cachePolicy?:CachePolicy
 }
 

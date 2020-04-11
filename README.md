@@ -142,18 +142,24 @@ export interface HttpsSSLPinningOptions {
 	allowInvalidCertificates?: boolean
 	validatesDomainName?: boolean
 	commonName?: string
+}
+import { HttpRequestOptions } from 'tns-core-modules/http';
+export interface HttpsRequestOptions extends HTTPOptions{
 	useLegacy?: boolean
 	cachePolicy?: 'noCache' | 'onlyCache' | 'ignoreCache'
 	onProgress?: (current: number, total: number) => void
 }
 ```
-Option | Description
+SSLPinning Option | Description
 ------------ | -------------
 `host: string` | This must be the request domain name eg `sales.company.org`.
 `commonName?: string` | Default: options.host, set if certificate CN is different from the host eg `*.company.org` (Android specific)
 `certificate: string` | The uri path to your `.cer` certificate file.
 `allowInvalidCertificates?: boolean` | Default: `false`. This should **always** be `false` if you are using SSL pinning. Set this to `true` if you're using a self-signed certificate.
 `validatesDomainName?: boolean` | Default: `true`. Determines if the domain name should be validated with your pinned certificate.
+
+Requests Option | Description
+------------ | -------------
 `useLegacy?: boolean` | Default: `false`. [IOS only] set to true in order to get the response data (when status >= 300)in the `content` directly instead of `response.body.content`.
 `cachePolicy?: 'noCache' | 'onlyCache' | 'ignoreCache'` | Set the cache policy to use with that request. This only works with GET requests for now.
 `onProgress?: (current: number, total: number) => void` | [IOS only] Set the progress callback.

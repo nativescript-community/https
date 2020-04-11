@@ -5,8 +5,6 @@ import {
 } from "tns-core-modules/utils/types";
 import * as Https from "./https.common";
 
-let useLegacy: boolean = false;
-
 let cache: NSURLCache;
 
 export function setCache(options?: Https.CacheOptions) {
@@ -59,7 +57,6 @@ export function enableSSLPinning(options: Https.HttpsSSLPinningOptions) {
         let data = NSData.dataWithContentsOfFile(options.certificate);
         policies.secure.pinnedCertificates = NSSet.setWithObject(data);
     }
-    useLegacy = isDefined(options.useLegacy) ? options.useLegacy : false;
     policies.secured = true;
     console.log("nativescript-https > Enabled SSL pinning");
 }
@@ -84,7 +81,8 @@ function AFFailure(
     resolve,
     reject,
     task: NSURLSessionDataTask,
-    error: NSError
+    error: NSError,
+    useLegacy: boolean
 ) {
     let data: NSDictionary<string, any> &
         NSData &
@@ -219,11 +217,14 @@ export function request(
                 ? opts.timeout
                 : 10;
 
+     
+            const useLegacy = isDefined(opts.useLegacy) ? opts.useLegacy : false;
+    
             const success = function (task: NSURLSessionDataTask, data?: any) {
                 AFSuccess(resolve, task, data);
             };
             const failure = function (task: NSURLSessionDataTask, error: any) {
-                AFFailure(resolve, reject, task, error);
+                AFFailure(resolve, reject, task, error, useLegacy);
             };
 
             const progress = opts.onProgress ? (progress: NSProgress) => {

@@ -1,4 +1,4 @@
-import { Headers } from 'tns-core-modules/http';
+import { Headers, HttpRequestOptions } from 'tns-core-modules/http';
 
 export interface HttpsSSLPinningOptions {
   host: string;
@@ -6,7 +6,6 @@ export interface HttpsSSLPinningOptions {
   allowInvalidCertificates?: boolean;
   validatesDomainName?: boolean;
   commonName?: string;
-  useLegacy?: boolean;
 }
 export interface CacheOptions {
   diskLocation: string;
@@ -27,7 +26,7 @@ export interface HttpsRequestObject {
 
 
 export type CachePolicy = 'noCache' | 'onlyCache' | 'ignoreCache'; 
-export interface HttpsRequestOptions {
+export interface HttpsRequestOptions extends HttpRequestOptions {
   url: string;
   method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'HEAD';
   headers?: Headers;
@@ -51,6 +50,7 @@ export interface HttpsRequestOptions {
   onProgress?: (current: number, total: number) => void
 
   cachePolicy?:CachePolicy
+  useLegacy?: boolean;
 }
 
 export interface HttpsResponse {

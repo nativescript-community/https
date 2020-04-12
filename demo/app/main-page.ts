@@ -1,4 +1,4 @@
-import * as Https from 'nativescript-akylas-https';
+import * as Https from 'nativescript-https';
 import * as Observable from 'tns-core-modules/data/observable';
 import * as fs from 'tns-core-modules/file-system';
 import * as dialogs from 'tns-core-modules/ui/dialogs';

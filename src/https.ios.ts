@@ -20,9 +20,7 @@ export function setCache(options?: Https.CacheOptions) {
     NSURLCache.sharedURLCache = cache;
 }
 export function clearCache() {
-    if (cache) {
-        cache.removeAllCachedResponses();
-    }
+    NSURLCache.sharedURLCache.removeAllCachedResponses();
 }
 
 interface Ipolicies {

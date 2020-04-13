@@ -1,4 +1,6 @@
-import { Headers, HttpRequestOptions } from 'tns-core-modules/http';
+import { Headers, HttpRequestOptions } from "tns-core-modules/http";
+import { ImageSource } from "tns-core-modules/image-source";
+import { File } from "tns-core-modules/file-system";
 export interface HttpsSSLPinningOptions {
     host: string;
     certificate: string;
@@ -20,15 +22,14 @@ export interface HttpsFormDataParam {
 export interface HttpsRequestObject {
     [key: string]: string | number | boolean | HttpsRequestObject | Array<any> | HttpsFormDataParam;
 }
-export declare type CachePolicy = 'noCache' | 'onlyCache' | 'ignoreCache';
+export declare type CachePolicy = "noCache" | "onlyCache" | "ignoreCache";
 export interface HttpsRequestOptions extends HttpRequestOptions {
     url: string;
-    method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'HEAD';
+    method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" | "HEAD";
     headers?: Headers;
     params?: HttpsRequestObject;
     body?: HttpsRequestObject | HttpsFormDataParam[];
     content?: string;
-    allowLargeResponse?: boolean;
     timeout?: number;
     onProgress?: (current: number, total: number) => void;
     cachePolicy?: CachePolicy;
@@ -41,6 +42,22 @@ export interface HttpsResponse {
     reason?: string;
     description?: string;
     url?: string;
-    reject?: boolean;
     failure?: any;
 }
+export interface HttpsRequest {
+    nativeRequest: any;
+    cancel(): any;
+    run(success: any, failure: any): any;
+}
+export interface HttpsResponseLegacy {
+    toArrayBuffer(): ArrayBuffer;
+    toArrayBufferAsync(): Promise<ArrayBuffer>;
+    toString(): string;
+    toStringAsync(): Promise<string>;
+    toJSON(): any;
+    toJSONAsync(): Promise<any>;
+    toImage(): Promise<ImageSource>;
+    toFile(destinationFilePath: string): Promise<File>;
+}
+export declare function getFilenameFromUrl(url: string): string;
+export declare function parseJSON(source: string): any;

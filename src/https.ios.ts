@@ -56,15 +56,12 @@ export function enableSSLPinning(options: Https.HttpsSSLPinningOptions) {
         policies.secure.pinnedCertificates = NSSet.setWithObject(data);
     }
     policies.secured = true;
-    console.log("nativescript-https > Enabled SSL pinning");
 }
 
 export function disableSSLPinning() {
     policies.secured = false;
-    console.log("nativescript-https > Disabled SSL pinning");
 }
 
-console.info("nativescript-https > Disabled SSL pinning by default");
 
 function AFSuccess(
     resolve,

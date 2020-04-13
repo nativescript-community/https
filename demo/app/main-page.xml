@@ -1,20 +1,31 @@
-<Page class="page" navigatingTo="onNavigatingTo">
+<Page class="page" loaded="pageLoaded"
+    xmlns="http://schemas.nativescript.org/tns.xsd">
     <Page.actionBar>
         <ActionBar title="HTTPS Playground" class="action-bar"></ActionBar>
     </Page.actionBar>
-
-    <StackLayout class="p-20">
-        <Label class="h1 text-center" color="{{ enabled ? 'green' : 'red' }}" text="{{ enabled ? 'Httpbin SSL Pinning Enabled' : 'SSL Pinning Disabled' }}"/>
-        <Button text="GET Mockbin" tap="getMockbin" class="t-20 btn btn-primary btn-active"/>
-        <Button text="GET Httpbin" tap="getHttpbin" class="t-20 btn btn-primary btn-active"/>
-        <Button text="GET Httpbin (large response)" tap="getHttpbinLargeResponse" class="t-20 btn btn-primary btn-active"/>
-        <Button text="POST Httpbin " tap="postHttpbin" class="t-20 btn btn-primary btn-active"/>
-        <Button text="POST Httpbin UTF-8" tap="postHttpbinWithUTF8" class="t-20 btn btn-primary btn-active"/>
-        <Button text="Httpbin Pinning ON" tap="enableSSLPinning" class="t-20 btn btn-primary btn-active"/>
-        <Button text="Httpbin Pinning ON, expired cert" tap="enableSSLPinningExpired" class="t-20 btn btn-primary btn-active"/>
-        <Button text="Httpbin Pinning OFF" tap="disableSSLPinning" class="t-20 btn btn-primary btn-active"/>
-        <Label text="Here's a spinner to show the main thread is not blocked by network IO" textWrap="true" class="m-20"/>
-        <ActivityIndicator busy="true"/>
-    </StackLayout>
-
+    <GridLayout class="p-20" rows="auto,auto,auto,*">
+        <Label class="h2 text-center" color="{{ enabled ? 'green' : 'red' }}" text="{{ enabled ? 'Httpbin SSL Pinning Enabled' : 'SSL Pinning Disabled' }}"/>
+        <GridLayout row="1" rows="auto" columns="*,auto">
+            <Label fontSize="13" text="Here's a spinner to show the main thread is not blocked by network IO" textWrap="true" class="m-20"/>
+            <ActivityIndicator col="1" busy="true"/>
+        </GridLayout>
+        <GridLayout row="2" rows="auto" columns="*,auto" visibility="{{ currentRequest ? 'visible' : 'collapsed'}}">
+            <Progress minValue="0" maxValue="100" value="{{ progress}}"/>
+            <Button col="1" text="cancel" tap="cancelCurrentRequest"/>
+        </GridLayout>
+        <ScrollView row="3">
+            <StackLayout>
+                <Button text="GET Bigfile" tap="getBigFile" class="t-20 btn btn-primary btn-active"/>
+                <Button text="GET 404" tap="get404" class="t-20 btn btn-primary btn-active"/>
+                <Button text="GET Mockbin" tap="getMockbin" class="t-20 btn btn-primary btn-active"/>
+                <Button text="GET Httpbin" tap="getHttpbin" class="t-20 btn btn-primary btn-active"/>
+                <Button text="GET Httpbin (large response)" tap="getHttpbinLargeResponse" class="t-20 btn btn-primary btn-active"/>
+                <Button text="POST Httpbin " tap="postHttpbin" class="t-20 btn btn-primary btn-active"/>
+                <Button text="POST Httpbin UTF-8" tap="postHttpbinWithUTF8" class="t-20 btn btn-primary btn-active"/>
+                <Button text="Httpbin Pinning ON" tap="enableSSLPinning" class="t-20 btn btn-primary btn-active"/>
+                <Button text="Httpbin Pinning ON, expired cert" tap="enableSSLPinningExpired" class="t-20 btn btn-primary btn-active"/>
+                <Button text="Httpbin Pinning OFF" tap="disableSSLPinning" class="t-20 btn btn-primary btn-active"/>
+            </StackLayout>
+        </ScrollView>
+    </GridLayout>
 </Page>

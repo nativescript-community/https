@@ -47,8 +47,23 @@ class HttpsResponse implements Https.HttpsResponseLegacy {
     private callback?: com.nativescript.https.OkHttpResponse.OkHttpResponseAsyncCallback;
     constructor(
         private response: com.nativescript.https.OkHttpResponse,
+        private tag: string,
         private url: string
     ) {}
+
+    getOrCreateCloseCallback() {
+        if (!notClosedResponses[this.tag]) {
+            // we need to store handling request to be able to cancel them
+            notClosedResponses[this.tag] = this.response;
+            this.response.closeCallback = new OkHttpResponse.OkHttpResponseCloseCallback(
+                {
+                    onClose() {
+                        delete notClosedResponses[this.tag];
+                    },
+                }
+            );
+        }
+    }
     getCallback(resolve, reject) {
         return new com.nativescript.https.OkHttpResponse.OkHttpResponseAsyncCallback(
             {
@@ -88,6 +103,7 @@ class HttpsResponse implements Https.HttpsResponseLegacy {
             return Promise.resolve(this.arrayBuffer);
         }
         return new Promise((resolve, reject) => {
+            this.getOrCreateCloseCallback();
             this.response.toByteArrayAsync(this.getCallback(resolve, reject));
         }).then((r: ArrayBuffer) => {
             this.arrayBuffer = r;
@@ -113,6 +129,7 @@ class HttpsResponse implements Https.HttpsResponseLegacy {
         }
         // TODO: handle arraybuffer already stored
         return new Promise<string>((resolve, reject) => {
+            this.getOrCreateCloseCallback();
             this.response.asStringAsync(this.getCallback(resolve, reject));
         }).then((r) => {
             this.stringResponse = r;
@@ -172,6 +189,7 @@ class HttpsResponse implements Https.HttpsResponseLegacy {
             return Promise.resolve(this.imageSource);
         }
         return new Promise<ImageSource>((resolve, reject) => {
+            this.getOrCreateCloseCallback();
             this.response
                 .toBitmapAsync(this.getCallback(resolve, reject))
                 .then((r) => {
@@ -197,6 +215,7 @@ class HttpsResponse implements Https.HttpsResponseLegacy {
             destinationFilePath = Https.getFilenameFromUrl(this.url);
         }
         return new Promise((resolve, reject) => {
+            this.getOrCreateCloseCallback();
             this.response.toFileAsync(
                 destinationFilePath,
                 this.getCallback(resolve, reject)
@@ -554,15 +573,7 @@ export function createRequest(
                             }
 
                             const nResponse = new OkHttpResponse(responseBody);
-                            // we need to store handling request to be able to cancel them
-                            notClosedResponses[tag] = nResponse;
-                            nResponse.closeCallback = new OkHttpResponse.OkHttpResponseCloseCallback(
-                                {
-                                    onClose() {
-                                        delete notClosedResponses[tag];
-                                    },
-                                }
-                            );
+
                             if (opts.onProgress) {
                                 nResponse.progressCallback = new OkHttpResponse.OkHttpResponseProgressCallback(
                                     {
@@ -573,10 +584,16 @@ export function createRequest(
 
                             resolve({
                                 response,
-                                content: new HttpsResponse(nResponse, opts.url),
+                                content: new HttpsResponse(
+                                    nResponse,
+                                    tag,
+                                    opts.url
+                                ),
                                 statusCode,
                                 reason: message,
-                                get headers(){return getHeaders()},
+                                get headers() {
+                                    return getHeaders();
+                                },
                             });
                         } else {
                             resolve({
@@ -584,7 +601,9 @@ export function createRequest(
                                 content: responseBody.string(),
                                 reason: message,
                                 statusCode,
-                                get headers(){return getHeaders()},
+                                get headers() {
+                                    return getHeaders();
+                                },
                             });
                         }
                     },

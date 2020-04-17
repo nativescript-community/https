@@ -544,6 +544,14 @@ export function createRequest(
     const tag = `okhttp_request_${CALL_ID++}`;
     const call = client.newCall(request.tag(tag).build());
 
+    // We have to allow networking on the main thread because larger responses will crash the app with an NetworkOnMainThreadException.
+    // Note that it would probably be better to offload it to a Worker or (natively running) AsyncTask.
+    // Also note that once set, this policy remains active until the app is killed.
+    if (opts.useLegacy === false && opts.allowLargeResponse) {
+        android.os.StrictMode.setThreadPolicy(
+            android.os.StrictMode.ThreadPolicy.LAX
+        );
+    }
     return {
         nativeRequest: call,
         cancel: () => cancelRequest(tag, client),

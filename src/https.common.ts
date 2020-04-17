@@ -46,6 +46,13 @@ export interface HttpsRequestOptions extends HttpRequestOptions {
     timeout?: number;
 
     /**
+     * On Android large responses may crash the app (fi. https://httpbin.org/bytes/10000).
+     * By setting this to true and when not using useLegacy, we allow large responses on the main thread (which this plugin currently does).
+     * Note that once set to true, this policy remains active until the app is killed.
+     */
+    allowLargeResponse?: boolean;
+
+    /**
      * iOS for now
      */
     onProgress?: (current: number, total: number) => void;

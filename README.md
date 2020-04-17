@@ -101,6 +101,13 @@ Https.disableSSLPinning()
 ```
 All requests after calling this method will no longer utilize SSL pinning until it is re-enabled once again.
 
+### useLegacy
+
+There is a new option called `useLegacy`. You can set of every request options.
+When using that option the request will behave more like {N} http module.
+
+* the `content` returned by a request is not the resulting string but an object. It follows [HTTPContent](https://docs.nativescript.org/api-reference/interfaces/_http_.httpcontent) format for the most part. You can call `toJSON` or `toFile`. The only difference is that `toFile` returns a `Promise<File>` which means that it is async and run in a background thread!
+* an error return a `content` too allowing you to read its content.
 
 ### Cookie
 

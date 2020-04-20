@@ -456,7 +456,7 @@ export function createRequest(
         opts.headers && opts.headers["Content-Type"]
             ? <string>opts.headers["Content-Type"]
             : "application/json";
-    if (type === "application/json") {
+    if (type.startsWith("application/json")) {
         manager.requestSerializer = AFJSONRequestSerializer.serializer();
         manager.responseSerializer = AFJSONResponseSerializer.serializerWithReadingOptions(
             NSJSONReadingOptions.AllowFragments

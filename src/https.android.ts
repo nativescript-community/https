@@ -123,18 +123,16 @@ class HttpsResponse implements Https.HttpsResponseLegacy {
             return null;
         }
     }
-    toStringAsync(): Promise<string> {
+    async toStringAsync(): Promise<string> {
         if (this.stringResponse) {
-            return Promise.resolve(this.stringResponse);
+            return this.stringResponse;
         }
         // TODO: handle arraybuffer already stored
-        return new Promise<string>((resolve, reject) => {
+        this.stringResponse = await new Promise<string>((resolve, reject) => {
             this.getOrCreateCloseCallback();
             this.response.asStringAsync(this.getCallback(resolve, reject));
-        }).then((r) => {
-            this.stringResponse = r;
-            return r;
         });
+        return this.stringResponse;
     }
 
     // cache it because asking it again wont work as the socket is closed
@@ -155,38 +153,25 @@ class HttpsResponse implements Https.HttpsResponseLegacy {
         }
     }
 
-    toJSONAsync() {
+    async toJSONAsync() {
         if (this.jsonResponse) {
-            return Promise.resolve(this.jsonResponse);
+            return this.jsonResponse;
         }
-        return new Promise<string>((resolve, reject) => {
-            if (this.stringResponse) {
-                this.jsonResponse = Https.parseJSON(this.stringResponse);
-                return this.jsonResponse;
-            }
-            // TODO: handle arraybuffer already stored
-            return this.toStringAsync().then((r) => {
-                this.jsonResponse = Https.parseJSON(this.stringResponse);
-                return this.jsonResponse;
-            });
-        }).then(Https.parseJSON);
+        if (this.stringResponse) {
+            this.jsonResponse = Https.parseJSON(this.stringResponse);
+            return this.jsonResponse;
+        }
+        // TODO: handle arraybuffer already stored
+        const r = await this.toStringAsync();
+        this.jsonResponse = Https.parseJSON(r);
+        return this.jsonResponse;
     }
-    // toImage(): Promise<ImageSource> {
-    //     return new Promise<any>((resolveImage, rejectImage) => {
-    //         try {
-    //             const image = this.response.toBitmap();
-    //             resolveImage(new ImageSource(image));
-    //         } catch (err) {
-    //             rejectImage(err);
-    //         }
-    //     });
-    // }
 
     // cache it because asking it again wont work as the socket is closed
     imageSource: ImageSource;
-    toImage(): Promise<ImageSource> {
+    async toImage(): Promise<ImageSource> {
         if (this.imageSource) {
-            return Promise.resolve(this.imageSource);
+            return this.imageSource;
         }
         return new Promise<ImageSource>((resolve, reject) => {
             this.getOrCreateCloseCallback();

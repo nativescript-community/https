@@ -129,12 +129,6 @@ class HttpsResponse implements Https.HttpsResponseLegacy {
     toArrayBufferAsync(): Promise<ArrayBuffer> {
         throw new Error("Method not implemented.");
     }
-    toStringAsync(): Promise<string> {
-        throw new Error("Method not implemented.");
-    }
-    toJSONAsync(): Promise<any> {
-        throw new Error("Method not implemented.");
-    }
     //     getCallback(resolve, reject) {
     //         return {
     //             onBitmap(res) {
@@ -250,6 +244,9 @@ class HttpsResponse implements Https.HttpsResponseLegacy {
             return this.stringResponse;
         }
     }
+    toStringAsync(encoding?: any) {
+        return Promise.resolve(this.toString(encoding));
+    }
     jsonResponse: any;
     toJSON(encoding?: any) {
         if (this.jsonResponse) {
@@ -272,6 +269,9 @@ class HttpsResponse implements Https.HttpsResponseLegacy {
             console.error("HttpsResponse.toJSON", err);
             return null;
         }
+    }
+    toJSONAsync(): Promise<any> {
+        return Promise.resolve(this.toJSON());
     }
     imageSource: ImageSource;
     toImage(): Promise<ImageSource> {
@@ -531,7 +531,6 @@ export function createRequest(
         cancel: () => task && task.cancel(),
         run(resolve, reject) {
             const success = function (task: NSURLSessionDataTask, data?: any) {
-
                 // TODO: refactor this code with failure one.
                 let content = useLegacy
                     ? new HttpsResponse(data, opts.url)

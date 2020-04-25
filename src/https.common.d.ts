@@ -1,6 +1,6 @@
-import { Headers, HttpRequestOptions } from "tns-core-modules/http";
-import { ImageSource } from "tns-core-modules/image-source";
-import { File } from "tns-core-modules/file-system";
+import { Headers, HttpRequestOptions } from "@nativescript/core/http";
+import { ImageSource } from "@nativescript/core/image-source";
+import { File } from "@nativescript/core/file-system";
 export interface HttpsSSLPinningOptions {
     host: string;
     certificate: string;
@@ -31,6 +31,7 @@ export interface HttpsRequestOptions extends HttpRequestOptions {
     body?: HttpsRequestObject | HttpsFormDataParam[];
     content?: string;
     timeout?: number;
+    allowLargeResponse?: boolean;
     onProgress?: (current: number, total: number) => void;
     cachePolicy?: CachePolicy;
     useLegacy?: boolean;

@@ -2,11 +2,10 @@ import {
     isDefined,
     isNullOrUndefined,
     isObject,
-} from "tns-core-modules/utils/types";
+} from "@nativescript/core/utils/types";
 import * as Https from "./https.common";
-import { HttpResponseEncoding } from "tns-core-modules/http";
-import { ImageSource } from "tns-core-modules/image-source";
-import { File } from "tns-core-modules/file-system";
+import { File } from "@nativescript/core/file-system";
+import { ImageSource } from "@nativescript/core/image-source";
 
 let cache: NSURLCache;
 

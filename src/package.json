@@ -29,13 +29,13 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "tns-core-modules": "~6.4.0",
-    "tns-platform-declarations": "~6.4.0",
-    "typescript": "3.4.5",
+    "@nativescript/core": "~6.5.1",
+    "tns-platform-declarations": "~6.5.1",
+    "typescript": "3.8.3",
     "prompt": "^1.0.0",
-    "rimraf": "^2.6.2",
-    "tslint": "^5.11.0",
-    "semver": "^5.6.0"
+    "rimraf": "^3.0.2",
+    "tslint": "^6.1.1",
+    "semver": "^7.3.2"
   },
   "author": "Eddy Verbruggen <eddyverbruggen@gmail.com> (https://github.com/EddyVerbruggen)",
   "contributors": [

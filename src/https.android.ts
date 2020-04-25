@@ -1,8 +1,8 @@
-import { isDefined } from "tns-core-modules/utils/types";
-import { HttpResponseEncoding } from "tns-core-modules/http";
-import { ImageSource } from "tns-core-modules/image-source";
+import { isDefined } from "@nativescript/core/utils/types";
+import { HttpResponseEncoding } from "@nativescript/core/http";
+import { ImageSource } from "@nativescript/core/image-source";
 import * as Https from "./https.common";
-import { File } from "tns-core-modules/file-system";
+import { File } from "@nativescript/core/file-system";
 
 interface Ipeer {
     enabled: boolean;

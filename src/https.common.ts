@@ -1,6 +1,6 @@
-import { Headers, HttpRequestOptions } from "tns-core-modules/http";
-import { ImageSource } from "tns-core-modules/image-source";
-import { File, knownFolders, path } from "tns-core-modules/file-system";
+import { Headers, HttpRequestOptions } from "@nativescript/core/http";
+import { ImageSource } from "@nativescript/core/image-source";
+import { File, knownFolders, path } from "@nativescript/core/file-system";
 
 export interface HttpsSSLPinningOptions {
     host: string;

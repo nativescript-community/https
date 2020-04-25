@@ -1,3 +1,4 @@
 dependencies {
-	implementation 'com.squareup.okhttp3:okhttp:3.14.7'
+	def okHttpVersion =  project.hasProperty("okHttpVersion") ? project.okHttpVersion : "3.14.7"
+	implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
 }

@@ -1,8 +1,7 @@
 package com.nativescript.https;
-import android.util.Log;
 import okhttp3.Callback;
 
-public class OkhttpCallback implements okhttp3.Callback {
+public class OkhttpCallback implements Callback {
     final String TAG = "OkhttpCallback";
     public void  onStringResponse(String responseString, int statusCode, okhttp3.Headers headers) {}
     public void onResponse(okhttp3.Call call, okhttp3.Response response ) throws java.io.IOException {

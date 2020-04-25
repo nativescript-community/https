@@ -9,12 +9,10 @@ import java.io.InputStream;
 import java.io.File;
 import java.io.IOException;
 
-import android.util.Log;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
 
-import okhttp3.Callback;
 import okhttp3.ResponseBody;
 
 public class OkHttpResponse {

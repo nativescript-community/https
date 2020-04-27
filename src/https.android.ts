@@ -491,7 +491,7 @@ export function createRequest(
                 : "application/json";
         const MEDIA_TYPE = okhttp3.MediaType.parse(type);
         let okHttpBody: okhttp3.RequestBody;
-        if (type === "multipart/form-data") {
+        if (type.startsWith("multipart/form-data")) {
             let builder = new okhttp3.MultipartBody.Builder();
             builder.setType(MEDIA_TYPE);
 

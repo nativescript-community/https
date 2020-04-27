@@ -567,9 +567,11 @@ export function createRequest(
             const failure = function (task: NSURLSessionDataTask, error: any) {
                 AFFailure(resolve, reject, task, error, useLegacy, opts.url);
             };
-            if (type === "multipart/form-data") {
+            if (type.startsWith("multipart/form-data")) {
                 switch (opts.method) {
                     case "POST":
+                        // we need to remove the Content-Type or the boundary wont be set correctly
+                        headers.removeObjectForKey("Content-Type");
                         task = manager.POSTParametersHeadersConstructingBodyWithBlockProgressSuccessFailure(
                             opts.url,
                             null,
@@ -581,12 +583,22 @@ export function createRequest(
                                             param.fileName &&
                                             param.contentType
                                         ) {
-                                            formData.appendPartWithFileDataNameFileNameMimeType(
-                                                param.data,
-                                                param.parameterName,
-                                                param.fileName,
-                                                param.contentType
-                                            );
+                                            if (param.data  instanceof NSURL) {
+                                                formData.appendPartWithFileURLNameFileNameMimeTypeError(
+                                                    param.data,
+                                                    param.parameterName,
+                                                    param.fileName,
+                                                    param.contentType
+                                                );
+                                            } else {
+                                                // console.log('addding file data', param.data instanceof NSData);
+                                                formData.appendPartWithFileDataNameFileNameMimeType(
+                                                    param.data,
+                                                    param.parameterName,
+                                                    param.fileName,
+                                                    param.contentType
+                                                );
+                                            }
                                         } else {
                                             formData.appendPartWithFormDataName(
                                                 NSString.stringWithString(

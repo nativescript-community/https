@@ -260,6 +260,17 @@ function getClient(
     reload: boolean = false,
     timeout: number = 10
 ): okhttp3.OkHttpClient {
+    if (!Client) {
+        // ssl error fix on KitKat. Only need to be done once.
+        // client will be null only onced so will run only once
+        const version = android.os.Build.VERSION.SDK_INT;
+        if (version >= 16 && version < 22) {
+            java.security.Security.insertProviderAt(
+                (org as any).conscrypt.Conscrypt.newProvider(),
+                1
+            );
+        }
+    }
     // if (!Client) {
     // 	Client = new okhttp3.OkHttpClient()
     // }

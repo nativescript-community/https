@@ -392,12 +392,12 @@ function AFFailure(
         AFNetworkingOperationFailingURLResponseDataErrorKey
     );
     let parsedData = getData(data);
+    const failingURL = error.userInfo.objectForKey("NSErrorFailingURLKey");
     if (useLegacy) {
         let failure: any = {
             description: error.description,
             reason: error.localizedDescription,
-            url: error.userInfo.objectForKey("NSErrorFailingURLKey")
-                .description,
+            url: failingURL ? failingURL.description : url,
         };
         if (policies.secured === true) {
             failure.description =
@@ -413,8 +413,7 @@ function AFFailure(
             body: parsedData,
             description: error.description,
             reason: error.localizedDescription,
-            url: error.userInfo.objectForKey("NSErrorFailingURLKey")
-                .description,
+            url: failingURL ? failingURL.description : url,
         };
 
         if (policies.secured === true) {
@@ -583,7 +582,7 @@ export function createRequest(
                                             param.fileName &&
                                             param.contentType
                                         ) {
-                                            if (param.data  instanceof NSURL) {
+                                            if (param.data instanceof NSURL) {
                                                 formData.appendPartWithFileURLNameFileNameMimeTypeError(
                                                     param.data,
                                                     param.parameterName,

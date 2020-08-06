@@ -1,11 +1,9 @@
 import {
-    isDefined,
-    isNullOrUndefined,
-    isObject,
-} from "@nativescript/core/utils/types";
+    Utils,
+    File,
+    ImageSource
+} from "@nativescript/core";
 import * as Https from "./https.common";
-import { File } from "@nativescript/core/file-system";
-import { ImageSource } from "@nativescript/core/image-source";
 
 let cache: NSURLCache;
 
@@ -44,12 +42,12 @@ export function enableSSLPinning(options: Https.HttpsSSLPinningOptions) {
         policies.secure = AFSecurityPolicy.policyWithPinningMode(
             AFSSLPinningMode.PublicKey
         );
-        policies.secure.allowInvalidCertificates = isDefined(
+        policies.secure.allowInvalidCertificates = Utils.isDefined(
             options.allowInvalidCertificates
         )
             ? options.allowInvalidCertificates
             : false;
-        policies.secure.validatesDomainName = isDefined(
+        policies.secure.validatesDomainName = Utils.isDefined(
             options.validatesDomainName
         )
             ? options.validatesDomainName
@@ -371,7 +369,7 @@ function AFFailure(
     let response = error.userInfo.valueForKey(
         AFNetworkingOperationFailingURLResponseErrorKey
     ) as NSHTTPURLResponse;
-    if (!isNullOrUndefined(response)) {
+    if (!Utils.isNullOrUndefined(response)) {
         sendi.statusCode = response.statusCode;
         getHeaders = function () {
             let dict = response.allHeaderFields;
@@ -434,7 +432,7 @@ function bodyToNative(cont) {
         // cont.forEach(function(item, idx) {
         //     dict.addObject(bodyToNative(item));
         // });
-    } else if (isObject(cont)) {
+    } else if (Utils.isObject(cont)) {
         dict = NSMutableDictionary.new<string, any>();
         Object.keys(cont).forEach((key) =>
             dict.setValueForKey(bodyToNative(cont[key]), key)
@@ -511,7 +509,7 @@ export function createRequest(
         ? opts.timeout
         : 10;
 
-    const useLegacy = isDefined(opts.useLegacy) ? opts.useLegacy : false;
+    const useLegacy = Utils.isDefined(opts.useLegacy) ? opts.useLegacy : false;
 
     const progress = opts.onProgress
         ? (progress: NSProgress) => {
@@ -543,7 +541,7 @@ export function createRequest(
                 };
 
                 let response = task.response as NSHTTPURLResponse;
-                if (!isNullOrUndefined(response)) {
+                if (!Utils.isNullOrUndefined(response)) {
                     sendi.statusCode = response.statusCode;
                     getHeaders = function () {
                         let dict = response.allHeaderFields;

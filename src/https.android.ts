@@ -1,8 +1,5 @@
-import { isDefined } from "@nativescript/core/utils/types";
-import { HttpResponseEncoding } from "@nativescript/core/http";
-import { ImageSource } from "@nativescript/core/image-source";
+import { Utils, HttpResponseEncoding, ImageSource, File } from "@nativescript/core";
 import * as Https from "./https.common";
-import { File } from "@nativescript/core/file-system";
 
 interface Ipeer {
     enabled: boolean;
@@ -491,8 +488,8 @@ export function createRequest(
     if (
         ["GET", "HEAD"].indexOf(opts.method) !== -1 ||
         (opts.method === "DELETE" &&
-            !isDefined(opts.body) &&
-            !isDefined(opts.content))
+            !Utils.isDefined(opts.body) &&
+            !Utils.isDefined(opts.content))
     ) {
         request[methods[opts.method]]();
     } else {

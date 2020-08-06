@@ -1,6 +1,6 @@
 {
   "name": "nativescript-https",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "description": "Secure HTTP client with SSL pinning for Nativescript - iOS/Android.",
   "main": "https",
   "typings": "index.d.ts",
@@ -29,9 +29,9 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@nativescript/core": "~6.5.1",
-    "tns-platform-declarations": "~6.5.1",
-    "typescript": "3.8.3",
+    "@nativescript/core": "rc",
+    "@nativescript/types": "rc",
+    "typescript": "~3.9.0",
     "prompt": "^1.0.0",
     "rimraf": "^3.0.2",
     "tslint": "^6.1.1",

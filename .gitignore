@@ -29,3 +29,4 @@ demo/report/stats.json
 /src/pnpm-lock.yaml
 package-lock.json
 /package
+*.tgz

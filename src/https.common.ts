@@ -1,6 +1,4 @@
-import { Headers, HttpRequestOptions } from "@nativescript/core/http";
-import { ImageSource } from "@nativescript/core/image-source";
-import { File, knownFolders, path } from "@nativescript/core/file-system";
+import { Headers, HttpRequestOptions, ImageSource, File, knownFolders, path } from "@nativescript/core";
 
 export interface HttpsSSLPinningOptions {
     host: string;

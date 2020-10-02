@@ -6,4 +6,6 @@ scripts/*
 platforms/ios/typings
 platforms/android/*
 !platforms/android/include.gradle
-!platforms/android/**/*.java
+!platforms/android/*.aar
+!platforms/android/*.jar
+*.tgz

@@ -343,7 +343,7 @@ class HttpsResponse implements Https.HttpsResponseLegacy {
 //     useLegacy: boolean,
 //     data?: NSDictionary<string, any> & NSData & NSArray<any>
 // ) {
-//     let content = useLegacy ? new HttpsResponse(data, url) : getData(data);
+//     let content = useLegacy ? newz& HttpsResponse(data, url) : getData(data);
 //     resolve({ task, content });
 // }
 
@@ -407,7 +407,7 @@ function AFFailure(
 
         resolve(sendi);
     } else {
-        let content: any = {
+        let response: any = {
             body: parsedData,
             description: error.description,
             reason: error.localizedDescription,
@@ -415,11 +415,12 @@ function AFFailure(
         };
 
         if (policies.secured === true) {
-            content.description =
+            response.description =
                 "nativescript-https > Invalid SSL certificate! " +
-                content.description;
+                response.description;
         }
-        sendi.content = content;
+        sendi.content = parsedData;
+        sendi.response = response;
 
         resolve(sendi);
     }

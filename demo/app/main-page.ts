@@ -135,21 +135,7 @@ export function getMockbin() {
 }
 
 export function get404() {
-    Https.request({
-        url: "https://httpbin.org/json",
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json; charset=utf-8"
-        },
-        body: {foo:"bar"},
-        allowLargeResponse: true
-    }).then(res => {
-        console.log(res.content)
-        console.log(res.content.slideshow)
-    }).catch(err => {
-        console.log("error >>>", err);
-    })
-    //getRequest("https://mockbin.com/reque2st");
+    getRequest("https://mockbin.com/reque2st");
 }
 
 export function enableSSLPinning(args: EventData) {

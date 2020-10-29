@@ -1,0 +1,58 @@
+# Change Log
+
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+# 3.1.0 (2020-10-29)
+
+
+### Bug Fixes
+
+* ios throw error like android (useLegacy) ([ff86cdc](https://github.com/farfromrefug/nativescript-https/commit/ff86cdc7060e9f692ce515362327adbbbf424d15))
+* **android:** now java files are included ([495c0c7](https://github.com/farfromrefug/nativescript-https/commit/495c0c7d9effd5db859968bf3907df9ba4b5d939))
+* **android:** packaging of java fies ([c467fe1](https://github.com/farfromrefug/nativescript-https/commit/c467fe1e13e825aed37f7acaf26b37a488760860))
+* **ios:** crash when error.userInfo.objectForKey("NSErrorFailingURLKey") is null ([dc96a48](https://github.com/farfromrefug/nativescript-https/commit/dc96a48988200f826c5b93ea0c6e0a20d2b64f04))
+* better test for application/json ([0d06254](https://github.com/farfromrefug/nativescript-https/commit/0d062547380147971b5e5d46ec5383afe849adf5))
+* bring back allowLargeResponse when not using useLegacy ([604637a](https://github.com/farfromrefug/nativescript-https/commit/604637ad1adb36c5947e4742463b95cc3d0112ef))
+* kitkat fix (ssl errors) ([be05b83](https://github.com/farfromrefug/nativescript-https/commit/be05b8355823d85c10a57739250bdc37dbf7c087))
+* merge from origin ([ed0edbe](https://github.com/farfromrefug/nativescript-https/commit/ed0edbe305f9a64ac4936486994ae819e3cd6b93))
+* some multi part fixes ([3fdbd94](https://github.com/farfromrefug/nativescript-https/commit/3fdbd9441296be609a82a208e6099670ca7dbc05))
+* **android:** allow overriding version ([57eea0c](https://github.com/farfromrefug/nativescript-https/commit/57eea0c8b0a46b8b899a4b88844f7716f03917b5))
+* **android:** only create OkHttpResponseCloseCallback when necessary ([1fb44fd](https://github.com/farfromrefug/nativescript-https/commit/1fb44fd01514246aab40c1067157a5e7f6b5bdd7))
+* **android:** removed logs ([22605de](https://github.com/farfromrefug/nativescript-https/commit/22605de5153a00ade7dcd4e78c13c04736534c07))
+* **android:** toJSONAsync fix ([ea415cd](https://github.com/farfromrefug/nativescript-https/commit/ea415cd842da0fd6364837a0afe0bebf834c4083))
+* **ios:** alloc clear cache on ios even if set cache done done ([374cd92](https://github.com/farfromrefug/nativescript-https/commit/374cd92c7bc375725ec16997cf7ea694cffb204a))
+* **ios:** toStringAsync &&  toJSONAsync ([20a74b6](https://github.com/farfromrefug/nativescript-https/commit/20a74b66a6d8a118ffe59f4bf440909de37d5c78))
+* multipart fixes ([097676f](https://github.com/farfromrefug/nativescript-https/commit/097676f1e404e2edb67fb1877941fa3e4bf05e0b))
+* typings ([8b5d82b](https://github.com/farfromrefug/nativescript-https/commit/8b5d82b71c2143a310222936fd0328b03958dc6a))
+* useLegacy should be a request option ([74f1afa](https://github.com/farfromrefug/nativescript-https/commit/74f1afabfeb051c08b89050b17771356381bd03c))
+* **ios:** multipart fix ([0d9d331](https://github.com/farfromrefug/nativescript-https/commit/0d9d331ff49cedd06ed0d07cd25a4b50181a23a5))
+
+
+### Features
+
+* basick cookie support ([91fe3c7](https://github.com/farfromrefug/nativescript-https/commit/91fe3c7d6b8fd7f4198845bd9f88324ccb384704))
+* cachePolicy support ([2355eb0](https://github.com/farfromrefug/nativescript-https/commit/2355eb0207c58c3a161769de2b111dae268b5a42))
+* in useLegacy bring the full power of async with progress and cancelation ([91b1772](https://github.com/farfromrefug/nativescript-https/commit/91b1772bd99887c8b9cbd7d523e77c363ecafee9))
+* move to @nativescript-community/https ([5c8d5c8](https://github.com/farfromrefug/nativescript-https/commit/5c8d5c8c4e5e7d50a0312cf978638b6068398025))
+* multi formdata support ([c1dff6d](https://github.com/farfromrefug/nativescript-https/commit/c1dff6d27bcad54fb4f7aa03180a73696fc17ce2))
+
+
+
+# 2.1.0 (2020-04-07)
+
+
+
+# 2.0.0 (2020-03-30)
+
+
+
+# 1.3.0 (2020-02-13)
+
+
+
+## 1.2.2 (2019-10-16)
+
+
+
+# 1.2.0 (2019-10-06)

@@ -369,7 +369,6 @@ function AFFailure(
     let response = error.userInfo.valueForKey(
         AFNetworkingOperationFailingURLResponseErrorKey
     ) as NSHTTPURLResponse;
-    console.log('AFFailu re', error, Utils.isNullOrUndefined(response), response);
     if (!Utils.isNullOrUndefined(response)) {
         sendi.statusCode = response.statusCode;
         getHeaders = function () {

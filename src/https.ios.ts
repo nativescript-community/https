@@ -369,6 +369,7 @@ function AFFailure(
     let response = error.userInfo.valueForKey(
         AFNetworkingOperationFailingURLResponseErrorKey
     ) as NSHTTPURLResponse;
+    console.log('AFFailu re', error, Utils.isNullOrUndefined(response), response);
     if (!Utils.isNullOrUndefined(response)) {
         sendi.statusCode = response.statusCode;
         getHeaders = function () {
@@ -392,6 +393,9 @@ function AFFailure(
     let parsedData = getData(data);
     const failingURL = error.userInfo.objectForKey("NSErrorFailingURLKey");
     if (useLegacy) {
+        if (!sendi.statusCode) {
+           return reject(error.localizedDescription);
+        }
         let failure: any = {
             description: error.description,
             reason: error.localizedDescription,
@@ -404,7 +408,6 @@ function AFFailure(
         }
         sendi.failure = failure;
         sendi.content = new HttpsResponse(data, url);
-
         resolve(sendi);
     } else {
         let content: any = {
@@ -529,7 +532,7 @@ export function createRequest(
         run(resolve, reject) {
             const success = function (task: NSURLSessionDataTask, data?: any) {
                 // TODO: refactor this code with failure one.
-                let content = useLegacy
+            let content = useLegacy
                     ? new HttpsResponse(data, opts.url)
                     : getData(data);
                 let getHeaders = () => ({});

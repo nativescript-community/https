@@ -1,8 +1,8 @@
 import * as Https from "nativescript-https";
-import * as Observable from "tns-core-modules/data/observable";
-import * as fs from "tns-core-modules/file-system";
-import * as dialogs from "tns-core-modules/ui/dialogs";
-import * as Page from "tns-core-modules/ui/page";
+import * as Observable from "@nativescript/core/data/observable";
+import * as fs from "@nativescript/core/file-system";
+import * as dialogs from "@nativescript/core/ui/dialogs";
+import * as Page from "@nativescript/core/ui/page";
 
 let page;
 let viewModel;

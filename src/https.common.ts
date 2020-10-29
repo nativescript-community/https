@@ -1,4 +1,4 @@
-import { Headers, HttpRequestOptions, ImageSource, File, knownFolders, path } from "@nativescript/core";
+import { File, Headers, HttpRequestOptions, ImageSource, knownFolders, path } from '@nativescript/core';
 
 export interface HttpsSSLPinningOptions {
     host: string;
@@ -21,19 +21,13 @@ export interface HttpsFormDataParam {
 }
 
 export interface HttpsRequestObject {
-    [key: string]:
-        | string
-        | number
-        | boolean
-        | HttpsRequestObject
-        | Array<any>
-        | HttpsFormDataParam;
+    [key: string]: string | number | boolean | HttpsRequestObject | any[] | HttpsFormDataParam;
 }
 
-export type CachePolicy = "noCache" | "onlyCache" | "ignoreCache";
+export type CachePolicy = 'noCache' | 'onlyCache' | 'ignoreCache';
 export interface HttpsRequestOptions extends HttpRequestOptions {
     url: string;
-    method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" | "HEAD";
+    method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'HEAD';
     headers?: Headers;
     params?: HttpsRequestObject;
     body?: HttpsRequestObject | HttpsFormDataParam[];
@@ -70,9 +64,9 @@ export interface HttpsResponse {
 }
 
 export interface HttpsRequest {
-  nativeRequest;
-  cancel();
-  run(success, failure);
+    nativeRequest;
+    cancel();
+    run(success, failure);
 }
 
 export interface HttpsResponseLegacy {
@@ -90,27 +84,25 @@ export interface HttpsResponseLegacy {
 }
 
 export function getFilenameFromUrl(url: string) {
-  const slashPos = url.lastIndexOf("/") + 1;
-  const questionMarkPos = url.lastIndexOf("?");
+    const slashPos = url.lastIndexOf('/') + 1;
+    const questionMarkPos = url.lastIndexOf('?');
 
-  let actualFileName: string;
-  if (questionMarkPos !== -1) {
-      actualFileName = url.substring(slashPos, questionMarkPos);
-  } else {
-      actualFileName = url.substring(slashPos);
-  }
+    let actualFileName: string;
+    if (questionMarkPos !== -1) {
+        actualFileName = url.substring(slashPos, questionMarkPos);
+    } else {
+        actualFileName = url.substring(slashPos);
+    }
 
-  const result = path.join(knownFolders.documents().path, actualFileName);
+    const result = path.join(knownFolders.documents().path, actualFileName);
 
-  return result;
+    return result;
 }
 export function parseJSON(source: string): any {
-  const src = source.trim();
-  if (src.lastIndexOf(")") === src.length - 1) {
-      return JSON.parse(
-          src.substring(src.indexOf("(") + 1, src.lastIndexOf(")"))
-      );
-  }
+    const src = source.trim();
+    if (src.lastIndexOf(')') === src.length - 1) {
+        return JSON.parse(src.substring(src.indexOf('(') + 1, src.lastIndexOf(')')));
+    }
 
-  return JSON.parse(src);
+    return JSON.parse(src);
 }

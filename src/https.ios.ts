@@ -402,7 +402,7 @@ function AFFailure(
         };
         if (policies.secured === true) {
             failure.description =
-                "nativescript-https > Invalid SSL certificate! " +
+                "@nativescript-community/https > Invalid SSL certificate! " +
                 error.description;
         }
         sendi.failure = failure;
@@ -418,7 +418,7 @@ function AFFailure(
 
         if (policies.secured === true) {
             content.description =
-                "nativescript-https > Invalid SSL certificate! " +
+                "@nativescript-community/https > Invalid SSL certificate! " +
                 content.description;
         }
         sendi.content = content;

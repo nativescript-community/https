@@ -1,0 +1,18 @@
+apply plugin: 'java'
+
+// Use maven repository
+repositories {
+    mavenCentral()
+    google()
+}
+dependencies {
+	implementation 'com.squareup.okhttp3:okhttp:3.14.7'
+    implementation files('/Volumes/dev/androidSDK/platforms/android-28/android.jar')
+}
+sourceSets {
+    main {
+        java {
+            srcDirs = ["src/platforms/android/java"]
+        }
+    }
+}

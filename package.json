@@ -1,0 +1,99 @@
+{
+    "name": "@nativescript-community/https",
+    "version": "1.0.0",
+    "description": "Nativescript plugin for gestures",
+    "scripts": {
+        "tsc": "cp src/index.d.ts plugin && tsc -skipLibCheck -d",
+        "clean": "rimraf ./plugin/**/*.d.ts ./plugin/**/*.js ./plugin/**/*.js.map plugin/node_modules plugin/package-lock.json",
+        "build.plugin": " cp README.md plugin/ && rm -f .tsbuildinfo && npm run tsc",
+        "build.android": "bash src-native/android/build.sh",
+        "build.ios": "bash src-native/ios/build.sh",
+        "build.native": "npm run build.android && npm run build.ios",
+        "build": "npm run build.plugin",
+        "demo.ios": "npm run build && cd ../demo && tns run ios",
+        "demo.android": "npm run build && cd ../demo && tns run android",
+        "plugin.watch.tsc": "npm run tsc -- -w",
+        "plugin.watch.android": "npm i && npm-watch build.android",
+        "plugin.watch.ios": "npm i && npm-watch build.ios",
+        "plugin.watch": "npm run plugin.watch.tsc & npm run plugin.watch.android & npm run plugin.watch.ios",
+        "publish": "npm run build && lerna publish --create-release=github",
+        "commitmsg": "commitlint -e $GIT_PARAMS"
+    },
+    "keywords": [
+        "secure",
+        "https",
+        "http",
+        "ssl",
+        "tls",
+        "pinning",
+        "nativescript",
+        "ecosystem:nativescript",
+        "nativescript-android",
+        "nativescript-ios",
+        "JavaScript",
+        "Android",
+        "iOS"
+    ],
+    "contributors": [
+        {
+            "name": "Robert Laverty",
+            "email": "roblav96@gmail.com",
+            "url": "https://github.com/roblav96"
+        },
+        {
+            "name": "Kefah BADER ALDIN",
+            "email": "kefah.bader@gmail.com",
+            "url": "https://github.com/kefahB"
+        }
+    ],
+    "author": "Eddy Verbruggen <eddyverbruggen@gmail.com> (https://github.com/EddyVerbruggen)",
+    "bugs": {
+        "url": "https://github.com/nativescript-community/https/issues"
+    },
+    "license": "MIT",
+    "homepage": "https://github.com/nativescript-community/https",
+    "readmeFilename": "README.md",
+    "devDependencies": {
+        "@commitlint/cli": "^9.1.2",
+        "@commitlint/config-conventional": "^9.1.2",
+        "@nativescript-community/observable": "^2.0.8",
+        "@nativescript/core": "7.0.0",
+        "@nativescript/types-android": "7.0.2",
+        "@nativescript/types-ios": "7.0.1",
+        "@nativescript/webpack": "3.0.2",
+        "@types/node": "^13.11.1",
+        "@typescript-eslint/eslint-plugin": "4.0.1",
+        "@typescript-eslint/parser": "4.0.1",
+        "cpy-cli": "^3.1.1",
+        "eslint": "7.8.1",
+        "eslint-config-prettier": "^6.13.0",
+        "eslint-plugin-prettier": "^3.1.4",
+        "husky": "^4.2.5",
+        "lerna": "^3.22.1",
+        "npm-watch": "^0.7.0",
+        "prettier": "^2.1.2",
+        "prompt": "^1.0.0",
+        "rimraf": "^3.0.2",
+        "typescript": "~3.9.7"
+    },
+    "bootstrapper": "nativescript-plugin-seed",
+    "watch": {
+        "build.android": {
+            "patterns": [
+                "./src-native/android/gesturehandler/src"
+            ],
+            "extensions": "java"
+        },
+        "build.ios": {
+            "patterns": [
+                "./src-native/ios/GestureHandler"
+            ],
+            "extensions": "h,m"
+        }
+    },
+    "commitlint": {
+        "extends": [
+            "@commitlint/config-conventional"
+        ]
+    }
+}

@@ -1,48 +1,60 @@
-
-declare module okhttp3 {
+/* eslint-disable @typescript-eslint/adjacent-overload-signatures */
+/* eslint-disable no-redeclare */
+/* eslint-disable @typescript-eslint/unified-signatures */
+declare namespace okhttp3 {
     export class Address {
-        public static class: java.lang.Class<okhttp3.Address>;
+        public static class: java.lang.Class<Address>;
         public proxy(): java.net.Proxy;
         public equals(param0: any): boolean;
-        public constructor(param0: string, param1: number, param2: okhttp3.Dns, param3: javax.net.SocketFactory, param4: javax.net.ssl.SSLSocketFactory, param5: javax.net.ssl.HostnameVerifier, param6: okhttp3.CertificatePinner, param7: okhttp3.Authenticator, param8: java.net.Proxy, param9: java.util.List<okhttp3.Protocol>, param10: java.util.List<okhttp3.ConnectionSpec>, param11: java.net.ProxySelector);
+        public constructor(
+            param0: string,
+            param1: number,
+            param2: Dns,
+            param3: javax.net.SocketFactory,
+            param4: javax.net.ssl.SSLSocketFactory,
+            param5: javax.net.ssl.HostnameVerifier,
+            param6: CertificatePinner,
+            param7: Authenticator,
+            param8: java.net.Proxy,
+            param9: java.util.List<Protocol>,
+            param10: java.util.List<ConnectionSpec>,
+            param11: java.net.ProxySelector
+        );
         public proxySelector(): java.net.ProxySelector;
         public sslSocketFactory(): javax.net.ssl.SSLSocketFactory;
-        public url(): okhttp3.HttpUrl;
-        public certificatePinner(): okhttp3.CertificatePinner;
+        public url(): HttpUrl;
+        public certificatePinner(): CertificatePinner;
         public toString(): string;
-        public protocols(): java.util.List<okhttp3.Protocol>;
+        public protocols(): java.util.List<Protocol>;
         public socketFactory(): javax.net.SocketFactory;
-        public dns(): okhttp3.Dns;
-        public proxyAuthenticator(): okhttp3.Authenticator;
+        public dns(): Dns;
+        public proxyAuthenticator(): Authenticator;
         public hostnameVerifier(): javax.net.ssl.HostnameVerifier;
         public hashCode(): number;
-        public connectionSpecs(): java.util.List<okhttp3.ConnectionSpec>;
+        public connectionSpecs(): java.util.List<ConnectionSpec>;
     }
 }
 
-declare module okhttp3 {
+declare namespace okhttp3 {
     export class Authenticator {
-        public static class: java.lang.Class<okhttp3.Authenticator>;
+        public static class: java.lang.Class<Authenticator>;
         /**
          * Constructs a new instance of the okhttp3.Authenticator interface with the provided implementation. An empty constructor exists calling super() when extending the interface class.
          */
-        public constructor(implementation: {
-            authenticate(param0: okhttp3.Route, param1: okhttp3.Response): okhttp3.Request;
-            <clinit>(): void;
-        });
+        public constructor(implementation: { authenticate(param0: Route, param1: Response): Request; <clinit>(): void });
         public constructor();
-        public static NONE: okhttp3.Authenticator;
-        public authenticate(param0: okhttp3.Route, param1: okhttp3.Response): okhttp3.Request;
+        public static NONE: Authenticator;
+        public authenticate(param0: Route, param1: Response): Request;
     }
 }
 
-declare module okhttp3 {
+declare namespace okhttp3 {
     export class Cache {
-        public static class: java.lang.Class<okhttp3.Cache>;
+        public static class: java.lang.Class<Cache>;
         public close(): void;
         public directory(): java.io.File;
         public constructor(param0: java.io.File, param1: number);
-        public static key(param0: okhttp3.HttpUrl): string;
+        public static key(param0: HttpUrl): string;
         public writeAbortCount(): number;
         public evictAll(): void;
         public delete(): void;
@@ -57,35 +69,35 @@ declare module okhttp3 {
         public urls(): java.util.Iterator<string>;
         public maxSize(): number;
     }
-    export module Cache {
-        export class CacheRequestImpl extends okhttp3.internal.cache.CacheRequest {
-            public static class: java.lang.Class<okhttp3.Cache.CacheRequestImpl>;
+    export namespace Cache {
+        export class CacheRequestImpl extends internal.cache.CacheRequest {
+            public static class: java.lang.Class<CacheRequestImpl>;
             public body(): okio.Sink;
             public abort(): void;
         }
-        export class CacheResponseBody extends okhttp3.ResponseBody {
-            public static class: java.lang.Class<okhttp3.Cache.CacheResponseBody>;
+        export class CacheResponseBody extends ResponseBody {
+            public static class: java.lang.Class<CacheResponseBody>;
             public contentLength(): number;
             public source(): okio.BufferedSource;
-            public contentType(): okhttp3.MediaType;
+            public contentType(): MediaType;
         }
         export class Entry {
-            public static class: java.lang.Class<okhttp3.Cache.Entry>;
-            public matches(param0: okhttp3.Request, param1: okhttp3.Response): boolean;
-            public response(param0: okhttp3.internal.cache.DiskLruCache.Snapshot): okhttp3.Response;
-            public writeTo(param0: okhttp3.internal.cache.DiskLruCache.Editor): void;
+            public static class: java.lang.Class<Entry>;
+            public matches(param0: Request, param1: Response): boolean;
+            public response(param0: internal.cache.DiskLruCache.Snapshot): Response;
+            public writeTo(param0: internal.cache.DiskLruCache.Editor): void;
         }
     }
 }
 
-declare module okhttp3 {
+declare namespace okhttp3 {
     export class CacheControl {
-        public static class: java.lang.Class<okhttp3.CacheControl>;
-        public static FORCE_NETWORK: okhttp3.CacheControl;
-        public static FORCE_CACHE: okhttp3.CacheControl;
+        public static class: java.lang.Class<CacheControl>;
+        public static FORCE_NETWORK: CacheControl;
+        public static FORCE_CACHE: CacheControl;
         public maxStaleSeconds(): number;
         public mustRevalidate(): boolean;
-        public static parse(param0: okhttp3.Headers): okhttp3.CacheControl;
+        public static parse(param0: Headers): CacheControl;
         public toString(): string;
         public minFreshSeconds(): number;
         public onlyIfCached(): boolean;
@@ -98,99 +110,94 @@ declare module okhttp3 {
         public maxAgeSeconds(): number;
         public isPublic(): boolean;
     }
-    export module CacheControl {
+    export namespace CacheControl {
         export class Builder {
-            public static class: java.lang.Class<okhttp3.CacheControl.Builder>;
-            public noCache(): okhttp3.CacheControl.Builder;
-            public maxStale(param0: number, param1: java.util.concurrent.TimeUnit): okhttp3.CacheControl.Builder;
-            public immutable(): okhttp3.CacheControl.Builder;
-            public onlyIfCached(): okhttp3.CacheControl.Builder;
-            public minFresh(param0: number, param1: java.util.concurrent.TimeUnit): okhttp3.CacheControl.Builder;
-            public maxAge(param0: number, param1: java.util.concurrent.TimeUnit): okhttp3.CacheControl.Builder;
+            public static class: java.lang.Class<Builder>;
+            public noCache(): Builder;
+            public maxStale(param0: number, param1: java.util.concurrent.TimeUnit): Builder;
+            public immutable(): Builder;
+            public onlyIfCached(): Builder;
+            public minFresh(param0: number, param1: java.util.concurrent.TimeUnit): Builder;
+            public maxAge(param0: number, param1: java.util.concurrent.TimeUnit): Builder;
             public constructor();
-            public build(): okhttp3.CacheControl;
-            public noStore(): okhttp3.CacheControl.Builder;
-            public noTransform(): okhttp3.CacheControl.Builder;
+            public build(): CacheControl;
+            public noStore(): Builder;
+            public noTransform(): Builder;
         }
     }
 }
 
-declare module okhttp3 {
+declare namespace okhttp3 {
     export class Call {
-        public static class: java.lang.Class<okhttp3.Call>;
+        public static class: java.lang.Class<Call>;
         /**
          * Constructs a new instance of the okhttp3.Call interface with the provided implementation. An empty constructor exists calling super() when extending the interface class.
          */
         public constructor(implementation: {
-            request(): okhttp3.Request;
-            execute(): okhttp3.Response;
-            enqueue(param0: okhttp3.Callback): void;
+            request(): Request;
+            execute(): Response;
+            enqueue(param0: Callback): void;
             cancel(): void;
             isExecuted(): boolean;
             isCanceled(): boolean;
             timeout(): okio.Timeout;
-            clone(): okhttp3.Call;
+            clone(): Call;
         });
         public constructor();
         public isExecuted(): boolean;
-        public clone(): okhttp3.Call;
-        public request(): okhttp3.Request;
-        public execute(): okhttp3.Response;
+        public clone(): Call;
+        public request(): Request;
+        public execute(): Response;
         public isCanceled(): boolean;
-        public enqueue(param0: okhttp3.Callback): void;
+        public enqueue(param0: Callback): void;
         public cancel(): void;
         public timeout(): okio.Timeout;
     }
-    export module Call {
+    export namespace Call {
         export class Factory {
-            public static class: java.lang.Class<okhttp3.Call.Factory>;
+            public static class: java.lang.Class<Factory>;
             /**
              * Constructs a new instance of the okhttp3.Call$Factory interface with the provided implementation. An empty constructor exists calling super() when extending the interface class.
              */
-            public constructor(implementation: {
-                newCall(param0: okhttp3.Request): okhttp3.Call;
-            });
+            public constructor(implementation: { newCall(param0: Request): Call });
             public constructor();
-            public newCall(param0: okhttp3.Request): okhttp3.Call;
+            public newCall(param0: Request): Call;
         }
     }
 }
 
-declare module okhttp3 {
+declare namespace okhttp3 {
     export class Callback {
-        public static class: java.lang.Class<okhttp3.Callback>;
+        public static class: java.lang.Class<Callback>;
         /**
          * Constructs a new instance of the okhttp3.Callback interface with the provided implementation. An empty constructor exists calling super() when extending the interface class.
          */
-        public constructor(implementation: {
-            onFailure(param0: okhttp3.Call, param1: java.io.IOException): void;
-            onResponse(param0: okhttp3.Call, param1: okhttp3.Response): void;
-        });
+        public constructor(implementation: { onFailure(param0: Call, param1: java.io.IOException): void; onResponse(param0: Call, param1: Response): void });
         public constructor();
-        public onResponse(param0: okhttp3.Call, param1: okhttp3.Response): void;
-        public onFailure(param0: okhttp3.Call, param1: java.io.IOException): void;
+        public onResponse(param0: Call, param1: Response): void;
+        public onFailure(param0: Call, param1: java.io.IOException): void;
     }
 }
 
-declare module okhttp3 {
+declare namespace okhttp3 {
     export class CertificatePinner {
-        public static class: java.lang.Class<okhttp3.CertificatePinner>;
-        public static DEFAULT: okhttp3.CertificatePinner;
+        public static class: java.lang.Class<CertificatePinner>;
+        public static DEFAULT: CertificatePinner;
         public equals(param0: any): boolean;
         public static pin(param0: java.security.cert.Certificate): string;
         public check(param0: string, param1: native.Array<java.security.cert.Certificate>): void;
         public hashCode(): number;
         public check(param0: string, param1: java.util.List<java.security.cert.Certificate>): void;
     }
-    export module CertificatePinner {
+    export namespace CertificatePinner {
         export class Builder {
-            public static class: java.lang.Class<okhttp3.CertificatePinner.Builder>;
-            public build(): okhttp3.CertificatePinner;
-            public add(param0: string, param1: native.Array<string>): okhttp3.CertificatePinner.Builder;
+            public static class: java.lang.Class<Builder>;
+            public build(): CertificatePinner;
+            public add(param0: string, param1: native.Array<string>): Builder;
             public constructor();
         }
         export class Pin {
-            public static class: java.lang.Class<okhttp3.CertificatePinner.Pin>;
+            public static class: java.lang.Class<Pin>;
             public equals(param0: any): boolean;
             public toString(): string;
             public hashCode(): number;
@@ -198,173 +205,168 @@ declare module okhttp3 {
     }
 }
 
-declare module okhttp3 {
+declare namespace okhttp3 {
     export class Challenge {
-        public static class: java.lang.Class<okhttp3.Challenge>;
-        public authParams(): java.util.Map<string,string>;
+        public static class: java.lang.Class<Challenge>;
+        public authParams(): java.util.Map<string, string>;
         public charset(): java.nio.charset.Charset;
         public equals(param0: any): boolean;
         public scheme(): string;
         public hashCode(): number;
         public toString(): string;
-        public constructor(param0: string, param1: java.util.Map<string,string>);
-        public withCharset(param0: java.nio.charset.Charset): okhttp3.Challenge;
+        public constructor(param0: string, param1: java.util.Map<string, string>);
+        public withCharset(param0: java.nio.charset.Charset): Challenge;
         public constructor(param0: string, param1: string);
         public realm(): string;
     }
 }
 
-declare module okhttp3 {
+declare namespace okhttp3 {
     export class CipherSuite {
-        public static class: java.lang.Class<okhttp3.CipherSuite>;
-        public static TLS_RSA_WITH_NULL_MD5: okhttp3.CipherSuite;
-        public static TLS_RSA_WITH_NULL_SHA: okhttp3.CipherSuite;
-        public static TLS_RSA_EXPORT_WITH_RC4_40_MD5: okhttp3.CipherSuite;
-        public static TLS_RSA_WITH_RC4_128_MD5: okhttp3.CipherSuite;
-        public static TLS_RSA_WITH_RC4_128_SHA: okhttp3.CipherSuite;
-        public static TLS_RSA_EXPORT_WITH_DES40_CBC_SHA: okhttp3.CipherSuite;
-        public static TLS_RSA_WITH_DES_CBC_SHA: okhttp3.CipherSuite;
-        public static TLS_RSA_WITH_3DES_EDE_CBC_SHA: okhttp3.CipherSuite;
-        public static TLS_DHE_DSS_EXPORT_WITH_DES40_CBC_SHA: okhttp3.CipherSuite;
-        public static TLS_DHE_DSS_WITH_DES_CBC_SHA: okhttp3.CipherSuite;
-        public static TLS_DHE_DSS_WITH_3DES_EDE_CBC_SHA: okhttp3.CipherSuite;
-        public static TLS_DHE_RSA_EXPORT_WITH_DES40_CBC_SHA: okhttp3.CipherSuite;
-        public static TLS_DHE_RSA_WITH_DES_CBC_SHA: okhttp3.CipherSuite;
-        public static TLS_DHE_RSA_WITH_3DES_EDE_CBC_SHA: okhttp3.CipherSuite;
-        public static TLS_DH_anon_EXPORT_WITH_RC4_40_MD5: okhttp3.CipherSuite;
-        public static TLS_DH_anon_WITH_RC4_128_MD5: okhttp3.CipherSuite;
-        public static TLS_DH_anon_EXPORT_WITH_DES40_CBC_SHA: okhttp3.CipherSuite;
-        public static TLS_DH_anon_WITH_DES_CBC_SHA: okhttp3.CipherSuite;
-        public static TLS_DH_anon_WITH_3DES_EDE_CBC_SHA: okhttp3.CipherSuite;
-        public static TLS_KRB5_WITH_DES_CBC_SHA: okhttp3.CipherSuite;
-        public static TLS_KRB5_WITH_3DES_EDE_CBC_SHA: okhttp3.CipherSuite;
-        public static TLS_KRB5_WITH_RC4_128_SHA: okhttp3.CipherSuite;
-        public static TLS_KRB5_WITH_DES_CBC_MD5: okhttp3.CipherSuite;
-        public static TLS_KRB5_WITH_3DES_EDE_CBC_MD5: okhttp3.CipherSuite;
-        public static TLS_KRB5_WITH_RC4_128_MD5: okhttp3.CipherSuite;
-        public static TLS_KRB5_EXPORT_WITH_DES_CBC_40_SHA: okhttp3.CipherSuite;
-        public static TLS_KRB5_EXPORT_WITH_RC4_40_SHA: okhttp3.CipherSuite;
-        public static TLS_KRB5_EXPORT_WITH_DES_CBC_40_MD5: okhttp3.CipherSuite;
-        public static TLS_KRB5_EXPORT_WITH_RC4_40_MD5: okhttp3.CipherSuite;
-        public static TLS_RSA_WITH_AES_128_CBC_SHA: okhttp3.CipherSuite;
-        public static TLS_DHE_DSS_WITH_AES_128_CBC_SHA: okhttp3.CipherSuite;
-        public static TLS_DHE_RSA_WITH_AES_128_CBC_SHA: okhttp3.CipherSuite;
-        public static TLS_DH_anon_WITH_AES_128_CBC_SHA: okhttp3.CipherSuite;
-        public static TLS_RSA_WITH_AES_256_CBC_SHA: okhttp3.CipherSuite;
-        public static TLS_DHE_DSS_WITH_AES_256_CBC_SHA: okhttp3.CipherSuite;
-        public static TLS_DHE_RSA_WITH_AES_256_CBC_SHA: okhttp3.CipherSuite;
-        public static TLS_DH_anon_WITH_AES_256_CBC_SHA: okhttp3.CipherSuite;
-        public static TLS_RSA_WITH_NULL_SHA256: okhttp3.CipherSuite;
-        public static TLS_RSA_WITH_AES_128_CBC_SHA256: okhttp3.CipherSuite;
-        public static TLS_RSA_WITH_AES_256_CBC_SHA256: okhttp3.CipherSuite;
-        public static TLS_DHE_DSS_WITH_AES_128_CBC_SHA256: okhttp3.CipherSuite;
-        public static TLS_RSA_WITH_CAMELLIA_128_CBC_SHA: okhttp3.CipherSuite;
-        public static TLS_DHE_DSS_WITH_CAMELLIA_128_CBC_SHA: okhttp3.CipherSuite;
-        public static TLS_DHE_RSA_WITH_CAMELLIA_128_CBC_SHA: okhttp3.CipherSuite;
-        public static TLS_DHE_RSA_WITH_AES_128_CBC_SHA256: okhttp3.CipherSuite;
-        public static TLS_DHE_DSS_WITH_AES_256_CBC_SHA256: okhttp3.CipherSuite;
-        public static TLS_DHE_RSA_WITH_AES_256_CBC_SHA256: okhttp3.CipherSuite;
-        public static TLS_DH_anon_WITH_AES_128_CBC_SHA256: okhttp3.CipherSuite;
-        public static TLS_DH_anon_WITH_AES_256_CBC_SHA256: okhttp3.CipherSuite;
-        public static TLS_RSA_WITH_CAMELLIA_256_CBC_SHA: okhttp3.CipherSuite;
-        public static TLS_DHE_DSS_WITH_CAMELLIA_256_CBC_SHA: okhttp3.CipherSuite;
-        public static TLS_DHE_RSA_WITH_CAMELLIA_256_CBC_SHA: okhttp3.CipherSuite;
-        public static TLS_PSK_WITH_RC4_128_SHA: okhttp3.CipherSuite;
-        public static TLS_PSK_WITH_3DES_EDE_CBC_SHA: okhttp3.CipherSuite;
-        public static TLS_PSK_WITH_AES_128_CBC_SHA: okhttp3.CipherSuite;
-        public static TLS_PSK_WITH_AES_256_CBC_SHA: okhttp3.CipherSuite;
-        public static TLS_RSA_WITH_SEED_CBC_SHA: okhttp3.CipherSuite;
-        public static TLS_RSA_WITH_AES_128_GCM_SHA256: okhttp3.CipherSuite;
-        public static TLS_RSA_WITH_AES_256_GCM_SHA384: okhttp3.CipherSuite;
-        public static TLS_DHE_RSA_WITH_AES_128_GCM_SHA256: okhttp3.CipherSuite;
-        public static TLS_DHE_RSA_WITH_AES_256_GCM_SHA384: okhttp3.CipherSuite;
-        public static TLS_DHE_DSS_WITH_AES_128_GCM_SHA256: okhttp3.CipherSuite;
-        public static TLS_DHE_DSS_WITH_AES_256_GCM_SHA384: okhttp3.CipherSuite;
-        public static TLS_DH_anon_WITH_AES_128_GCM_SHA256: okhttp3.CipherSuite;
-        public static TLS_DH_anon_WITH_AES_256_GCM_SHA384: okhttp3.CipherSuite;
-        public static TLS_EMPTY_RENEGOTIATION_INFO_SCSV: okhttp3.CipherSuite;
-        public static TLS_FALLBACK_SCSV: okhttp3.CipherSuite;
-        public static TLS_ECDH_ECDSA_WITH_NULL_SHA: okhttp3.CipherSuite;
-        public static TLS_ECDH_ECDSA_WITH_RC4_128_SHA: okhttp3.CipherSuite;
-        public static TLS_ECDH_ECDSA_WITH_3DES_EDE_CBC_SHA: okhttp3.CipherSuite;
-        public static TLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA: okhttp3.CipherSuite;
-        public static TLS_ECDH_ECDSA_WITH_AES_256_CBC_SHA: okhttp3.CipherSuite;
-        public static TLS_ECDHE_ECDSA_WITH_NULL_SHA: okhttp3.CipherSuite;
-        public static TLS_ECDHE_ECDSA_WITH_RC4_128_SHA: okhttp3.CipherSuite;
-        public static TLS_ECDHE_ECDSA_WITH_3DES_EDE_CBC_SHA: okhttp3.CipherSuite;
-        public static TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA: okhttp3.CipherSuite;
-        public static TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA: okhttp3.CipherSuite;
-        public static TLS_ECDH_RSA_WITH_NULL_SHA: okhttp3.CipherSuite;
-        public static TLS_ECDH_RSA_WITH_RC4_128_SHA: okhttp3.CipherSuite;
-        public static TLS_ECDH_RSA_WITH_3DES_EDE_CBC_SHA: okhttp3.CipherSuite;
-        public static TLS_ECDH_RSA_WITH_AES_128_CBC_SHA: okhttp3.CipherSuite;
-        public static TLS_ECDH_RSA_WITH_AES_256_CBC_SHA: okhttp3.CipherSuite;
-        public static TLS_ECDHE_RSA_WITH_NULL_SHA: okhttp3.CipherSuite;
-        public static TLS_ECDHE_RSA_WITH_RC4_128_SHA: okhttp3.CipherSuite;
-        public static TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA: okhttp3.CipherSuite;
-        public static TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA: okhttp3.CipherSuite;
-        public static TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA: okhttp3.CipherSuite;
-        public static TLS_ECDH_anon_WITH_NULL_SHA: okhttp3.CipherSuite;
-        public static TLS_ECDH_anon_WITH_RC4_128_SHA: okhttp3.CipherSuite;
-        public static TLS_ECDH_anon_WITH_3DES_EDE_CBC_SHA: okhttp3.CipherSuite;
-        public static TLS_ECDH_anon_WITH_AES_128_CBC_SHA: okhttp3.CipherSuite;
-        public static TLS_ECDH_anon_WITH_AES_256_CBC_SHA: okhttp3.CipherSuite;
-        public static TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256: okhttp3.CipherSuite;
-        public static TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384: okhttp3.CipherSuite;
-        public static TLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA256: okhttp3.CipherSuite;
-        public static TLS_ECDH_ECDSA_WITH_AES_256_CBC_SHA384: okhttp3.CipherSuite;
-        public static TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256: okhttp3.CipherSuite;
-        public static TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384: okhttp3.CipherSuite;
-        public static TLS_ECDH_RSA_WITH_AES_128_CBC_SHA256: okhttp3.CipherSuite;
-        public static TLS_ECDH_RSA_WITH_AES_256_CBC_SHA384: okhttp3.CipherSuite;
-        public static TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256: okhttp3.CipherSuite;
-        public static TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384: okhttp3.CipherSuite;
-        public static TLS_ECDH_ECDSA_WITH_AES_128_GCM_SHA256: okhttp3.CipherSuite;
-        public static TLS_ECDH_ECDSA_WITH_AES_256_GCM_SHA384: okhttp3.CipherSuite;
-        public static TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256: okhttp3.CipherSuite;
-        public static TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384: okhttp3.CipherSuite;
-        public static TLS_ECDH_RSA_WITH_AES_128_GCM_SHA256: okhttp3.CipherSuite;
-        public static TLS_ECDH_RSA_WITH_AES_256_GCM_SHA384: okhttp3.CipherSuite;
-        public static TLS_ECDHE_PSK_WITH_AES_128_CBC_SHA: okhttp3.CipherSuite;
-        public static TLS_ECDHE_PSK_WITH_AES_256_CBC_SHA: okhttp3.CipherSuite;
-        public static TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256: okhttp3.CipherSuite;
-        public static TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256: okhttp3.CipherSuite;
-        public static TLS_DHE_RSA_WITH_CHACHA20_POLY1305_SHA256: okhttp3.CipherSuite;
-        public static TLS_ECDHE_PSK_WITH_CHACHA20_POLY1305_SHA256: okhttp3.CipherSuite;
-        public static TLS_AES_128_GCM_SHA256: okhttp3.CipherSuite;
-        public static TLS_AES_256_GCM_SHA384: okhttp3.CipherSuite;
-        public static TLS_CHACHA20_POLY1305_SHA256: okhttp3.CipherSuite;
-        public static TLS_AES_128_CCM_SHA256: okhttp3.CipherSuite;
-        public static TLS_AES_256_CCM_8_SHA256: okhttp3.CipherSuite;
+        public static class: java.lang.Class<CipherSuite>;
+        public static TLS_RSA_WITH_NULL_MD5: CipherSuite;
+        public static TLS_RSA_WITH_NULL_SHA: CipherSuite;
+        public static TLS_RSA_EXPORT_WITH_RC4_40_MD5: CipherSuite;
+        public static TLS_RSA_WITH_RC4_128_MD5: CipherSuite;
+        public static TLS_RSA_WITH_RC4_128_SHA: CipherSuite;
+        public static TLS_RSA_EXPORT_WITH_DES40_CBC_SHA: CipherSuite;
+        public static TLS_RSA_WITH_DES_CBC_SHA: CipherSuite;
+        public static TLS_RSA_WITH_3DES_EDE_CBC_SHA: CipherSuite;
+        public static TLS_DHE_DSS_EXPORT_WITH_DES40_CBC_SHA: CipherSuite;
+        public static TLS_DHE_DSS_WITH_DES_CBC_SHA: CipherSuite;
+        public static TLS_DHE_DSS_WITH_3DES_EDE_CBC_SHA: CipherSuite;
+        public static TLS_DHE_RSA_EXPORT_WITH_DES40_CBC_SHA: CipherSuite;
+        public static TLS_DHE_RSA_WITH_DES_CBC_SHA: CipherSuite;
+        public static TLS_DHE_RSA_WITH_3DES_EDE_CBC_SHA: CipherSuite;
+        public static TLS_DH_anon_EXPORT_WITH_RC4_40_MD5: CipherSuite;
+        public static TLS_DH_anon_WITH_RC4_128_MD5: CipherSuite;
+        public static TLS_DH_anon_EXPORT_WITH_DES40_CBC_SHA: CipherSuite;
+        public static TLS_DH_anon_WITH_DES_CBC_SHA: CipherSuite;
+        public static TLS_DH_anon_WITH_3DES_EDE_CBC_SHA: CipherSuite;
+        public static TLS_KRB5_WITH_DES_CBC_SHA: CipherSuite;
+        public static TLS_KRB5_WITH_3DES_EDE_CBC_SHA: CipherSuite;
+        public static TLS_KRB5_WITH_RC4_128_SHA: CipherSuite;
+        public static TLS_KRB5_WITH_DES_CBC_MD5: CipherSuite;
+        public static TLS_KRB5_WITH_3DES_EDE_CBC_MD5: CipherSuite;
+        public static TLS_KRB5_WITH_RC4_128_MD5: CipherSuite;
+        public static TLS_KRB5_EXPORT_WITH_DES_CBC_40_SHA: CipherSuite;
+        public static TLS_KRB5_EXPORT_WITH_RC4_40_SHA: CipherSuite;
+        public static TLS_KRB5_EXPORT_WITH_DES_CBC_40_MD5: CipherSuite;
+        public static TLS_KRB5_EXPORT_WITH_RC4_40_MD5: CipherSuite;
+        public static TLS_RSA_WITH_AES_128_CBC_SHA: CipherSuite;
+        public static TLS_DHE_DSS_WITH_AES_128_CBC_SHA: CipherSuite;
+        public static TLS_DHE_RSA_WITH_AES_128_CBC_SHA: CipherSuite;
+        public static TLS_DH_anon_WITH_AES_128_CBC_SHA: CipherSuite;
+        public static TLS_RSA_WITH_AES_256_CBC_SHA: CipherSuite;
+        public static TLS_DHE_DSS_WITH_AES_256_CBC_SHA: CipherSuite;
+        public static TLS_DHE_RSA_WITH_AES_256_CBC_SHA: CipherSuite;
+        public static TLS_DH_anon_WITH_AES_256_CBC_SHA: CipherSuite;
+        public static TLS_RSA_WITH_NULL_SHA256: CipherSuite;
+        public static TLS_RSA_WITH_AES_128_CBC_SHA256: CipherSuite;
+        public static TLS_RSA_WITH_AES_256_CBC_SHA256: CipherSuite;
+        public static TLS_DHE_DSS_WITH_AES_128_CBC_SHA256: CipherSuite;
+        public static TLS_RSA_WITH_CAMELLIA_128_CBC_SHA: CipherSuite;
+        public static TLS_DHE_DSS_WITH_CAMELLIA_128_CBC_SHA: CipherSuite;
+        public static TLS_DHE_RSA_WITH_CAMELLIA_128_CBC_SHA: CipherSuite;
+        public static TLS_DHE_RSA_WITH_AES_128_CBC_SHA256: CipherSuite;
+        public static TLS_DHE_DSS_WITH_AES_256_CBC_SHA256: CipherSuite;
+        public static TLS_DHE_RSA_WITH_AES_256_CBC_SHA256: CipherSuite;
+        public static TLS_DH_anon_WITH_AES_128_CBC_SHA256: CipherSuite;
+        public static TLS_DH_anon_WITH_AES_256_CBC_SHA256: CipherSuite;
+        public static TLS_RSA_WITH_CAMELLIA_256_CBC_SHA: CipherSuite;
+        public static TLS_DHE_DSS_WITH_CAMELLIA_256_CBC_SHA: CipherSuite;
+        public static TLS_DHE_RSA_WITH_CAMELLIA_256_CBC_SHA: CipherSuite;
+        public static TLS_PSK_WITH_RC4_128_SHA: CipherSuite;
+        public static TLS_PSK_WITH_3DES_EDE_CBC_SHA: CipherSuite;
+        public static TLS_PSK_WITH_AES_128_CBC_SHA: CipherSuite;
+        public static TLS_PSK_WITH_AES_256_CBC_SHA: CipherSuite;
+        public static TLS_RSA_WITH_SEED_CBC_SHA: CipherSuite;
+        public static TLS_RSA_WITH_AES_128_GCM_SHA256: CipherSuite;
+        public static TLS_RSA_WITH_AES_256_GCM_SHA384: CipherSuite;
+        public static TLS_DHE_RSA_WITH_AES_128_GCM_SHA256: CipherSuite;
+        public static TLS_DHE_RSA_WITH_AES_256_GCM_SHA384: CipherSuite;
+        public static TLS_DHE_DSS_WITH_AES_128_GCM_SHA256: CipherSuite;
+        public static TLS_DHE_DSS_WITH_AES_256_GCM_SHA384: CipherSuite;
+        public static TLS_DH_anon_WITH_AES_128_GCM_SHA256: CipherSuite;
+        public static TLS_DH_anon_WITH_AES_256_GCM_SHA384: CipherSuite;
+        public static TLS_EMPTY_RENEGOTIATION_INFO_SCSV: CipherSuite;
+        public static TLS_FALLBACK_SCSV: CipherSuite;
+        public static TLS_ECDH_ECDSA_WITH_NULL_SHA: CipherSuite;
+        public static TLS_ECDH_ECDSA_WITH_RC4_128_SHA: CipherSuite;
+        public static TLS_ECDH_ECDSA_WITH_3DES_EDE_CBC_SHA: CipherSuite;
+        public static TLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA: CipherSuite;
+        public static TLS_ECDH_ECDSA_WITH_AES_256_CBC_SHA: CipherSuite;
+        public static TLS_ECDHE_ECDSA_WITH_NULL_SHA: CipherSuite;
+        public static TLS_ECDHE_ECDSA_WITH_RC4_128_SHA: CipherSuite;
+        public static TLS_ECDHE_ECDSA_WITH_3DES_EDE_CBC_SHA: CipherSuite;
+        public static TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA: CipherSuite;
+        public static TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA: CipherSuite;
+        public static TLS_ECDH_RSA_WITH_NULL_SHA: CipherSuite;
+        public static TLS_ECDH_RSA_WITH_RC4_128_SHA: CipherSuite;
+        public static TLS_ECDH_RSA_WITH_3DES_EDE_CBC_SHA: CipherSuite;
+        public static TLS_ECDH_RSA_WITH_AES_128_CBC_SHA: CipherSuite;
+        public static TLS_ECDH_RSA_WITH_AES_256_CBC_SHA: CipherSuite;
+        public static TLS_ECDHE_RSA_WITH_NULL_SHA: CipherSuite;
+        public static TLS_ECDHE_RSA_WITH_RC4_128_SHA: CipherSuite;
+        public static TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA: CipherSuite;
+        public static TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA: CipherSuite;
+        public static TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA: CipherSuite;
+        public static TLS_ECDH_anon_WITH_NULL_SHA: CipherSuite;
+        public static TLS_ECDH_anon_WITH_RC4_128_SHA: CipherSuite;
+        public static TLS_ECDH_anon_WITH_3DES_EDE_CBC_SHA: CipherSuite;
+        public static TLS_ECDH_anon_WITH_AES_128_CBC_SHA: CipherSuite;
+        public static TLS_ECDH_anon_WITH_AES_256_CBC_SHA: CipherSuite;
+        public static TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256: CipherSuite;
+        public static TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384: CipherSuite;
+        public static TLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA256: CipherSuite;
+        public static TLS_ECDH_ECDSA_WITH_AES_256_CBC_SHA384: CipherSuite;
+        public static TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256: CipherSuite;
+        public static TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384: CipherSuite;
+        public static TLS_ECDH_RSA_WITH_AES_128_CBC_SHA256: CipherSuite;
+        public static TLS_ECDH_RSA_WITH_AES_256_CBC_SHA384: CipherSuite;
+        public static TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256: CipherSuite;
+        public static TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384: CipherSuite;
+        public static TLS_ECDH_ECDSA_WITH_AES_128_GCM_SHA256: CipherSuite;
+        public static TLS_ECDH_ECDSA_WITH_AES_256_GCM_SHA384: CipherSuite;
+        public static TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256: CipherSuite;
+        public static TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384: CipherSuite;
+        public static TLS_ECDH_RSA_WITH_AES_128_GCM_SHA256: CipherSuite;
+        public static TLS_ECDH_RSA_WITH_AES_256_GCM_SHA384: CipherSuite;
+        public static TLS_ECDHE_PSK_WITH_AES_128_CBC_SHA: CipherSuite;
+        public static TLS_ECDHE_PSK_WITH_AES_256_CBC_SHA: CipherSuite;
+        public static TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256: CipherSuite;
+        public static TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256: CipherSuite;
+        public static TLS_DHE_RSA_WITH_CHACHA20_POLY1305_SHA256: CipherSuite;
+        public static TLS_ECDHE_PSK_WITH_CHACHA20_POLY1305_SHA256: CipherSuite;
+        public static TLS_AES_128_GCM_SHA256: CipherSuite;
+        public static TLS_AES_256_GCM_SHA384: CipherSuite;
+        public static TLS_CHACHA20_POLY1305_SHA256: CipherSuite;
+        public static TLS_AES_128_CCM_SHA256: CipherSuite;
+        public static TLS_AES_256_CCM_8_SHA256: CipherSuite;
         public javaName(): string;
-        public static forJavaName(param0: string): okhttp3.CipherSuite;
+        public static forJavaName(param0: string): CipherSuite;
         public toString(): string;
     }
 }
 
-declare module okhttp3 {
+declare namespace okhttp3 {
     export class Connection {
-        public static class: java.lang.Class<okhttp3.Connection>;
+        public static class: java.lang.Class<Connection>;
         /**
          * Constructs a new instance of the okhttp3.Connection interface with the provided implementation. An empty constructor exists calling super() when extending the interface class.
          */
-        public constructor(implementation: {
-            route(): okhttp3.Route;
-            socket(): java.net.Socket;
-            handshake(): okhttp3.Handshake;
-            protocol(): okhttp3.Protocol;
-        });
+        public constructor(implementation: { route(): Route; socket(): java.net.Socket; handshake(): Handshake; protocol(): Protocol });
         public constructor();
-        public route(): okhttp3.Route;
-        public protocol(): okhttp3.Protocol;
-        public handshake(): okhttp3.Handshake;
+        public route(): Route;
+        public protocol(): Protocol;
+        public handshake(): Handshake;
         public socket(): java.net.Socket;
     }
 }
 
-declare module okhttp3 {
+declare namespace okhttp3 {
     export class ConnectionPool {
-        public static class: java.lang.Class<okhttp3.ConnectionPool>;
+        public static class: java.lang.Class<ConnectionPool>;
         public constructor();
         public connectionCount(): number;
         public evictAll(): void;
@@ -373,49 +375,49 @@ declare module okhttp3 {
     }
 }
 
-declare module okhttp3 {
+declare namespace okhttp3 {
     export class ConnectionSpec {
-        public static class: java.lang.Class<okhttp3.ConnectionSpec>;
-        public static RESTRICTED_TLS: okhttp3.ConnectionSpec;
-        public static MODERN_TLS: okhttp3.ConnectionSpec;
-        public static COMPATIBLE_TLS: okhttp3.ConnectionSpec;
-        public static CLEARTEXT: okhttp3.ConnectionSpec;
-        public cipherSuites(): java.util.List<okhttp3.CipherSuite>;
+        public static class: java.lang.Class<ConnectionSpec>;
+        public static RESTRICTED_TLS: ConnectionSpec;
+        public static MODERN_TLS: ConnectionSpec;
+        public static COMPATIBLE_TLS: ConnectionSpec;
+        public static CLEARTEXT: ConnectionSpec;
+        public cipherSuites(): java.util.List<CipherSuite>;
         public equals(param0: any): boolean;
-        public tlsVersions(): java.util.List<okhttp3.TlsVersion>;
+        public tlsVersions(): java.util.List<TlsVersion>;
         public supportsTlsExtensions(): boolean;
         public hashCode(): number;
         public isCompatible(param0: javax.net.ssl.SSLSocket): boolean;
         public isTls(): boolean;
         public toString(): string;
     }
-    export module ConnectionSpec {
+    export namespace ConnectionSpec {
         export class Builder {
-            public static class: java.lang.Class<okhttp3.ConnectionSpec.Builder>;
-            public tlsVersions(param0: native.Array<string>): okhttp3.ConnectionSpec.Builder;
-            public cipherSuites(param0: native.Array<string>): okhttp3.ConnectionSpec.Builder;
-            public build(): okhttp3.ConnectionSpec;
-            public constructor(param0: okhttp3.ConnectionSpec);
-            public cipherSuites(param0: native.Array<okhttp3.CipherSuite>): okhttp3.ConnectionSpec.Builder;
-            public supportsTlsExtensions(param0: boolean): okhttp3.ConnectionSpec.Builder;
-            public allEnabledCipherSuites(): okhttp3.ConnectionSpec.Builder;
-            public tlsVersions(param0: native.Array<okhttp3.TlsVersion>): okhttp3.ConnectionSpec.Builder;
-            public allEnabledTlsVersions(): okhttp3.ConnectionSpec.Builder;
+            public static class: java.lang.Class<Builder>;
+            public tlsVersions(param0: native.Array<string>): Builder;
+            public cipherSuites(param0: native.Array<string>): Builder;
+            public build(): ConnectionSpec;
+            public constructor(param0: ConnectionSpec);
+            public cipherSuites(param0: native.Array<CipherSuite>): Builder;
+            public supportsTlsExtensions(param0: boolean): Builder;
+            public allEnabledCipherSuites(): Builder;
+            public tlsVersions(param0: native.Array<TlsVersion>): Builder;
+            public allEnabledTlsVersions(): Builder;
         }
     }
 }
 
-declare module okhttp3 {
+declare namespace okhttp3 {
     export class Cookie {
-        public static class: java.lang.Class<okhttp3.Cookie>;
+        public static class: java.lang.Class<Cookie>;
         public domain(): string;
         public equals(param0: any): boolean;
-        public matches(param0: okhttp3.HttpUrl): boolean;
-        public static parseAll(param0: okhttp3.HttpUrl, param1: okhttp3.Headers): java.util.List<okhttp3.Cookie>;
+        public matches(param0: HttpUrl): boolean;
+        public static parseAll(param0: HttpUrl, param1: Headers): java.util.List<Cookie>;
         public toString(): string;
         public persistent(): boolean;
         public httpOnly(): boolean;
-        public static parse(param0: okhttp3.HttpUrl, param1: string): okhttp3.Cookie;
+        public static parse(param0: HttpUrl, param1: string): Cookie;
         public hostOnly(): boolean;
         public expiresAt(): number;
         public hashCode(): number;
@@ -424,60 +426,56 @@ declare module okhttp3 {
         public secure(): boolean;
         public value(): string;
     }
-    export module Cookie {
+    export namespace Cookie {
         export class Builder {
-            public static class: java.lang.Class<okhttp3.Cookie.Builder>;
-            public domain(param0: string): okhttp3.Cookie.Builder;
-            public hostOnlyDomain(param0: string): okhttp3.Cookie.Builder;
-            public value(param0: string): okhttp3.Cookie.Builder;
-            public httpOnly(): okhttp3.Cookie.Builder;
-            public secure(): okhttp3.Cookie.Builder;
-            public expiresAt(param0: number): okhttp3.Cookie.Builder;
-            public build(): okhttp3.Cookie;
-            public name(param0: string): okhttp3.Cookie.Builder;
+            public static class: java.lang.Class<Builder>;
+            public domain(param0: string): Builder;
+            public hostOnlyDomain(param0: string): Builder;
+            public value(param0: string): Builder;
+            public httpOnly(): Builder;
+            public secure(): Builder;
+            public expiresAt(param0: number): Builder;
+            public build(): Cookie;
+            public name(param0: string): Builder;
             public constructor();
-            public path(param0: string): okhttp3.Cookie.Builder;
+            public path(param0: string): Builder;
         }
     }
 }
 
-declare module okhttp3 {
+declare namespace okhttp3 {
     export class CookieJar {
-        public static class: java.lang.Class<okhttp3.CookieJar>;
+        public static class: java.lang.Class<CookieJar>;
         /**
          * Constructs a new instance of the okhttp3.CookieJar interface with the provided implementation. An empty constructor exists calling super() when extending the interface class.
          */
-        public constructor(implementation: {
-            saveFromResponse(param0: okhttp3.HttpUrl, param1: java.util.List<okhttp3.Cookie>): void;
-            loadForRequest(param0: okhttp3.HttpUrl): java.util.List<okhttp3.Cookie>;
-            <clinit>(): void;
-        });
+        public constructor(implementation: { saveFromResponse(param0: HttpUrl, param1: java.util.List<Cookie>): void; loadForRequest(param0: HttpUrl): java.util.List<Cookie>; <clinit>(): void });
         public constructor();
-        public static NO_COOKIES: okhttp3.CookieJar;
-        public loadForRequest(param0: okhttp3.HttpUrl): java.util.List<okhttp3.Cookie>;
-        public saveFromResponse(param0: okhttp3.HttpUrl, param1: java.util.List<okhttp3.Cookie>): void;
+        public static NO_COOKIES: CookieJar;
+        public loadForRequest(param0: HttpUrl): java.util.List<Cookie>;
+        public saveFromResponse(param0: HttpUrl, param1: java.util.List<Cookie>): void;
     }
 }
 
-declare module okhttp3 {
+declare namespace okhttp3 {
     export class Credentials {
-        public static class: java.lang.Class<okhttp3.Credentials>;
+        public static class: java.lang.Class<Credentials>;
         public static basic(param0: string, param1: string, param2: java.nio.charset.Charset): string;
         public static basic(param0: string, param1: string): string;
     }
 }
 
-declare module okhttp3 {
+declare namespace okhttp3 {
     export class Dispatcher {
-        public static class: java.lang.Class<okhttp3.Dispatcher>;
+        public static class: java.lang.Class<Dispatcher>;
         public constructor();
         public setMaxRequestsPerHost(param0: number): void;
         public constructor(param0: java.util.concurrent.ExecutorService);
         public queuedCallsCount(): number;
         public runningCallsCount(): number;
-        public runningCalls(): java.util.List<okhttp3.Call>;
+        public runningCalls(): java.util.List<Call>;
         public cancelAll(): void;
-        public queuedCalls(): java.util.List<okhttp3.Call>;
+        public queuedCalls(): java.util.List<Call>;
         public setMaxRequests(param0: number): void;
         public getMaxRequestsPerHost(): number;
         public executorService(): java.util.concurrent.ExecutorService;
@@ -486,144 +484,139 @@ declare module okhttp3 {
     }
 }
 
-declare module okhttp3 {
+declare namespace okhttp3 {
     export class Dns {
-        public static class: java.lang.Class<okhttp3.Dns>;
+        public static class: java.lang.Class<Dns>;
         /**
          * Constructs a new instance of the okhttp3.Dns interface with the provided implementation. An empty constructor exists calling super() when extending the interface class.
          */
-        public constructor(implementation: {
-            lookup(param0: string): java.util.List<java.net.InetAddress>;
-            <clinit>(): void;
-        });
+        public constructor(implementation: { lookup(param0: string): java.util.List<java.net.InetAddress>; <clinit>(): void });
         public constructor();
-        public static SYSTEM: okhttp3.Dns;
+        public static SYSTEM: Dns;
         public lookup(param0: string): java.util.List<java.net.InetAddress>;
     }
 }
 
-declare module okhttp3 {
+declare namespace okhttp3 {
     export abstract class EventListener {
-        public static class: java.lang.Class<okhttp3.EventListener>;
-        public static NONE: okhttp3.EventListener;
+        public static class: java.lang.Class<EventListener>;
+        public static NONE: EventListener;
         public constructor();
-        public connectFailed(param0: okhttp3.Call, param1: java.net.InetSocketAddress, param2: java.net.Proxy, param3: okhttp3.Protocol, param4: java.io.IOException): void;
-        public callStart(param0: okhttp3.Call): void;
-        public connectionReleased(param0: okhttp3.Call, param1: okhttp3.Connection): void;
-        public dnsEnd(param0: okhttp3.Call, param1: string, param2: java.util.List<java.net.InetAddress>): void;
-        public responseBodyEnd(param0: okhttp3.Call, param1: number): void;
-        public callEnd(param0: okhttp3.Call): void;
-        public secureConnectStart(param0: okhttp3.Call): void;
-        public responseHeadersEnd(param0: okhttp3.Call, param1: okhttp3.Response): void;
-        public secureConnectEnd(param0: okhttp3.Call, param1: okhttp3.Handshake): void;
-        public dnsStart(param0: okhttp3.Call, param1: string): void;
-        public connectionAcquired(param0: okhttp3.Call, param1: okhttp3.Connection): void;
-        public connectEnd(param0: okhttp3.Call, param1: java.net.InetSocketAddress, param2: java.net.Proxy, param3: okhttp3.Protocol): void;
-        public requestHeadersEnd(param0: okhttp3.Call, param1: okhttp3.Request): void;
-        public responseBodyStart(param0: okhttp3.Call): void;
-        public connectStart(param0: okhttp3.Call, param1: java.net.InetSocketAddress, param2: java.net.Proxy): void;
-        public requestBodyEnd(param0: okhttp3.Call, param1: number): void;
-        public callFailed(param0: okhttp3.Call, param1: java.io.IOException): void;
-        public requestHeadersStart(param0: okhttp3.Call): void;
-        public requestBodyStart(param0: okhttp3.Call): void;
-        public responseHeadersStart(param0: okhttp3.Call): void;
+        public connectFailed(param0: Call, param1: java.net.InetSocketAddress, param2: java.net.Proxy, param3: Protocol, param4: java.io.IOException): void;
+        public callStart(param0: Call): void;
+        public connectionReleased(param0: Call, param1: Connection): void;
+        public dnsEnd(param0: Call, param1: string, param2: java.util.List<java.net.InetAddress>): void;
+        public responseBodyEnd(param0: Call, param1: number): void;
+        public callEnd(param0: Call): void;
+        public secureConnectStart(param0: Call): void;
+        public responseHeadersEnd(param0: Call, param1: Response): void;
+        public secureConnectEnd(param0: Call, param1: Handshake): void;
+        public dnsStart(param0: Call, param1: string): void;
+        public connectionAcquired(param0: Call, param1: Connection): void;
+        public connectEnd(param0: Call, param1: java.net.InetSocketAddress, param2: java.net.Proxy, param3: Protocol): void;
+        public requestHeadersEnd(param0: Call, param1: Request): void;
+        public responseBodyStart(param0: Call): void;
+        public connectStart(param0: Call, param1: java.net.InetSocketAddress, param2: java.net.Proxy): void;
+        public requestBodyEnd(param0: Call, param1: number): void;
+        public callFailed(param0: Call, param1: java.io.IOException): void;
+        public requestHeadersStart(param0: Call): void;
+        public requestBodyStart(param0: Call): void;
+        public responseHeadersStart(param0: Call): void;
     }
-    export module EventListener {
+    export namespace EventListener {
         export class Factory {
-            public static class: java.lang.Class<okhttp3.EventListener.Factory>;
+            public static class: java.lang.Class<Factory>;
             /**
              * Constructs a new instance of the okhttp3.EventListener$Factory interface with the provided implementation. An empty constructor exists calling super() when extending the interface class.
              */
-            public constructor(implementation: {
-                create(param0: okhttp3.Call): okhttp3.EventListener;
-            });
+            public constructor(implementation: { create(param0: Call): EventListener });
             public constructor();
-            public create(param0: okhttp3.Call): okhttp3.EventListener;
+            public create(param0: Call): EventListener;
         }
     }
 }
 
-declare module okhttp3 {
-    export class FormBody extends okhttp3.RequestBody {
-        public static class: java.lang.Class<okhttp3.FormBody>;
+declare namespace okhttp3 {
+    export class FormBody extends RequestBody {
+        public static class: java.lang.Class<FormBody>;
         public value(param0: number): string;
         public encodedValue(param0: number): string;
         public name(param0: number): string;
         public size(): number;
         public encodedName(param0: number): string;
-        public contentType(): okhttp3.MediaType;
+        public contentType(): MediaType;
         public writeTo(param0: okio.BufferedSink): void;
         public contentLength(): number;
     }
-    export module FormBody {
+    export namespace FormBody {
         export class Builder {
-            public static class: java.lang.Class<okhttp3.FormBody.Builder>;
+            public static class: java.lang.Class<Builder>;
             public constructor(param0: java.nio.charset.Charset);
-            public addEncoded(param0: string, param1: string): okhttp3.FormBody.Builder;
+            public addEncoded(param0: string, param1: string): Builder;
             public constructor();
-            public add(param0: string, param1: string): okhttp3.FormBody.Builder;
-            public build(): okhttp3.FormBody;
+            public add(param0: string, param1: string): Builder;
+            public build(): FormBody;
         }
     }
 }
 
-declare module okhttp3 {
+declare namespace okhttp3 {
     export class Handshake {
-        public static class: java.lang.Class<okhttp3.Handshake>;
+        public static class: java.lang.Class<Handshake>;
         public equals(param0: any): boolean;
-        public static get(param0: javax.net.ssl.SSLSession): okhttp3.Handshake;
-        public static get(param0: okhttp3.TlsVersion, param1: okhttp3.CipherSuite, param2: java.util.List<java.security.cert.Certificate>, param3: java.util.List<java.security.cert.Certificate>): okhttp3.Handshake;
+        public static get(param0: javax.net.ssl.SSLSession): Handshake;
+        public static get(param0: TlsVersion, param1: CipherSuite, param2: java.util.List<java.security.cert.Certificate>, param3: java.util.List<java.security.cert.Certificate>): Handshake;
         public hashCode(): number;
         public localCertificates(): java.util.List<java.security.cert.Certificate>;
         public localPrincipal(): java.security.Principal;
-        public tlsVersion(): okhttp3.TlsVersion;
+        public tlsVersion(): TlsVersion;
         public peerCertificates(): java.util.List<java.security.cert.Certificate>;
         public peerPrincipal(): java.security.Principal;
-        public cipherSuite(): okhttp3.CipherSuite;
+        public cipherSuite(): CipherSuite;
     }
 }
 
-declare module okhttp3 {
+declare namespace okhttp3 {
     export class Headers {
-        public static class: java.lang.Class<okhttp3.Headers>;
+        public static class: java.lang.Class<Headers>;
         public value(param0: number): string;
         public equals(param0: any): boolean;
-        public newBuilder(): okhttp3.Headers.Builder;
+        public newBuilder(): Headers.Builder;
         public toString(): string;
         public get(param0: string): string;
         public values(param0: string): java.util.List<string>;
         public names(): java.util.Set<string>;
-        public static of(param0: java.util.Map<string,string>): okhttp3.Headers;
+        public static of(param0: java.util.Map<string, string>): Headers;
         public name(param0: number): string;
         public size(): number;
         public hashCode(): number;
-        public toMultimap(): java.util.Map<string,java.util.List<string>>;
+        public toMultimap(): java.util.Map<string, java.util.List<string>>;
         public getDate(param0: string): java.util.Date;
         public byteCount(): number;
-        public static of(param0: native.Array<string>): okhttp3.Headers;
+        public static of(param0: native.Array<string>): Headers;
     }
-    export module Headers {
+    export namespace Headers {
         export class Builder {
-            public static class: java.lang.Class<okhttp3.Headers.Builder>;
+            public static class: java.lang.Class<Builder>;
             public get(param0: string): string;
-            public build(): okhttp3.Headers;
-            public add(param0: string, param1: string): okhttp3.Headers.Builder;
-            public removeAll(param0: string): okhttp3.Headers.Builder;
-            public set(param0: string, param1: string): okhttp3.Headers.Builder;
-            public set(param0: string, param1: java.util.Date): okhttp3.Headers.Builder;
+            public build(): Headers;
+            public add(param0: string, param1: string): Builder;
+            public removeAll(param0: string): Builder;
+            public set(param0: string, param1: string): Builder;
+            public set(param0: string, param1: java.util.Date): Builder;
             public constructor();
-            public addAll(param0: okhttp3.Headers): okhttp3.Headers.Builder;
-            public add(param0: string): okhttp3.Headers.Builder;
-            public addUnsafeNonAscii(param0: string, param1: string): okhttp3.Headers.Builder;
-            public add(param0: string, param1: java.util.Date): okhttp3.Headers.Builder;
+            public addAll(param0: Headers): Builder;
+            public add(param0: string): Builder;
+            public addUnsafeNonAscii(param0: string, param1: string): Builder;
+            public add(param0: string, param1: java.util.Date): Builder;
         }
     }
 }
 
-declare module okhttp3 {
+declare namespace okhttp3 {
     export class HttpUrl {
-        public static class: java.lang.Class<okhttp3.HttpUrl>;
-        public static get(param0: java.net.URI): okhttp3.HttpUrl;
+        public static class: java.lang.Class<HttpUrl>;
+        public static get(param0: java.net.URI): HttpUrl;
         public equals(param0: any): boolean;
         public topPrivateDomain(): string;
         public queryParameterName(param0: number): string;
@@ -635,12 +628,12 @@ declare module okhttp3 {
         public query(): string;
         public password(): string;
         public hashCode(): number;
-        public static get(param0: string): okhttp3.HttpUrl;
-        public resolve(param0: string): okhttp3.HttpUrl;
+        public static get(param0: string): HttpUrl;
+        public resolve(param0: string): HttpUrl;
         public pathSize(): number;
         public isHttps(): boolean;
         public encodedPathSegments(): java.util.List<string>;
-        public newBuilder(): okhttp3.HttpUrl.Builder;
+        public newBuilder(): HttpUrl.Builder;
         public port(): number;
         public encodedQuery(): string;
         public encodedPath(): string;
@@ -652,409 +645,407 @@ declare module okhttp3 {
         public queryParameterValue(param0: number): string;
         public encodedUsername(): string;
         public queryParameterValues(param0: string): java.util.List<string>;
-        public newBuilder(param0: string): okhttp3.HttpUrl.Builder;
+        public newBuilder(param0: string): HttpUrl.Builder;
         public host(): string;
-        public static get(param0: java.net.URL): okhttp3.HttpUrl;
+        public static get(param0: java.net.URL): HttpUrl;
         public pathSegments(): java.util.List<string>;
-        public static parse(param0: string): okhttp3.HttpUrl;
+        public static parse(param0: string): HttpUrl;
         public url(): java.net.URL;
         public querySize(): number;
         public username(): string;
     }
-    export module HttpUrl {
+    export namespace HttpUrl {
         export class Builder {
-            public static class: java.lang.Class<okhttp3.HttpUrl.Builder>;
-            public addPathSegment(param0: string): okhttp3.HttpUrl.Builder;
-            public addEncodedPathSegment(param0: string): okhttp3.HttpUrl.Builder;
-            public setEncodedQueryParameter(param0: string, param1: string): okhttp3.HttpUrl.Builder;
-            public setQueryParameter(param0: string, param1: string): okhttp3.HttpUrl.Builder;
-            public encodedFragment(param0: string): okhttp3.HttpUrl.Builder;
-            public username(param0: string): okhttp3.HttpUrl.Builder;
-            public addPathSegments(param0: string): okhttp3.HttpUrl.Builder;
-            public encodedPath(param0: string): okhttp3.HttpUrl.Builder;
-            public encodedPassword(param0: string): okhttp3.HttpUrl.Builder;
-            public addEncodedPathSegments(param0: string): okhttp3.HttpUrl.Builder;
-            public encodedQuery(param0: string): okhttp3.HttpUrl.Builder;
-            public host(param0: string): okhttp3.HttpUrl.Builder;
-            public removeAllEncodedQueryParameters(param0: string): okhttp3.HttpUrl.Builder;
-            public setEncodedPathSegment(param0: number, param1: string): okhttp3.HttpUrl.Builder;
+            public static class: java.lang.Class<Builder>;
+            public addPathSegment(param0: string): Builder;
+            public addEncodedPathSegment(param0: string): Builder;
+            public setEncodedQueryParameter(param0: string, param1: string): Builder;
+            public setQueryParameter(param0: string, param1: string): Builder;
+            public encodedFragment(param0: string): Builder;
+            public username(param0: string): Builder;
+            public addPathSegments(param0: string): Builder;
+            public encodedPath(param0: string): Builder;
+            public encodedPassword(param0: string): Builder;
+            public addEncodedPathSegments(param0: string): Builder;
+            public encodedQuery(param0: string): Builder;
+            public host(param0: string): Builder;
+            public removeAllEncodedQueryParameters(param0: string): Builder;
+            public setEncodedPathSegment(param0: number, param1: string): Builder;
             public constructor();
-            public encodedUsername(param0: string): okhttp3.HttpUrl.Builder;
-            public password(param0: string): okhttp3.HttpUrl.Builder;
-            public port(param0: number): okhttp3.HttpUrl.Builder;
+            public encodedUsername(param0: string): Builder;
+            public password(param0: string): Builder;
+            public port(param0: number): Builder;
             public toString(): string;
-            public addQueryParameter(param0: string, param1: string): okhttp3.HttpUrl.Builder;
-            public addEncodedQueryParameter(param0: string, param1: string): okhttp3.HttpUrl.Builder;
-            public query(param0: string): okhttp3.HttpUrl.Builder;
-            public setPathSegment(param0: number, param1: string): okhttp3.HttpUrl.Builder;
-            public removeAllQueryParameters(param0: string): okhttp3.HttpUrl.Builder;
-            public scheme(param0: string): okhttp3.HttpUrl.Builder;
-            public removePathSegment(param0: number): okhttp3.HttpUrl.Builder;
-            public fragment(param0: string): okhttp3.HttpUrl.Builder;
-            public build(): okhttp3.HttpUrl;
+            public addQueryParameter(param0: string, param1: string): Builder;
+            public addEncodedQueryParameter(param0: string, param1: string): Builder;
+            public query(param0: string): Builder;
+            public setPathSegment(param0: number, param1: string): Builder;
+            public removeAllQueryParameters(param0: string): Builder;
+            public scheme(param0: string): Builder;
+            public removePathSegment(param0: number): Builder;
+            public fragment(param0: string): Builder;
+            public build(): HttpUrl;
         }
     }
 }
 
-declare module okhttp3 {
+declare namespace okhttp3 {
     export class Interceptor {
-        public static class: java.lang.Class<okhttp3.Interceptor>;
+        public static class: java.lang.Class<Interceptor>;
         /**
          * Constructs a new instance of the okhttp3.Interceptor interface with the provided implementation. An empty constructor exists calling super() when extending the interface class.
          */
-        public constructor(implementation: {
-            intercept(param0: okhttp3.Interceptor.Chain): okhttp3.Response;
-        });
+        public constructor(implementation: { intercept(param0: Interceptor.Chain): Response });
         public constructor();
-        public intercept(param0: okhttp3.Interceptor.Chain): okhttp3.Response;
+        public intercept(param0: Interceptor.Chain): Response;
     }
-    export module Interceptor {
+    export namespace Interceptor {
         export class Chain {
-            public static class: java.lang.Class<okhttp3.Interceptor.Chain>;
+            public static class: java.lang.Class<Chain>;
             /**
              * Constructs a new instance of the okhttp3.Interceptor$Chain interface with the provided implementation. An empty constructor exists calling super() when extending the interface class.
              */
             public constructor(implementation: {
-                request(): okhttp3.Request;
-                proceed(param0: okhttp3.Request): okhttp3.Response;
-                connection(): okhttp3.Connection;
-                call(): okhttp3.Call;
+                request(): Request;
+                proceed(param0: Request): Response;
+                connection(): Connection;
+                call(): Call;
                 connectTimeoutMillis(): number;
-                withConnectTimeout(param0: number, param1: java.util.concurrent.TimeUnit): okhttp3.Interceptor.Chain;
+                withConnectTimeout(param0: number, param1: java.util.concurrent.TimeUnit): Chain;
                 readTimeoutMillis(): number;
-                withReadTimeout(param0: number, param1: java.util.concurrent.TimeUnit): okhttp3.Interceptor.Chain;
+                withReadTimeout(param0: number, param1: java.util.concurrent.TimeUnit): Chain;
                 writeTimeoutMillis(): number;
-                withWriteTimeout(param0: number, param1: java.util.concurrent.TimeUnit): okhttp3.Interceptor.Chain;
+                withWriteTimeout(param0: number, param1: java.util.concurrent.TimeUnit): Chain;
             });
             public constructor();
-            public request(): okhttp3.Request;
-            public withConnectTimeout(param0: number, param1: java.util.concurrent.TimeUnit): okhttp3.Interceptor.Chain;
-            public call(): okhttp3.Call;
-            public withWriteTimeout(param0: number, param1: java.util.concurrent.TimeUnit): okhttp3.Interceptor.Chain;
+            public request(): Request;
+            public withConnectTimeout(param0: number, param1: java.util.concurrent.TimeUnit): Chain;
+            public call(): Call;
+            public withWriteTimeout(param0: number, param1: java.util.concurrent.TimeUnit): Chain;
             public readTimeoutMillis(): number;
-            public withReadTimeout(param0: number, param1: java.util.concurrent.TimeUnit): okhttp3.Interceptor.Chain;
-            public proceed(param0: okhttp3.Request): okhttp3.Response;
-            public connection(): okhttp3.Connection;
+            public withReadTimeout(param0: number, param1: java.util.concurrent.TimeUnit): Chain;
+            public proceed(param0: Request): Response;
+            public connection(): Connection;
             public connectTimeoutMillis(): number;
             public writeTimeoutMillis(): number;
         }
     }
 }
 
-declare module okhttp3 {
+declare namespace okhttp3 {
     export class MediaType {
-        public static class: java.lang.Class<okhttp3.MediaType>;
+        public static class: java.lang.Class<MediaType>;
         public type(): string;
         public charset(): java.nio.charset.Charset;
         public equals(param0: any): boolean;
         public subtype(): string;
-        public static get(param0: string): okhttp3.MediaType;
+        public static get(param0: string): MediaType;
         public charset(param0: java.nio.charset.Charset): java.nio.charset.Charset;
         public hashCode(): number;
-        public static parse(param0: string): okhttp3.MediaType;
+        public static parse(param0: string): MediaType;
         public toString(): string;
     }
 }
 
-declare module okhttp3 {
-    export class MultipartBody extends okhttp3.RequestBody {
-        public static class: java.lang.Class<okhttp3.MultipartBody>;
-        public static MIXED: okhttp3.MediaType;
-        public static ALTERNATIVE: okhttp3.MediaType;
-        public static DIGEST: okhttp3.MediaType;
-        public static PARALLEL: okhttp3.MediaType;
-        public static FORM: okhttp3.MediaType;
+declare namespace okhttp3 {
+    export class MultipartBody extends RequestBody {
+        public static class: java.lang.Class<MultipartBody>;
+        public static MIXED: MediaType;
+        public static ALTERNATIVE: MediaType;
+        public static DIGEST: MediaType;
+        public static PARALLEL: MediaType;
+        public static FORM: MediaType;
         public boundary(): string;
         public size(): number;
-        public parts(): java.util.List<okhttp3.MultipartBody.Part>;
-        public type(): okhttp3.MediaType;
-        public contentType(): okhttp3.MediaType;
+        public parts(): java.util.List<MultipartBody.Part>;
+        public type(): MediaType;
+        public contentType(): MediaType;
         public writeTo(param0: okio.BufferedSink): void;
-        public part(param0: number): okhttp3.MultipartBody.Part;
+        public part(param0: number): MultipartBody.Part;
         public contentLength(): number;
     }
-    export module MultipartBody {
+    export namespace MultipartBody {
         export class Builder {
-            public static class: java.lang.Class<okhttp3.MultipartBody.Builder>;
-            public setType(param0: okhttp3.MediaType): okhttp3.MultipartBody.Builder;
-            public addPart(param0: okhttp3.MultipartBody.Part): okhttp3.MultipartBody.Builder;
-            public build(): okhttp3.MultipartBody;
-            public addPart(param0: okhttp3.Headers, param1: okhttp3.RequestBody): okhttp3.MultipartBody.Builder;
-            public addPart(param0: okhttp3.RequestBody): okhttp3.MultipartBody.Builder;
+            public static class: java.lang.Class<Builder>;
+            public setType(param0: MediaType): Builder;
+            public addPart(param0: Part): Builder;
+            public build(): MultipartBody;
+            public addPart(param0: Headers, param1: RequestBody): Builder;
+            public addPart(param0: RequestBody): Builder;
             public constructor();
-            public addFormDataPart(param0: string, param1: string): okhttp3.MultipartBody.Builder;
-            public addFormDataPart(param0: string, param1: string, param2: okhttp3.RequestBody): okhttp3.MultipartBody.Builder;
+            public addFormDataPart(param0: string, param1: string): Builder;
+            public addFormDataPart(param0: string, param1: string, param2: RequestBody): Builder;
             public constructor(param0: string);
         }
         export class Part {
-            public static class: java.lang.Class<okhttp3.MultipartBody.Part>;
-            public headers(): okhttp3.Headers;
-            public static create(param0: okhttp3.Headers, param1: okhttp3.RequestBody): okhttp3.MultipartBody.Part;
-            public static createFormData(param0: string, param1: string, param2: okhttp3.RequestBody): okhttp3.MultipartBody.Part;
-            public static create(param0: okhttp3.RequestBody): okhttp3.MultipartBody.Part;
-            public static createFormData(param0: string, param1: string): okhttp3.MultipartBody.Part;
-            public body(): okhttp3.RequestBody;
+            public static class: java.lang.Class<Part>;
+            public headers(): Headers;
+            public static create(param0: Headers, param1: RequestBody): Part;
+            public static createFormData(param0: string, param1: string, param2: RequestBody): Part;
+            public static create(param0: RequestBody): Part;
+            public static createFormData(param0: string, param1: string): Part;
+            public body(): RequestBody;
         }
     }
 }
 
-declare module okhttp3 {
-    export class OkHttpClient implements okhttp3.Call.Factory, okhttp3.WebSocket.Factory {
-        public static class: java.lang.Class<okhttp3.OkHttpClient>;
+declare namespace okhttp3 {
+    export class OkHttpClient implements Call.Factory, WebSocket.Factory {
+        public static class: java.lang.Class<OkHttpClient>;
         public proxy(): java.net.Proxy;
         public sslSocketFactory(): javax.net.ssl.SSLSocketFactory;
-        public connectionPool(): okhttp3.ConnectionPool;
-        public cache(): okhttp3.Cache;
-        public certificatePinner(): okhttp3.CertificatePinner;
-        public dispatcher(): okhttp3.Dispatcher;
-        public protocols(): java.util.List<okhttp3.Protocol>;
-        public dns(): okhttp3.Dns;
-        public proxyAuthenticator(): okhttp3.Authenticator;
+        public connectionPool(): ConnectionPool;
+        public cache(): Cache;
+        public certificatePinner(): CertificatePinner;
+        public dispatcher(): Dispatcher;
+        public protocols(): java.util.List<Protocol>;
+        public dns(): Dns;
+        public proxyAuthenticator(): Authenticator;
         public callTimeoutMillis(): number;
         public hostnameVerifier(): javax.net.ssl.HostnameVerifier;
         public connectTimeoutMillis(): number;
         public pingIntervalMillis(): number;
-        public cookieJar(): okhttp3.CookieJar;
-        public connectionSpecs(): java.util.List<okhttp3.ConnectionSpec>;
-        public newBuilder(): okhttp3.OkHttpClient.Builder;
+        public cookieJar(): CookieJar;
+        public connectionSpecs(): java.util.List<ConnectionSpec>;
+        public newBuilder(): OkHttpClient.Builder;
         public constructor();
         public proxySelector(): java.net.ProxySelector;
         public readTimeoutMillis(): number;
-        public authenticator(): okhttp3.Authenticator;
+        public authenticator(): Authenticator;
         public followRedirects(): boolean;
-        public interceptors(): java.util.List<okhttp3.Interceptor>;
+        public interceptors(): java.util.List<Interceptor>;
         public writeTimeoutMillis(): number;
-        public newWebSocket(param0: okhttp3.Request, param1: okhttp3.WebSocketListener): okhttp3.WebSocket;
+        public newWebSocket(param0: Request, param1: WebSocketListener): WebSocket;
         public followSslRedirects(): boolean;
         public socketFactory(): javax.net.SocketFactory;
         public retryOnConnectionFailure(): boolean;
-        public networkInterceptors(): java.util.List<okhttp3.Interceptor>;
-        public eventListenerFactory(): okhttp3.EventListener.Factory;
-        public newCall(param0: okhttp3.Request): okhttp3.Call;
+        public networkInterceptors(): java.util.List<Interceptor>;
+        public eventListenerFactory(): EventListener.Factory;
+        public newCall(param0: Request): Call;
     }
-    export module OkHttpClient {
+    export namespace OkHttpClient {
         export class Builder {
-            public static class: java.lang.Class<okhttp3.OkHttpClient.Builder>;
-            public protocols(param0: java.util.List<okhttp3.Protocol>): okhttp3.OkHttpClient.Builder;
-            public addInterceptor(param0: okhttp3.Interceptor): okhttp3.OkHttpClient.Builder;
-            public connectionPool(param0: okhttp3.ConnectionPool): okhttp3.OkHttpClient.Builder;
-            public interceptors(): java.util.List<okhttp3.Interceptor>;
-            public readTimeout(param0: number, param1: java.util.concurrent.TimeUnit): okhttp3.OkHttpClient.Builder;
-            public callTimeout(param0: number, param1: java.util.concurrent.TimeUnit): okhttp3.OkHttpClient.Builder;
-            public dns(param0: okhttp3.Dns): okhttp3.OkHttpClient.Builder;
-            public writeTimeout(param0: java.time.Duration): okhttp3.OkHttpClient.Builder;
-            public readTimeout(param0: java.time.Duration): okhttp3.OkHttpClient.Builder;
-            public pingInterval(param0: number, param1: java.util.concurrent.TimeUnit): okhttp3.OkHttpClient.Builder;
-            public eventListenerFactory(param0: okhttp3.EventListener.Factory): okhttp3.OkHttpClient.Builder;
-            public connectionSpecs(param0: java.util.List<okhttp3.ConnectionSpec>): okhttp3.OkHttpClient.Builder;
-            public build(): okhttp3.OkHttpClient;
-            public sslSocketFactory(param0: javax.net.ssl.SSLSocketFactory): okhttp3.OkHttpClient.Builder;
-            public eventListener(param0: okhttp3.EventListener): okhttp3.OkHttpClient.Builder;
-            public proxyAuthenticator(param0: okhttp3.Authenticator): okhttp3.OkHttpClient.Builder;
-            public followRedirects(param0: boolean): okhttp3.OkHttpClient.Builder;
-            public networkInterceptors(): java.util.List<okhttp3.Interceptor>;
-            public cache(param0: okhttp3.Cache): okhttp3.OkHttpClient.Builder;
-            public sslSocketFactory(param0: javax.net.ssl.SSLSocketFactory, param1: javax.net.ssl.X509TrustManager): okhttp3.OkHttpClient.Builder;
-            public callTimeout(param0: java.time.Duration): okhttp3.OkHttpClient.Builder;
-            public cookieJar(param0: okhttp3.CookieJar): okhttp3.OkHttpClient.Builder;
-            public connectTimeout(param0: number, param1: java.util.concurrent.TimeUnit): okhttp3.OkHttpClient.Builder;
-            public pingInterval(param0: java.time.Duration): okhttp3.OkHttpClient.Builder;
-            public followSslRedirects(param0: boolean): okhttp3.OkHttpClient.Builder;
+            public static class: java.lang.Class<Builder>;
+            public protocols(param0: java.util.List<Protocol>): Builder;
+            public addInterceptor(param0: Interceptor): Builder;
+            public connectionPool(param0: ConnectionPool): Builder;
+            public interceptors(): java.util.List<Interceptor>;
+            public readTimeout(param0: number, param1: java.util.concurrent.TimeUnit): Builder;
+            public callTimeout(param0: number, param1: java.util.concurrent.TimeUnit): Builder;
+            public dns(param0: Dns): Builder;
+            public writeTimeout(param0: java.time.Duration): Builder;
+            public readTimeout(param0: java.time.Duration): Builder;
+            public pingInterval(param0: number, param1: java.util.concurrent.TimeUnit): Builder;
+            public eventListenerFactory(param0: EventListener.Factory): Builder;
+            public connectionSpecs(param0: java.util.List<ConnectionSpec>): Builder;
+            public build(): OkHttpClient;
+            public sslSocketFactory(param0: javax.net.ssl.SSLSocketFactory): Builder;
+            public eventListener(param0: EventListener): Builder;
+            public proxyAuthenticator(param0: Authenticator): Builder;
+            public followRedirects(param0: boolean): Builder;
+            public networkInterceptors(): java.util.List<Interceptor>;
+            public cache(param0: Cache): Builder;
+            public sslSocketFactory(param0: javax.net.ssl.SSLSocketFactory, param1: javax.net.ssl.X509TrustManager): Builder;
+            public callTimeout(param0: java.time.Duration): Builder;
+            public cookieJar(param0: CookieJar): Builder;
+            public connectTimeout(param0: number, param1: java.util.concurrent.TimeUnit): Builder;
+            public pingInterval(param0: java.time.Duration): Builder;
+            public followSslRedirects(param0: boolean): Builder;
             public constructor();
-            public connectTimeout(param0: java.time.Duration): okhttp3.OkHttpClient.Builder;
-            public dispatcher(param0: okhttp3.Dispatcher): okhttp3.OkHttpClient.Builder;
-            public proxySelector(param0: java.net.ProxySelector): okhttp3.OkHttpClient.Builder;
-            public socketFactory(param0: javax.net.SocketFactory): okhttp3.OkHttpClient.Builder;
-            public retryOnConnectionFailure(param0: boolean): okhttp3.OkHttpClient.Builder;
-            public writeTimeout(param0: number, param1: java.util.concurrent.TimeUnit): okhttp3.OkHttpClient.Builder;
-            public addNetworkInterceptor(param0: okhttp3.Interceptor): okhttp3.OkHttpClient.Builder;
-            public hostnameVerifier(param0: javax.net.ssl.HostnameVerifier): okhttp3.OkHttpClient.Builder;
-            public authenticator(param0: okhttp3.Authenticator): okhttp3.OkHttpClient.Builder;
-            public proxy(param0: java.net.Proxy): okhttp3.OkHttpClient.Builder;
-            public certificatePinner(param0: okhttp3.CertificatePinner): okhttp3.OkHttpClient.Builder;
+            public connectTimeout(param0: java.time.Duration): Builder;
+            public dispatcher(param0: Dispatcher): Builder;
+            public proxySelector(param0: java.net.ProxySelector): Builder;
+            public socketFactory(param0: javax.net.SocketFactory): Builder;
+            public retryOnConnectionFailure(param0: boolean): Builder;
+            public writeTimeout(param0: number, param1: java.util.concurrent.TimeUnit): Builder;
+            public addNetworkInterceptor(param0: Interceptor): Builder;
+            public hostnameVerifier(param0: javax.net.ssl.HostnameVerifier): Builder;
+            public authenticator(param0: Authenticator): Builder;
+            public proxy(param0: java.net.Proxy): Builder;
+            public certificatePinner(param0: CertificatePinner): Builder;
         }
     }
 }
 
-declare module okhttp3 {
+declare namespace okhttp3 {
     export class Protocol {
-        public static class: java.lang.Class<okhttp3.Protocol>;
-        public static HTTP_1_0: okhttp3.Protocol;
-        public static HTTP_1_1: okhttp3.Protocol;
-        public static SPDY_3: okhttp3.Protocol;
-        public static HTTP_2: okhttp3.Protocol;
-        public static H2_PRIOR_KNOWLEDGE: okhttp3.Protocol;
-        public static QUIC: okhttp3.Protocol;
-        public static valueOf(param0: string): okhttp3.Protocol;
-        public static get(param0: string): okhttp3.Protocol;
-        public static values(): native.Array<okhttp3.Protocol>;
+        public static class: java.lang.Class<Protocol>;
+        public static HTTP_1_0: Protocol;
+        public static HTTP_1_1: Protocol;
+        public static SPDY_3: Protocol;
+        public static HTTP_2: Protocol;
+        public static H2_PRIOR_KNOWLEDGE: Protocol;
+        public static QUIC: Protocol;
+        public static valueOf(param0: string): Protocol;
+        public static get(param0: string): Protocol;
+        public static values(): native.Array<Protocol>;
         public toString(): string;
     }
 }
 
-declare module okhttp3 {
-    export class RealCall extends okhttp3.Call {
-        public static class: java.lang.Class<okhttp3.RealCall>;
-        public clone(): okhttp3.RealCall;
+declare namespace okhttp3 {
+    export class RealCall extends Call {
+        public static class: java.lang.Class<RealCall>;
+        public clone(): RealCall;
         public isExecuted(): boolean;
-        public clone(): okhttp3.Call;
-        public request(): okhttp3.Request;
-        public execute(): okhttp3.Response;
+        public clone(): Call;
+        public request(): Request;
+        public execute(): Response;
         public isCanceled(): boolean;
-        public enqueue(param0: okhttp3.Callback): void;
+        public enqueue(param0: Callback): void;
         public cancel(): void;
         public timeout(): okio.Timeout;
     }
-    export module RealCall {
-        export class AsyncCall extends okhttp3.internal.NamedRunnable {
-            public static class: java.lang.Class<okhttp3.RealCall.AsyncCall>;
+    export namespace RealCall {
+        export class AsyncCall extends internal.NamedRunnable {
+            public static class: java.lang.Class<AsyncCall>;
             public execute(): void;
         }
     }
 }
 
-declare module okhttp3 {
+declare namespace okhttp3 {
     export class Request {
-        public static class: java.lang.Class<okhttp3.Request>;
+        public static class: java.lang.Class<Request>;
         public header(param0: string): string;
-        public headers(): okhttp3.Headers;
+        public headers(): Headers;
         public tag(): any;
-        public newBuilder(): okhttp3.Request.Builder;
+        public newBuilder(): Request.Builder;
         public headers(param0: string): java.util.List<string>;
-        public url(): okhttp3.HttpUrl;
+        public url(): HttpUrl;
         public tag(param0: java.lang.Class): any;
-        public cacheControl(): okhttp3.CacheControl;
+        public cacheControl(): CacheControl;
         public method(): string;
         public toString(): string;
-        public body(): okhttp3.RequestBody;
+        public body(): RequestBody;
         public isHttps(): boolean;
     }
-    export module Request {
+    export namespace Request {
         export class Builder {
-            public static class: java.lang.Class<okhttp3.Request.Builder>;
-            public tag(param0: java.lang.Class, param1: any): okhttp3.Request.Builder;
-            public url(param0: okhttp3.HttpUrl): okhttp3.Request.Builder;
-            public tag(param0: any): okhttp3.Request.Builder;
-            public url(param0: java.net.URL): okhttp3.Request.Builder;
-            public header(param0: string, param1: string): okhttp3.Request.Builder;
-            public headers(param0: okhttp3.Headers): okhttp3.Request.Builder;
-            public put(param0: okhttp3.RequestBody): okhttp3.Request.Builder;
-            public delete(): okhttp3.Request.Builder;
-            public get(): okhttp3.Request.Builder;
+            public static class: java.lang.Class<Builder>;
+            public tag(param0: java.lang.Class, param1: any): Builder;
+            public url(param0: HttpUrl): Builder;
+            public tag(param0: any): Builder;
+            public url(param0: java.net.URL): Builder;
+            public header(param0: string, param1: string): Builder;
+            public headers(param0: Headers): Builder;
+            public put(param0: RequestBody): Builder;
+            public delete(): Builder;
+            public get(): Builder;
             public constructor();
-            public addHeader(param0: string, param1: string): okhttp3.Request.Builder;
-            public post(param0: okhttp3.RequestBody): okhttp3.Request.Builder;
-            public delete(param0: okhttp3.RequestBody): okhttp3.Request.Builder;
-            public patch(param0: okhttp3.RequestBody): okhttp3.Request.Builder;
-            public build(): okhttp3.Request;
-            public method(param0: string, param1: okhttp3.RequestBody): okhttp3.Request.Builder;
-            public url(param0: string): okhttp3.Request.Builder;
-            public removeHeader(param0: string): okhttp3.Request.Builder;
-            public cacheControl(param0: okhttp3.CacheControl): okhttp3.Request.Builder;
-            public head(): okhttp3.Request.Builder;
+            public addHeader(param0: string, param1: string): Builder;
+            public post(param0: RequestBody): Builder;
+            public delete(param0: RequestBody): Builder;
+            public patch(param0: RequestBody): Builder;
+            public build(): Request;
+            public method(param0: string, param1: RequestBody): Builder;
+            public url(param0: string): Builder;
+            public removeHeader(param0: string): Builder;
+            public cacheControl(param0: CacheControl): Builder;
+            public head(): Builder;
         }
     }
 }
 
-declare module okhttp3 {
+declare namespace okhttp3 {
     export abstract class RequestBody {
-        public static class: java.lang.Class<okhttp3.RequestBody>;
+        public static class: java.lang.Class<RequestBody>;
         public constructor();
-        public static create(param0: okhttp3.MediaType, param1: okio.ByteString): okhttp3.RequestBody;
-        public static create(param0: okhttp3.MediaType, param1: java.io.File): okhttp3.RequestBody;
-        public static create(param0: okhttp3.MediaType, param1: string): okhttp3.RequestBody;
-        public contentType(): okhttp3.MediaType;
+        public static create(param0: MediaType, param1: okio.ByteString): RequestBody;
+        public static create(param0: MediaType, param1: java.io.File): RequestBody;
+        public static create(param0: MediaType, param1: string): RequestBody;
+        public contentType(): MediaType;
         public writeTo(param0: okio.BufferedSink): void;
-        public static create(param0: okhttp3.MediaType, param1: native.Array<number>): okhttp3.RequestBody;
+        public static create(param0: MediaType, param1: native.Array<number>): RequestBody;
         public contentLength(): number;
-        public static create(param0: okhttp3.MediaType, param1: native.Array<number>, param2: number, param3: number): okhttp3.RequestBody;
+        public static create(param0: MediaType, param1: native.Array<number>, param2: number, param3: number): RequestBody;
     }
 }
 
-declare module okhttp3 {
+declare namespace okhttp3 {
     export class Response {
-        public static class: java.lang.Class<okhttp3.Response>;
-        public headers(): okhttp3.Headers;
-        public priorResponse(): okhttp3.Response;
+        public static class: java.lang.Class<Response>;
+        public headers(): Headers;
+        public priorResponse(): Response;
         public close(): void;
-        public cacheResponse(): okhttp3.Response;
+        public cacheResponse(): Response;
         public sentRequestAtMillis(): number;
-        public cacheControl(): okhttp3.CacheControl;
+        public cacheControl(): CacheControl;
         public toString(): string;
-        public handshake(): okhttp3.Handshake;
-        public peekBody(param0: number): okhttp3.ResponseBody;
+        public handshake(): Handshake;
+        public peekBody(param0: number): ResponseBody;
         public isSuccessful(): boolean;
         public header(param0: string): string;
         public header(param0: string, param1: string): string;
-        public body(): okhttp3.ResponseBody;
-        public networkResponse(): okhttp3.Response;
+        public body(): ResponseBody;
+        public networkResponse(): Response;
         public headers(param0: string): java.util.List<string>;
-        public newBuilder(): okhttp3.Response.Builder;
-        public request(): okhttp3.Request;
+        public newBuilder(): Response.Builder;
+        public request(): Request;
         public code(): number;
-        public protocol(): okhttp3.Protocol;
+        public protocol(): Protocol;
         public message(): string;
-        public challenges(): java.util.List<okhttp3.Challenge>;
+        public challenges(): java.util.List<Challenge>;
         public receivedResponseAtMillis(): number;
         public isRedirect(): boolean;
     }
-    export module Response {
+    export namespace Response {
         export class Builder {
-            public static class: java.lang.Class<okhttp3.Response.Builder>;
-            public cacheResponse(param0: okhttp3.Response): okhttp3.Response.Builder;
-            public body(param0: okhttp3.ResponseBody): okhttp3.Response.Builder;
-            public message(param0: string): okhttp3.Response.Builder;
-            public request(param0: okhttp3.Request): okhttp3.Response.Builder;
-            public header(param0: string, param1: string): okhttp3.Response.Builder;
-            public headers(param0: okhttp3.Headers): okhttp3.Response.Builder;
-            public sentRequestAtMillis(param0: number): okhttp3.Response.Builder;
-            public priorResponse(param0: okhttp3.Response): okhttp3.Response.Builder;
-            public networkResponse(param0: okhttp3.Response): okhttp3.Response.Builder;
+            public static class: java.lang.Class<Builder>;
+            public cacheResponse(param0: Response): Builder;
+            public body(param0: ResponseBody): Builder;
+            public message(param0: string): Builder;
+            public request(param0: Request): Builder;
+            public header(param0: string, param1: string): Builder;
+            public headers(param0: Headers): Builder;
+            public sentRequestAtMillis(param0: number): Builder;
+            public priorResponse(param0: Response): Builder;
+            public networkResponse(param0: Response): Builder;
             public constructor();
-            public removeHeader(param0: string): okhttp3.Response.Builder;
-            public handshake(param0: okhttp3.Handshake): okhttp3.Response.Builder;
-            public addHeader(param0: string, param1: string): okhttp3.Response.Builder;
-            public code(param0: number): okhttp3.Response.Builder;
-            public build(): okhttp3.Response;
-            public protocol(param0: okhttp3.Protocol): okhttp3.Response.Builder;
-            public receivedResponseAtMillis(param0: number): okhttp3.Response.Builder;
+            public removeHeader(param0: string): Builder;
+            public handshake(param0: Handshake): Builder;
+            public addHeader(param0: string, param1: string): Builder;
+            public code(param0: number): Builder;
+            public build(): Response;
+            public protocol(param0: Protocol): Builder;
+            public receivedResponseAtMillis(param0: number): Builder;
         }
     }
 }
 
-declare module okhttp3 {
+declare namespace okhttp3 {
     export abstract class ResponseBody {
-        public static class: java.lang.Class<okhttp3.ResponseBody>;
+        public static class: java.lang.Class<ResponseBody>;
         public constructor();
         public byteStream(): java.io.InputStream;
         public bytes(): native.Array<number>;
-        public static create(param0: okhttp3.MediaType, param1: native.Array<number>): okhttp3.ResponseBody;
-        public static create(param0: okhttp3.MediaType, param1: number, param2: okio.BufferedSource): okhttp3.ResponseBody;
+        public static create(param0: MediaType, param1: native.Array<number>): ResponseBody;
+        public static create(param0: MediaType, param1: number, param2: okio.BufferedSource): ResponseBody;
         public close(): void;
         public source(): okio.BufferedSource;
-        public static create(param0: okhttp3.MediaType, param1: okio.ByteString): okhttp3.ResponseBody;
-        public static create(param0: okhttp3.MediaType, param1: string): okhttp3.ResponseBody;
+        public static create(param0: MediaType, param1: okio.ByteString): ResponseBody;
+        public static create(param0: MediaType, param1: string): ResponseBody;
         public charStream(): java.io.Reader;
-        public contentType(): okhttp3.MediaType;
+        public contentType(): MediaType;
         public string(): string;
         public contentLength(): number;
     }
-    export module ResponseBody {
+    export namespace ResponseBody {
         export class BomAwareReader {
-            public static class: java.lang.Class<okhttp3.ResponseBody.BomAwareReader>;
+            public static class: java.lang.Class<BomAwareReader>;
             public read(param0: native.Array<string>, param1: number, param2: number): number;
             public close(): void;
         }
     }
 }
 
-declare module okhttp3 {
+declare namespace okhttp3 {
     export class Route {
-        public static class: java.lang.Class<okhttp3.Route>;
+        public static class: java.lang.Class<Route>;
         public proxy(): java.net.Proxy;
-        public constructor(param0: okhttp3.Address, param1: java.net.Proxy, param2: java.net.InetSocketAddress);
+        public constructor(param0: Address, param1: java.net.Proxy, param2: java.net.InetSocketAddress);
         public equals(param0: any): boolean;
-        public address(): okhttp3.Address;
+        public address(): Address;
         public hashCode(): number;
         public toString(): string;
         public requiresTunnel(): boolean;
@@ -1062,29 +1053,29 @@ declare module okhttp3 {
     }
 }
 
-declare module okhttp3 {
+declare namespace okhttp3 {
     export class TlsVersion {
-        public static class: java.lang.Class<okhttp3.TlsVersion>;
-        public static TLS_1_3: okhttp3.TlsVersion;
-        public static TLS_1_2: okhttp3.TlsVersion;
-        public static TLS_1_1: okhttp3.TlsVersion;
-        public static TLS_1_0: okhttp3.TlsVersion;
-        public static SSL_3_0: okhttp3.TlsVersion;
+        public static class: java.lang.Class<TlsVersion>;
+        public static TLS_1_3: TlsVersion;
+        public static TLS_1_2: TlsVersion;
+        public static TLS_1_1: TlsVersion;
+        public static TLS_1_0: TlsVersion;
+        public static SSL_3_0: TlsVersion;
         public javaName(): string;
-        public static values(): native.Array<okhttp3.TlsVersion>;
-        public static valueOf(param0: string): okhttp3.TlsVersion;
-        public static forJavaName(param0: string): okhttp3.TlsVersion;
+        public static values(): native.Array<TlsVersion>;
+        public static valueOf(param0: string): TlsVersion;
+        public static forJavaName(param0: string): TlsVersion;
     }
 }
 
-declare module okhttp3 {
+declare namespace okhttp3 {
     export class WebSocket {
-        public static class: java.lang.Class<okhttp3.WebSocket>;
+        public static class: java.lang.Class<WebSocket>;
         /**
          * Constructs a new instance of the okhttp3.WebSocket interface with the provided implementation. An empty constructor exists calling super() when extending the interface class.
          */
         public constructor(implementation: {
-            request(): okhttp3.Request;
+            request(): Request;
             queueSize(): number;
             send(param0: string): boolean;
             send(param0: okio.ByteString): boolean;
@@ -1095,68 +1086,66 @@ declare module okhttp3 {
         public send(param0: string): boolean;
         public send(param0: okio.ByteString): boolean;
         public close(param0: number, param1: string): boolean;
-        public request(): okhttp3.Request;
+        public request(): Request;
         public queueSize(): number;
         public cancel(): void;
     }
-    export module WebSocket {
+    export namespace WebSocket {
         export class Factory {
-            public static class: java.lang.Class<okhttp3.WebSocket.Factory>;
+            public static class: java.lang.Class<Factory>;
             /**
              * Constructs a new instance of the okhttp3.WebSocket$Factory interface with the provided implementation. An empty constructor exists calling super() when extending the interface class.
              */
-            public constructor(implementation: {
-                newWebSocket(param0: okhttp3.Request, param1: okhttp3.WebSocketListener): okhttp3.WebSocket;
-            });
+            public constructor(implementation: { newWebSocket(param0: Request, param1: WebSocketListener): WebSocket });
             public constructor();
-            public newWebSocket(param0: okhttp3.Request, param1: okhttp3.WebSocketListener): okhttp3.WebSocket;
+            public newWebSocket(param0: Request, param1: WebSocketListener): WebSocket;
         }
     }
 }
 
-declare module okhttp3 {
+declare namespace okhttp3 {
     export abstract class WebSocketListener {
-        public static class: java.lang.Class<okhttp3.WebSocketListener>;
+        public static class: java.lang.Class<WebSocketListener>;
         public constructor();
-        public onClosed(param0: okhttp3.WebSocket, param1: number, param2: string): void;
-        public onMessage(param0: okhttp3.WebSocket, param1: okio.ByteString): void;
-        public onFailure(param0: okhttp3.WebSocket, param1: java.lang.Throwable, param2: okhttp3.Response): void;
-        public onOpen(param0: okhttp3.WebSocket, param1: okhttp3.Response): void;
-        public onClosing(param0: okhttp3.WebSocket, param1: number, param2: string): void;
-        public onMessage(param0: okhttp3.WebSocket, param1: string): void;
+        public onClosed(param0: WebSocket, param1: number, param2: string): void;
+        public onMessage(param0: WebSocket, param1: okio.ByteString): void;
+        public onFailure(param0: WebSocket, param1: java.lang.Throwable, param2: Response): void;
+        public onOpen(param0: WebSocket, param1: Response): void;
+        public onClosing(param0: WebSocket, param1: number, param2: string): void;
+        public onMessage(param0: WebSocket, param1: string): void;
     }
 }
 
-declare module okhttp3 {
-    export module internal {
+declare namespace okhttp3 {
+    export namespace internal {
         export abstract class Internal {
-            public static class: java.lang.Class<okhttp3.internal.Internal>;
-            public static instance: okhttp3.internal.Internal;
-            public code(param0: okhttp3.Response.Builder): number;
-            public addLenient(param0: okhttp3.Headers.Builder, param1: string): void;
-            public connectionBecameIdle(param0: okhttp3.ConnectionPool, param1: okhttp3.internal.connection.RealConnection): boolean;
-            public setCache(param0: okhttp3.OkHttpClient.Builder, param1: okhttp3.internal.cache.InternalCache): void;
-            public equalsNonHost(param0: okhttp3.Address, param1: okhttp3.Address): boolean;
+            public static class: java.lang.Class<Internal>;
+            public static instance: Internal;
+            public code(param0: Response.Builder): number;
+            public addLenient(param0: Headers.Builder, param1: string): void;
+            public connectionBecameIdle(param0: ConnectionPool, param1: connection.RealConnection): boolean;
+            public setCache(param0: OkHttpClient.Builder, param1: cache.InternalCache): void;
+            public equalsNonHost(param0: Address, param1: Address): boolean;
             public isInvalidHttpUrlHost(param0: java.lang.IllegalArgumentException): boolean;
-            public newWebSocketCall(param0: okhttp3.OkHttpClient, param1: okhttp3.Request): okhttp3.Call;
+            public newWebSocketCall(param0: OkHttpClient, param1: Request): Call;
             public constructor();
-            public apply(param0: okhttp3.ConnectionSpec, param1: javax.net.ssl.SSLSocket, param2: boolean): void;
-            public put(param0: okhttp3.ConnectionPool, param1: okhttp3.internal.connection.RealConnection): void;
-            public routeDatabase(param0: okhttp3.ConnectionPool): okhttp3.internal.connection.RouteDatabase;
+            public apply(param0: ConnectionSpec, param1: javax.net.ssl.SSLSocket, param2: boolean): void;
+            public put(param0: ConnectionPool, param1: connection.RealConnection): void;
+            public routeDatabase(param0: ConnectionPool): connection.RouteDatabase;
             public static initializeInstanceForTests(): void;
-            public addLenient(param0: okhttp3.Headers.Builder, param1: string, param2: string): void;
-            public deduplicate(param0: okhttp3.ConnectionPool, param1: okhttp3.Address, param2: okhttp3.internal.connection.StreamAllocation): java.net.Socket;
-            public timeoutExit(param0: okhttp3.Call, param1: java.io.IOException): java.io.IOException;
-            public get(param0: okhttp3.ConnectionPool, param1: okhttp3.Address, param2: okhttp3.internal.connection.StreamAllocation, param3: okhttp3.Route): okhttp3.internal.connection.RealConnection;
-            public streamAllocation(param0: okhttp3.Call): okhttp3.internal.connection.StreamAllocation;
+            public addLenient(param0: Headers.Builder, param1: string, param2: string): void;
+            public deduplicate(param0: ConnectionPool, param1: Address, param2: connection.StreamAllocation): java.net.Socket;
+            public timeoutExit(param0: Call, param1: java.io.IOException): java.io.IOException;
+            public get(param0: ConnectionPool, param1: Address, param2: connection.StreamAllocation, param3: Route): connection.RealConnection;
+            public streamAllocation(param0: Call): connection.StreamAllocation;
         }
     }
 }
 
-declare module okhttp3 {
-    export module internal {
+declare namespace okhttp3 {
+    export namespace internal {
         export abstract class NamedRunnable {
-            public static class: java.lang.Class<okhttp3.internal.NamedRunnable>;
+            public static class: java.lang.Class<NamedRunnable>;
             public name: string;
             public execute(): void;
             public constructor(param0: string, param1: native.Array<any>);
@@ -1165,14 +1154,14 @@ declare module okhttp3 {
     }
 }
 
-declare module okhttp3 {
-    export module internal {
+declare namespace okhttp3 {
+    export namespace internal {
         export class Util {
-            public static class: java.lang.Class<okhttp3.internal.Util>;
+            public static class: java.lang.Class<Util>;
             public static EMPTY_BYTE_ARRAY: native.Array<number>;
             public static EMPTY_STRING_ARRAY: native.Array<string>;
-            public static EMPTY_RESPONSE: okhttp3.ResponseBody;
-            public static EMPTY_REQUEST: okhttp3.RequestBody;
+            public static EMPTY_RESPONSE: ResponseBody;
+            public static EMPTY_REQUEST: RequestBody;
             public static UTF_8: java.nio.charset.Charset;
             public static ISO_8859_1: java.nio.charset.Charset;
             public static UTC: java.util.TimeZone;
@@ -1190,7 +1179,7 @@ declare module okhttp3 {
             public static immutableList(param0: native.Array<any>): java.util.List;
             public static delimiterOffset(param0: string, param1: number, param2: number, param3: string): number;
             public static closeQuietly(param0: java.io.Closeable): void;
-            public static hostHeader(param0: okhttp3.HttpUrl, param1: boolean): string;
+            public static hostHeader(param0: HttpUrl, param1: boolean): string;
             public static trimSubstring(param0: string, param1: number, param2: number): string;
             public static closeQuietly(param0: java.net.Socket): void;
             public static assertionError(param0: string, param1: java.lang.Exception): java.lang.AssertionError;
@@ -1198,7 +1187,7 @@ declare module okhttp3 {
             public static checkDuration(param0: string, param1: number, param2: java.util.concurrent.TimeUnit): number;
             public static intersect(param0: java.util.Comparator<any>, param1: native.Array<string>, param2: native.Array<string>): native.Array<string>;
             public static canonicalizeHost(param0: string): string;
-            public static toHeaders(param0: java.util.List<okhttp3.internal.http2.Header>): okhttp3.Headers;
+            public static toHeaders(param0: java.util.List<http2.Header>): Headers;
             public static concat(param0: native.Array<string>, param1: string): native.Array<string>;
             public static addSuppressedIfPossible(param0: java.lang.Throwable, param1: java.lang.Throwable): void;
             public static nonEmptyIntersection(param0: java.util.Comparator<string>, param1: native.Array<string>, param2: native.Array<string>): boolean;
@@ -1213,55 +1202,51 @@ declare module okhttp3 {
     }
 }
 
-declare module okhttp3 {
-    export module internal {
+declare namespace okhttp3 {
+    export namespace internal {
         export class Version {
-            public static class: java.lang.Class<okhttp3.internal.Version>;
+            public static class: java.lang.Class<Version>;
             public static userAgent(): string;
         }
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module annotations {
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace annotations {
             export class EverythingIsNonNull {
-                public static class: java.lang.Class<okhttp3.internal.annotations.EverythingIsNonNull>;
+                public static class: java.lang.Class<EverythingIsNonNull>;
                 /**
                  * Constructs a new instance of the okhttp3.internal.annotations.EverythingIsNonNull interface with the provided implementation. An empty constructor exists calling super() when extending the interface class.
                  */
-                public constructor(implementation: {
-                });
+                public constructor(implementation: {});
                 public constructor();
             }
         }
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module cache {
-            export class CacheInterceptor extends okhttp3.Interceptor {
-                public static class: java.lang.Class<okhttp3.internal.cache.CacheInterceptor>;
-                public intercept(param0: okhttp3.Interceptor.Chain): okhttp3.Response;
-                public constructor(param0: okhttp3.internal.cache.InternalCache);
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace cache {
+            export class CacheInterceptor extends Interceptor {
+                public static class: java.lang.Class<CacheInterceptor>;
+                public intercept(param0: Interceptor.Chain): Response;
+                public constructor(param0: InternalCache);
             }
         }
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module cache {
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace cache {
             export class CacheRequest {
-                public static class: java.lang.Class<okhttp3.internal.cache.CacheRequest>;
+                public static class: java.lang.Class<CacheRequest>;
                 /**
                  * Constructs a new instance of the okhttp3.internal.cache.CacheRequest interface with the provided implementation. An empty constructor exists calling super() when extending the interface class.
                  */
-                public constructor(implementation: {
-                    body(): okio.Sink;
-                    abort(): void;
-                });
+                public constructor(implementation: { body(): okio.Sink; abort(): void });
                 public constructor();
                 public abort(): void;
                 public body(): okio.Sink;
@@ -1270,50 +1255,50 @@ declare module okhttp3 {
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module cache {
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace cache {
             export class CacheStrategy {
-                public static class: java.lang.Class<okhttp3.internal.cache.CacheStrategy>;
-                public networkRequest: okhttp3.Request;
-                public cacheResponse: okhttp3.Response;
-                public static isCacheable(param0: okhttp3.Response, param1: okhttp3.Request): boolean;
+                public static class: java.lang.Class<CacheStrategy>;
+                public networkRequest: Request;
+                public cacheResponse: Response;
+                public static isCacheable(param0: Response, param1: Request): boolean;
             }
-            export module CacheStrategy {
+            export namespace CacheStrategy {
                 export class Factory {
-                    public static class: java.lang.Class<okhttp3.internal.cache.CacheStrategy.Factory>;
-                    public constructor(param0: number, param1: okhttp3.Request, param2: okhttp3.Response);
-                    public get(): okhttp3.internal.cache.CacheStrategy;
+                    public static class: java.lang.Class<Factory>;
+                    public constructor(param0: number, param1: Request, param2: Response);
+                    public get(): CacheStrategy;
                 }
             }
         }
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module cache {
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace cache {
             export class DiskLruCache {
-                public static class: java.lang.Class<okhttp3.internal.cache.DiskLruCache>;
+                public static class: java.lang.Class<DiskLruCache>;
                 public remove(param0: string): boolean;
                 public close(): void;
-                public snapshots(): java.util.Iterator<okhttp3.internal.cache.DiskLruCache.Snapshot>;
+                public snapshots(): java.util.Iterator<DiskLruCache.Snapshot>;
                 public isClosed(): boolean;
                 public getDirectory(): java.io.File;
-                public static create(param0: okhttp3.internal.io.FileSystem, param1: java.io.File, param2: number, param3: number, param4: number): okhttp3.internal.cache.DiskLruCache;
-                public get(param0: string): okhttp3.internal.cache.DiskLruCache.Snapshot;
+                public static create(param0: io.FileSystem, param1: java.io.File, param2: number, param3: number, param4: number): DiskLruCache;
+                public get(param0: string): DiskLruCache.Snapshot;
                 public size(): number;
                 public flush(): void;
                 public setMaxSize(param0: number): void;
-                public edit(param0: string): okhttp3.internal.cache.DiskLruCache.Editor;
+                public edit(param0: string): DiskLruCache.Editor;
                 public initialize(): void;
                 public delete(): void;
                 public getMaxSize(): number;
                 public evictAll(): void;
             }
-            export module DiskLruCache {
+            export namespace DiskLruCache {
                 export class Editor {
-                    public static class: java.lang.Class<okhttp3.internal.cache.DiskLruCache.Editor>;
+                    public static class: java.lang.Class<Editor>;
                     public newSource(param0: number): okio.Source;
                     public commit(): void;
                     public newSink(param0: number): okio.Sink;
@@ -1321,14 +1306,14 @@ declare module okhttp3 {
                     public abort(): void;
                 }
                 export class Entry {
-                    public static class: java.lang.Class<okhttp3.internal.cache.DiskLruCache.Entry>;
+                    public static class: java.lang.Class<Entry>;
                 }
                 export class Snapshot {
-                    public static class: java.lang.Class<okhttp3.internal.cache.DiskLruCache.Snapshot>;
+                    public static class: java.lang.Class<Snapshot>;
                     public close(): void;
                     public key(): string;
                     public getLength(param0: number): number;
-                    public edit(): okhttp3.internal.cache.DiskLruCache.Editor;
+                    public edit(): Editor;
                     public getSource(param0: number): okio.Source;
                 }
             }
@@ -1336,11 +1321,11 @@ declare module okhttp3 {
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module cache {
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace cache {
             export class FaultHidingSink {
-                public static class: java.lang.Class<okhttp3.internal.cache.FaultHidingSink>;
+                public static class: java.lang.Class<FaultHidingSink>;
                 public close(): void;
                 public write(param0: okio.Buffer, param1: number): void;
                 public flush(): void;
@@ -1350,39 +1335,39 @@ declare module okhttp3 {
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module cache {
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace cache {
             export class InternalCache {
-                public static class: java.lang.Class<okhttp3.internal.cache.InternalCache>;
+                public static class: java.lang.Class<InternalCache>;
                 /**
                  * Constructs a new instance of the okhttp3.internal.cache.InternalCache interface with the provided implementation. An empty constructor exists calling super() when extending the interface class.
                  */
                 public constructor(implementation: {
-                    get(param0: okhttp3.Request): okhttp3.Response;
-                    put(param0: okhttp3.Response): okhttp3.internal.cache.CacheRequest;
-                    remove(param0: okhttp3.Request): void;
-                    update(param0: okhttp3.Response, param1: okhttp3.Response): void;
+                    get(param0: Request): Response;
+                    put(param0: Response): CacheRequest;
+                    remove(param0: Request): void;
+                    update(param0: Response, param1: Response): void;
                     trackConditionalCacheHit(): void;
-                    trackResponse(param0: okhttp3.internal.cache.CacheStrategy): void;
+                    trackResponse(param0: CacheStrategy): void;
                 });
                 public constructor();
-                public put(param0: okhttp3.Response): okhttp3.internal.cache.CacheRequest;
-                public get(param0: okhttp3.Request): okhttp3.Response;
-                public remove(param0: okhttp3.Request): void;
-                public update(param0: okhttp3.Response, param1: okhttp3.Response): void;
+                public put(param0: Response): CacheRequest;
+                public get(param0: Request): Response;
+                public remove(param0: Request): void;
+                public update(param0: Response, param1: Response): void;
                 public trackConditionalCacheHit(): void;
-                public trackResponse(param0: okhttp3.internal.cache.CacheStrategy): void;
+                public trackResponse(param0: CacheStrategy): void;
             }
         }
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module cache2 {
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace cache2 {
             export class FileOperator {
-                public static class: java.lang.Class<okhttp3.internal.cache2.FileOperator>;
+                public static class: java.lang.Class<FileOperator>;
                 public write(param0: number, param1: okio.Buffer, param2: number): void;
                 public read(param0: number, param1: okio.Buffer, param2: number): void;
             }
@@ -1390,19 +1375,19 @@ declare module okhttp3 {
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module cache2 {
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace cache2 {
             export class Relay {
-                public static class: java.lang.Class<okhttp3.internal.cache2.Relay>;
+                public static class: java.lang.Class<Relay>;
                 public newSource(): okio.Source;
                 public metadata(): okio.ByteString;
-                public static edit(param0: java.io.File, param1: okio.Source, param2: okio.ByteString, param3: number): okhttp3.internal.cache2.Relay;
-                public static read(param0: java.io.File): okhttp3.internal.cache2.Relay;
+                public static edit(param0: java.io.File, param1: okio.Source, param2: okio.ByteString, param3: number): Relay;
+                public static read(param0: java.io.File): Relay;
             }
-            export module Relay {
+            export namespace Relay {
                 export class RelaySource {
-                    public static class: java.lang.Class<okhttp3.internal.cache2.Relay.RelaySource>;
+                    public static class: java.lang.Class<RelaySource>;
                     public close(): void;
                     public timeout(): okio.Timeout;
                     public read(param0: okio.Buffer, param1: number): number;
@@ -1412,84 +1397,84 @@ declare module okhttp3 {
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module connection {
-            export class ConnectInterceptor extends okhttp3.Interceptor {
-                public static class: java.lang.Class<okhttp3.internal.connection.ConnectInterceptor>;
-                public client: okhttp3.OkHttpClient;
-                public constructor(param0: okhttp3.OkHttpClient);
-                public intercept(param0: okhttp3.Interceptor.Chain): okhttp3.Response;
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace connection {
+            export class ConnectInterceptor extends Interceptor {
+                public static class: java.lang.Class<ConnectInterceptor>;
+                public client: OkHttpClient;
+                public constructor(param0: OkHttpClient);
+                public intercept(param0: Interceptor.Chain): Response;
             }
         }
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module connection {
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace connection {
             export class ConnectionSpecSelector {
-                public static class: java.lang.Class<okhttp3.internal.connection.ConnectionSpecSelector>;
-                public constructor(param0: java.util.List<okhttp3.ConnectionSpec>);
-                public configureSecureSocket(param0: javax.net.ssl.SSLSocket): okhttp3.ConnectionSpec;
+                public static class: java.lang.Class<ConnectionSpecSelector>;
+                public constructor(param0: java.util.List<ConnectionSpec>);
+                public configureSecureSocket(param0: javax.net.ssl.SSLSocket): ConnectionSpec;
                 public connectionFailed(param0: java.io.IOException): boolean;
             }
         }
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module connection {
-            export class RealConnection extends okhttp3.internal.http2.Http2Connection.Listener implements okhttp3.Connection {
-                public static class: java.lang.Class<okhttp3.internal.connection.RealConnection>;
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace connection {
+            export class RealConnection extends http2.Http2Connection.Listener implements Connection {
+                public static class: java.lang.Class<RealConnection>;
                 public noNewStreams: boolean;
                 public successCount: number;
                 public allocationLimit: number;
-                public allocations: java.util.List<java.lang.ref.Reference<okhttp3.internal.connection.StreamAllocation>>;
+                public allocations: java.util.List<java.lang.ref.Reference<StreamAllocation>>;
                 public idleAtNanos: number;
-                public onSettings(param0: okhttp3.internal.http2.Http2Connection): void;
-                public connect(param0: number, param1: number, param2: number, param3: number, param4: boolean, param5: okhttp3.Call, param6: okhttp3.EventListener): void;
-                public isEligible(param0: okhttp3.Address, param1: okhttp3.Route): boolean;
-                public protocol(): okhttp3.Protocol;
-                public route(): okhttp3.Route;
+                public onSettings(param0: http2.Http2Connection): void;
+                public connect(param0: number, param1: number, param2: number, param3: number, param4: boolean, param5: Call, param6: EventListener): void;
+                public isEligible(param0: Address, param1: Route): boolean;
+                public protocol(): Protocol;
+                public route(): Route;
                 public toString(): string;
                 public socket(): java.net.Socket;
-                public onStream(param0: okhttp3.internal.http2.Http2Stream): void;
+                public onStream(param0: http2.Http2Stream): void;
                 public constructor();
-                public constructor(param0: okhttp3.ConnectionPool, param1: okhttp3.Route);
+                public constructor(param0: ConnectionPool, param1: Route);
                 public isHealthy(param0: boolean): boolean;
-                public supportsUrl(param0: okhttp3.HttpUrl): boolean;
-                public newWebSocketStreams(param0: okhttp3.internal.connection.StreamAllocation): okhttp3.internal.ws.RealWebSocket.Streams;
+                public supportsUrl(param0: HttpUrl): boolean;
+                public newWebSocketStreams(param0: StreamAllocation): ws.RealWebSocket.Streams;
                 public cancel(): void;
                 public isMultiplexed(): boolean;
-                public static testConnection(param0: okhttp3.ConnectionPool, param1: okhttp3.Route, param2: java.net.Socket, param3: number): okhttp3.internal.connection.RealConnection;
-                public handshake(): okhttp3.Handshake;
-                public newCodec(param0: okhttp3.OkHttpClient, param1: okhttp3.Interceptor.Chain, param2: okhttp3.internal.connection.StreamAllocation): okhttp3.internal.http.HttpCodec;
+                public static testConnection(param0: ConnectionPool, param1: Route, param2: java.net.Socket, param3: number): RealConnection;
+                public handshake(): Handshake;
+                public newCodec(param0: OkHttpClient, param1: Interceptor.Chain, param2: StreamAllocation): http.HttpCodec;
             }
         }
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module connection {
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace connection {
             export class RouteDatabase {
-                public static class: java.lang.Class<okhttp3.internal.connection.RouteDatabase>;
-                public shouldPostpone(param0: okhttp3.Route): boolean;
-                public connected(param0: okhttp3.Route): void;
-                public failed(param0: okhttp3.Route): void;
+                public static class: java.lang.Class<RouteDatabase>;
+                public shouldPostpone(param0: Route): boolean;
+                public connected(param0: Route): void;
+                public failed(param0: Route): void;
                 public constructor();
             }
         }
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module connection {
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace connection {
             export class RouteException {
-                public static class: java.lang.Class<okhttp3.internal.connection.RouteException>;
+                public static class: java.lang.Class<RouteException>;
                 public getLastConnectException(): java.io.IOException;
                 public constructor(param0: java.io.IOException);
                 public addConnectException(param0: java.io.IOException): void;
@@ -1499,21 +1484,21 @@ declare module okhttp3 {
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module connection {
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace connection {
             export class RouteSelector {
-                public static class: java.lang.Class<okhttp3.internal.connection.RouteSelector>;
-                public next(): okhttp3.internal.connection.RouteSelector.Selection;
-                public constructor(param0: okhttp3.Address, param1: okhttp3.internal.connection.RouteDatabase, param2: okhttp3.Call, param3: okhttp3.EventListener);
+                public static class: java.lang.Class<RouteSelector>;
+                public next(): RouteSelector.Selection;
+                public constructor(param0: Address, param1: RouteDatabase, param2: Call, param3: EventListener);
                 public hasNext(): boolean;
-                public connectFailed(param0: okhttp3.Route, param1: java.io.IOException): void;
+                public connectFailed(param0: Route, param1: java.io.IOException): void;
             }
-            export module RouteSelector {
+            export namespace RouteSelector {
                 export class Selection {
-                    public static class: java.lang.Class<okhttp3.internal.connection.RouteSelector.Selection>;
-                    public getAll(): java.util.List<okhttp3.Route>;
-                    public next(): okhttp3.Route;
+                    public static class: java.lang.Class<Selection>;
+                    public getAll(): java.util.List<Route>;
+                    public next(): Route;
                     public hasNext(): boolean;
                 }
             }
@@ -1521,32 +1506,32 @@ declare module okhttp3 {
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module connection {
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace connection {
             export class StreamAllocation {
-                public static class: java.lang.Class<okhttp3.internal.connection.StreamAllocation>;
-                public address: okhttp3.Address;
-                public call: okhttp3.Call;
-                public eventListener: okhttp3.EventListener;
-                public streamFinished(param0: boolean, param1: okhttp3.internal.http.HttpCodec, param2: number, param3: java.io.IOException): void;
+                public static class: java.lang.Class<StreamAllocation>;
+                public address: Address;
+                public call: Call;
+                public eventListener: EventListener;
+                public streamFinished(param0: boolean, param1: http.HttpCodec, param2: number, param3: java.io.IOException): void;
                 public release(): void;
-                public codec(): okhttp3.internal.http.HttpCodec;
-                public route(): okhttp3.Route;
+                public codec(): http.HttpCodec;
+                public route(): Route;
                 public toString(): string;
-                public newStream(param0: okhttp3.OkHttpClient, param1: okhttp3.Interceptor.Chain, param2: boolean): okhttp3.internal.http.HttpCodec;
-                public releaseAndAcquire(param0: okhttp3.internal.connection.RealConnection): java.net.Socket;
+                public newStream(param0: OkHttpClient, param1: Interceptor.Chain, param2: boolean): http.HttpCodec;
+                public releaseAndAcquire(param0: RealConnection): java.net.Socket;
                 public noNewStreams(): void;
-                public acquire(param0: okhttp3.internal.connection.RealConnection, param1: boolean): void;
+                public acquire(param0: RealConnection, param1: boolean): void;
                 public cancel(): void;
-                public connection(): okhttp3.internal.connection.RealConnection;
+                public connection(): RealConnection;
                 public hasMoreRoutes(): boolean;
-                public constructor(param0: okhttp3.ConnectionPool, param1: okhttp3.Address, param2: okhttp3.Call, param3: okhttp3.EventListener, param4: any);
+                public constructor(param0: ConnectionPool, param1: Address, param2: Call, param3: EventListener, param4: any);
                 public streamFailed(param0: java.io.IOException): void;
             }
-            export module StreamAllocation {
-                export class StreamAllocationReference extends java.lang.ref.WeakReference<okhttp3.internal.connection.StreamAllocation> {
-                    public static class: java.lang.Class<okhttp3.internal.connection.StreamAllocation.StreamAllocationReference>;
+            export namespace StreamAllocation {
+                export class StreamAllocationReference extends java.lang.ref.WeakReference<StreamAllocation> {
+                    public static class: java.lang.Class<StreamAllocationReference>;
                     public callStackTrace: any;
                 }
             }
@@ -1554,29 +1539,29 @@ declare module okhttp3 {
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module http {
-            export class BridgeInterceptor extends okhttp3.Interceptor {
-                public static class: java.lang.Class<okhttp3.internal.http.BridgeInterceptor>;
-                public intercept(param0: okhttp3.Interceptor.Chain): okhttp3.Response;
-                public constructor(param0: okhttp3.CookieJar);
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace http {
+            export class BridgeInterceptor extends Interceptor {
+                public static class: java.lang.Class<BridgeInterceptor>;
+                public intercept(param0: Interceptor.Chain): Response;
+                public constructor(param0: CookieJar);
             }
         }
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module http {
-            export class CallServerInterceptor extends okhttp3.Interceptor {
-                public static class: java.lang.Class<okhttp3.internal.http.CallServerInterceptor>;
-                public intercept(param0: okhttp3.Interceptor.Chain): okhttp3.Response;
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace http {
+            export class CallServerInterceptor extends Interceptor {
+                public static class: java.lang.Class<CallServerInterceptor>;
+                public intercept(param0: Interceptor.Chain): Response;
                 public constructor(param0: boolean);
             }
-            export module CallServerInterceptor {
+            export namespace CallServerInterceptor {
                 export class CountingSink {
-                    public static class: java.lang.Class<okhttp3.internal.http.CallServerInterceptor.CountingSink>;
+                    public static class: java.lang.Class<CountingSink>;
                     public write(param0: okio.Buffer, param1: number): void;
                 }
             }
@@ -1584,42 +1569,42 @@ declare module okhttp3 {
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module http {
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace http {
             export class HttpCodec {
-                public static class: java.lang.Class<okhttp3.internal.http.HttpCodec>;
+                public static class: java.lang.Class<HttpCodec>;
                 /**
                  * Constructs a new instance of the okhttp3.internal.http.HttpCodec interface with the provided implementation. An empty constructor exists calling super() when extending the interface class.
                  */
                 public constructor(implementation: {
-                    createRequestBody(param0: okhttp3.Request, param1: number): okio.Sink;
-                    writeRequestHeaders(param0: okhttp3.Request): void;
+                    createRequestBody(param0: Request, param1: number): okio.Sink;
+                    writeRequestHeaders(param0: Request): void;
                     flushRequest(): void;
                     finishRequest(): void;
-                    readResponseHeaders(param0: boolean): okhttp3.Response.Builder;
-                    openResponseBody(param0: okhttp3.Response): okhttp3.ResponseBody;
+                    readResponseHeaders(param0: boolean): Response.Builder;
+                    openResponseBody(param0: Response): ResponseBody;
                     cancel(): void;
                 });
                 public constructor();
                 public static DISCARD_STREAM_TIMEOUT_MILLIS: number;
                 public finishRequest(): void;
-                public openResponseBody(param0: okhttp3.Response): okhttp3.ResponseBody;
-                public readResponseHeaders(param0: boolean): okhttp3.Response.Builder;
+                public openResponseBody(param0: Response): ResponseBody;
+                public readResponseHeaders(param0: boolean): Response.Builder;
                 public cancel(): void;
                 public flushRequest(): void;
-                public createRequestBody(param0: okhttp3.Request, param1: number): okio.Sink;
-                public writeRequestHeaders(param0: okhttp3.Request): void;
+                public createRequestBody(param0: Request, param1: number): okio.Sink;
+                public writeRequestHeaders(param0: Request): void;
             }
         }
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module http {
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace http {
             export class HttpDate {
-                public static class: java.lang.Class<okhttp3.internal.http.HttpDate>;
+                public static class: java.lang.Class<HttpDate>;
                 public static MAX_DATE: number;
                 public static parse(param0: string): java.util.Date;
                 public static format(param0: java.util.Date): string;
@@ -1628,35 +1613,35 @@ declare module okhttp3 {
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module http {
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace http {
             export class HttpHeaders {
-                public static class: java.lang.Class<okhttp3.internal.http.HttpHeaders>;
-                public static varyHeaders(param0: okhttp3.Headers, param1: okhttp3.Headers): okhttp3.Headers;
-                public static hasBody(param0: okhttp3.Response): boolean;
-                public static receiveHeaders(param0: okhttp3.CookieJar, param1: okhttp3.HttpUrl, param2: okhttp3.Headers): void;
-                public static varyHeaders(param0: okhttp3.Response): okhttp3.Headers;
-                public static varyMatches(param0: okhttp3.Response, param1: okhttp3.Headers, param2: okhttp3.Request): boolean;
+                public static class: java.lang.Class<HttpHeaders>;
+                public static varyHeaders(param0: Headers, param1: Headers): Headers;
+                public static hasBody(param0: Response): boolean;
+                public static receiveHeaders(param0: CookieJar, param1: HttpUrl, param2: Headers): void;
+                public static varyHeaders(param0: Response): Headers;
+                public static varyMatches(param0: Response, param1: Headers, param2: Request): boolean;
                 public static skipWhitespace(param0: string, param1: number): number;
-                public static hasVaryAll(param0: okhttp3.Headers): boolean;
-                public static contentLength(param0: okhttp3.Response): number;
-                public static hasVaryAll(param0: okhttp3.Response): boolean;
+                public static hasVaryAll(param0: Headers): boolean;
+                public static contentLength(param0: Response): number;
+                public static hasVaryAll(param0: Response): boolean;
                 public static skipUntil(param0: string, param1: number, param2: string): number;
-                public static varyFields(param0: okhttp3.Headers): java.util.Set<string>;
-                public static contentLength(param0: okhttp3.Headers): number;
-                public static parseChallenges(param0: okhttp3.Headers, param1: string): java.util.List<okhttp3.Challenge>;
+                public static varyFields(param0: Headers): java.util.Set<string>;
+                public static contentLength(param0: Headers): number;
+                public static parseChallenges(param0: Headers, param1: string): java.util.List<Challenge>;
                 public static parseSeconds(param0: string, param1: number): number;
             }
         }
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module http {
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace http {
             export class HttpMethod {
-                public static class: java.lang.Class<okhttp3.internal.http.HttpMethod>;
+                public static class: java.lang.Class<HttpMethod>;
                 public static invalidatesCache(param0: string): boolean;
                 public static requiresRequestBody(param0: string): boolean;
                 public static permitsRequestBody(param0: string): boolean;
@@ -1667,135 +1652,146 @@ declare module okhttp3 {
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module http {
-            export class RealInterceptorChain extends okhttp3.Interceptor.Chain {
-                public static class: java.lang.Class<okhttp3.internal.http.RealInterceptorChain>;
-                public request(): okhttp3.Request;
-                public httpStream(): okhttp3.internal.http.HttpCodec;
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace http {
+            export class RealInterceptorChain extends Interceptor.Chain {
+                public static class: java.lang.Class<RealInterceptorChain>;
+                public request(): Request;
+                public httpStream(): HttpCodec;
                 public connectTimeoutMillis(): number;
-                public constructor(param0: java.util.List<okhttp3.Interceptor>, param1: okhttp3.internal.connection.StreamAllocation, param2: okhttp3.internal.http.HttpCodec, param3: okhttp3.internal.connection.RealConnection, param4: number, param5: okhttp3.Request, param6: okhttp3.Call, param7: okhttp3.EventListener, param8: number, param9: number, param10: number);
-                public proceed(param0: okhttp3.Request, param1: okhttp3.internal.connection.StreamAllocation, param2: okhttp3.internal.http.HttpCodec, param3: okhttp3.internal.connection.RealConnection): okhttp3.Response;
-                public withWriteTimeout(param0: number, param1: java.util.concurrent.TimeUnit): okhttp3.Interceptor.Chain;
-                public connection(): okhttp3.Connection;
+                public constructor(
+                    param0: java.util.List<Interceptor>,
+                    param1: connection.StreamAllocation,
+                    param2: HttpCodec,
+                    param3: connection.RealConnection,
+                    param4: number,
+                    param5: Request,
+                    param6: Call,
+                    param7: EventListener,
+                    param8: number,
+                    param9: number,
+                    param10: number
+                );
+                public proceed(param0: Request, param1: connection.StreamAllocation, param2: HttpCodec, param3: connection.RealConnection): Response;
+                public withWriteTimeout(param0: number, param1: java.util.concurrent.TimeUnit): Interceptor.Chain;
+                public connection(): Connection;
                 public writeTimeoutMillis(): number;
                 public readTimeoutMillis(): number;
-                public call(): okhttp3.Call;
-                public withConnectTimeout(param0: number, param1: java.util.concurrent.TimeUnit): okhttp3.Interceptor.Chain;
-                public proceed(param0: okhttp3.Request): okhttp3.Response;
-                public eventListener(): okhttp3.EventListener;
-                public withReadTimeout(param0: number, param1: java.util.concurrent.TimeUnit): okhttp3.Interceptor.Chain;
-                public streamAllocation(): okhttp3.internal.connection.StreamAllocation;
+                public call(): Call;
+                public withConnectTimeout(param0: number, param1: java.util.concurrent.TimeUnit): Interceptor.Chain;
+                public proceed(param0: Request): Response;
+                public eventListener(): EventListener;
+                public withReadTimeout(param0: number, param1: java.util.concurrent.TimeUnit): Interceptor.Chain;
+                public streamAllocation(): connection.StreamAllocation;
             }
         }
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module http {
-            export class RealResponseBody extends okhttp3.ResponseBody {
-                public static class: java.lang.Class<okhttp3.internal.http.RealResponseBody>;
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace http {
+            export class RealResponseBody extends ResponseBody {
+                public static class: java.lang.Class<RealResponseBody>;
                 public contentLength(): number;
                 public constructor(param0: string, param1: number, param2: okio.BufferedSource);
                 public source(): okio.BufferedSource;
-                public contentType(): okhttp3.MediaType;
+                public contentType(): MediaType;
                 public constructor();
             }
         }
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module http {
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace http {
             export class RequestLine {
-                public static class: java.lang.Class<okhttp3.internal.http.RequestLine>;
-                public static requestPath(param0: okhttp3.HttpUrl): string;
-                public static get(param0: okhttp3.Request, param1: java.net.Proxy.Type): string;
+                public static class: java.lang.Class<RequestLine>;
+                public static requestPath(param0: HttpUrl): string;
+                public static get(param0: Request, param1: java.net.Proxy.Type): string;
             }
         }
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module http {
-            export class RetryAndFollowUpInterceptor extends okhttp3.Interceptor {
-                public static class: java.lang.Class<okhttp3.internal.http.RetryAndFollowUpInterceptor>;
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace http {
+            export class RetryAndFollowUpInterceptor extends Interceptor {
+                public static class: java.lang.Class<RetryAndFollowUpInterceptor>;
                 public isCanceled(): boolean;
                 public setCallStackTrace(param0: any): void;
-                public intercept(param0: okhttp3.Interceptor.Chain): okhttp3.Response;
-                public constructor(param0: okhttp3.OkHttpClient, param1: boolean);
+                public intercept(param0: Interceptor.Chain): Response;
+                public constructor(param0: OkHttpClient, param1: boolean);
                 public cancel(): void;
-                public streamAllocation(): okhttp3.internal.connection.StreamAllocation;
+                public streamAllocation(): connection.StreamAllocation;
             }
         }
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module http {
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace http {
             export class StatusLine {
-                public static class: java.lang.Class<okhttp3.internal.http.StatusLine>;
+                public static class: java.lang.Class<StatusLine>;
                 public static HTTP_TEMP_REDIRECT: number;
                 public static HTTP_PERM_REDIRECT: number;
                 public static HTTP_CONTINUE: number;
-                public protocol: okhttp3.Protocol;
+                public protocol: Protocol;
                 public code: number;
                 public message: string;
-                public constructor(param0: okhttp3.Protocol, param1: number, param2: string);
-                public static parse(param0: string): okhttp3.internal.http.StatusLine;
+                public constructor(param0: Protocol, param1: number, param2: string);
+                public static parse(param0: string): StatusLine;
                 public toString(): string;
-                public static get(param0: okhttp3.Response): okhttp3.internal.http.StatusLine;
+                public static get(param0: Response): StatusLine;
             }
         }
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module http {
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace http {
             export class UnrepeatableRequestBody {
-                public static class: java.lang.Class<okhttp3.internal.http.UnrepeatableRequestBody>;
+                public static class: java.lang.Class<UnrepeatableRequestBody>;
                 /**
                  * Constructs a new instance of the okhttp3.internal.http.UnrepeatableRequestBody interface with the provided implementation. An empty constructor exists calling super() when extending the interface class.
                  */
-                public constructor(implementation: {
-                });
+                public constructor(implementation: {});
                 public constructor();
             }
         }
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module http1 {
-            export class Http1Codec extends okhttp3.internal.http.HttpCodec {
-                public static class: java.lang.Class<okhttp3.internal.http1.Http1Codec>;
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace http1 {
+            export class Http1Codec extends http.HttpCodec {
+                public static class: java.lang.Class<Http1Codec>;
                 public finishRequest(): void;
                 public newFixedLengthSink(param0: number): okio.Sink;
                 public newChunkedSink(): okio.Sink;
-                public constructor(param0: okhttp3.OkHttpClient, param1: okhttp3.internal.connection.StreamAllocation, param2: okio.BufferedSource, param3: okio.BufferedSink);
+                public constructor(param0: OkHttpClient, param1: connection.StreamAllocation, param2: okio.BufferedSource, param3: okio.BufferedSink);
                 public isClosed(): boolean;
-                public readResponseHeaders(param0: boolean): okhttp3.Response.Builder;
-                public writeRequestHeaders(param0: okhttp3.Request): void;
-                public writeRequest(param0: okhttp3.Headers, param1: string): void;
-                public openResponseBody(param0: okhttp3.Response): okhttp3.ResponseBody;
+                public readResponseHeaders(param0: boolean): Response.Builder;
+                public writeRequestHeaders(param0: Request): void;
+                public writeRequest(param0: Headers, param1: string): void;
+                public openResponseBody(param0: Response): ResponseBody;
                 public newUnknownLengthSource(): okio.Source;
-                public readHeaders(): okhttp3.Headers;
-                public newChunkedSource(param0: okhttp3.HttpUrl): okio.Source;
+                public readHeaders(): Headers;
+                public newChunkedSource(param0: HttpUrl): okio.Source;
                 public cancel(): void;
                 public flushRequest(): void;
-                public createRequestBody(param0: okhttp3.Request, param1: number): okio.Sink;
+                public createRequestBody(param0: Request, param1: number): okio.Sink;
                 public newFixedLengthSource(param0: number): okio.Source;
             }
-            export module Http1Codec {
+            export namespace Http1Codec {
                 export abstract class AbstractSource {
-                    public static class: java.lang.Class<okhttp3.internal.http1.Http1Codec.AbstractSource>;
+                    public static class: java.lang.Class<AbstractSource>;
                     public closed: boolean;
                     public bytesRead: number;
                     public endOfInput(param0: boolean, param1: java.io.IOException): void;
@@ -1803,31 +1799,31 @@ declare module okhttp3 {
                     public read(param0: okio.Buffer, param1: number): number;
                 }
                 export class ChunkedSink {
-                    public static class: java.lang.Class<okhttp3.internal.http1.Http1Codec.ChunkedSink>;
+                    public static class: java.lang.Class<ChunkedSink>;
                     public close(): void;
                     public flush(): void;
                     public write(param0: okio.Buffer, param1: number): void;
                     public timeout(): okio.Timeout;
                 }
-                export class ChunkedSource extends okhttp3.internal.http1.Http1Codec.AbstractSource {
-                    public static class: java.lang.Class<okhttp3.internal.http1.Http1Codec.ChunkedSource>;
+                export class ChunkedSource extends AbstractSource {
+                    public static class: java.lang.Class<ChunkedSource>;
                     public close(): void;
                     public read(param0: okio.Buffer, param1: number): number;
                 }
                 export class FixedLengthSink {
-                    public static class: java.lang.Class<okhttp3.internal.http1.Http1Codec.FixedLengthSink>;
+                    public static class: java.lang.Class<FixedLengthSink>;
                     public close(): void;
                     public flush(): void;
                     public write(param0: okio.Buffer, param1: number): void;
                     public timeout(): okio.Timeout;
                 }
-                export class FixedLengthSource extends okhttp3.internal.http1.Http1Codec.AbstractSource {
-                    public static class: java.lang.Class<okhttp3.internal.http1.Http1Codec.FixedLengthSource>;
+                export class FixedLengthSource extends AbstractSource {
+                    public static class: java.lang.Class<FixedLengthSource>;
                     public close(): void;
                     public read(param0: okio.Buffer, param1: number): number;
                 }
-                export class UnknownLengthSource extends okhttp3.internal.http1.Http1Codec.AbstractSource {
-                    public static class: java.lang.Class<okhttp3.internal.http1.Http1Codec.UnknownLengthSource>;
+                export class UnknownLengthSource extends AbstractSource {
+                    public static class: java.lang.Class<UnknownLengthSource>;
                     public close(): void;
                     public read(param0: okio.Buffer, param1: number): number;
                 }
@@ -1836,47 +1832,47 @@ declare module okhttp3 {
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module http2 {
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace http2 {
             export class ConnectionShutdownException {
-                public static class: java.lang.Class<okhttp3.internal.http2.ConnectionShutdownException>;
+                public static class: java.lang.Class<ConnectionShutdownException>;
                 public constructor();
             }
         }
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module http2 {
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace http2 {
             export class ErrorCode {
-                public static class: java.lang.Class<okhttp3.internal.http2.ErrorCode>;
-                public static NO_ERROR: okhttp3.internal.http2.ErrorCode;
-                public static PROTOCOL_ERROR: okhttp3.internal.http2.ErrorCode;
-                public static INTERNAL_ERROR: okhttp3.internal.http2.ErrorCode;
-                public static FLOW_CONTROL_ERROR: okhttp3.internal.http2.ErrorCode;
-                public static REFUSED_STREAM: okhttp3.internal.http2.ErrorCode;
-                public static CANCEL: okhttp3.internal.http2.ErrorCode;
-                public static COMPRESSION_ERROR: okhttp3.internal.http2.ErrorCode;
-                public static CONNECT_ERROR: okhttp3.internal.http2.ErrorCode;
-                public static ENHANCE_YOUR_CALM: okhttp3.internal.http2.ErrorCode;
-                public static INADEQUATE_SECURITY: okhttp3.internal.http2.ErrorCode;
-                public static HTTP_1_1_REQUIRED: okhttp3.internal.http2.ErrorCode;
+                public static class: java.lang.Class<ErrorCode>;
+                public static NO_ERROR: ErrorCode;
+                public static PROTOCOL_ERROR: ErrorCode;
+                public static INTERNAL_ERROR: ErrorCode;
+                public static FLOW_CONTROL_ERROR: ErrorCode;
+                public static REFUSED_STREAM: ErrorCode;
+                public static CANCEL: ErrorCode;
+                public static COMPRESSION_ERROR: ErrorCode;
+                public static CONNECT_ERROR: ErrorCode;
+                public static ENHANCE_YOUR_CALM: ErrorCode;
+                public static INADEQUATE_SECURITY: ErrorCode;
+                public static HTTP_1_1_REQUIRED: ErrorCode;
                 public httpCode: number;
-                public static valueOf(param0: string): okhttp3.internal.http2.ErrorCode;
-                public static fromHttp2(param0: number): okhttp3.internal.http2.ErrorCode;
-                public static values(): native.Array<okhttp3.internal.http2.ErrorCode>;
+                public static valueOf(param0: string): ErrorCode;
+                public static fromHttp2(param0: number): ErrorCode;
+                public static values(): native.Array<ErrorCode>;
             }
         }
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module http2 {
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace http2 {
             export class Header {
-                public static class: java.lang.Class<okhttp3.internal.http2.Header>;
+                public static class: java.lang.Class<Header>;
                 public static PSEUDO_PREFIX: okio.ByteString;
                 public static RESPONSE_STATUS_UTF8: string;
                 public static TARGET_METHOD_UTF8: string;
@@ -1897,71 +1893,69 @@ declare module okhttp3 {
                 public toString(): string;
                 public constructor(param0: string, param1: string);
             }
-            export module Header {
+            export namespace Header {
                 export class Listener {
-                    public static class: java.lang.Class<okhttp3.internal.http2.Header.Listener>;
+                    public static class: java.lang.Class<Listener>;
                     /**
                      * Constructs a new instance of the okhttp3.internal.http2.Header$Listener interface with the provided implementation. An empty constructor exists calling super() when extending the interface class.
                      */
-                    public constructor(implementation: {
-                        onHeaders(param0: okhttp3.Headers): void;
-                    });
+                    public constructor(implementation: { onHeaders(param0: Headers): void });
                     public constructor();
-                    public onHeaders(param0: okhttp3.Headers): void;
+                    public onHeaders(param0: Headers): void;
                 }
             }
         }
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module http2 {
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace http2 {
             export class Hpack {
-                public static class: java.lang.Class<okhttp3.internal.http2.Hpack>;
+                public static class: java.lang.Class<Hpack>;
             }
-            export module Hpack {
+            export namespace Hpack {
                 export class Reader {
-                    public static class: java.lang.Class<okhttp3.internal.http2.Hpack.Reader>;
-                    public getAndResetHeaderList(): java.util.List<okhttp3.internal.http2.Header>;
+                    public static class: java.lang.Class<Reader>;
+                    public getAndResetHeaderList(): java.util.List<Header>;
                 }
                 export class Writer {
-                    public static class: java.lang.Class<okhttp3.internal.http2.Hpack.Writer>;
+                    public static class: java.lang.Class<Writer>;
                 }
             }
         }
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module http2 {
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace http2 {
             export class Http2 {
-                public static class: java.lang.Class<okhttp3.internal.http2.Http2>;
+                public static class: java.lang.Class<Http2>;
             }
         }
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module http2 {
-            export class Http2Codec extends okhttp3.internal.http.HttpCodec {
-                public static class: java.lang.Class<okhttp3.internal.http2.Http2Codec>;
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace http2 {
+            export class Http2Codec extends http.HttpCodec {
+                public static class: java.lang.Class<Http2Codec>;
                 public finishRequest(): void;
-                public static readHttp2HeadersList(param0: okhttp3.Headers, param1: okhttp3.Protocol): okhttp3.Response.Builder;
-                public openResponseBody(param0: okhttp3.Response): okhttp3.ResponseBody;
-                public readResponseHeaders(param0: boolean): okhttp3.Response.Builder;
+                public static readHttp2HeadersList(param0: Headers, param1: Protocol): Response.Builder;
+                public openResponseBody(param0: Response): ResponseBody;
+                public readResponseHeaders(param0: boolean): Response.Builder;
                 public cancel(): void;
-                public constructor(param0: okhttp3.OkHttpClient, param1: okhttp3.Interceptor.Chain, param2: okhttp3.internal.connection.StreamAllocation, param3: okhttp3.internal.http2.Http2Connection);
+                public constructor(param0: OkHttpClient, param1: Interceptor.Chain, param2: connection.StreamAllocation, param3: Http2Connection);
                 public flushRequest(): void;
-                public createRequestBody(param0: okhttp3.Request, param1: number): okio.Sink;
-                public writeRequestHeaders(param0: okhttp3.Request): void;
-                public static http2HeadersList(param0: okhttp3.Request): java.util.List<okhttp3.internal.http2.Header>;
+                public createRequestBody(param0: Request, param1: number): okio.Sink;
+                public writeRequestHeaders(param0: Request): void;
+                public static http2HeadersList(param0: Request): java.util.List<Header>;
             }
-            export module Http2Codec {
+            export namespace Http2Codec {
                 export class StreamFinishingSource {
-                    public static class: java.lang.Class<okhttp3.internal.http2.Http2Codec.StreamFinishingSource>;
+                    public static class: java.lang.Class<StreamFinishingSource>;
                     public close(): void;
                     public read(param0: okio.Buffer, param1: number): number;
                 }
@@ -1970,58 +1964,58 @@ declare module okhttp3 {
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module http2 {
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace http2 {
             export class Http2Connection {
-                public static class: java.lang.Class<okhttp3.internal.http2.Http2Connection>;
+                public static class: java.lang.Class<Http2Connection>;
                 public maxConcurrentStreams(): number;
-                public pushStream(param0: number, param1: java.util.List<okhttp3.internal.http2.Header>, param2: boolean): okhttp3.internal.http2.Http2Stream;
+                public pushStream(param0: number, param1: java.util.List<Header>, param2: boolean): Http2Stream;
                 public writeData(param0: number, param1: boolean, param2: okio.Buffer, param3: number): void;
                 public close(): void;
                 public start(): void;
-                public newStream(param0: java.util.List<okhttp3.internal.http2.Header>, param1: boolean): okhttp3.internal.http2.Http2Stream;
+                public newStream(param0: java.util.List<Header>, param1: boolean): Http2Stream;
                 public isShutdown(): boolean;
                 public openStreamCount(): number;
-                public shutdown(param0: okhttp3.internal.http2.ErrorCode): void;
-                public setSettings(param0: okhttp3.internal.http2.Settings): void;
-                public getProtocol(): okhttp3.Protocol;
+                public shutdown(param0: ErrorCode): void;
+                public setSettings(param0: Settings): void;
+                public getProtocol(): Protocol;
                 public flush(): void;
             }
-            export module Http2Connection {
+            export namespace Http2Connection {
                 export class Builder {
-                    public static class: java.lang.Class<okhttp3.internal.http2.Http2Connection.Builder>;
+                    public static class: java.lang.Class<Builder>;
                     public constructor(param0: boolean);
-                    public listener(param0: okhttp3.internal.http2.Http2Connection.Listener): okhttp3.internal.http2.Http2Connection.Builder;
-                    public pingIntervalMillis(param0: number): okhttp3.internal.http2.Http2Connection.Builder;
-                    public build(): okhttp3.internal.http2.Http2Connection;
-                    public socket(param0: java.net.Socket, param1: string, param2: okio.BufferedSource, param3: okio.BufferedSink): okhttp3.internal.http2.Http2Connection.Builder;
-                    public socket(param0: java.net.Socket): okhttp3.internal.http2.Http2Connection.Builder;
-                    public pushObserver(param0: okhttp3.internal.http2.PushObserver): okhttp3.internal.http2.Http2Connection.Builder;
+                    public listener(param0: Listener): Builder;
+                    public pingIntervalMillis(param0: number): Builder;
+                    public build(): Http2Connection;
+                    public socket(param0: java.net.Socket, param1: string, param2: okio.BufferedSource, param3: okio.BufferedSink): Builder;
+                    public socket(param0: java.net.Socket): Builder;
+                    public pushObserver(param0: PushObserver): Builder;
                 }
                 export abstract class Listener {
-                    public static class: java.lang.Class<okhttp3.internal.http2.Http2Connection.Listener>;
-                    public static REFUSE_INCOMING_STREAMS: okhttp3.internal.http2.Http2Connection.Listener;
-                    public onStream(param0: okhttp3.internal.http2.Http2Stream): void;
+                    public static class: java.lang.Class<Listener>;
+                    public static REFUSE_INCOMING_STREAMS: Listener;
+                    public onStream(param0: Http2Stream): void;
                     public constructor();
-                    public onSettings(param0: okhttp3.internal.http2.Http2Connection): void;
+                    public onSettings(param0: Http2Connection): void;
                 }
-                export class PingRunnable extends okhttp3.internal.NamedRunnable {
-                    public static class: java.lang.Class<okhttp3.internal.http2.Http2Connection.PingRunnable>;
+                export class PingRunnable extends NamedRunnable {
+                    public static class: java.lang.Class<PingRunnable>;
                     public execute(): void;
                 }
-                export class ReaderRunnable extends okhttp3.internal.NamedRunnable implements okhttp3.internal.http2.Http2Reader.Handler {
-                    public static class: java.lang.Class<okhttp3.internal.http2.Http2Connection.ReaderRunnable>;
-                    public settings(param0: boolean, param1: okhttp3.internal.http2.Settings): void;
+                export class ReaderRunnable extends NamedRunnable implements Http2Reader.Handler {
+                    public static class: java.lang.Class<ReaderRunnable>;
+                    public settings(param0: boolean, param1: Settings): void;
                     public alternateService(param0: number, param1: string, param2: okio.ByteString, param3: string, param4: number, param5: number): void;
                     public ackSettings(): void;
                     public data(param0: boolean, param1: number, param2: okio.BufferedSource, param3: number): void;
-                    public headers(param0: boolean, param1: number, param2: number, param3: java.util.List<okhttp3.internal.http2.Header>): void;
+                    public headers(param0: boolean, param1: number, param2: number, param3: java.util.List<Header>): void;
                     public priority(param0: number, param1: number, param2: number, param3: boolean): void;
                     public execute(): void;
-                    public pushPromise(param0: number, param1: number, param2: java.util.List<okhttp3.internal.http2.Header>): void;
-                    public rstStream(param0: number, param1: okhttp3.internal.http2.ErrorCode): void;
-                    public goAway(param0: number, param1: okhttp3.internal.http2.ErrorCode, param2: okio.ByteString): void;
+                    public pushPromise(param0: number, param1: number, param2: java.util.List<Header>): void;
+                    public rstStream(param0: number, param1: ErrorCode): void;
+                    public goAway(param0: number, param1: ErrorCode, param2: okio.ByteString): void;
                     public windowUpdate(param0: number, param1: number): void;
                     public ping(param0: boolean, param1: number, param2: number): void;
                 }
@@ -2030,50 +2024,50 @@ declare module okhttp3 {
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module http2 {
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace http2 {
             export class Http2Reader {
-                public static class: java.lang.Class<okhttp3.internal.http2.Http2Reader>;
+                public static class: java.lang.Class<Http2Reader>;
                 public close(): void;
-                public nextFrame(param0: boolean, param1: okhttp3.internal.http2.Http2Reader.Handler): boolean;
-                public readConnectionPreface(param0: okhttp3.internal.http2.Http2Reader.Handler): void;
+                public nextFrame(param0: boolean, param1: Http2Reader.Handler): boolean;
+                public readConnectionPreface(param0: Http2Reader.Handler): void;
             }
-            export module Http2Reader {
+            export namespace Http2Reader {
                 export class ContinuationSource {
-                    public static class: java.lang.Class<okhttp3.internal.http2.Http2Reader.ContinuationSource>;
+                    public static class: java.lang.Class<ContinuationSource>;
                     public close(): void;
                     public timeout(): okio.Timeout;
                     public read(param0: okio.Buffer, param1: number): number;
                 }
                 export class Handler {
-                    public static class: java.lang.Class<okhttp3.internal.http2.Http2Reader.Handler>;
+                    public static class: java.lang.Class<Handler>;
                     /**
                      * Constructs a new instance of the okhttp3.internal.http2.Http2Reader$Handler interface with the provided implementation. An empty constructor exists calling super() when extending the interface class.
                      */
                     public constructor(implementation: {
                         data(param0: boolean, param1: number, param2: okio.BufferedSource, param3: number): void;
-                        headers(param0: boolean, param1: number, param2: number, param3: java.util.List<okhttp3.internal.http2.Header>): void;
-                        rstStream(param0: number, param1: okhttp3.internal.http2.ErrorCode): void;
-                        settings(param0: boolean, param1: okhttp3.internal.http2.Settings): void;
+                        headers(param0: boolean, param1: number, param2: number, param3: java.util.List<Header>): void;
+                        rstStream(param0: number, param1: ErrorCode): void;
+                        settings(param0: boolean, param1: Settings): void;
                         ackSettings(): void;
                         ping(param0: boolean, param1: number, param2: number): void;
-                        goAway(param0: number, param1: okhttp3.internal.http2.ErrorCode, param2: okio.ByteString): void;
+                        goAway(param0: number, param1: ErrorCode, param2: okio.ByteString): void;
                         windowUpdate(param0: number, param1: number): void;
                         priority(param0: number, param1: number, param2: number, param3: boolean): void;
-                        pushPromise(param0: number, param1: number, param2: java.util.List<okhttp3.internal.http2.Header>): void;
+                        pushPromise(param0: number, param1: number, param2: java.util.List<Header>): void;
                         alternateService(param0: number, param1: string, param2: okio.ByteString, param3: string, param4: number, param5: number): void;
                     });
                     public constructor();
-                    public settings(param0: boolean, param1: okhttp3.internal.http2.Settings): void;
+                    public settings(param0: boolean, param1: Settings): void;
                     public alternateService(param0: number, param1: string, param2: okio.ByteString, param3: string, param4: number, param5: number): void;
                     public ackSettings(): void;
                     public data(param0: boolean, param1: number, param2: okio.BufferedSource, param3: number): void;
-                    public headers(param0: boolean, param1: number, param2: number, param3: java.util.List<okhttp3.internal.http2.Header>): void;
+                    public headers(param0: boolean, param1: number, param2: number, param3: java.util.List<Header>): void;
                     public priority(param0: number, param1: number, param2: number, param3: boolean): void;
-                    public pushPromise(param0: number, param1: number, param2: java.util.List<okhttp3.internal.http2.Header>): void;
-                    public rstStream(param0: number, param1: okhttp3.internal.http2.ErrorCode): void;
-                    public goAway(param0: number, param1: okhttp3.internal.http2.ErrorCode, param2: okio.ByteString): void;
+                    public pushPromise(param0: number, param1: number, param2: java.util.List<Header>): void;
+                    public rstStream(param0: number, param1: ErrorCode): void;
+                    public goAway(param0: number, param1: ErrorCode, param2: okio.ByteString): void;
                     public windowUpdate(param0: number, param1: number): void;
                     public ping(param0: boolean, param1: number, param2: number): void;
                 }
@@ -2082,42 +2076,42 @@ declare module okhttp3 {
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module http2 {
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace http2 {
             export class Http2Stream {
-                public static class: java.lang.Class<okhttp3.internal.http2.Http2Stream>;
+                public static class: java.lang.Class<Http2Stream>;
                 public getSource(): okio.Source;
-                public close(param0: okhttp3.internal.http2.ErrorCode): void;
-                public closeLater(param0: okhttp3.internal.http2.ErrorCode): void;
+                public close(param0: ErrorCode): void;
+                public closeLater(param0: ErrorCode): void;
                 public writeTimeout(): okio.Timeout;
                 public getId(): number;
-                public writeHeaders(param0: java.util.List<okhttp3.internal.http2.Header>, param1: boolean): void;
-                public getErrorCode(): okhttp3.internal.http2.ErrorCode;
-                public takeHeaders(): okhttp3.Headers;
-                public getConnection(): okhttp3.internal.http2.Http2Connection;
+                public writeHeaders(param0: java.util.List<Header>, param1: boolean): void;
+                public getErrorCode(): ErrorCode;
+                public takeHeaders(): Headers;
+                public getConnection(): Http2Connection;
                 public isOpen(): boolean;
                 public readTimeout(): okio.Timeout;
                 public getSink(): okio.Sink;
                 public isLocallyInitiated(): boolean;
-                public setHeadersListener(param0: okhttp3.internal.http2.Header.Listener): void;
+                public setHeadersListener(param0: Header.Listener): void;
             }
-            export module Http2Stream {
+            export namespace Http2Stream {
                 export class FramingSink {
-                    public static class: java.lang.Class<okhttp3.internal.http2.Http2Stream.FramingSink>;
+                    public static class: java.lang.Class<FramingSink>;
                     public close(): void;
                     public flush(): void;
                     public write(param0: okio.Buffer, param1: number): void;
                     public timeout(): okio.Timeout;
                 }
                 export class FramingSource {
-                    public static class: java.lang.Class<okhttp3.internal.http2.Http2Stream.FramingSource>;
+                    public static class: java.lang.Class<FramingSource>;
                     public close(): void;
                     public timeout(): okio.Timeout;
                     public read(param0: okio.Buffer, param1: number): number;
                 }
                 export class StreamTimeout {
-                    public static class: java.lang.Class<okhttp3.internal.http2.Http2Stream.StreamTimeout>;
+                    public static class: java.lang.Class<StreamTimeout>;
                     public timedOut(): void;
                     public newTimeoutException(param0: java.io.IOException): java.io.IOException;
                     public exitAndThrowIfTimedOut(): void;
@@ -2127,102 +2121,102 @@ declare module okhttp3 {
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module http2 {
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace http2 {
             export class Http2Writer {
-                public static class: java.lang.Class<okhttp3.internal.http2.Http2Writer>;
-                public headers(param0: number, param1: java.util.List<okhttp3.internal.http2.Header>): void;
+                public static class: java.lang.Class<Http2Writer>;
+                public headers(param0: number, param1: java.util.List<Header>): void;
                 public close(): void;
-                public synStream(param0: boolean, param1: number, param2: number, param3: java.util.List<okhttp3.internal.http2.Header>): void;
-                public settings(param0: okhttp3.internal.http2.Settings): void;
+                public synStream(param0: boolean, param1: number, param2: number, param3: java.util.List<Header>): void;
+                public settings(param0: Settings): void;
                 public ping(param0: boolean, param1: number, param2: number): void;
                 public windowUpdate(param0: number, param1: number): void;
                 public frameHeader(param0: number, param1: number, param2: number, param3: number): void;
                 public maxDataLength(): number;
-                public goAway(param0: number, param1: okhttp3.internal.http2.ErrorCode, param2: native.Array<number>): void;
+                public goAway(param0: number, param1: ErrorCode, param2: native.Array<number>): void;
                 public flush(): void;
                 public connectionPreface(): void;
-                public pushPromise(param0: number, param1: number, param2: java.util.List<okhttp3.internal.http2.Header>): void;
+                public pushPromise(param0: number, param1: number, param2: java.util.List<Header>): void;
                 public data(param0: boolean, param1: number, param2: okio.Buffer, param3: number): void;
-                public rstStream(param0: number, param1: okhttp3.internal.http2.ErrorCode): void;
-                public synReply(param0: boolean, param1: number, param2: java.util.List<okhttp3.internal.http2.Header>): void;
-                public applyAndAckSettings(param0: okhttp3.internal.http2.Settings): void;
+                public rstStream(param0: number, param1: ErrorCode): void;
+                public synReply(param0: boolean, param1: number, param2: java.util.List<Header>): void;
+                public applyAndAckSettings(param0: Settings): void;
             }
         }
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module http2 {
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace http2 {
             export class Huffman {
-                public static class: java.lang.Class<okhttp3.internal.http2.Huffman>;
-                public static get(): okhttp3.internal.http2.Huffman;
+                public static class: java.lang.Class<Huffman>;
+                public static get(): Huffman;
             }
-            export module Huffman {
+            export namespace Huffman {
                 export class Node {
-                    public static class: java.lang.Class<okhttp3.internal.http2.Huffman.Node>;
+                    public static class: java.lang.Class<Node>;
                 }
             }
         }
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module http2 {
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace http2 {
             export class PushObserver {
-                public static class: java.lang.Class<okhttp3.internal.http2.PushObserver>;
+                public static class: java.lang.Class<PushObserver>;
                 /**
                  * Constructs a new instance of the okhttp3.internal.http2.PushObserver interface with the provided implementation. An empty constructor exists calling super() when extending the interface class.
                  */
                 public constructor(implementation: {
-                    onRequest(param0: number, param1: java.util.List<okhttp3.internal.http2.Header>): boolean;
-                    onHeaders(param0: number, param1: java.util.List<okhttp3.internal.http2.Header>, param2: boolean): boolean;
+                    onRequest(param0: number, param1: java.util.List<Header>): boolean;
+                    onHeaders(param0: number, param1: java.util.List<Header>, param2: boolean): boolean;
                     onData(param0: number, param1: okio.BufferedSource, param2: number, param3: boolean): boolean;
-                    onReset(param0: number, param1: okhttp3.internal.http2.ErrorCode): void;
+                    onReset(param0: number, param1: ErrorCode): void;
                     <clinit>(): void;
                 });
                 public constructor();
-                public static CANCEL: okhttp3.internal.http2.PushObserver;
-                public onRequest(param0: number, param1: java.util.List<okhttp3.internal.http2.Header>): boolean;
-                public onHeaders(param0: number, param1: java.util.List<okhttp3.internal.http2.Header>, param2: boolean): boolean;
+                public static CANCEL: PushObserver;
+                public onRequest(param0: number, param1: java.util.List<Header>): boolean;
+                public onHeaders(param0: number, param1: java.util.List<Header>, param2: boolean): boolean;
                 public onData(param0: number, param1: okio.BufferedSource, param2: number, param3: boolean): boolean;
-                public onReset(param0: number, param1: okhttp3.internal.http2.ErrorCode): void;
+                public onReset(param0: number, param1: ErrorCode): void;
             }
         }
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module http2 {
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace http2 {
             export class Settings {
-                public static class: java.lang.Class<okhttp3.internal.http2.Settings>;
+                public static class: java.lang.Class<Settings>;
                 public constructor();
             }
         }
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module http2 {
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace http2 {
             export class StreamResetException {
-                public static class: java.lang.Class<okhttp3.internal.http2.StreamResetException>;
-                public errorCode: okhttp3.internal.http2.ErrorCode;
-                public constructor(param0: okhttp3.internal.http2.ErrorCode);
+                public static class: java.lang.Class<StreamResetException>;
+                public errorCode: ErrorCode;
+                public constructor(param0: ErrorCode);
             }
         }
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module io {
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace io {
             export class FileSystem {
-                public static class: java.lang.Class<okhttp3.internal.io.FileSystem>;
+                public static class: java.lang.Class<FileSystem>;
                 /**
                  * Constructs a new instance of the okhttp3.internal.io.FileSystem interface with the provided implementation. An empty constructor exists calling super() when extending the interface class.
                  */
@@ -2238,7 +2232,7 @@ declare module okhttp3 {
                     <clinit>(): void;
                 });
                 public constructor();
-                public static SYSTEM: okhttp3.internal.io.FileSystem;
+                public static SYSTEM: FileSystem;
                 public source(param0: java.io.File): okio.Source;
                 public size(param0: java.io.File): number;
                 public deleteContents(param0: java.io.File): void;
@@ -2252,89 +2246,89 @@ declare module okhttp3 {
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module platform {
-            export class AndroidPlatform extends okhttp3.internal.platform.Platform {
-                public static class: java.lang.Class<okhttp3.internal.platform.AndroidPlatform>;
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace platform {
+            export class AndroidPlatform extends Platform {
+                public static class: java.lang.Class<AndroidPlatform>;
                 public connectSocket(param0: java.net.Socket, param1: java.net.InetSocketAddress, param2: number): void;
-                public configureTlsExtensions(param0: javax.net.ssl.SSLSocket, param1: string, param2: java.util.List<okhttp3.Protocol>): void;
+                public configureTlsExtensions(param0: javax.net.ssl.SSLSocket, param1: string, param2: java.util.List<Protocol>): void;
                 public log(param0: number, param1: string, param2: java.lang.Throwable): void;
                 public logCloseableLeak(param0: string, param1: any): void;
-                public buildTrustRootIndex(param0: javax.net.ssl.X509TrustManager): okhttp3.internal.tls.TrustRootIndex;
+                public buildTrustRootIndex(param0: javax.net.ssl.X509TrustManager): tls.TrustRootIndex;
                 public isCleartextTrafficPermitted(param0: string): boolean;
-                public buildCertificateChainCleaner(param0: javax.net.ssl.X509TrustManager): okhttp3.internal.tls.CertificateChainCleaner;
-                public buildCertificateChainCleaner(param0: javax.net.ssl.SSLSocketFactory): okhttp3.internal.tls.CertificateChainCleaner;
+                public buildCertificateChainCleaner(param0: javax.net.ssl.X509TrustManager): tls.CertificateChainCleaner;
+                public buildCertificateChainCleaner(param0: javax.net.ssl.SSLSocketFactory): tls.CertificateChainCleaner;
                 public getSelectedProtocol(param0: javax.net.ssl.SSLSocket): string;
                 public trustManager(param0: javax.net.ssl.SSLSocketFactory): javax.net.ssl.X509TrustManager;
                 public getStackTraceForCloseable(param0: string): any;
-                public static buildIfSupported(): okhttp3.internal.platform.Platform;
+                public static buildIfSupported(): Platform;
                 public getSSLContext(): javax.net.ssl.SSLContext;
             }
-            export module AndroidPlatform {
-                export class AndroidCertificateChainCleaner extends okhttp3.internal.tls.CertificateChainCleaner {
-                    public static class: java.lang.Class<okhttp3.internal.platform.AndroidPlatform.AndroidCertificateChainCleaner>;
+            export namespace AndroidPlatform {
+                export class AndroidCertificateChainCleaner extends tls.CertificateChainCleaner {
+                    public static class: java.lang.Class<AndroidCertificateChainCleaner>;
                     public equals(param0: any): boolean;
                     public clean(param0: java.util.List<java.security.cert.Certificate>, param1: string): java.util.List<java.security.cert.Certificate>;
                     public hashCode(): number;
                 }
-                export class AndroidTrustRootIndex extends okhttp3.internal.tls.TrustRootIndex {
-                    public static class: java.lang.Class<okhttp3.internal.platform.AndroidPlatform.AndroidTrustRootIndex>;
+                export class AndroidTrustRootIndex extends tls.TrustRootIndex {
+                    public static class: java.lang.Class<AndroidTrustRootIndex>;
                     public equals(param0: any): boolean;
                     public findByIssuerAndSignature(param0: java.security.cert.X509Certificate): java.security.cert.X509Certificate;
                     public hashCode(): number;
                 }
                 export class CloseGuard {
-                    public static class: java.lang.Class<okhttp3.internal.platform.AndroidPlatform.CloseGuard>;
+                    public static class: java.lang.Class<CloseGuard>;
                 }
             }
         }
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module platform {
-            export class ConscryptPlatform extends okhttp3.internal.platform.Platform {
-                public static class: java.lang.Class<okhttp3.internal.platform.ConscryptPlatform>;
-                public static buildIfSupported(): okhttp3.internal.platform.ConscryptPlatform;
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace platform {
+            export class ConscryptPlatform extends Platform {
+                public static class: java.lang.Class<ConscryptPlatform>;
+                public static buildIfSupported(): ConscryptPlatform;
                 public getSelectedProtocol(param0: javax.net.ssl.SSLSocket): string;
                 public trustManager(param0: javax.net.ssl.SSLSocketFactory): javax.net.ssl.X509TrustManager;
                 public configureSslSocketFactory(param0: javax.net.ssl.SSLSocketFactory): void;
-                public configureTlsExtensions(param0: javax.net.ssl.SSLSocket, param1: string, param2: java.util.List<okhttp3.Protocol>): void;
+                public configureTlsExtensions(param0: javax.net.ssl.SSLSocket, param1: string, param2: java.util.List<Protocol>): void;
                 public getSSLContext(): javax.net.ssl.SSLContext;
             }
         }
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module platform {
-            export class Jdk9Platform extends okhttp3.internal.platform.Platform {
-                public static class: java.lang.Class<okhttp3.internal.platform.Jdk9Platform>;
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace platform {
+            export class Jdk9Platform extends Platform {
+                public static class: java.lang.Class<Jdk9Platform>;
                 public getSelectedProtocol(param0: javax.net.ssl.SSLSocket): string;
                 public trustManager(param0: javax.net.ssl.SSLSocketFactory): javax.net.ssl.X509TrustManager;
-                public static buildIfSupported(): okhttp3.internal.platform.Jdk9Platform;
-                public configureTlsExtensions(param0: javax.net.ssl.SSLSocket, param1: string, param2: java.util.List<okhttp3.Protocol>): void;
+                public static buildIfSupported(): Jdk9Platform;
+                public configureTlsExtensions(param0: javax.net.ssl.SSLSocket, param1: string, param2: java.util.List<Protocol>): void;
             }
         }
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module platform {
-            export class JdkWithJettyBootPlatform extends okhttp3.internal.platform.Platform {
-                public static class: java.lang.Class<okhttp3.internal.platform.JdkWithJettyBootPlatform>;
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace platform {
+            export class JdkWithJettyBootPlatform extends Platform {
+                public static class: java.lang.Class<JdkWithJettyBootPlatform>;
                 public getSelectedProtocol(param0: javax.net.ssl.SSLSocket): string;
                 public afterHandshake(param0: javax.net.ssl.SSLSocket): void;
-                public configureTlsExtensions(param0: javax.net.ssl.SSLSocket, param1: string, param2: java.util.List<okhttp3.Protocol>): void;
-                public static buildIfSupported(): okhttp3.internal.platform.Platform;
+                public configureTlsExtensions(param0: javax.net.ssl.SSLSocket, param1: string, param2: java.util.List<Protocol>): void;
+                public static buildIfSupported(): Platform;
             }
-            export module JdkWithJettyBootPlatform {
+            export namespace JdkWithJettyBootPlatform {
                 export class JettyNegoProvider {
-                    public static class: java.lang.Class<okhttp3.internal.platform.JdkWithJettyBootPlatform.JettyNegoProvider>;
+                    public static class: java.lang.Class<JettyNegoProvider>;
                     public invoke(param0: any, param1: java.lang.reflect.Method, param2: native.Array<any>): any;
                 }
             }
@@ -2342,11 +2336,11 @@ declare module okhttp3 {
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module platform {
-            export class OptionalMethod<T>  extends java.lang.Object {
-                public static class: java.lang.Class<okhttp3.internal.platform.OptionalMethod<any>>;
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace platform {
+            export class OptionalMethod<T> extends java.lang.Object {
+                public static class: java.lang.Class<OptionalMethod<any>>;
                 public invokeOptional(param0: T, param1: native.Array<any>): any;
                 public invokeOptionalWithoutCheckedException(param0: T, param1: native.Array<any>): any;
                 public isSupported(param0: T): boolean;
@@ -2357,43 +2351,43 @@ declare module okhttp3 {
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module platform {
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace platform {
             export class Platform {
-                public static class: java.lang.Class<okhttp3.internal.platform.Platform>;
+                public static class: java.lang.Class<Platform>;
                 public static INFO: number;
                 public static WARN: number;
                 public getPrefix(): string;
                 public connectSocket(param0: java.net.Socket, param1: java.net.InetSocketAddress, param2: number): void;
                 public configureSslSocketFactory(param0: javax.net.ssl.SSLSocketFactory): void;
-                public configureTlsExtensions(param0: javax.net.ssl.SSLSocket, param1: string, param2: java.util.List<okhttp3.Protocol>): void;
+                public configureTlsExtensions(param0: javax.net.ssl.SSLSocket, param1: string, param2: java.util.List<Protocol>): void;
                 public static isConscryptPreferred(): boolean;
                 public log(param0: number, param1: string, param2: java.lang.Throwable): void;
                 public logCloseableLeak(param0: string, param1: any): void;
-                public buildTrustRootIndex(param0: javax.net.ssl.X509TrustManager): okhttp3.internal.tls.TrustRootIndex;
+                public buildTrustRootIndex(param0: javax.net.ssl.X509TrustManager): tls.TrustRootIndex;
                 public toString(): string;
                 public isCleartextTrafficPermitted(param0: string): boolean;
                 public constructor();
-                public buildCertificateChainCleaner(param0: javax.net.ssl.X509TrustManager): okhttp3.internal.tls.CertificateChainCleaner;
-                public buildCertificateChainCleaner(param0: javax.net.ssl.SSLSocketFactory): okhttp3.internal.tls.CertificateChainCleaner;
+                public buildCertificateChainCleaner(param0: javax.net.ssl.X509TrustManager): tls.CertificateChainCleaner;
+                public buildCertificateChainCleaner(param0: javax.net.ssl.SSLSocketFactory): tls.CertificateChainCleaner;
                 public getSelectedProtocol(param0: javax.net.ssl.SSLSocket): string;
                 public trustManager(param0: javax.net.ssl.SSLSocketFactory): javax.net.ssl.X509TrustManager;
                 public afterHandshake(param0: javax.net.ssl.SSLSocket): void;
-                public static get(): okhttp3.internal.platform.Platform;
+                public static get(): Platform;
                 public getStackTraceForCloseable(param0: string): any;
-                public static alpnProtocolNames(param0: java.util.List<okhttp3.Protocol>): java.util.List<string>;
+                public static alpnProtocolNames(param0: java.util.List<Protocol>): java.util.List<string>;
                 public getSSLContext(): javax.net.ssl.SSLContext;
             }
         }
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module proxy {
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace proxy {
             export class NullProxySelector {
-                public static class: java.lang.Class<okhttp3.internal.proxy.NullProxySelector>;
+                public static class: java.lang.Class<NullProxySelector>;
                 public select(param0: java.net.URI): java.util.List<java.net.Proxy>;
                 public connectFailed(param0: java.net.URI, param1: java.net.SocketAddress, param2: java.io.IOException): void;
                 public constructor();
@@ -2402,13 +2396,13 @@ declare module okhttp3 {
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module publicsuffix {
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace publicsuffix {
             export class PublicSuffixDatabase {
-                public static class: java.lang.Class<okhttp3.internal.publicsuffix.PublicSuffixDatabase>;
+                public static class: java.lang.Class<PublicSuffixDatabase>;
                 public static PUBLIC_SUFFIX_RESOURCE: string;
-                public static get(): okhttp3.internal.publicsuffix.PublicSuffixDatabase;
+                public static get(): PublicSuffixDatabase;
                 public getEffectiveTldPlusOne(param0: string): string;
                 public constructor();
             }
@@ -2416,26 +2410,26 @@ declare module okhttp3 {
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module tls {
-            export class BasicCertificateChainCleaner extends okhttp3.internal.tls.CertificateChainCleaner {
-                public static class: java.lang.Class<okhttp3.internal.tls.BasicCertificateChainCleaner>;
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace tls {
+            export class BasicCertificateChainCleaner extends CertificateChainCleaner {
+                public static class: java.lang.Class<BasicCertificateChainCleaner>;
                 public clean(param0: java.util.List<java.security.cert.Certificate>, param1: string): java.util.List<java.security.cert.Certificate>;
                 public hashCode(): number;
                 public equals(param0: any): boolean;
-                public constructor(param0: okhttp3.internal.tls.TrustRootIndex);
+                public constructor(param0: TrustRootIndex);
                 public constructor();
             }
         }
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module tls {
-            export class BasicTrustRootIndex extends okhttp3.internal.tls.TrustRootIndex {
-                public static class: java.lang.Class<okhttp3.internal.tls.BasicTrustRootIndex>;
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace tls {
+            export class BasicTrustRootIndex extends TrustRootIndex {
+                public static class: java.lang.Class<BasicTrustRootIndex>;
                 public constructor(param0: native.Array<java.security.cert.X509Certificate>);
                 public hashCode(): number;
                 public equals(param0: any): boolean;
@@ -2445,37 +2439,37 @@ declare module okhttp3 {
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module tls {
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace tls {
             export abstract class CertificateChainCleaner {
-                public static class: java.lang.Class<okhttp3.internal.tls.CertificateChainCleaner>;
-                public static get(param0: javax.net.ssl.X509TrustManager): okhttp3.internal.tls.CertificateChainCleaner;
+                public static class: java.lang.Class<CertificateChainCleaner>;
+                public static get(param0: javax.net.ssl.X509TrustManager): CertificateChainCleaner;
                 public clean(param0: java.util.List<java.security.cert.Certificate>, param1: string): java.util.List<java.security.cert.Certificate>;
-                public static get(param0: native.Array<java.security.cert.X509Certificate>): okhttp3.internal.tls.CertificateChainCleaner;
+                public static get(param0: native.Array<java.security.cert.X509Certificate>): CertificateChainCleaner;
                 public constructor();
             }
         }
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module tls {
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace tls {
             export class DistinguishedNameParser {
-                public static class: java.lang.Class<okhttp3.internal.tls.DistinguishedNameParser>;
+                public static class: java.lang.Class<DistinguishedNameParser>;
                 public findMostSpecific(param0: string): string;
             }
         }
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module tls {
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace tls {
             export class OkHostnameVerifier {
-                public static class: java.lang.Class<okhttp3.internal.tls.OkHostnameVerifier>;
-                public static INSTANCE: okhttp3.internal.tls.OkHostnameVerifier;
+                public static class: java.lang.Class<OkHostnameVerifier>;
+                public static INSTANCE: OkHostnameVerifier;
                 public verify(param0: string, param1: javax.net.ssl.SSLSession): boolean;
                 public verifyHostname(param0: string, param1: string): boolean;
                 public static allSubjectAltNames(param0: java.security.cert.X509Certificate): java.util.List<string>;
@@ -2485,17 +2479,15 @@ declare module okhttp3 {
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module tls {
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace tls {
             export class TrustRootIndex {
-                public static class: java.lang.Class<okhttp3.internal.tls.TrustRootIndex>;
+                public static class: java.lang.Class<TrustRootIndex>;
                 /**
                  * Constructs a new instance of the okhttp3.internal.tls.TrustRootIndex interface with the provided implementation. An empty constructor exists calling super() when extending the interface class.
                  */
-                public constructor(implementation: {
-                    findByIssuerAndSignature(param0: java.security.cert.X509Certificate): java.security.cert.X509Certificate;
-                });
+                public constructor(implementation: { findByIssuerAndSignature(param0: java.security.cert.X509Certificate): java.security.cert.X509Certificate });
                 public constructor();
                 public findByIssuerAndSignature(param0: java.security.cert.X509Certificate): java.security.cert.X509Certificate;
             }
@@ -2503,45 +2495,45 @@ declare module okhttp3 {
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module ws {
-            export class RealWebSocket implements okhttp3.WebSocket, okhttp3.internal.ws.WebSocketReader.FrameCallback {
-                public static class: java.lang.Class<okhttp3.internal.ws.RealWebSocket>;
-                public constructor(param0: okhttp3.Request, param1: okhttp3.WebSocketListener, param2: java.util.Random, param3: number);
-                public request(): okhttp3.Request;
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace ws {
+            export class RealWebSocket implements WebSocket, WebSocketReader.FrameCallback {
+                public static class: java.lang.Class<RealWebSocket>;
+                public constructor(param0: Request, param1: WebSocketListener, param2: java.util.Random, param3: number);
+                public request(): Request;
                 public send(param0: string): boolean;
                 public onReadPong(param0: okio.ByteString): void;
                 public onReadPing(param0: okio.ByteString): void;
-                public initReaderAndWriter(param0: string, param1: okhttp3.internal.ws.RealWebSocket.Streams): void;
+                public initReaderAndWriter(param0: string, param1: RealWebSocket.Streams): void;
                 public queueSize(): number;
                 public close(param0: number, param1: string): boolean;
                 public loopReader(): void;
                 public send(param0: okio.ByteString): boolean;
                 public onReadMessage(param0: okio.ByteString): void;
-                public failWebSocket(param0: java.lang.Exception, param1: okhttp3.Response): void;
+                public failWebSocket(param0: java.lang.Exception, param1: Response): void;
                 public cancel(): void;
-                public connect(param0: okhttp3.OkHttpClient): void;
+                public connect(param0: OkHttpClient): void;
                 public onReadClose(param0: number, param1: string): void;
                 public onReadMessage(param0: string): void;
             }
-            export module RealWebSocket {
+            export namespace RealWebSocket {
                 export class CancelRunnable {
-                    public static class: java.lang.Class<okhttp3.internal.ws.RealWebSocket.CancelRunnable>;
+                    public static class: java.lang.Class<CancelRunnable>;
                     public run(): void;
                 }
                 export class Close {
-                    public static class: java.lang.Class<okhttp3.internal.ws.RealWebSocket.Close>;
+                    public static class: java.lang.Class<Close>;
                 }
                 export class Message {
-                    public static class: java.lang.Class<okhttp3.internal.ws.RealWebSocket.Message>;
+                    public static class: java.lang.Class<Message>;
                 }
                 export class PingRunnable {
-                    public static class: java.lang.Class<okhttp3.internal.ws.RealWebSocket.PingRunnable>;
+                    public static class: java.lang.Class<PingRunnable>;
                     public run(): void;
                 }
                 export abstract class Streams {
-                    public static class: java.lang.Class<okhttp3.internal.ws.RealWebSocket.Streams>;
+                    public static class: java.lang.Class<Streams>;
                     public client: boolean;
                     public source: okio.BufferedSource;
                     public sink: okio.BufferedSink;
@@ -2552,26 +2544,26 @@ declare module okhttp3 {
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module ws {
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace ws {
             export class WebSocketProtocol {
-                public static class: java.lang.Class<okhttp3.internal.ws.WebSocketProtocol>;
+                public static class: java.lang.Class<WebSocketProtocol>;
                 public static acceptHeader(param0: string): string;
             }
         }
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module ws {
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace ws {
             export class WebSocketReader {
-                public static class: java.lang.Class<okhttp3.internal.ws.WebSocketReader>;
+                public static class: java.lang.Class<WebSocketReader>;
             }
-            export module WebSocketReader {
+            export namespace WebSocketReader {
                 export class FrameCallback {
-                    public static class: java.lang.Class<okhttp3.internal.ws.WebSocketReader.FrameCallback>;
+                    public static class: java.lang.Class<FrameCallback>;
                     /**
                      * Constructs a new instance of the okhttp3.internal.ws.WebSocketReader$FrameCallback interface with the provided implementation. An empty constructor exists calling super() when extending the interface class.
                      */
@@ -2594,15 +2586,15 @@ declare module okhttp3 {
     }
 }
 
-declare module okhttp3 {
-    export module internal {
-        export module ws {
+declare namespace okhttp3 {
+    export namespace internal {
+        export namespace ws {
             export class WebSocketWriter {
-                public static class: java.lang.Class<okhttp3.internal.ws.WebSocketWriter>;
+                public static class: java.lang.Class<WebSocketWriter>;
             }
-            export module WebSocketWriter {
+            export namespace WebSocketWriter {
                 export class FrameSink {
-                    public static class: java.lang.Class<okhttp3.internal.ws.WebSocketWriter.FrameSink>;
+                    public static class: java.lang.Class<FrameSink>;
                     public close(): void;
                     public flush(): void;
                     public write(param0: okio.Buffer, param1: number): void;
@@ -2613,7 +2605,5 @@ declare module okhttp3 {
     }
 }
 
-
 //Generics information:
 //okhttp3.internal.platform.OptionalMethod:1
-

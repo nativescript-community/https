@@ -1,6 +1,7 @@
 import * as Https from "nativescript-https";
 import {fromObject, Dialogs as dialogs, Page, EventData} from "@nativescript/core";
 import * as fs from "@nativescript/core/file-system";
+
 let page;
 let viewModel;
 export function pageLoaded(args: EventData) {

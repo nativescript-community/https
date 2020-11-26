@@ -8,6 +8,7 @@ declare namespace com {
                 progressCallback: OkHttpResponse.OkHttpResponseProgressCallback;
                 closeCallback: OkHttpResponse.OkHttpResponseCloseCallback;
                 constructor(body: okhttp3.ResponseBody);
+                contentLength(): number;
                 cancel();
                 toByteArray();
                 toByteArrayAsync(callback: OkHttpResponse.OkHttpResponseAsyncCallback);

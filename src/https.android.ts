@@ -122,12 +122,12 @@ class HttpsResponse implements Https.HttpsResponseLegacy {
     jsonResponse: any;
     toJSON(encoding?: HttpResponseEncoding) {
         try {
-            if (this.jsonResponse) {
+            if (this.jsonResponse !== undefined) {
                 return this.jsonResponse;
             }
             // TODO: handle arraybuffer already stored
             this.stringResponse = this.stringResponse || this.response.asString();
-            this.jsonResponse = Https.parseJSON(this.stringResponse);
+            this.jsonResponse = this.stringResponse ? Https.parseJSON(this.stringResponse) : null;
             return this.jsonResponse;
         } catch (err) {
             console.error('HttpsResponse.toJSON', err);
@@ -136,16 +136,16 @@ class HttpsResponse implements Https.HttpsResponseLegacy {
     }
 
     async toJSONAsync() {
-        if (this.jsonResponse) {
+        if (this.jsonResponse !== undefined) {
             return this.jsonResponse;
         }
-        if (this.stringResponse) {
-            this.jsonResponse = Https.parseJSON(this.stringResponse);
+        if (this.stringResponse !== undefined) {
+            this.jsonResponse = this.stringResponse ? Https.parseJSON(this.stringResponse) : null;
             return this.jsonResponse;
         }
         // TODO: handle arraybuffer already stored
         const r = await this.toStringAsync();
-        this.jsonResponse = Https.parseJSON(r);
+        this.jsonResponse = r ? Https.parseJSON(r) : null;
         return this.jsonResponse;
     }
 

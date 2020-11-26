@@ -53,6 +53,9 @@ public class OkHttpResponse {
     public void cancel() {
         cancelled = true;
     }
+    public long contentLength() {
+        return responseBody.contentLength();
+    }
 
     static void runProgressCallback(final OkHttpResponseProgressCallback progressCallback, final long current,
             final long total) {
@@ -151,6 +154,7 @@ public class OkHttpResponse {
 
     static Bitmap responseBodyToBitmap(OkHttpResponse response, OkHttpResponseProgressCallback progressCallback)
             throws Exception {
+        
         BufferedInputStream input = null;
         OutputStream output = null;
         try {
@@ -297,6 +301,7 @@ public class OkHttpResponse {
     }
 
     static java.nio.ByteBuffer responseBodyToByteArray(OkHttpResponse response) throws IOException {
+        
         final byte[] result = response.responseBody.bytes();
         response.closeResponseBody();
         return java.nio.ByteBuffer.wrap(result);
@@ -347,6 +352,7 @@ public class OkHttpResponse {
     }
 
     static String responseBodyToString(OkHttpResponse response) throws IOException {
+        
         final String responseString = response.responseBody.string();
         response.closeResponseBody();
         return responseString;

@@ -4,7 +4,7 @@
     "description": "Nativescript plugin for gestures",
     "main": "https",
     "sideEffects": false,
-    "typings": "index.d.ts",
+    "typings": "https.d.ts",
     "nativescript": {
         "platforms": {
             "android": "6.2.1",

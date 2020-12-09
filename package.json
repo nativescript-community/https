@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "description": "Nativescript plugin for gestures",
     "scripts": {
-        "tsc": "cp src/index.d.ts plugin && tsc -skipLibCheck -d",
+        "tsc": "cp src/https.d.ts plugin && tsc -skipLibCheck -d",
         "clean": "rimraf ./plugin/**/*.d.ts ./plugin/**/*.js ./plugin/**/*.js.map plugin/node_modules plugin/package-lock.json",
         "build.plugin": " cp README.md plugin/ && rm -f .tsbuildinfo && npm run tsc",
         "build.android": "bash src-native/android/build.sh",

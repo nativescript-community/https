@@ -5,7 +5,7 @@ let cache: NSURLCache;
 
 export function setCache(options?: Https.CacheOptions) {
     if (options) {
-        cache = NSURLCache.alloc().initWithMemoryCapacityDiskCapacityDirectoryURL(options.memorySize, options.diskSize, NSURL.URLWithString(options.diskLocation));
+        cache = NSURLCache.alloc().initWithMemoryCapacityDiskCapacityDiskPath(options.memorySize, options.diskSize, options.diskLocation);
     } else {
         cache = null;
     }
@@ -254,7 +254,7 @@ class HttpsResponse implements Https.HttpsResponseLegacy {
             return Promise.resolve(this.imageSource);
         }
         return new Promise<ImageSource>((resolve, reject) => {
-            (<any>UIImage).tns_decodeImageWithDataCompletion(this.data, (image) => {
+            (UIImage as any).tns_decodeImageWithDataCompletion(this.data, (image) => {
                 if (image) {
                     resolve(new ImageSource(image));
                 } else {
@@ -387,7 +387,7 @@ function bodyToNative(cont) {
 }
 export function createRequest(opts: Https.HttpsRequestOptions): Https.HttpsRequest {
     const manager = AFHTTPSessionManager.alloc().initWithBaseURL(NSURL.URLWithString(opts.url));
-    const type = opts.headers && opts.headers['Content-Type'] ? <string>opts.headers['Content-Type'] : 'application/json';
+    const type = opts.headers && opts.headers['Content-Type'] ? (opts.headers['Content-Type'] as string) : 'application/json';
     if (type.startsWith('application/json')) {
         manager.requestSerializer = AFJSONRequestSerializer.serializer();
         manager.responseSerializer = AFJSONResponseSerializer.serializerWithReadingOptions(NSJSONReadingOptions.AllowFragments);

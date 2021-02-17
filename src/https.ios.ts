@@ -94,83 +94,6 @@ class HttpsResponse implements Https.HttpsResponseLegacy {
     toArrayBufferAsync(): Promise<ArrayBuffer> {
         throw new Error('Method not implemented.');
     }
-    //     getCallback(resolve, reject) {
-    //         return {
-    //             onBitmap(res) {
-    //                 resolve(new ImageSource(res));
-    //             },
-    //             onString(res) {
-    //                 resolve(res);
-    //             },
-    //             onByteArray(res) {
-    //                 resolve((ArrayBuffer as any).from(res));
-    //             },
-    //             onFile(res) {
-    //                 resolve(res);
-    //             },
-    //             onException(err) {
-    //                 reject(err);
-    //             },
-    //         };
-    //     }
-    //     toArrayBuffer() {
-    //         return (ArrayBuffer as any).from(this.response.toByteArray());
-    //     }
-    //     toArrayBufferAsync() {
-    //         return new Promise((resolve, reject) => {
-    //             this.response.toByteArrayAsync(this.getCallback(resolve, reject));
-    //         });
-    //     }
-
-    //     toString(encoding?: HttpResponseEncoding) {
-    //         return this.response.toString();
-    //     }
-    //     toStringAsync() {
-    //         return new Promise((resolve, reject) => {
-    //             this.response.toStringAsync(this.getCallback(resolve, reject));
-    //         });
-    //     }
-    //     toJSON(encoding?: HttpResponseEncoding) {
-    //         return parseJSON(this.response.toString());
-    //     }
-
-    //     toJSONAsync() {
-    //         return new Promise<string>((resolve, reject) => {
-    //             this.response.toStringAsync(this.getCallback(resolve, reject));
-    //         }).then(parseJSON);
-    //     }
-    //     toImage() {
-    //         return new Promise<any>((resolveImage, rejectImage) => {
-    //             try {
-    //                 const image = this.response.toBitmap();
-    //                 resolveImage(new ImageSource(image));
-    //             } catch (err) {
-    //                 rejectImage(err);
-    //             }
-    //         });
-    //     }
-    //     toImageAsync() {
-    //         return new Promise((resolve, reject) => {
-    //             this.response.toBitmapAsync(this.getCallback(resolve, reject));
-    //         });
-    //     }
-    //     toFile(destinationFilePath: string) {
-    //         if (!destinationFilePath) {
-    //             destinationFilePath = getFilenameFromUrl(this.url);
-    //         }
-    //         return this.response.toFile(destinationFilePath);
-    //     }
-    //     toFileAsync(destinationFilePath: string) {
-    //         if (!destinationFilePath) {
-    //             destinationFilePath = getFilenameFromUrl(this.url);
-    //         }
-    //         return new Promise((resolve, reject) => {
-    //             this.response.toFileAsync(
-    //                 destinationFilePath,
-    //                 this.getCallback(resolve, reject)
-    //             );
-    //         });
-    //     }
 
     arrayBuffer: ArrayBuffer;
     toArrayBuffer() {
@@ -298,17 +221,6 @@ class HttpsResponse implements Https.HttpsResponseLegacy {
     }
 }
 
-// function AFSuccess(
-//     resolve,
-//     task: NSURLSessionDataTask,
-//     url: string,
-//     useLegacy: boolean,
-//     data?: NSDictionary<string, any> & NSData & NSArray<any>
-// ) {
-//     let content = useLegacy ? new HttpsResponse(data, url) : getData(data);
-//     resolve({ task, content });
-// }
-
 function AFFailure(resolve, reject, task: NSURLSessionDataTask, error: NSError, useLegacy: boolean, url) {
     if (error.code === -999) {
         return reject(new Error(error.localizedDescription));
@@ -374,9 +286,6 @@ function bodyToNative(cont) {
     let dict;
     if (Array.isArray(cont)) {
         dict = NSArray.arrayWithArray(cont.map((item) => bodyToNative(item)));
-        // cont.forEach(function(item, idx) {
-        //     dict.addObject(bodyToNative(item));
-        // });
     } else if (Utils.isObject(cont)) {
         dict = NSMutableDictionary.new<string, any>();
         Object.keys(cont).forEach((key) => dict.setValueForKey(bodyToNative(cont[key]), key));
@@ -385,8 +294,10 @@ function bodyToNative(cont) {
     }
     return dict;
 }
+const configuration = NSURLSessionConfiguration.defaultSessionConfiguration;
+const manager = AFHTTPSessionManager.alloc().initWithSessionConfiguration(configuration);
+
 export function createRequest(opts: Https.HttpsRequestOptions): Https.HttpsRequest {
-    const manager = AFHTTPSessionManager.alloc().initWithBaseURL(NSURL.URLWithString(opts.url));
     const type = opts.headers && opts.headers['Content-Type'] ? (opts.headers['Content-Type'] as string) : 'application/json';
     if (type.startsWith('application/json')) {
         manager.requestSerializer = AFJSONRequestSerializer.serializer();
@@ -411,6 +322,8 @@ export function createRequest(opts: Https.HttpsRequestOptions): Https.HttpsReque
                 manager.requestSerializer.cachePolicy = NSURLRequestCachePolicy.ReloadIgnoringLocalCacheData;
                 break;
         }
+    } else {
+        manager.requestSerializer.cachePolicy = NSURLRequestCachePolicy.UseProtocolCachePolicy;
     }
     const heads = opts.headers;
     let headers: NSMutableDictionary<string, any> = null;

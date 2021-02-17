@@ -376,7 +376,7 @@ const notClosedResponses: {
 } = {};
 let OkHttpResponse: typeof com.nativescript.https.OkHttpResponse;
 export function createRequest(opts: Https.HttpsRequestOptions): Https.HttpsRequest {
-    const client = getClient(false);
+    const client = getClient(false, opts.timeout);
 
     const request = new okhttp3.Request.Builder();
     request.url(opts.url);

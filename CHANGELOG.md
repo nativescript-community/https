@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.3](https://github.com/farfromrefug/nativescript-https/compare/v3.1.2...v3.1.3) (2021-03-12)
+
+
+### Bug Fixes
+
+* **android:** correctly use timeout option ([9a1e5be](https://github.com/farfromrefug/nativescript-https/commit/9a1e5be39f70453653d8cbc38c66ddf6843754ce))
+
+
+
+
+
 ## [3.1.2](https://github.com/farfromrefug/nativescript-https/compare/v3.1.1...v3.1.2) (2020-12-09)
 
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.2.0](https://github.com/farfromrefug/nativescript-https/compare/v3.1.3...v3.2.0) (2021-03-14)
+
+
+### Features
+
+* **android:** forceCache option ([cc225be](https://github.com/farfromrefug/nativescript-https/commit/cc225bea37e0035288533106e48a469e11d15d01))
+
+
+
+
+
 ## [3.1.3](https://github.com/farfromrefug/nativescript-https/compare/v3.1.2...v3.1.3) (2021-03-12)
 
 

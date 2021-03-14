@@ -4,6 +4,9 @@ declare namespace com {
             export class QuotePreservingCookieJar extends okhttp3.CookieJar {
                 constructor(manager: java.net.CookieManager);
             }
+            export class CacheInterceptor implements okhttp3.Interceptor {
+                intercept(chain): okhttp3.Response;
+            }
             export class OkHttpResponse {
                 progressCallback: OkHttpResponse.OkHttpResponseProgressCallback;
                 closeCallback: OkHttpResponse.OkHttpResponseCloseCallback;

@@ -18,9 +18,10 @@ const peer: Ipeer = {
 };
 
 let cache: okhttp3.Cache;
-
+let forceCache = false;
 export function setCache(options?: Https.CacheOptions) {
     if (options) {
+        forceCache = options.forceCache === true;
         cache = new okhttp3.Cache(new java.io.File(options.diskLocation), options.diskSize);
     } else {
         cache = null;
@@ -329,6 +330,9 @@ function getClient(reload: boolean = false, timeout: number = 10): okhttp3.OkHtt
 
     if (cache) {
         client.cache(cache);
+        if (forceCache) {
+            client.addInterceptor(new com.nativescript.https.CacheInterceptor());
+        }
     }
     if (cookieJar) {
         client.cookieJar(cookieJar);

@@ -11,6 +11,7 @@ export interface CacheOptions {
     diskLocation: string;
     diskSize: number;
     memorySize?: number;
+    forceCache?: boolean;
 }
 
 export interface HttpsFormDataParam {

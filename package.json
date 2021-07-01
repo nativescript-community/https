@@ -16,7 +16,7 @@
         "plugin.watch.android": "npm i && npm-watch build.android",
         "plugin.watch.ios": "npm i && npm-watch build.ios",
         "plugin.watch": "npm run plugin.watch.tsc & npm run plugin.watch.android & npm run plugin.watch.ios",
-        "publish": "npm run build && lerna publish --create-release=github",
+        "publish": "npm run build && lerna publish --create-release=github --force-publish",
         "commitmsg": "commitlint -e $GIT_PARAMS"
     },
     "keywords": [

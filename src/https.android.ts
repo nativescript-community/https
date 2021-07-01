@@ -433,6 +433,12 @@ export function createRequest(opts: Https.HttpsRequestOptions): Https.HttpsReque
                 }
             });
             okHttpBody = builder.build();
+        } else if (type === 'application/x-www-form-urlencoded') {
+            const builder = new okhttp3.FormBody.Builder();
+            Object.keys(opts.body).forEach((key) => {
+                builder.add(key, opts.body[key]);
+            });
+            okHttpBody = builder.build();
         } else {
             let body;
             if (opts.body) {

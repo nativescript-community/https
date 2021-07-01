@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.2.1](https://github.com/farfromrefug/nativescript-https/compare/v3.2.0...v3.2.1) (2021-07-01)
+
+
+### Bug Fixes
+
+* **android:** support for application/x-www-form-urlencoded ([fb8db51](https://github.com/farfromrefug/nativescript-https/commit/fb8db514916dd1c29baa40016fc5302c64a79a41))
+
+
+
+
+
 # [3.2.0](https://github.com/farfromrefug/nativescript-https/compare/v3.1.3...v3.2.0) (2021-03-14)
 
 

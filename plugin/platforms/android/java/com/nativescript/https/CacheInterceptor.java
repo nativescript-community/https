@@ -11,7 +11,11 @@ public class CacheInterceptor implements Interceptor {
         Request originalRequest = chain.request();
         String cacheControlHeader = originalRequest.header("Cache-Control");
         Response originalResponse = chain.proceed(originalRequest);
-        return originalResponse.newBuilder().header("Cache-Control", cacheControlHeader).build();
+        if (cacheControlHeader != null) {
+            return originalResponse.newBuilder().header("Cache-Control", cacheControlHeader).build();
+        } else {
+            return originalResponse;
+        }
     }
 
 

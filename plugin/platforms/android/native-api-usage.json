@@ -1,0 +1,5 @@
+{
+    "uses": [
+        "okhttp3:RequestBody*","okhttp3:MediaType*","okhttp3:MultipartBody*","okhttp3:CacheControl*","okhttp3:Request*","okhttp3:OkHttpClient*","okhttp3:CertificatePinner*","okhttp3:ConnectionSpec*","okhttp3:Cache*","okhttp3:Callback*","okhttp3:FormBody*","java.net:CookieManager*","java.net:CookiePolicy*","com.nativescript.https:QuotePreservingCookieJar*","com.nativescript.https:CacheInterceptor*","com.nativescript.https:OkHttpResponse*","java.util:Collections*","java.security.cert:CertificateFactory*","java.security:KeyStore*","java.security:Security*","javax.net.ssl:TrustManagerFactory*","javax.net.ssl:SSLContext*","javax.net.ssl:HttpsURLConnection*","java.util.concurrent:TimeUnit*","org.conscrypt:Conscrypt*"
+    ]
+}

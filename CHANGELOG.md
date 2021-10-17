@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.3.0](https://github.com/farfromrefug/nativescript-https/compare/v3.2.2...v3.3.0) (2021-10-17)
+
+
+### Bug Fixes
+
+* **android:** Conscrypt not included by default anymore. You need to add it in your app ([c16f34d](https://github.com/farfromrefug/nativescript-https/commit/c16f34d1b2f3fa226760ab00b17e56f6996dff96))
+
+
+### Features
+
+* **android:** native-api-usage ([9415f38](https://github.com/farfromrefug/nativescript-https/commit/9415f387b929b01c7fe385ff5d42e1bbd15ae2e4))
+
+
+
+
+
 ## [3.2.2](https://github.com/farfromrefug/nativescript-https/compare/v3.2.1...v3.2.2) (2021-07-21)
 
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.1](https://github.com/farfromrefug/nativescript-https/compare/v3.3.0...v3.3.1) (2021-10-18)
+
+
+### Bug Fixes
+
+* **android:** native-api-usage fix ([e18a203](https://github.com/farfromrefug/nativescript-https/commit/e18a2039464d488f3e370dd7feaf6ed61e4938e6))
+
+
+
+
+
 # [3.3.0](https://github.com/farfromrefug/nativescript-https/compare/v3.2.2...v3.3.0) (2021-10-17)
 
 

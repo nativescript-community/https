@@ -54,10 +54,10 @@ export interface HttpsRequestOptions extends HttpRequestOptions {
     useLegacy?: boolean;
 }
 
-export interface HttpsResponse {
+export interface HttpsResponse<T = any> {
     headers?: Headers;
     statusCode?: number;
-    content?: any;
+    content?: T;
     reason?: string;
     description?: string;
     url?: string;

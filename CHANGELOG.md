@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.3](https://github.com/farfromrefug/nativescript-https/compare/v3.3.2...v3.3.3) (2021-12-23)
+
+
+### Bug Fixes
+
+* android allow interceptors ([49073c5](https://github.com/farfromrefug/nativescript-https/commit/49073c5c4e1ab1370da4260ebc833705eaabb2b3))
+
+
+
+
+
 ## [3.3.2](https://github.com/farfromrefug/nativescript-https/compare/v3.3.1...v3.3.2) (2021-10-21)
 
 

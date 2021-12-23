@@ -107,3 +107,12 @@ export function parseJSON(source: string): any {
 
     return JSON.parse(src);
 }
+
+export const interceptors = [];
+export function addInterceptor(interceptor) {
+    interceptors.push(interceptor);
+}
+export const networkInterceptors = [];
+export function addNetworkInterceptor(interceptor) {
+    networkInterceptors.push(interceptor);
+}

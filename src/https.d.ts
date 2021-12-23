@@ -8,5 +8,5 @@ export function request(options: Https.HttpsRequestOptions): Promise<Https.Https
 export function setCache(options?: Https.CacheOptions);
 export function clearCache();
 export function createRequest(opts: Https.HttpsRequestOptions): Https.HttpsRequest;
-
+export function addNetworkInterceptor(interceptor);
 export * from './https.common';

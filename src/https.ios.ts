@@ -351,8 +351,8 @@ export function createRequest(opts: Https.HttpsRequestOptions): Https.HttpsReque
 
     const progress = opts.onProgress
         ? (progress: NSProgress) => {
-              opts.onProgress(progress.completedUnitCount, progress.totalUnitCount);
-          }
+            opts.onProgress(progress.completedUnitCount, progress.totalUnitCount);
+        }
         : null;
     let task: NSURLSessionDataTask;
 

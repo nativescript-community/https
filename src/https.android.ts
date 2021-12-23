@@ -266,6 +266,8 @@ function getClient(reload: boolean = false, timeout: number = 10): okhttp3.OkHtt
     }
 
     const client = new okhttp3.OkHttpClient.Builder();
+    Https.interceptors.forEach((interceptor) => client.addInterceptor(interceptor));
+    Https.networkInterceptors.forEach((interceptor) => client.addNetworkInterceptor(interceptor));
     if (peer.enabled === true) {
         if (peer.host || peer.certificate) {
             const spec = okhttp3.ConnectionSpec.MODERN_TLS;

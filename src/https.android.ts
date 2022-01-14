@@ -1,6 +1,8 @@
 import { File, HttpResponseEncoding, ImageSource, Utils } from '@nativescript/core';
 import * as Https from './https.common';
 
+export { addNetworkInterceptor, addInterceptor } from './https.common';
+
 interface Ipeer {
     enabled: boolean;
     allowInvalidCertificates: boolean;

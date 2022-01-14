@@ -1,5 +1,6 @@
 import { File, ImageSource, Utils } from '@nativescript/core';
 import * as Https from './https.common';
+export { addNetworkInterceptor, addInterceptor } from './https.common';
 
 let cache: NSURLCache;
 

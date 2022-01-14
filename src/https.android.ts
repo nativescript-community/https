@@ -267,17 +267,17 @@ function getClient(reload: boolean = false, timeout: number = 10): okhttp3.OkHtt
         cookieJar = new com.nativescript.https.QuotePreservingCookieJar(cookieManager);
     }
 
-    const client = new okhttp3.OkHttpClient.Builder();
-    Https.interceptors.forEach((interceptor) => client.addInterceptor(interceptor));
-    Https.networkInterceptors.forEach((interceptor) => client.addNetworkInterceptor(interceptor));
+    const builder = new okhttp3.OkHttpClient.Builder();
+    Https.interceptors.forEach((interceptor) => builder.addInterceptor(interceptor));
+    Https.networkInterceptors.forEach((interceptor) => builder.addNetworkInterceptor(interceptor));
     if (peer.enabled === true) {
         if (peer.host || peer.certificate) {
             const spec = okhttp3.ConnectionSpec.MODERN_TLS;
-            client.connectionSpecs(java.util.Collections.singletonList(spec));
+            builder.connectionSpecs(java.util.Collections.singletonList(spec));
 
             const pinner = new okhttp3.CertificatePinner.Builder();
             pinner.add(peer.host, [peer.certificate]);
-            client.certificatePinner(pinner.build());
+            builder.certificatePinner(pinner.build());
 
             if (peer.allowInvalidCertificates === false) {
                 try {
@@ -299,7 +299,7 @@ function getClient(reload: boolean = false, timeout: number = 10): okhttp3.OkHtt
 
                     const sslContext = javax.net.ssl.SSLContext.getInstance('TLS');
                     sslContext.init(keyManagers, trustManagerFactory.getTrustManagers(), new java.security.SecureRandom());
-                    client.sslSocketFactory(sslContext.getSocketFactory());
+                    builder.sslSocketFactory(sslContext.getSocketFactory());
                 } catch (error) {
                     console.error('@nativescript-community/https > client.allowInvalidCertificates error', error);
                 }
@@ -307,7 +307,7 @@ function getClient(reload: boolean = false, timeout: number = 10): okhttp3.OkHtt
 
             if (peer.validatesDomainName === true) {
                 try {
-                    client.hostnameVerifier(
+                    builder.hostnameVerifier(
                         new javax.net.ssl.HostnameVerifier({
                             verify: (hostname: string, session: javax.net.ssl.SSLSession): boolean => {
                                 const pp = session.getPeerPrincipal().getName();
@@ -330,19 +330,19 @@ function getClient(reload: boolean = false, timeout: number = 10): okhttp3.OkHtt
     }
 
     _timeout = timeout;
-    client.connectTimeout(timeout, java.util.concurrent.TimeUnit.SECONDS).writeTimeout(timeout, java.util.concurrent.TimeUnit.SECONDS).readTimeout(timeout, java.util.concurrent.TimeUnit.SECONDS);
+    builder.connectTimeout(timeout, java.util.concurrent.TimeUnit.SECONDS).writeTimeout(timeout, java.util.concurrent.TimeUnit.SECONDS).readTimeout(timeout, java.util.concurrent.TimeUnit.SECONDS);
 
     if (cache) {
-        client.cache(cache);
+        builder.cache(cache);
         if (forceCache) {
-            client.addInterceptor(new com.nativescript.https.CacheInterceptor());
+            builder.addInterceptor(new com.nativescript.https.CacheInterceptor());
         }
     }
     if (cookieJar) {
-        client.cookieJar(cookieJar);
+        builder.cookieJar(cookieJar);
     }
 
-    Client = client.build();
+    Client = builder.build();
     return Client;
 }
 

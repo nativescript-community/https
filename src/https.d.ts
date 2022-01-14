@@ -4,7 +4,7 @@ export function enableSSLPinning(options: Https.HttpsSSLPinningOptions);
 
 export function disableSSLPinning();
 
-export function request(options: Https.HttpsRequestOptions): Promise<Https.HttpsResponse>;
+export function request<T = any>(options: Https.HttpsRequestOptions): Promise<Https.HttpsResponse<T>>;
 export function setCache(options?: Https.CacheOptions);
 export function clearCache();
 export function createRequest(opts: Https.HttpsRequestOptions): Https.HttpsRequest;

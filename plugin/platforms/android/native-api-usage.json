@@ -14,6 +14,7 @@
         "okhttp3.CacheControl:Builder*",
         "okhttp3:Request*",
         "okhttp3.Request:Builder*",
+        "okhttp3:Interceptor*",
         "okhttp3:OkHttpClient*",
         "okhttp3.OkHttpClient:Builder*",
         "okhttp3:CertificatePinner*",

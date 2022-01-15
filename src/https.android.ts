@@ -346,7 +346,10 @@ function getClient(reload: boolean = false, timeout: number = 10): okhttp3.OkHtt
     return Client;
 }
 
-export function cancelRequest(tag: string, client: okhttp3.OkHttpClient) {
+export function cancelRequest(tag: string, client: okhttp3.OkHttpClient = runningClients[tag]) {
+    if (!client) {
+        return;
+    }
     if (notClosedResponses[tag]) {
         notClosedResponses[tag].cancel();
         return;
@@ -382,6 +385,9 @@ let CALL_ID = 0;
 const notClosedResponses: {
     [k: string]: com.nativescript.https.OkHttpResponse;
 } = {};
+
+const runningClients: { [k: string]: okhttp3.OkHttpClient } = {};
+
 let OkHttpResponse: typeof com.nativescript.https.OkHttpResponse;
 export function createRequest(opts: Https.HttpsRequestOptions): Https.HttpsRequest {
     const client = getClient(false, opts.timeout);
@@ -458,7 +464,7 @@ export function createRequest(opts: Https.HttpsRequestOptions): Https.HttpsReque
     }
     const tag = opts.tag || `okhttp_request_${CALL_ID++}`;
     const call = client.newCall(request.tag(tag).build());
-
+    runningClients[tag] = client;
     // We have to allow networking on the main thread because larger responses will crash the app with an NetworkOnMainThreadException.
     // Note that it would probably be better to offload it to a Worker or (natively running) AsyncTask.
     // Also note that once set, this policy remains active until the app is killed.
@@ -472,6 +478,7 @@ export function createRequest(opts: Https.HttpsRequestOptions): Https.HttpsReque
             call.enqueue(
                 new okhttp3.Callback({
                     onResponse(call, response) {
+                        delete runningClients[tag];
                         const responseBody = response.body();
                         const message = response.message();
                         const statusCode = response.code();
@@ -522,6 +529,7 @@ export function createRequest(opts: Https.HttpsRequestOptions): Https.HttpsReque
                         }
                     },
                     onFailure(task, error) {
+                        delete runningClients[tag];
                         reject(error);
                     },
                 })

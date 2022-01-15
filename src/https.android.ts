@@ -346,7 +346,7 @@ function getClient(reload: boolean = false, timeout: number = 10): okhttp3.OkHtt
     return Client;
 }
 
-function cancelRequest(tag: string, client: okhttp3.OkHttpClient) {
+export function cancelRequest(tag: string, client: okhttp3.OkHttpClient) {
     if (notClosedResponses[tag]) {
         notClosedResponses[tag].cancel();
         return;

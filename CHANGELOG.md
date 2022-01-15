@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.6](https://github.com/farfromrefug/nativescript-https/compare/v3.3.5...v3.3.6) (2022-01-15)
+
+
+### Features
+
+* added method `cancelRequest`. You need to set the `tag` in request options first ([bace983](https://github.com/farfromrefug/nativescript-https/commit/bace9832d9ab07b158068eca3104a24f4c494851))
+
+
+
+
+
 ## [3.3.5](https://github.com/farfromrefug/nativescript-https/compare/v3.3.4...v3.3.5) (2022-01-14)
 
 **Note:** Version bump only for package @nativescript-community/https

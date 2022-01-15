@@ -298,6 +298,14 @@ function bodyToNative(cont) {
 const configuration = NSURLSessionConfiguration.defaultSessionConfiguration;
 const manager = AFHTTPSessionManager.alloc().initWithSessionConfiguration(configuration);
 
+const runningRequests: { [k: string]: NSURLSessionDataTask } = {};
+
+export function cancelRequest(tag: string) {
+    if (runningRequests[tag]) {
+        runningRequests[tag].cancel();
+    }
+}
+
 export function createRequest(opts: Https.HttpsRequestOptions): Https.HttpsRequest {
     const type = opts.headers && opts.headers['Content-Type'] ? (opts.headers['Content-Type'] as string) : 'application/json';
     if (type.startsWith('application/json')) {
@@ -352,11 +360,17 @@ export function createRequest(opts: Https.HttpsRequestOptions): Https.HttpsReque
 
     const progress = opts.onProgress
         ? (progress: NSProgress) => {
-            opts.onProgress(progress.completedUnitCount, progress.totalUnitCount);
-        }
+              opts.onProgress(progress.completedUnitCount, progress.totalUnitCount);
+          }
         : null;
     let task: NSURLSessionDataTask;
+    const tag = opts.tag;
 
+    function clearRunningRequest() {
+        if (tag) {
+            delete runningRequests[tag];
+        }
+    }
     return {
         get nativeRequest() {
             return task;
@@ -364,6 +378,7 @@ export function createRequest(opts: Https.HttpsRequestOptions): Https.HttpsReque
         cancel: () => task && task.cancel(),
         run(resolve, reject) {
             const success = function (task: NSURLSessionDataTask, data?: any) {
+                clearRunningRequest();
                 // TODO: refactor this code with failure one.
                 const content = useLegacy ? new HttpsResponse(data, opts.url) : getData(data);
                 let getHeaders = () => ({});
@@ -394,6 +409,7 @@ export function createRequest(opts: Https.HttpsRequestOptions): Https.HttpsReque
                 // }
             };
             const failure = function (task: NSURLSessionDataTask, error: any) {
+                clearRunningRequest();
                 AFFailure(resolve, reject, task, error, useLegacy, opts.url);
             };
             if (type.startsWith('multipart/form-data')) {
@@ -450,6 +466,9 @@ export function createRequest(opts: Https.HttpsRequestOptions): Https.HttpsReque
                     default:
                         throw new Error('method_not_supported_multipart');
                 }
+            }
+            if (task && tag) {
+                runningRequests[tag] = task;
             }
         },
     };

@@ -28,6 +28,7 @@ export interface HttpsRequestObject {
 export type CachePolicy = 'noCache' | 'onlyCache' | 'ignoreCache';
 export interface HttpsRequestOptions extends HttpRequestOptions {
     url: string;
+    tag?: string; // optional request tag to allow to cancel it
     method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'HEAD';
     headers?: Headers;
     params?: HttpsRequestObject;

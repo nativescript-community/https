@@ -456,7 +456,7 @@ export function createRequest(opts: Https.HttpsRequestOptions): Https.HttpsReque
         }
         request[methods[opts.method]](okHttpBody);
     }
-    const tag = `okhttp_request_${CALL_ID++}`;
+    const tag = opts.tag || `okhttp_request_${CALL_ID++}`;
     const call = client.newCall(request.tag(tag).build());
 
     // We have to allow networking on the main thread because larger responses will crash the app with an NetworkOnMainThreadException.

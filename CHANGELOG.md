@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.7](https://github.com/farfromrefug/nativescript-https/compare/v3.3.6...v3.3.7) (2022-01-15)
+
+
+### Bug Fixes
+
+* **android:** `cancelRequest` not exported ([9727802](https://github.com/farfromrefug/nativescript-https/commit/972780279a291d3f95636601450198a78d935696))
+
+
+
+
+
 ## [3.3.6](https://github.com/farfromrefug/nativescript-https/compare/v3.3.5...v3.3.6) (2022-01-15)
 
 

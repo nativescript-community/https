@@ -52,7 +52,6 @@ export interface HttpsRequestOptions extends HttpRequestOptions {
     onProgress?: (current: number, total: number) => void;
 
     cachePolicy?: CachePolicy;
-    useLegacy?: boolean;
 }
 
 export interface HttpsResponse<T = any> {
@@ -71,14 +70,14 @@ export interface HttpsRequest {
     run(success, failure);
 }
 
-export interface HttpsResponseLegacy {
+export interface HttpsResponseLegacy<T = any> {
     toArrayBuffer(): ArrayBuffer;
     toArrayBufferAsync(): Promise<ArrayBuffer>;
 
     toString(): string;
     toStringAsync(): Promise<string>;
-    toJSON(): any;
-    toJSONAsync(): Promise<any>;
+    toJSON(): T;
+    toJSONAsync(): Promise<T>;
     toImage(): Promise<ImageSource>;
     // toImageAsync(): Promise<ImageSource>;
     toFile(destinationFilePath: string): Promise<File>;

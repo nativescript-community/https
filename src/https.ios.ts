@@ -306,7 +306,7 @@ export function cancelRequest(tag: string) {
     }
 }
 
-export function createRequest(opts: Https.HttpsRequestOptions): Https.HttpsRequest {
+export function createRequest(opts: Https.HttpsRequestOptions, useLegacy: boolean = true): Https.HttpsRequest {
     const type = opts.headers && opts.headers['Content-Type'] ? (opts.headers['Content-Type'] as string) : 'application/json';
     if (type.startsWith('application/json')) {
         manager.requestSerializer = AFJSONRequestSerializer.serializer();
@@ -356,12 +356,10 @@ export function createRequest(opts: Https.HttpsRequestOptions): Https.HttpsReque
 
     manager.requestSerializer.timeoutInterval = opts.timeout ? opts.timeout : 10;
 
-    const useLegacy = Utils.isDefined(opts.useLegacy) ? opts.useLegacy : false;
-
     const progress = opts.onProgress
         ? (progress: NSProgress) => {
-              opts.onProgress(progress.completedUnitCount, progress.totalUnitCount);
-          }
+            opts.onProgress(progress.completedUnitCount, progress.totalUnitCount);
+        }
         : null;
     let task: NSURLSessionDataTask;
     const tag = opts.tag;
@@ -473,10 +471,10 @@ export function createRequest(opts: Https.HttpsRequestOptions): Https.HttpsReque
         },
     };
 }
-export function request(opts: Https.HttpsRequestOptions) {
+export function request(opts: Https.HttpsRequestOptions, useLegacy: boolean = true) {
     return new Promise((resolve, reject) => {
         try {
-            createRequest(opts).run(resolve, reject);
+            createRequest(opts, useLegacy).run(resolve, reject);
         } catch (error) {
             reject(error);
         }

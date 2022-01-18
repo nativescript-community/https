@@ -389,7 +389,7 @@ const notClosedResponses: {
 const runningClients: { [k: string]: okhttp3.OkHttpClient } = {};
 
 let OkHttpResponse: typeof com.nativescript.https.OkHttpResponse;
-export function createRequest(opts: Https.HttpsRequestOptions): Https.HttpsRequest {
+export function createRequest(opts: Https.HttpsRequestOptions, useLegacy: boolean = true): Https.HttpsRequest {
     const client = getClient(false, opts.timeout);
 
     const request = new okhttp3.Request.Builder();
@@ -468,7 +468,7 @@ export function createRequest(opts: Https.HttpsRequestOptions): Https.HttpsReque
     // We have to allow networking on the main thread because larger responses will crash the app with an NetworkOnMainThreadException.
     // Note that it would probably be better to offload it to a Worker or (natively running) AsyncTask.
     // Also note that once set, this policy remains active until the app is killed.
-    if (opts.useLegacy === false && opts.allowLargeResponse) {
+    if (useLegacy === false && opts.allowLargeResponse) {
         android.os.StrictMode.setThreadPolicy(android.os.StrictMode.ThreadPolicy.LAX);
     }
     return {
@@ -494,7 +494,7 @@ export function createRequest(opts: Https.HttpsRequestOptions): Https.HttpsReque
                             }
                             return headers;
                         };
-                        if (opts.useLegacy) {
+                        if (useLegacy) {
                             if (!OkHttpResponse) {
                                 OkHttpResponse = com.nativescript.https.OkHttpResponse;
                             }
@@ -538,10 +538,10 @@ export function createRequest(opts: Https.HttpsRequestOptions): Https.HttpsReque
     };
 }
 
-export function request(opts: Https.HttpsRequestOptions) {
+export function request(opts: Https.HttpsRequestOptions, useLegacy: boolean = true) {
     return new Promise((resolve, reject) => {
         try {
-            createRequest(opts).run(resolve, reject);
+            createRequest(opts, useLegacy).run(resolve, reject);
         } catch (error) {
             reject(error);
         }

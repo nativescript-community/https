@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.9](https://github.com/nativescript-community/https/compare/v3.3.8...v3.3.9) (2022-01-18)
+
+**Note:** Version bump only for package @nativescript-community/https
+
+
+
+
+
 ## [3.3.8](https://github.com/farfromrefug/nativescript-https/compare/v3.3.7...v3.3.8) (2022-01-18)
 
 

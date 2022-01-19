@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.10](https://github.com/nativescript-community/https/compare/v3.3.9...v3.3.10) (2022-01-19)
+
+
+### Bug Fixes
+
+* typings fix ([3490469](https://github.com/nativescript-community/https/commit/3490469cdc019265ec321ff9db37b94100f94b49))
+
+
+
+
+
 ## [3.3.9](https://github.com/nativescript-community/https/compare/v3.3.8...v3.3.9) (2022-01-18)
 
 **Note:** Version bump only for package @nativescript-community/https

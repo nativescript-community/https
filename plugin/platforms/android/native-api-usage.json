@@ -3,6 +3,7 @@
         "android.os:StrictMode*",
         "android.os.StrictMode:ThreadPolicy*",
         "okhttp3:Call*",
+        "okhttp3:Dispatcher*",
         "okhttp3:RequestBody*",
         "okhttp3:MediaType*",
         "okhttp3:MultipartBody*",

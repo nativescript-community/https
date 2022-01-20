@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.12](https://github.com/nativescript-community/https/compare/v3.3.11...v3.3.12) (2022-01-20)
+
+
+### Bug Fixes
+
+* **android:** progress support for uploading ([67817ac](https://github.com/nativescript-community/https/commit/67817ac284f8da424829b0c400b5c2c788ccf9dc))
+
+
+
+
+
 ## [3.3.11](https://github.com/nativescript-community/https/compare/v3.3.10...v3.3.11) (2022-01-20)
 
 

@@ -443,6 +443,16 @@ export function createRequest(opts: Https.HttpsRequestOptions, useLegacy: boolea
                 }
             });
             okHttpBody = builder.build();
+            if (opts.onProgress) {
+                okHttpBody = new com.nativescript.https.ProgressRequestWrapper(
+                    okHttpBody,
+                    new com.nativescript.https.ProgressRequestWrapper.ProgressListener({
+                        onRequestProgress(bytesWritten: number, contentLength: number) {
+                            opts.onProgress(bytesWritten, contentLength);
+                        },
+                    })
+                );
+            }
         } else if (type === 'application/x-www-form-urlencoded') {
             const builder = new okhttp3.FormBody.Builder();
             Object.keys(opts.body).forEach((key) => {

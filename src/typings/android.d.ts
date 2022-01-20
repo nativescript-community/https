@@ -22,6 +22,15 @@ declare namespace com {
                 toFile();
                 toFileAsync(filePath: string, callback: OkHttpResponse.OkHttpResponseAsyncCallback);
             }
+            export class ProgressRequestWrapper extends okhttp3.RequestBody {
+                constructor(body: okhttp3.RequestBody, listener: ProgressRequestWrapper.ProgressListener);
+            }
+            export namespace ProgressRequestWrapper {
+                export class ProgressListener {
+                    constructor(impl: { onRequestProgress(current: number, total: number) });
+                    onRequestProgress(current: number, total: number);
+                }
+            }
             export namespace OkHttpResponse {
                 export class OkHttpResponseProgressCallback {
                     constructor(impl: { onProgress(current: number, total: number) });

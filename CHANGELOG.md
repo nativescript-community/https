@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.13](https://github.com/nativescript-community/https/compare/v3.3.12...v3.3.13) (2022-02-08)
+
+
+### Bug Fixes
+
+* **ios:** fix form data passed as a string ([d234842](https://github.com/nativescript-community/https/commit/d234842c5a29b8a360aae6c91dce80821630eea1))
+
+
+
+
+
 ## [3.3.12](https://github.com/nativescript-community/https/compare/v3.3.11...v3.3.12) (2022-01-20)
 
 

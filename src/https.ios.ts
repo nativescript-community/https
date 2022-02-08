@@ -425,8 +425,11 @@ export function createRequest(opts: Https.HttpsRequestOptions, useLegacy: boolea
                                         if (param.data instanceof NSURL) {
                                             formData.appendPartWithFileURLNameFileNameMimeTypeError(param.data, param.parameterName, param.fileName, param.contentType);
                                         } else {
-                                            // console.log('addding file data', param.data instanceof NSData);
-                                            formData.appendPartWithFileDataNameFileNameMimeType(param.data, param.parameterName, param.fileName, param.contentType);
+                                            let data = param.data;
+                                            if (typeof data === 'string') {
+                                                data = NSString.stringWithString(data).dataUsingEncoding(NSUTF8StringEncoding);
+                                            }
+                                            formData.appendPartWithFileDataNameFileNameMimeType(data, param.parameterName, param.fileName, param.contentType);
                                         }
                                     } else {
                                         formData.appendPartWithFormDataName(NSString.stringWithString(param.data).dataUsingEncoding(NSUTF8StringEncoding), param.parameterName);

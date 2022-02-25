@@ -1,10 +1,10 @@
 import { File, ImageSource, Utils } from '@nativescript/core';
-import * as Https from './https.common';
-export { addNetworkInterceptor, addInterceptor } from './https.common';
+import { CacheOptions, HttpsFormDataParam, HttpsRequest, HttpsRequestOptions, HttpsResponse, HttpsResponseLegacy, HttpsSSLPinningOptions, getFilenameFromUrl, parseJSON } from '.';
+export { addInterceptor, addNetworkInterceptor } from './request.common';
 
 let cache: NSURLCache;
 
-export function setCache(options?: Https.CacheOptions) {
+export function setCache(options?: CacheOptions) {
     if (options) {
         cache = NSURLCache.alloc().initWithMemoryCapacityDiskCapacityDiskPath(options.memorySize, options.diskSize, options.diskLocation);
     } else {
@@ -30,7 +30,7 @@ const policies: Ipolicies = {
 policies.def.allowInvalidCertificates = true;
 policies.def.validatesDomainName = false;
 
-export function enableSSLPinning(options: Https.HttpsSSLPinningOptions) {
+export function enableSSLPinning(options: HttpsSSLPinningOptions) {
     if (!policies.secure) {
         policies.secure = AFSecurityPolicy.policyWithPinningMode(AFSSLPinningMode.PublicKey);
         policies.secure.allowInvalidCertificates = Utils.isDefined(options.allowInvalidCertificates) ? options.allowInvalidCertificates : false;
@@ -89,7 +89,7 @@ function getData(data) {
     return content;
 }
 
-class HttpsResponse implements Https.HttpsResponseLegacy {
+class HttpsResponseLegacyAndroid implements HttpsResponseLegacy {
     //     private callback?: com.nativescript.https.OkhttpResponse.OkHttpResponseAsyncCallback;
     constructor(private data: NSDictionary<string, any> & NSData & NSArray<any>, private url: string) {}
     toArrayBufferAsync(): Promise<ArrayBuffer> {
@@ -149,7 +149,7 @@ class HttpsResponse implements Https.HttpsResponseLegacy {
             return this.jsonResponse;
         }
         if (this.stringResponse) {
-            this.jsonResponse = Https.parseJSON(this.stringResponse);
+            this.jsonResponse = parseJSON(this.stringResponse);
             return this.jsonResponse;
         }
         const data = nativeToObj(this.data);
@@ -159,7 +159,7 @@ class HttpsResponse implements Https.HttpsResponseLegacy {
         }
         try {
             this.stringResponse = data;
-            this.jsonResponse = Https.parseJSON(data);
+            this.jsonResponse = parseJSON(data);
             return this.jsonResponse;
         } catch (err) {
             console.error('HttpsResponse.toJSON', err);
@@ -200,7 +200,7 @@ class HttpsResponse implements Https.HttpsResponseLegacy {
         }
         return new Promise<File>((resolve, reject) => {
             if (!destinationFilePath) {
-                destinationFilePath = Https.getFilenameFromUrl(this.url);
+                destinationFilePath = getFilenameFromUrl(this.url);
             }
             if (this.data instanceof NSData) {
                 // ensure destination path exists by creating any missing parent directories
@@ -227,13 +227,13 @@ function AFFailure(resolve, reject, task: NSURLSessionDataTask, error: NSError, 
         return reject(new Error(error.localizedDescription));
     }
     let getHeaders = () => ({});
-    const sendi = {
+    const sendi = ({
         task,
         reason: error.localizedDescription,
         get headers() {
             return getHeaders();
         },
-    } as Https.HttpsResponse;
+    } as any) as HttpsResponse;
     const response = error.userInfo.valueForKey(AFNetworkingOperationFailingURLResponseErrorKey) as NSHTTPURLResponse;
     if (!Utils.isNullOrUndefined(response)) {
         sendi.statusCode = response.statusCode;
@@ -264,7 +264,7 @@ function AFFailure(resolve, reject, task: NSURLSessionDataTask, error: NSError, 
             failure.description = '@nativescript-community/https > Invalid SSL certificate! ' + error.description;
         }
         sendi.failure = failure;
-        sendi.content = new HttpsResponse(data, url);
+        sendi.content = new HttpsResponseLegacyAndroid(data, url);
         resolve(sendi);
     } else {
         const content: any = {
@@ -306,7 +306,7 @@ export function cancelRequest(tag: string) {
     }
 }
 
-export function createRequest(opts: Https.HttpsRequestOptions, useLegacy: boolean = true): Https.HttpsRequest {
+export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = true): HttpsRequest {
     const type = opts.headers && opts.headers['Content-Type'] ? (opts.headers['Content-Type'] as string) : 'application/json';
     if (type.startsWith('application/json')) {
         manager.requestSerializer = AFJSONRequestSerializer.serializer();
@@ -358,8 +358,8 @@ export function createRequest(opts: Https.HttpsRequestOptions, useLegacy: boolea
 
     const progress = opts.onProgress
         ? (progress: NSProgress) => {
-            opts.onProgress(progress.completedUnitCount, progress.totalUnitCount);
-        }
+              opts.onProgress(progress.completedUnitCount, progress.totalUnitCount);
+          }
         : null;
     let task: NSURLSessionDataTask;
     const tag = opts.tag;
@@ -378,14 +378,14 @@ export function createRequest(opts: Https.HttpsRequestOptions, useLegacy: boolea
             const success = function (task: NSURLSessionDataTask, data?: any) {
                 clearRunningRequest();
                 // TODO: refactor this code with failure one.
-                const content = useLegacy ? new HttpsResponse(data, opts.url) : getData(data);
+                const content = useLegacy ? new HttpsResponseLegacyAndroid(data, opts.url) : getData(data);
                 let getHeaders = () => ({});
-                const sendi: Https.HttpsResponse = {
+                const sendi = ({
                     content,
                     get headers() {
                         return getHeaders();
                     },
-                };
+                } as any) as HttpsResponse;
 
                 const response = task.response as NSHTTPURLResponse;
                 if (!Utils.isNullOrUndefined(response)) {
@@ -420,7 +420,7 @@ export function createRequest(opts: Https.HttpsRequestOptions, useLegacy: boolea
                             null,
                             headers,
                             (formData) => {
-                                (opts.body as Https.HttpsFormDataParam[]).forEach((param) => {
+                                (opts.body as HttpsFormDataParam[]).forEach((param) => {
                                     if (param.fileName && param.contentType) {
                                         if (param.data instanceof NSURL) {
                                             formData.appendPartWithFileURLNameFileNameMimeTypeError(param.data, param.parameterName, param.fileName, param.contentType);
@@ -474,7 +474,7 @@ export function createRequest(opts: Https.HttpsRequestOptions, useLegacy: boolea
         },
     };
 }
-export function request(opts: Https.HttpsRequestOptions, useLegacy: boolean = true) {
+export function request(opts: HttpsRequestOptions, useLegacy: boolean = true) {
     return new Promise((resolve, reject) => {
         try {
             createRequest(opts, useLegacy).run(resolve, reject);

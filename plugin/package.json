@@ -2,9 +2,9 @@
     "name": "@nativescript-community/https",
     "version": "3.3.13",
     "description": "Nativescript plugin for gestures",
-    "main": "https",
+    "main": "index",
     "sideEffects": false,
-    "typings": "https.d.ts",
+    "typings": "index.d.ts",
     "nativescript": {
         "platforms": {
             "android": "6.2.1",

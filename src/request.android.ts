@@ -1,7 +1,7 @@
 import { File, HttpResponseEncoding, ImageSource, Utils } from '@nativescript/core';
-import * as Https from './https.common';
+import { CacheOptions, getFilenameFromUrl, HttpsFormDataParam, HttpsRequest, HttpsRequestOptions, HttpsResponseLegacy, HttpsSSLPinningOptions, interceptors, networkInterceptors, parseJSON } from '.';
 
-export { addNetworkInterceptor, addInterceptor } from './https.common';
+export { addNetworkInterceptor, addInterceptor } from './request.common';
 
 interface Ipeer {
     enabled: boolean;
@@ -21,7 +21,7 @@ const peer: Ipeer = {
 
 let cache: okhttp3.Cache;
 let forceCache = false;
-export function setCache(options?: Https.CacheOptions) {
+export function setCache(options?: CacheOptions) {
     if (options) {
         forceCache = options.forceCache === true;
         cache = new okhttp3.Cache(new java.io.File(options.diskLocation), options.diskSize);
@@ -40,7 +40,7 @@ export function clearCache() {
 
 let _timeout = 10;
 
-class HttpsResponse implements Https.HttpsResponseLegacy {
+class HttpsResponseLegacyIOS implements HttpsResponseLegacy {
     private callback?: com.nativescript.https.OkHttpResponse.OkHttpResponseAsyncCallback;
     constructor(private response: com.nativescript.https.OkHttpResponse, private tag: string, private url: string) {}
 
@@ -130,7 +130,7 @@ class HttpsResponse implements Https.HttpsResponseLegacy {
             }
             // TODO: handle arraybuffer already stored
             this.stringResponse = this.stringResponse || this.response.asString();
-            this.jsonResponse = this.stringResponse ? Https.parseJSON(this.stringResponse) : null;
+            this.jsonResponse = this.stringResponse ? parseJSON(this.stringResponse) : null;
             return this.jsonResponse;
         } catch (err) {
             console.error('HttpsResponse.toJSON', err);
@@ -143,12 +143,12 @@ class HttpsResponse implements Https.HttpsResponseLegacy {
             return this.jsonResponse;
         }
         if (this.stringResponse !== undefined) {
-            this.jsonResponse = this.stringResponse ? Https.parseJSON(this.stringResponse) : null;
+            this.jsonResponse = this.stringResponse ? parseJSON(this.stringResponse) : null;
             return this.jsonResponse;
         }
         // TODO: handle arraybuffer already stored
         const r = await this.toStringAsync();
-        this.jsonResponse = r ? Https.parseJSON(r) : null;
+        this.jsonResponse = r ? parseJSON(r) : null;
         return this.jsonResponse;
     }
 
@@ -168,7 +168,7 @@ class HttpsResponse implements Https.HttpsResponseLegacy {
     }
     // toFile(destinationFilePath: string): File {
     //     if (!destinationFilePath) {
-    //         destinationFilePath = Https.getFilenameFromUrl(this.url);
+    //         destinationFilePath = getFilenameFromUrl(this.url);
     //     }
     //     const file = this.response.toFile(destinationFilePath);
     //     return File.fromPath(destinationFilePath);
@@ -180,7 +180,7 @@ class HttpsResponse implements Https.HttpsResponseLegacy {
             return Promise.resolve(this.file);
         }
         if (!destinationFilePath) {
-            destinationFilePath = Https.getFilenameFromUrl(this.url);
+            destinationFilePath = getFilenameFromUrl(this.url);
         }
         return new Promise((resolve, reject) => {
             this.getOrCreateCloseCallback();
@@ -192,7 +192,7 @@ class HttpsResponse implements Https.HttpsResponseLegacy {
     }
 }
 
-export function enableSSLPinning(options: Https.HttpsSSLPinningOptions) {
+export function enableSSLPinning(options: HttpsSSLPinningOptions) {
     if (!peer.host && !peer.certificate) {
         let certificate: string;
         let inputStream: java.io.FileInputStream;
@@ -268,8 +268,8 @@ function getClient(reload: boolean = false, timeout: number = 10): okhttp3.OkHtt
     }
 
     const builder = new okhttp3.OkHttpClient.Builder();
-    Https.interceptors.forEach((interceptor) => builder.addInterceptor(interceptor));
-    Https.networkInterceptors.forEach((interceptor) => builder.addNetworkInterceptor(interceptor));
+    interceptors.forEach((interceptor) => builder.addInterceptor(interceptor));
+    networkInterceptors.forEach((interceptor) => builder.addNetworkInterceptor(interceptor));
     if (peer.enabled === true) {
         if (peer.host || peer.certificate) {
             const spec = okhttp3.ConnectionSpec.MODERN_TLS;
@@ -389,7 +389,7 @@ const notClosedResponses: {
 const runningClients: { [k: string]: okhttp3.OkHttpClient } = {};
 
 let OkHttpResponse: typeof com.nativescript.https.OkHttpResponse;
-export function createRequest(opts: Https.HttpsRequestOptions, useLegacy: boolean = true): Https.HttpsRequest {
+export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = true): HttpsRequest {
     const client = getClient(false, opts.timeout);
 
     const request = new okhttp3.Request.Builder();
@@ -434,7 +434,7 @@ export function createRequest(opts: Https.HttpsRequestOptions, useLegacy: boolea
             const builder = new okhttp3.MultipartBody.Builder();
             builder.setType(MEDIA_TYPE);
 
-            (opts.body as Https.HttpsFormDataParam[]).forEach((param) => {
+            (opts.body as HttpsFormDataParam[]).forEach((param) => {
                 if (param.fileName && param.contentType) {
                     const MEDIA_TYPE = okhttp3.MediaType.parse(param.contentType);
                     builder.addFormDataPart(param.parameterName, param.fileName, okhttp3.RequestBody.create(MEDIA_TYPE, param.data));
@@ -519,7 +519,7 @@ export function createRequest(opts: Https.HttpsRequestOptions, useLegacy: boolea
 
                             resolve({
                                 response,
-                                content: new HttpsResponse(nResponse, tag, opts.url),
+                                content: new HttpsResponseLegacyIOS(nResponse, tag, opts.url),
                                 statusCode,
                                 reason: message,
                                 get headers() {
@@ -548,7 +548,7 @@ export function createRequest(opts: Https.HttpsRequestOptions, useLegacy: boolea
     };
 }
 
-export function request(opts: Https.HttpsRequestOptions, useLegacy: boolean = true) {
+export function request(opts: HttpsRequestOptions, useLegacy: boolean = true) {
     return new Promise((resolve, reject) => {
         try {
             createRequest(opts, useLegacy).run(resolve, reject);

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.4.0](https://github.com/nativescript-community/https/compare/v3.3.13...v3.4.0) (2022-02-25)
+
+
+### Features
+
+* refactoring to allow N alias to replace core impl ([22ac92f](https://github.com/nativescript-community/https/commit/22ac92f572c9b2739c40f5a39f47ac67d28a78ee))
+
+
+
+
+
 ## [3.3.13](https://github.com/nativescript-community/https/compare/v3.3.12...v3.3.13) (2022-02-08)
 
 **Note:** Version bump only for package @nativescript-community/https

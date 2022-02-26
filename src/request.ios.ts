@@ -1,5 +1,6 @@
 import { File, ImageSource, Utils } from '@nativescript/core';
-import { CacheOptions, HttpsFormDataParam, HttpsRequest, HttpsRequestOptions, HttpsResponse, HttpsResponseLegacy, HttpsSSLPinningOptions, getFilenameFromUrl, parseJSON } from '.';
+import { CacheOptions, HttpsFormDataParam, HttpsRequest, HttpsRequestOptions, HttpsResponse, HttpsResponseLegacy, HttpsSSLPinningOptions } from '.';
+import { getFilenameFromUrl, parseJSON } from './request.common';
 export { addInterceptor, addNetworkInterceptor } from './request.common';
 
 let cache: NSURLCache;
@@ -307,7 +308,7 @@ export function cancelRequest(tag: string) {
 }
 
 export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = true): HttpsRequest {
-    const type = opts.headers && opts.headers['Content-Type'] ? (opts.headers['Content-Type'] as string) : 'application/json';
+    const type = opts.headers && opts.headers['Content-Type'] ? opts.headers['Content-Type'] : 'application/json';
     if (type.startsWith('application/json')) {
         manager.requestSerializer = AFJSONRequestSerializer.serializer();
         manager.responseSerializer = AFJSONResponseSerializer.serializerWithReadingOptions(NSJSONReadingOptions.AllowFragments);

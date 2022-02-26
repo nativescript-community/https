@@ -26,6 +26,10 @@ export interface HttpsRequestObject {
     [key: string]: string | number | boolean | HttpsRequestObject | any[] | HttpsFormDataParam;
 }
 
+export interface Headers {
+    [k: string]: string;
+}
+
 export type CachePolicy = 'noCache' | 'onlyCache' | 'ignoreCache';
 export interface HttpsRequestOptions extends HttpRequestOptions {
     url: string;

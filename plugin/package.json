@@ -1,6 +1,6 @@
 {
     "name": "@nativescript-community/https",
-    "version": "3.4.1",
+    "version": "3.4.2",
     "description": "Nativescript plugin for gestures",
     "main": "index",
     "sideEffects": false,

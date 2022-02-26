@@ -1,7 +1,7 @@
 import { File, HttpResponseEncoding, ImageSource, Utils } from '@nativescript/core';
-import { CacheOptions, getFilenameFromUrl, HttpsFormDataParam, HttpsRequest, HttpsRequestOptions, HttpsResponseLegacy, HttpsSSLPinningOptions, interceptors, networkInterceptors, parseJSON } from '.';
+import { CacheOptions, HttpsFormDataParam, HttpsRequest, HttpsRequestOptions, HttpsResponseLegacy, HttpsSSLPinningOptions, getFilenameFromUrl, parseJSON } from '.';
 
-export { addNetworkInterceptor, addInterceptor } from './request.common';
+export { addNetworkInterceptor, addInterceptor, interceptors, networkInterceptors } from './request.common';
 
 interface Ipeer {
     enabled: boolean;

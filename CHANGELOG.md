@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1](https://github.com/nativescript-community/https/compare/v4.0.0...v4.0.1) (2022-04-25)
+
+### Bug Fixes
+
+* **android:** crash on response headers ([b09da7f](https://github.com/nativescript-community/https/commit/b09da7f3e357e5b3047b73227f7c29d2efb93ced))
+
 # [4.0.0](https://github.com/nativescript-community/https/compare/v3.4.4...v4.0.0) (2022-04-25)
 
 ### Features

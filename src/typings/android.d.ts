@@ -23,7 +23,8 @@ declare namespace com {
                 toFileAsync(filePath: string, callback: OkHttpResponse.OkHttpResponseAsyncCallback);
 
                 static getStatusCode(response: okhttp3.Response): number;
-                static getMessage(response: okhttp3.Response): String;
+                static getMessage(response: okhttp3.Response): string;
+                static getHeaders(response: okhttp3.Response): string;
             }
             export class ProgressRequestWrapper extends okhttp3.RequestBody {
                 constructor(body: okhttp3.RequestBody, listener: ProgressRequestWrapper.ProgressListener);

@@ -496,16 +496,8 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                             const message = OkHttpResponse.getMessage(response);
                             const statusCode = OkHttpResponse.getStatusCode(response);
                             const getHeaders = function () {
-                                const heads = response.headers();
-                                const headers = {};
-                                // let heads: okhttp3.Headers = resp.headers();
-                                const len: number = heads.size();
-                                let i: number;
-                                for (i = 0; i < len; i++) {
-                                    const key = heads.name(i);
-                                    headers[key] = heads.value(i);
-                                }
-                                return headers;
+                                const heads = OkHttpResponse.getHeaders(response);
+                                return JSON.parse(heads);
                             };
                             if (useLegacy) {
                                 const nResponse = new OkHttpResponse(responseBody);

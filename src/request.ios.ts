@@ -1,5 +1,5 @@
 import { File, ImageSource, Utils } from '@nativescript/core';
-import { CacheOptions, HttpsFormDataParam, HttpsRequest, HttpsRequestOptions, HttpsResponse, HttpsResponseLegacy, HttpsSSLPinningOptions } from '.';
+import { CacheOptions, HttpsFormDataParam, HttpsRequest, HttpsRequestOptions, HttpsResponse, HttpsSSLPinningOptions, HttpsResponseLegacy as IHttpsResponseLegacy } from '.';
 import { getFilenameFromUrl, parseJSON } from './request.common';
 export { addInterceptor, addNetworkInterceptor } from './request.common';
 
@@ -90,9 +90,9 @@ function getData(data) {
     return content;
 }
 
-class HttpsResponseLegacyAndroid implements HttpsResponseLegacy {
+class HttpsResponseLegacy implements IHttpsResponseLegacy {
     //     private callback?: com.nativescript.https.OkhttpResponse.OkHttpResponseAsyncCallback;
-    constructor(private data: NSDictionary<string, any> & NSData & NSArray<any>, private url: string) {}
+    constructor(private data: NSDictionary<string, any> & NSData & NSArray<any>, public contentLength, private url: string) {}
     toArrayBufferAsync(): Promise<ArrayBuffer> {
         throw new Error('Method not implemented.');
     }
@@ -230,6 +230,7 @@ function AFFailure(resolve, reject, task: NSURLSessionDataTask, error: NSError, 
     let getHeaders = () => ({});
     const sendi = ({
         task,
+        contentLength: task.countOfBytesReceived,
         reason: error.localizedDescription,
         get headers() {
             return getHeaders();
@@ -265,11 +266,12 @@ function AFFailure(resolve, reject, task: NSURLSessionDataTask, error: NSError, 
             failure.description = '@nativescript-community/https > Invalid SSL certificate! ' + error.description;
         }
         sendi.failure = failure;
-        sendi.content = new HttpsResponseLegacyAndroid(data, url);
+        sendi.content = new HttpsResponseLegacy(data, sendi.contentLength, url);
         resolve(sendi);
     } else {
         const content: any = {
             body: parsedData,
+            contentLength: sendi.contentLength,
             description: error.description,
             reason: error.localizedDescription,
             url: failingURL ? failingURL.description : url,
@@ -379,10 +381,12 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
             const success = function (task: NSURLSessionDataTask, data?: any) {
                 clearRunningRequest();
                 // TODO: refactor this code with failure one.
-                const content = useLegacy ? new HttpsResponseLegacyAndroid(data, opts.url) : getData(data);
+                const contentLength = task.countOfBytesReceived;
+                const content = useLegacy ? new HttpsResponseLegacy(data, contentLength, opts.url) : getData(data);
                 let getHeaders = () => ({});
                 const sendi = ({
                     content,
+                    contentLength,
                     get headers() {
                         return getHeaders();
                     },

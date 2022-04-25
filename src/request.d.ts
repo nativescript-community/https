@@ -62,6 +62,7 @@ export interface HttpsRequestOptions extends HttpRequestOptions {
 export interface HttpsResponse<T = any> {
     headers?: Headers;
     statusCode?: number;
+    contentLength: number;
     content?: T;
     reason?: string;
     description?: string;
@@ -76,6 +77,7 @@ export interface HttpsRequest {
 }
 
 export interface HttpsResponseLegacy<T = any> {
+    contentLength: number;
     toArrayBuffer(): ArrayBuffer;
     toArrayBufferAsync(): Promise<ArrayBuffer>;
 

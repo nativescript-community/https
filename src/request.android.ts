@@ -1,5 +1,5 @@
 import { File, HttpResponseEncoding, ImageSource, Utils } from '@nativescript/core';
-import { CacheOptions, HttpsFormDataParam, HttpsRequest, HttpsRequestOptions, HttpsResponseLegacy, HttpsSSLPinningOptions } from '.';
+import { CacheOptions, HttpsFormDataParam, HttpsRequest, HttpsRequestOptions, HttpsSSLPinningOptions, HttpsResponseLegacy as IHttpsResponseLegacy } from '.';
 
 import { getFilenameFromUrl, interceptors, networkInterceptors, parseJSON } from './request.common';
 export { addNetworkInterceptor, addInterceptor } from './request.common';
@@ -41,10 +41,13 @@ export function clearCache() {
 
 let _timeout = 10;
 
-class HttpsResponseLegacyIOS implements HttpsResponseLegacy {
+class HttpsResponseLegacy implements IHttpsResponseLegacy {
     private callback?: com.nativescript.https.OkHttpResponse.OkHttpResponseAsyncCallback;
     constructor(private response: com.nativescript.https.OkHttpResponse, private tag: string, private url: string) {}
 
+    get contentLength() {
+        return this.response.contentLength();
+    }
     getOrCreateCloseCallback() {
         if (!notClosedResponses[this.tag]) {
             // we need to store handling request to be able to cancel them
@@ -440,7 +443,11 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                     const MEDIA_TYPE = okhttp3.MediaType.parse(param.contentType);
                     builder.addFormDataPart(param.parameterName, param.fileName, okhttp3.RequestBody.create(MEDIA_TYPE, param.data));
                 } else {
-                    builder.addFormDataPart(param.parameterName, param.data);
+                    if (typeof param.data === 'string') {
+                        builder.addFormDataPart(param.parameterName, param.data);
+                    } else {
+                        builder.addFormDataPart(param.parameterName, param.data + '');
+                    }
                 }
             });
             okHttpBody = builder.build();
@@ -520,7 +527,8 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
 
                             resolve({
                                 response,
-                                content: new HttpsResponseLegacyIOS(nResponse, tag, opts.url),
+                                content: new HttpsResponseLegacy(nResponse, tag, opts.url),
+                                contentLength: nResponse.contentLength(),
                                 statusCode,
                                 reason: message,
                                 get headers() {
@@ -531,6 +539,7 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                             resolve({
                                 response,
                                 content: responseBody.string(),
+                                contentLength: responseBody.contentLength(),
                                 reason: message,
                                 statusCode,
                                 get headers() {

@@ -5,7 +5,9 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [4.0.0](https://github.com/nativescript-community/https/compare/v3.4.4...v4.0.0) (2022-04-25)
 
-**Note:** Version bump only for package @nativescript-community/https
+### Features
+
+* **android:** upgrade okhttp to  4.x. WARNING: minSDKVersion bumped to 21!
 
 ## [3.4.4](https://github.com/nativescript-community/https/compare/v3.4.3...v3.4.4) (2022-04-25)
 

@@ -38,6 +38,7 @@
         "javax.net.ssl:TrustManagerFactory*",
         "javax.net.ssl:SSLContext*",
         "javax.net.ssl:HttpsURLConnection*",
+        "java.net:UnknownHostException*",
         "java.util.concurrent:TimeUnit*",
         "org.conscrypt:Conscrypt*"
     ]

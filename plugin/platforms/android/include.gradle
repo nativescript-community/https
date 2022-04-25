@@ -1,5 +1,5 @@
 dependencies {
-	def okHttpVersion =  project.hasProperty("okHttpVersion") ? project.okHttpVersion : "3.14.7"
+	def okHttpVersion =  project.hasProperty("okHttpVersion") ? project.okHttpVersion : "3.14.9"
 	implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
 	// def conscryptVersion =  project.hasProperty("conscryptVersion") ? project.conscryptVersion : "2.4.0"
 	//  implementation "org.conscrypt:conscrypt-android:$conscryptVersion"

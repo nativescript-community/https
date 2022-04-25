@@ -1,26 +1,14 @@
 # @nativescript-community/https
 
-[![NPM version][npm-image]][npm-url]
-[![Downloads][downloads-image]][npm-url]
-[![TotalDownloads][total-downloads-image]][npm-url]
-[![Twitter Follow][twitter-image]][twitter-url]
-
-[build-status]: https://travis-ci.org/nativescript-community/https.svg?branch=master
-[build-url]: https://travis-ci.org/nativescript-community/https
-[npm-image]: http://img.shields.io/npm/v/@nativescript-community/https.svg
-[npm-url]: https://npmjs.org/package/@nativescript-community/https
-[downloads-image]: http://img.shields.io/npm/dm/@nativescript-community/https.svg
-[total-downloads-image]: http://img.shields.io/npm/dt/@nativescript-community/https.svg?label=total%20downloads
-[twitter-image]: https://img.shields.io/twitter/follow/eddyverbruggen.svg?style=social&label=Follow%20me
-[twitter-url]: https://twitter.com/eddyverbruggen
-
 ### The definitive way to hit HTTP based APIs in Nativescript.
 
 Easily integrate the most reliable native networking libraries with the latest and greatest HTTPS security features.
 
+> Android: version 4.x using okhttp 4.x changing minSDKVersion to 21! If lower needed stick to 3.x
+
 > Plugin version 2.0.0 bumps `AFNetworking` on iOS to [4.0.0](https://github.com/AFNetworking/AFNetworking/releases/tag/4.0.0) which no longer relies on `UIWebView`. Make sure to run `pod repo update` to get the latest `AFNetworking` pod on your development machine.
 
-#### A drop-in replacement for the [default http module](https://docs.nativescript.org/cookbook/http#get-response-status-code).
+#### A drop-in replacement for the [default http module](https://docs.nativescript.org/cookbook/http).
 
 ## Features
 
@@ -44,28 +32,8 @@ Easily integrate the most reliable native networking libraries with the latest a
 
 **No.** This plugin works out of the box without any security configurations needed. Either way you'll still benefit from all the features listed above.
 
-## Demo
-
-```shell
-git clone https://github.com/nativescript-community/https
-cd https
-npm run demo.ios
-npm run demo.android
-```
 
 ## Installation
-
-#### Add `tns-platform-declarations` for Android and iOS to your `references.d.ts`!
-
-```typescript
-/// <reference path="./node_modules/tns-platform-declarations/android.d.ts" />
-/// <reference path="./node_modules/tns-platform-declarations/ios.d.ts" />
-```
-
-We also recommend adding `"skipLibCheck": true,` to your `tsconfig.json`.
-More information on that can be found [here](https://github.com/NativeScript/NativeScript/tree/master/tns-platform-declarations).
-
-Install the plugin:
 
 ```bash
 tns plugin add @nativescript-community/https
@@ -227,3 +195,12 @@ then pass the option `allowLargeResponse` with value `true` to the `request` fun
 | [Robert Laverty](https://github.com/roblav96)   | For creating and maintaining this plugin for a long time, before transfering it to me, with the help of Jeff Whelpley of [GetHuman](https://github.com/gethuman). |
 | [AFNetworking](https://github.com/AFNetworking) | [AFNetworking](https://github.com/AFNetworking/AFNetworking) A delightful networking framework for iOS, OS X, watchOS, and tvOS.                                  |
 | [Square](http://square.github.io/)              | [okhttp](https://github.com/square/okhttp) An HTTP+HTTP/2 client for Android and Java applications.                                                               |
+
+## Demo
+
+```shell
+git clone https://github.com/nativescript-community/https
+cd https
+npm run demo.ios
+npm run demo.android
+```

@@ -4,8 +4,8 @@ declare namespace com {
             export class QuotePreservingCookieJar extends okhttp3.CookieJar {
                 constructor(manager: java.net.CookieManager);
             }
-            export class CacheInterceptor implements okhttp3.Interceptor {
-                intercept(chain): okhttp3.Response;
+            export class CacheInterceptor {
+                public static INTERCEPTOR: okhttp3.Interceptor;
             }
             export class OkHttpResponse {
                 progressCallback: OkHttpResponse.OkHttpResponseProgressCallback;
@@ -21,6 +21,9 @@ declare namespace com {
                 toBitmapAsync(callback: OkHttpResponse.OkHttpResponseAsyncCallback);
                 toFile();
                 toFileAsync(filePath: string, callback: OkHttpResponse.OkHttpResponseAsyncCallback);
+
+                static getStatusCode(response: okhttp3.Response): number;
+                static getMessage(response: okhttp3.Response): String;
             }
             export class ProgressRequestWrapper extends okhttp3.RequestBody {
                 constructor(body: okhttp3.RequestBody, listener: ProgressRequestWrapper.ProgressListener);

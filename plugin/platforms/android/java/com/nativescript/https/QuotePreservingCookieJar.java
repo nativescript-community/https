@@ -27,8 +27,6 @@ import okhttp3.CookieJar;
 import okhttp3.HttpUrl;
 import okhttp3.internal.platform.Platform;
 
-import static okhttp3.internal.Util.delimiterOffset;
-import static okhttp3.internal.Util.trimSubstring;
 import static okhttp3.internal.platform.Platform.WARN;
 
 /** A cookie jar that delegates to a {@link java.net.CookieHandler}. */
@@ -49,7 +47,7 @@ public final class QuotePreservingCookieJar implements CookieJar {
       try {
         cookieHandler.put(url.uri(), multimap);
       } catch (IOException e) {
-        Platform.get().log(WARN, "Saving cookies failed for " + url.resolve("/..."), e);
+        // Platform.get().log(WARN, "Saving cookies failed for " + url.resolve("/..."), e);
       }
     }
   }
@@ -61,7 +59,7 @@ public final class QuotePreservingCookieJar implements CookieJar {
     try {
       cookieHeaders = cookieHandler.get(url.uri(), headers);
     } catch (IOException e) {
-      Platform.get().log(WARN, "Loading cookies failed for " + url.resolve("/..."), e);
+      // Platform.get().log(WARN, "Loading cookies failed for " + url.resolve("/..."), e);
       return Collections.emptyList();
     }
 
@@ -83,6 +81,64 @@ public final class QuotePreservingCookieJar implements CookieJar {
   }
 
   /**
+   * Increments {@code pos} until {@code input[pos]} is not ASCII whitespace. Stops at {@code
+   * limit}.
+   */
+  public static int skipLeadingAsciiWhitespace(String input, int pos, int limit) {
+    for (int i = pos; i < limit; i++) {
+      switch (input.charAt(i)) {
+        case '\t':
+        case '\n':
+        case '\f':
+        case '\r':
+        case ' ':
+          continue;
+        default:
+          return i;
+      }
+    }
+    return limit;
+  }
+
+  /**
+   * Decrements {@code limit} until {@code input[limit - 1]} is not ASCII whitespace. Stops at
+   * {@code pos}.
+   */
+  public static int skipTrailingAsciiWhitespace(String input, int pos, int limit) {
+    for (int i = limit - 1; i >= pos; i--) {
+      switch (input.charAt(i)) {
+        case '\t':
+        case '\n':
+        case '\f':
+        case '\r':
+        case ' ':
+          continue;
+        default:
+          return i + 1;
+      }
+    }
+    return pos;
+  }
+  
+   /** Equivalent to {@code string.substring(pos, limit).trim()}. */
+  public static String trimSubstring(String string, int pos, int limit) {
+    int start = skipLeadingAsciiWhitespace(string, pos, limit);
+    int end = skipTrailingAsciiWhitespace(string, start, limit);
+    return string.substring(start, end);
+  }
+
+  /**
+   * Returns the index of the first character in {@code input} that contains a character in {@code
+   * delimiters}. Returns limit if there is no such character.
+   */
+  public static int delimiterOffset(String input, int pos, int limit, String delimiters) {
+    for (int i = pos; i < limit; i++) {
+      if (delimiters.indexOf(input.charAt(i)) != -1) return i;
+    }
+    return limit;
+  }
+
+  /**
    * Convert a request header to OkHttp's cookies via {@link HttpCookie}. That extra step handles
    * multiple cookies in a single request header, which {@link Cookie#parse} doesn't support.
    */
@@ -90,7 +146,7 @@ public final class QuotePreservingCookieJar implements CookieJar {
     List<Cookie> result = new ArrayList<>();
     for (int pos = 0, limit = header.length(), pairEnd; pos < limit; pos = pairEnd + 1) {
       pairEnd = delimiterOffset(header, pos, limit, ";,");
-      int equalsSign = delimiterOffset(header, pos, pairEnd, '=');
+      int equalsSign = delimiterOffset(header, pos, pairEnd, "=");
       String name = trimSubstring(header, pos, equalsSign);
       if (name.startsWith("$")) continue;
 

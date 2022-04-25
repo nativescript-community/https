@@ -330,7 +330,7 @@ function getClient(reload: boolean = false, timeout: number = 10): okhttp3.OkHtt
     if (cache) {
         builder.cache(cache);
         if (forceCache) {
-            builder.addInterceptor(new com.nativescript.https.CacheInterceptor());
+            builder.addInterceptor(com.nativescript.https.CacheInterceptor.INTERCEPTOR);
         }
     }
     if (cookieJar) {
@@ -488,58 +488,63 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                 new okhttp3.Callback({
                     onResponse(call, response) {
                         delete runningClients[tag];
-                        const responseBody = response.body();
-                        const message = response.message();
-                        const statusCode = response.code();
-                        const getHeaders = function () {
-                            const heads = response.headers();
-                            const headers = {};
-                            // let heads: okhttp3.Headers = resp.headers();
-                            const len: number = heads.size();
-                            let i: number;
-                            for (i = 0; i < len; i++) {
-                                const key = heads.name(i);
-                                headers[key] = heads.value(i);
-                            }
-                            return headers;
-                        };
-                        if (useLegacy) {
-                            if (!OkHttpResponse) {
-                                OkHttpResponse = com.nativescript.https.OkHttpResponse;
-                            }
+                        if (!OkHttpResponse) {
+                            OkHttpResponse = com.nativescript.https.OkHttpResponse;
+                        }
+                        try {
+                            const responseBody = response.body();
+                            const message = OkHttpResponse.getMessage(response);
+                            const statusCode = OkHttpResponse.getStatusCode(response);
+                            const getHeaders = function () {
+                                const heads = response.headers();
+                                const headers = {};
+                                // let heads: okhttp3.Headers = resp.headers();
+                                const len: number = heads.size();
+                                let i: number;
+                                for (i = 0; i < len; i++) {
+                                    const key = heads.name(i);
+                                    headers[key] = heads.value(i);
+                                }
+                                return headers;
+                            };
+                            if (useLegacy) {
+                                const nResponse = new OkHttpResponse(responseBody);
+                                if (opts.onProgress) {
+                                    nResponse.progressCallback = new OkHttpResponse.OkHttpResponseProgressCallback({
+                                        onProgress: opts.onProgress,
+                                    });
+                                }
 
-                            const nResponse = new OkHttpResponse(responseBody);
-
-                            if (opts.onProgress) {
-                                nResponse.progressCallback = new OkHttpResponse.OkHttpResponseProgressCallback({
-                                    onProgress: opts.onProgress,
+                                resolve({
+                                    response,
+                                    content: new HttpsResponseLegacy(nResponse, tag, opts.url),
+                                    contentLength: nResponse.contentLength(),
+                                    statusCode,
+                                    reason: message,
+                                    get headers() {
+                                        return getHeaders();
+                                    },
+                                });
+                            } else {
+                                resolve({
+                                    response,
+                                    content: responseBody.string(),
+                                    contentLength: responseBody.contentLength(),
+                                    reason: message,
+                                    statusCode,
+                                    get headers() {
+                                        return getHeaders();
+                                    },
                                 });
                             }
-
-                            resolve({
-                                response,
-                                content: new HttpsResponseLegacy(nResponse, tag, opts.url),
-                                contentLength: nResponse.contentLength(),
-                                statusCode,
-                                reason: message,
-                                get headers() {
-                                    return getHeaders();
-                                },
-                            });
-                        } else {
-                            resolve({
-                                response,
-                                content: responseBody.string(),
-                                contentLength: responseBody.contentLength(),
-                                reason: message,
-                                statusCode,
-                                get headers() {
-                                    return getHeaders();
-                                },
-                            });
+                        } catch (error) {
+                            console.error(error);
+                            delete runningClients[tag];
+                            reject(error);
                         }
                     },
                     onFailure(task, error) {
+                        console.error(error);
                         delete runningClients[tag];
                         reject(error);
                     },

@@ -12,8 +12,11 @@ import java.io.IOException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 
 import okhttp3.ResponseBody;
+import okhttp3.Response;
 
 public class OkHttpResponse {
     private final static String TAG = "OkHttpResponse";
@@ -43,6 +46,53 @@ public class OkHttpResponse {
     public static interface OkHttpResponseCloseCallback {
         void onClose();
     }
+    private static class NotifyRunnable implements Runnable {
+        private final Runnable mRunnable;
+        private final Handler mHandler;
+        private boolean mFinished = false;
+
+        public  NotifyRunnable(final Handler handler, final Runnable r) {
+            mRunnable = r;
+            mHandler = handler;
+        }
+
+        public boolean isFinished() {
+            return mFinished;
+        }
+
+        @Override
+        public void run() {
+            synchronized (mHandler) {
+                Log.d("JS", "NotifyRunnable run");
+                mRunnable.run();
+                mFinished = true;
+                mHandler.notifyAll();
+            }
+        }
+    }
+    
+    public static void postAndWait(final Handler handler, final Runnable r) {
+
+        if (handler.getLooper() == Looper.myLooper()) {
+            r.run();
+        } else {
+            synchronized (handler) {
+                Log.d("JS", "postAndWait1");
+                NotifyRunnable runnable = new NotifyRunnable(handler, r);
+                handler.post(runnable);
+                Log.d("JS", "postAndWait2");
+                while (!runnable.isFinished()) {
+                    Log.d("JS", "postAndWait3");
+                    try {
+                        handler.wait();
+                    } catch (InterruptedException is) {
+                        Log.d("JS", "postAndWait4", is);
+                        // ignore
+                    }
+                }
+            }
+        }
+    }
 
     public OkHttpResponse(ResponseBody body) {
         responseBody = body;
@@ -57,16 +107,20 @@ public class OkHttpResponse {
         return responseBody.contentLength();
     }
 
+    private static Handler getMainHandler() {
+        if (mainHandler == null) {
+            mainHandler = new Handler(android.os.Looper.getMainLooper());
+        }
+        return mainHandler;
+    }
+
     static void runProgressCallback(final OkHttpResponseProgressCallback progressCallback, final long current,
             final long total) {
         if (progressCallback == null) {
             return;
         }
         if (RUN_ON_MAIN_THREAD) {
-            if (mainHandler == null) {
-                mainHandler = new Handler(android.os.Looper.getMainLooper());
-            }
-            mainHandler.post(new Runnable() {
+            getMainHandler().post(new Runnable() {
                 @Override
                 public void run() {
                     progressCallback.onProgress(current, total);
@@ -82,10 +136,8 @@ public class OkHttpResponse {
             return;
         }
         if (RUN_ON_MAIN_THREAD) {
-            if (mainHandler == null) {
-                mainHandler = new Handler(android.os.Looper.getMainLooper());
-            }
-            mainHandler.post(new Runnable() {
+ 
+            getMainHandler().post(new Runnable() {
                 @Override
                 public void run() {
                     closeCallback.onClose();
@@ -213,10 +265,7 @@ public class OkHttpResponse {
                     // Log.d(TAG, "toFileAsync run ");
                     final File result = responseBodyToFile(filePath, fme, progressCallback);
                     if (RUN_ON_MAIN_THREAD) {
-                        if (mainHandler == null) {
-                            mainHandler = new Handler(android.os.Looper.getMainLooper());
-                        }
-                        mainHandler.post(new Runnable() {
+                        getMainHandler().post(new Runnable() {
                             @Override
                             public void run() {
                                 callback.onFile(result);
@@ -227,10 +276,7 @@ public class OkHttpResponse {
                     }
                 } catch (final Exception exc) {
                     if (RUN_ON_MAIN_THREAD) {
-                        if (mainHandler == null) {
-                            mainHandler = new Handler(android.os.Looper.getMainLooper());
-                        }
-                        mainHandler.post(new Runnable() {
+                        getMainHandler().post(new Runnable() {
                             @Override
                             public void run() {
                                 callback.onException(exc);
@@ -268,10 +314,7 @@ public class OkHttpResponse {
                 try {
                     final Bitmap result = responseBodyToBitmap(fme, progressCallback);
                     if (RUN_ON_MAIN_THREAD) {
-                        if (mainHandler == null) {
-                            mainHandler = new Handler(android.os.Looper.getMainLooper());
-                        }
-                        mainHandler.post(new Runnable() {
+                        getMainHandler().post(new Runnable() {
                             @Override
                             public void run() {
                                 callback.onBitmap(result);
@@ -282,10 +325,7 @@ public class OkHttpResponse {
                     }
                 } catch (final Exception exc) {
                     if (RUN_ON_MAIN_THREAD) {
-                        if (mainHandler == null) {
-                            mainHandler = new Handler(android.os.Looper.getMainLooper());
-                        }
-                        mainHandler.post(new Runnable() {
+                        getMainHandler().post(new Runnable() {
                             @Override
                             public void run() {
                                 callback.onException(exc);
@@ -319,10 +359,7 @@ public class OkHttpResponse {
                 try {
                     final java.nio.ByteBuffer result = responseBodyToByteArray(fme);
                     if (RUN_ON_MAIN_THREAD) {
-                        if (mainHandler == null) {
-                            mainHandler = new Handler(android.os.Looper.getMainLooper());
-                        }
-                        mainHandler.post(new Runnable() {
+                        getMainHandler().post(new Runnable() {
                             @Override
                             public void run() {
                                 callback.onByteArray(result);
@@ -333,10 +370,7 @@ public class OkHttpResponse {
                     }
                 } catch (final Exception exc) {
                     if (RUN_ON_MAIN_THREAD) {
-                        if (mainHandler == null) {
-                            mainHandler = new Handler(android.os.Looper.getMainLooper());
-                        }
-                        mainHandler.post(new Runnable() {
+                        getMainHandler().post(new Runnable() {
                             @Override
                             public void run() {
                                 callback.onException(exc);
@@ -359,7 +393,31 @@ public class OkHttpResponse {
     }
 
     public String asString() throws IOException {
-        return responseBodyToString(this);
+        // if (getMainHandler().getLooper() != Looper.myLooper()) {
+                // try {
+            return responseBodyToString(this);
+            // } catch (final Exception ex) {
+            //         Log.d("JS", "RuntimeException "  + ex);
+            //         return null;
+            //     }
+        // }
+        // final Object[] arr = new Object[1];
+        // Log.d("JS", "test asString");
+        // postAndWait(getMainHandler(), new Runnable() {
+        //     @Override
+        //     public void run() {
+        //             Log.d("JS", "test asString runnable");
+        //         try {
+        //             arr[1] = responseBodyToString(OkHttpResponse.this);
+        //             Log.d("JS", "test asString runnable result "  + (String)arr[1]);
+        //         } catch (final Exception ex) {
+        //             Log.d("JS", "RuntimeException "  + ex);
+        //             // throw new RuntimeException(ex);
+        //         }
+        //     }
+        // });
+        // Log.d("JS", "test asString result "  + (String)arr[1]);
+        // return (String)arr[1];
     }
 
     public void asStringAsync(final OkHttpResponseAsyncCallback callback) {
@@ -370,10 +428,7 @@ public class OkHttpResponse {
                 try {
                     final String result = responseBodyToString(fme);
                     if (RUN_ON_MAIN_THREAD) {
-                        if (mainHandler == null) {
-                            mainHandler = new Handler(android.os.Looper.getMainLooper());
-                        }
-                        mainHandler.post(new Runnable() {
+                        getMainHandler().post(new Runnable() {
                             @Override
                             public void run() {
                                 callback.onString(result);
@@ -384,10 +439,7 @@ public class OkHttpResponse {
                     }
                 } catch (final Exception exc) {
                     if (RUN_ON_MAIN_THREAD) {
-                        if (mainHandler == null) {
-                            mainHandler = new Handler(android.os.Looper.getMainLooper());
-                        }
-                        mainHandler.post(new Runnable() {
+                        getMainHandler().post(new Runnable() {
                             @Override
                             public void run() {
                                 callback.onException(exc);
@@ -400,5 +452,12 @@ public class OkHttpResponse {
             }
         });
         thread.start();
+    }
+
+    public static int getStatusCode(Response response) {
+        return response.code();
+    }
+    public static String getMessage(Response response) {
+        return response.message();
     }
 }

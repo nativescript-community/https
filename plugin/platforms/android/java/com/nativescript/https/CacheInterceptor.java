@@ -4,10 +4,9 @@ import okhttp3.Request;
 import okhttp3.Response;
 import java.io.IOException;
 
-public class CacheInterceptor implements Interceptor {
-    final String TAG = "CacheInterceptor";
 
-    public Response intercept(Interceptor.Chain chain ) throws IOException {
+public class CacheInterceptor {
+    public static final Interceptor INTERCEPTOR = chain -> {
         Request originalRequest = chain.request();
         String cacheControlHeader = originalRequest.header("Cache-Control");
         Response originalResponse = chain.proceed(originalRequest);
@@ -16,7 +15,5 @@ public class CacheInterceptor implements Interceptor {
         } else {
             return originalResponse;
         }
-    }
-
-
+    };
 }

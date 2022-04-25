@@ -18,7 +18,6 @@ export function pageLoaded(args: Page.NavigatedData) {
 
 function createRequest(url: string, options?: Partial<Https.HttpsRequestOptions>) {
     return Https.createRequest({
-        useLegacy: true,
         url,
         method: 'GET',
         timeout: 1,
@@ -35,7 +34,6 @@ function onError(error) {
 }
 function getRequest(url: string, options?: Partial<Https.HttpsRequestOptions>) {
     return Https.request({
-        useLegacy: true,
         url,
         method: 'GET',
         timeout: 1,
@@ -44,7 +42,7 @@ function getRequest(url: string, options?: Partial<Https.HttpsRequestOptions>) {
         .then((response) => {
             page.bindingContext.currentRequest = null;
             page.bindingContext.progress = 0;
-            console.log('Https.request response', response);
+            console.log('Https.request response', response.statusCode, response.content.contentLength, response.content.toString());
             return response;
         })
         .catch(onError);
@@ -52,7 +50,6 @@ function getRequest(url: string, options?: Partial<Https.HttpsRequestOptions>) {
 
 function postRequest(url: string, options?: Partial<Https.HttpsRequestOptions>) {
     return Https.request({
-        useLegacy: true,
         url,
         method: 'POST',
         ...options,

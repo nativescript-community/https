@@ -56,6 +56,8 @@
     "devDependencies": {
         "@commitlint/cli": "^9.1.2",
         "@commitlint/config-conventional": "^9.1.2",
+        "@lerna-lite/cli": "^1.0.5",
+        "@lerna-lite/run": "^1.0.5",
         "@nativescript-community/observable": "^2.0.8",
         "@nativescript/core": "7.0.0",
         "@nativescript/types-android": "7.0.2",
@@ -69,7 +71,6 @@
         "eslint-config-prettier": "^6.13.0",
         "eslint-plugin-prettier": "^3.1.4",
         "husky": "^4.2.5",
-        "lerna": "^3.22.1",
         "npm-watch": "^0.7.0",
         "prettier": "^2.1.2",
         "prompt": "^1.0.0",

@@ -17,6 +17,7 @@ import android.util.Log;
 
 import okhttp3.ResponseBody;
 import okhttp3.Response;
+import okhttp3.Headers;
 
 public class OkHttpResponse {
     private final static String TAG = "OkHttpResponse";
@@ -457,7 +458,7 @@ public class OkHttpResponse {
     public static int getStatusCode(Response response) {
         return response.code();
     }
-    
+
     public static String getMessage(Response response) {
         return response.message();
     }

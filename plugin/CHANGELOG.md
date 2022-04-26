@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.2](https://github.com/nativescript-community/https/compare/v4.0.1...v4.0.2) (2022-04-26)
+
+### Bug Fixes
+
+* **android:** broken headers in response ([81d8479](https://github.com/nativescript-community/https/commit/81d8479a5dd44fb1e51212b8842c3409b7c23ed3))
+
 ## [4.0.1](https://github.com/nativescript-community/https/compare/v4.0.0...v4.0.1) (2022-04-25)
 
 **Note:** Version bump only for package @nativescript-community/https

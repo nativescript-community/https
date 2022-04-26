@@ -457,7 +457,18 @@ public class OkHttpResponse {
     public static int getStatusCode(Response response) {
         return response.code();
     }
+    
     public static String getMessage(Response response) {
         return response.message();
+    }
+
+    public static String getHeaders(Response response) throws Exception {
+        JSONObject obj = new JSONObject();
+        Headers headers = response.headers();
+        for (int i = 0; i < headers.size(); i++)
+        {  
+            obj.put(headers.name(i), headers.value(i));
+        }  
+        return obj.toString();
     }
 }

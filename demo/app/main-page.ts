@@ -4,6 +4,16 @@ import * as fs from '@nativescript/core/file-system';
 import * as dialogs from '@nativescript/core/ui/dialogs';
 import * as Page from '@nativescript/core/ui/page';
 
+const folder = fs.knownFolders.temp().getFolder('cache');
+const diskLocation = folder.path;
+const cacheSize = 10 * 1024 * 1024;
+Https.setCache({
+    // forceCache: true,
+    diskLocation,
+    diskSize: cacheSize,
+    memorySize: cacheSize
+});
+
 let page;
 let viewModel;
 export function pageLoaded(args: Page.NavigatedData) {
@@ -42,7 +52,7 @@ function getRequest(url: string, options?: Partial<Https.HttpsRequestOptions>) {
         .then((response) => {
             page.bindingContext.currentRequest = null;
             page.bindingContext.progress = 0;
-            console.log('Https.request response', response.statusCode, response.content.contentLength, response.content.toString());
+            console.log('Https.request response', response, response.content.toString());
             return response;
         })
         .catch(onError);

@@ -19,6 +19,8 @@ import okhttp3.ResponseBody;
 import okhttp3.Response;
 import okhttp3.Headers;
 
+import org.json.JSONObject;
+
 public class OkHttpResponse {
     private final static String TAG = "OkHttpResponse";
     private ResponseBody responseBody;
@@ -458,11 +460,9 @@ public class OkHttpResponse {
     public static int getStatusCode(Response response) {
         return response.code();
     }
-
     public static String getMessage(Response response) {
         return response.message();
     }
-
     public static String getHeaders(Response response) throws Exception {
         JSONObject obj = new JSONObject();
         Headers headers = response.headers();

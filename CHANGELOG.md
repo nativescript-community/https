@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.3](https://github.com/nativescript-community/https/compare/v4.0.2...v4.0.3) (2022-04-26)
+
+### Bug Fixes
+
+* **android:** another fix... ([8cd3c92](https://github.com/nativescript-community/https/commit/8cd3c92980faeb6b87dfe6799b56b3b0a9375e60))
+
 ## [4.0.2](https://github.com/nativescript-community/https/compare/v4.0.1...v4.0.2) (2022-04-26)
 
 ### Bug Fixes

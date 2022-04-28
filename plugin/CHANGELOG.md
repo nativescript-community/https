@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.5](https://github.com/nativescript-community/https/compare/v4.0.4...v4.0.5) (2022-04-28)
+
+### Bug Fixes
+
+* **android:** trying to fix kotlin crashes ([9c75476](https://github.com/nativescript-community/https/commit/9c7547690b72163c325e0137ad386cf51ab33db6))
+
 ## [4.0.4](https://github.com/nativescript-community/https/compare/v4.0.3...v4.0.4) (2022-04-26)
 
 ### Bug Fixes

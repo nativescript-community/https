@@ -456,7 +456,9 @@ public class OkHttpResponse {
         });
         thread.start();
     }
-
+    public static ResponseBody getBody(Response response) {
+        return response.body();
+    }
     public static int getStatusCode(Response response) {
         return response.code();
     }

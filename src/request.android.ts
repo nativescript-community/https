@@ -492,7 +492,7 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                             OkHttpResponse = com.nativescript.https.OkHttpResponse;
                         }
                         try {
-                            const responseBody = response.body();
+                            const responseBody = OkHttpResponse.getBody(response);
                             const message = OkHttpResponse.getMessage(response);
                             const statusCode = OkHttpResponse.getStatusCode(response);
                             const getHeaders = function () {

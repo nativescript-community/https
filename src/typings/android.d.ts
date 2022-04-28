@@ -22,6 +22,7 @@ declare namespace com {
                 toFile();
                 toFileAsync(filePath: string, callback: OkHttpResponse.OkHttpResponseAsyncCallback);
 
+                static getBody(response: okhttp3.Response): okhttp3.ResponseBody;
                 static getStatusCode(response: okhttp3.Response): number;
                 static getMessage(response: okhttp3.Response): string;
                 static getHeaders(response: okhttp3.Response): string;

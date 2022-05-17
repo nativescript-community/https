@@ -342,11 +342,11 @@ function getClient(reload: boolean = false, timeout: number = 10): okhttp3.OkHtt
 }
 
 export function cancelRequest(tag: string, client: okhttp3.OkHttpClient = runningClients[tag]) {
-    if (!client) {
-        return;
-    }
     if (notClosedResponses[tag]) {
         notClosedResponses[tag].cancel();
+        return;
+    }
+    if (!client) {
         return;
     }
     const dispatcher = client.dispatcher();

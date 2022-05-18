@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.6](https://github.com/nativescript-community/https/compare/v4.0.5...v4.0.6) (2022-05-18)
+
+### Bug Fixes
+
+* **android:** cancelling of long process requests fix ([e46b698](https://github.com/nativescript-community/https/commit/e46b698d106ccf3239ecbee5f7ea3a39192a50f5))
+
 ## [4.0.5](https://github.com/nativescript-community/https/compare/v4.0.4...v4.0.5) (2022-04-28)
 
 ### Bug Fixes

@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.7](https://github.com/nativescript-community/https/compare/v4.0.6...v4.0.7) (2022-09-17)
+
+### Features
+
+* added `cookiesEnabled` property (`true` by default) ([19aeb27](https://github.com/nativescript-community/https/commit/19aeb27f469e989c8d71b48aa32139c8faa66cd2))
+
 ## [4.0.6](https://github.com/nativescript-community/https/compare/v4.0.5...v4.0.6) (2022-05-18)
 
 ### Bug Fixes

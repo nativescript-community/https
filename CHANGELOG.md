@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.8](https://github.com/nativescript-community/https/compare/v4.0.7...v4.0.8) (2022-09-17)
+
+### Features
+
+* export getClient for use with ui-image plugin ([50a5f4a](https://github.com/nativescript-community/https/commit/50a5f4a6657c93a441df7f55f6a0b392f3c2b251))
+
 ## [4.0.7](https://github.com/nativescript-community/https/compare/v4.0.6...v4.0.7) (2022-09-17)
 
 ### Features

@@ -30,7 +30,8 @@ export function setCache(options?: CacheOptions) {
         cache = null;
     }
     if (Client) {
-        getClient(true);
+        //we need to force a new client for the builder to use cache
+        getClient(undefined, true);
     }
 }
 export function clearCache() {
@@ -221,18 +222,18 @@ export function enableSSLPinning(options: HttpsSSLPinningOptions) {
         }
     }
     peer.enabled = true;
-    getClient(true);
+    getClient(undefined, true);
 }
 
 export function disableSSLPinning() {
     peer.enabled = false;
-    getClient(true);
+    getClient(undefined, true);
 }
 
 let Client: okhttp3.OkHttpClient;
 let cookieJar: com.nativescript.https.QuotePreservingCookieJar;
 let cookieManager: java.net.CookieManager;
-function getClient(reload: boolean = false, opts: Partial<HttpsRequestOptions> = {}): okhttp3.OkHttpClient {
+export function getClient(opts: Partial<HttpsRequestOptions> = {}, reload: boolean = false): okhttp3.OkHttpClient {
     if (!Client) {
         // ssl error fix on KitKat. Only need to be done once.
         // client will be null only onced so will run only once
@@ -409,7 +410,7 @@ const runningClients: { [k: string]: okhttp3.OkHttpClient } = {};
 
 let OkHttpResponse: typeof com.nativescript.https.OkHttpResponse;
 export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = true): HttpsRequest {
-    const client = getClient(false, opts);
+    const client = getClient(opts, false);
 
     const request = new okhttp3.Request.Builder();
     request.url(opts.url);

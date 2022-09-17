@@ -488,3 +488,7 @@ export function request(opts: HttpsRequestOptions, useLegacy: boolean = true) {
         }
     });
 }
+//Android only
+export function getClient(opts: Partial<HttpsRequestOptions>) {
+    return undefined;
+}

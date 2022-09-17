@@ -110,4 +110,6 @@ export function clearCache();
 export function createRequest(opts: HttpsRequestOptions): HttpsRequest;
 export function cancelRequest(tag: string);
 export function addNetworkInterceptor(interceptor);
+
+export function getClient(opts: Partial<HttpsRequestOptions>);
 export * from './request.common';

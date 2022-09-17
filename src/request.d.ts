@@ -57,6 +57,11 @@ export interface HttpsRequestOptions extends HttpRequestOptions {
     onProgress?: (current: number, total: number) => void;
 
     cachePolicy?: CachePolicy;
+
+    /**
+     * default to true
+     */
+    cookiesEnabled?: boolean;
 }
 
 export interface HttpsResponse<T = any> {

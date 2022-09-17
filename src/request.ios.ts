@@ -319,7 +319,7 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
         manager.responseSerializer = AFHTTPResponseSerializer.serializer();
     }
     manager.requestSerializer.allowsCellularAccess = true;
-    manager.requestSerializer.HTTPShouldHandleCookies = true;
+    manager.requestSerializer.HTTPShouldHandleCookies = opts.cookiesEnabled !== false;
     manager.securityPolicy = policies.secured === true ? policies.secure : policies.def;
 
     if (opts.cachePolicy) {

@@ -39,7 +39,10 @@ export function clearCache() {
     }
 }
 
+// TODO: rewrite this to not have to handle
+// every single property
 let _timeout = 10;
+let _cookiesEnabled = true;
 
 class HttpsResponseLegacy implements IHttpsResponseLegacy {
     private callback?: com.nativescript.https.OkHttpResponse.OkHttpResponseAsyncCallback;
@@ -229,7 +232,7 @@ export function disableSSLPinning() {
 let Client: okhttp3.OkHttpClient;
 let cookieJar: com.nativescript.https.QuotePreservingCookieJar;
 let cookieManager: java.net.CookieManager;
-function getClient(reload: boolean = false, timeout: number = 10): okhttp3.OkHttpClient {
+function getClient(reload: boolean = false, opts: Partial<HttpsRequestOptions> = {}): okhttp3.OkHttpClient {
     if (!Client) {
         // ssl error fix on KitKat. Only need to be done once.
         // client will be null only onced so will run only once
@@ -245,24 +248,48 @@ function getClient(reload: boolean = false, timeout: number = 10): okhttp3.OkHtt
     // 	Client.connectionPool().evictAll()
     // 	Client = null
     // }
+    const timeout = opts.timeout ?? 10;
+    const cookiesEnabled = opts.cookiesEnabled ?? true;
     if (Client && reload === false) {
-        if (timeout === _timeout) {
+        const needTimeoutChange = timeout === _timeout;
+        const needCookiesChange = cookiesEnabled === _cookiesEnabled;
+        if (!needTimeoutChange && !needCookiesChange) {
             return Client;
         } else {
-            return Client.newBuilder()
-                .connectTimeout(timeout, java.util.concurrent.TimeUnit.SECONDS)
-                .writeTimeout(timeout, java.util.concurrent.TimeUnit.SECONDS)
-                .readTimeout(timeout, java.util.concurrent.TimeUnit.SECONDS)
-                .build();
+            const builder = Client.newBuilder();
+            if (needTimeoutChange) {
+                builder
+                    .connectTimeout(timeout, java.util.concurrent.TimeUnit.SECONDS)
+                    .writeTimeout(timeout, java.util.concurrent.TimeUnit.SECONDS)
+                    .readTimeout(timeout, java.util.concurrent.TimeUnit.SECONDS);
+            }
+            if (needCookiesChange) {
+                if (cookiesEnabled) {
+                    if (!cookieJar) {
+                        cookieManager = new java.net.CookieManager();
+                        cookieManager.setCookiePolicy(java.net.CookiePolicy.ACCEPT_ALL);
+                        cookieJar = new com.nativescript.https.QuotePreservingCookieJar(cookieManager);
+                    }
+                    builder.cookieJar(cookieJar);
+                } else {
+                    builder.cookieJar(null);
+                }
+            }
+            return builder.build();
         }
     }
-    if (!cookieJar) {
-        cookieManager = new java.net.CookieManager();
-        cookieManager.setCookiePolicy(java.net.CookiePolicy.ACCEPT_ALL);
-        cookieJar = new com.nativescript.https.QuotePreservingCookieJar(cookieManager);
+    const builder = new okhttp3.OkHttpClient.Builder();
+
+    _cookiesEnabled = cookiesEnabled;
+    if (cookiesEnabled) {
+        if (!cookieJar) {
+            cookieManager = new java.net.CookieManager();
+            cookieManager.setCookiePolicy(java.net.CookiePolicy.ACCEPT_ALL);
+            cookieJar = new com.nativescript.https.QuotePreservingCookieJar(cookieManager);
+        }
+        builder.cookieJar(cookieJar);
     }
 
-    const builder = new okhttp3.OkHttpClient.Builder();
     interceptors.forEach((interceptor) => builder.addInterceptor(interceptor));
     networkInterceptors.forEach((interceptor) => builder.addNetworkInterceptor(interceptor));
     if (peer.enabled === true) {
@@ -333,9 +360,6 @@ function getClient(reload: boolean = false, timeout: number = 10): okhttp3.OkHtt
             builder.addInterceptor(com.nativescript.https.CacheInterceptor.INTERCEPTOR);
         }
     }
-    if (cookieJar) {
-        builder.cookieJar(cookieJar);
-    }
 
     Client = builder.build();
     return Client;
@@ -385,7 +409,7 @@ const runningClients: { [k: string]: okhttp3.OkHttpClient } = {};
 
 let OkHttpResponse: typeof com.nativescript.https.OkHttpResponse;
 export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = true): HttpsRequest {
-    const client = getClient(false, opts.timeout);
+    const client = getClient(false, opts);
 
     const request = new okhttp3.Request.Builder();
     request.url(opts.url);

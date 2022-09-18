@@ -361,8 +361,8 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
 
     const progress = opts.onProgress
         ? (progress: NSProgress) => {
-              opts.onProgress(progress.completedUnitCount, progress.totalUnitCount);
-          }
+            opts.onProgress(progress.completedUnitCount, progress.totalUnitCount);
+        }
         : null;
     let task: NSURLSessionDataTask;
     const tag = opts.tag;

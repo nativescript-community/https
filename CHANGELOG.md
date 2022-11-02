@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.10](https://github.com/nativescript-community/https/compare/v4.0.9...v4.0.10) (2022-11-02)
+
+### Bug Fixes
+
+* **ios:** correctly send JSON body with null values ([8ba7085](https://github.com/nativescript-community/https/commit/8ba70858927adef23b2a0eeea32827bff975457b))
+
 ## [4.0.9](https://github.com/nativescript-community/https/compare/v4.0.8...v4.0.9) (2022-11-02)
 
 ### Bug Fixes

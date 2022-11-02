@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.9](https://github.com/nativescript-community/https/compare/v4.0.8...v4.0.9) (2022-11-02)
+
+### Bug Fixes
+
+* **ios:** prevent crash on request failure ([c9485e5](https://github.com/nativescript-community/https/commit/c9485e57833946c858682899b09d2c504d445fbc))
+
 ## [4.0.8](https://github.com/nativescript-community/https/compare/v4.0.7...v4.0.8) (2022-09-17)
 
 ### Features

@@ -230,7 +230,7 @@ function AFFailure(resolve, reject, task: NSURLSessionDataTask, error: NSError, 
     let getHeaders = () => ({});
     const sendi = ({
         task,
-        contentLength: task.countOfBytesReceived,
+        contentLength: task?.countOfBytesReceived,
         reason: error.localizedDescription,
         get headers() {
             return getHeaders();

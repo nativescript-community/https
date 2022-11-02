@@ -352,17 +352,17 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
 
     let dict = null;
     if (opts.body) {
-        dict = bodyToNative(opts.body);
+        dict = NSJSONSerialization.JSONObjectWithDataOptionsError(NSString.stringWithString(JSON.stringify(opts.body)).dataUsingEncoding(NSUTF8StringEncoding), 0);
     } else if (opts.content) {
-        dict = opts.content;
+        dict = NSJSONSerialization.JSONObjectWithDataOptionsError(NSString.stringWithString(opts.content).dataUsingEncoding(NSUTF8StringEncoding), 0);
     }
 
     manager.requestSerializer.timeoutInterval = opts.timeout ? opts.timeout : 10;
 
     const progress = opts.onProgress
         ? (progress: NSProgress) => {
-            opts.onProgress(progress.completedUnitCount, progress.totalUnitCount);
-        }
+              opts.onProgress(progress.completedUnitCount, progress.totalUnitCount);
+          }
         : null;
     let task: NSURLSessionDataTask;
     const tag = opts.tag;

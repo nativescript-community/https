@@ -59,7 +59,7 @@ export interface HttpsRequestOptions extends HttpRequestOptions {
     cachePolicy?: CachePolicy;
 
     /**
-     * default to true
+     * default to true. Android and iOS only store cookies in memory! it will be cleared after an app restart
      */
     cookiesEnabled?: boolean;
 }
@@ -109,6 +109,7 @@ export function setCache(options?: CacheOptions);
 export function clearCache();
 export function createRequest(opts: HttpsRequestOptions): HttpsRequest;
 export function cancelRequest(tag: string);
+export function clearCookies();
 export function addNetworkInterceptor(interceptor);
 
 export function getClient(opts: Partial<HttpsRequestOptions>);

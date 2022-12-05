@@ -229,6 +229,7 @@ export function disableSSLPinning() {
     peer.enabled = false;
     getClient(undefined, true);
 }
+const SDKVersion = android.os.Build.VERSION.SDK_INT;
 
 let Client: okhttp3.OkHttpClient;
 let cookieJar: com.nativescript.https.QuotePreservingCookieJar;
@@ -237,8 +238,7 @@ export function getClient(opts: Partial<HttpsRequestOptions> = {}, reload: boole
     if (!Client) {
         // ssl error fix on KitKat. Only need to be done once.
         // client will be null only onced so will run only once
-        const version = android.os.Build.VERSION.SDK_INT;
-        if (version >= 16 && version < 22 && (org as any).conscrypt) {
+        if (SDKVersion >= 16 && SDKVersion < 22 && (org as any).conscrypt) {
             java.security.Security.insertProviderAt((org as any).conscrypt.Conscrypt.newProvider(), 1);
         }
     }
@@ -398,6 +398,13 @@ export function cancelRequest(tag: string, client: okhttp3.OkHttpClient = runnin
                 return;
             }
         }
+    }
+}
+
+export function clearCookies() {
+    if (cookieJar) {
+        cookieJar = null;
+        cookieManager = null;
     }
 }
 

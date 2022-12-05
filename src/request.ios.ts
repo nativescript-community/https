@@ -309,6 +309,13 @@ export function cancelRequest(tag: string) {
     }
 }
 
+export function clearCookies() {
+    const storage = NSHTTPCookieStorage.sharedHTTPCookieStorage;
+    const cookies = storage.cookies;
+    cookies.enumerateObjectsUsingBlock((cookie) => {
+        storage.deleteCookie(cookie);
+    });
+}
 export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = true): HttpsRequest {
     const type = opts.headers && opts.headers['Content-Type'] ? opts.headers['Content-Type'] : 'application/json';
     if (type.startsWith('application/json')) {
@@ -361,8 +368,8 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
 
     const progress = opts.onProgress
         ? (progress: NSProgress) => {
-              opts.onProgress(progress.completedUnitCount, progress.totalUnitCount);
-          }
+            opts.onProgress(progress.completedUnitCount, progress.totalUnitCount);
+        }
         : null;
     let task: NSURLSessionDataTask;
     const tag = opts.tag;

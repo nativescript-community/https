@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.11](https://github.com/nativescript-community/https/compare/v4.0.10...v4.0.11) (2022-12-05)
+
+### Features
+
+* clearCookies method ([5410f6e](https://github.com/nativescript-community/https/commit/5410f6e86202ca74b31fea0f94fda95467c13e38))
+
 ## [4.0.10](https://github.com/nativescript-community/https/compare/v4.0.9...v4.0.10) (2022-11-02)
 
 ### Bug Fixes

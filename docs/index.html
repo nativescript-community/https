@@ -1,0 +1,482 @@
+<!DOCTYPE html><html class="default" lang="en"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>Nativescript plugin for https requests</title><meta name="description" content="Documentation for Nativescript plugin for https requests"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script async src="assets/search.js" id="search-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os"</script><header class="tsd-page-toolbar">
+<div class="tsd-toolbar-contents container">
+<div class="table-cell" id="tsd-search" data-base=".">
+<div class="field"><label for="tsd-search-field" class="tsd-widget tsd-toolbar-icon search no-caption"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M15.7824 13.833L12.6666 10.7177C12.5259 10.5771 12.3353 10.499 12.1353 10.499H11.6259C12.4884 9.39596 13.001 8.00859 13.001 6.49937C13.001 2.90909 10.0914 0 6.50048 0C2.90959 0 0 2.90909 0 6.49937C0 10.0896 2.90959 12.9987 6.50048 12.9987C8.00996 12.9987 9.39756 12.4863 10.5008 11.6239V12.1332C10.5008 12.3332 10.5789 12.5238 10.7195 12.6644L13.8354 15.7797C14.1292 16.0734 14.6042 16.0734 14.8948 15.7797L15.7793 14.8954C16.0731 14.6017 16.0731 14.1267 15.7824 13.833ZM6.50048 10.499C4.29094 10.499 2.50018 8.71165 2.50018 6.49937C2.50018 4.29021 4.28781 2.49976 6.50048 2.49976C8.71001 2.49976 10.5008 4.28708 10.5008 6.49937C10.5008 8.70852 8.71314 10.499 6.50048 10.499Z" fill="var(--color-text)"></path></svg></label><input type="text" id="tsd-search-field" aria-label="Search"/></div>
+<div class="field">
+<div id="tsd-toolbar-links"><a href="https://docs.nativescript.org">Nativescript Doc</a></div></div>
+<ul class="results">
+<li class="state loading">Preparing search index...</li>
+<li class="state failure">The search index is not available</li></ul><a href="index.html" class="title">Nativescript plugin for https requests</a></div>
+<div class="table-cell" id="tsd-widgets"><a href="#" class="tsd-widget tsd-toolbar-icon menu no-caption" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="3" width="14" height="2" fill="var(--color-text)"></rect><rect x="1" y="7" width="14" height="2" fill="var(--color-text)"></rect><rect x="1" y="11" width="14" height="2" fill="var(--color-text)"></rect></svg></a></div></div></header>
+<div class="container container-main">
+<div class="col-8 col-content">
+<div class="tsd-page-title">
+<h2>Nativescript plugin for https requests</h2></div>
+<div class="tsd-panel tsd-typography"><!-- ⚠️ This README has been generated from the file(s) "blueprint.md" ⚠️--><!-- ⚠️ This README has been generated from the file(s) "blueprint.md" ⚠️-->
+<!--  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      DO NOT EDIT THIS READEME DIRECTLY! Edit "bluesprint.md" instead.
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<h1 align="center">@nativescript-community/https</h1>
+<p align="center">
+        <a href="https://npmcharts.com/compare/@nativescript-community/https?minimal=true"><img alt="Downloads per month" src="https://img.shields.io/npm/dm/@nativescript-community/https.svg" height="20"/></a>
+<a href="https://www.npmjs.com/package/@nativescript-community/https"><img alt="NPM Version" src="https://img.shields.io/npm/v/@nativescript-community/https.svg" height="20"/></a>
+    </p>
+
+<p align="center">
+  <b>Nativescript plugin for https requests</b></br>
+  <sub><sub>
+</p>
+
+<br />
+
+
+
+<p><a href="#table-of-contents"></a></p>
+<p><a href="#table-of-contents"></a></p>
+
+<a href="#table-of-contents" id="table-of-contents" style="color: inherit; text-decoration: none;">
+  <h2>Table of Contents</h2>
+</a>
+<pre><code><span class="hl-0">* [</span><span class="hl-1">Installation</span><span class="hl-0">](#</span><span class="hl-1">installation</span><span class="hl-0">)</span><br/><span class="hl-0">        * [</span><span class="hl-2">A</span><span class="hl-0"> </span><span class="hl-1">drop</span><span class="hl-0">-</span><span class="hl-3">in</span><span class="hl-0"> </span><span class="hl-1">replacement</span><span class="hl-0"> </span><span class="hl-1">for</span><span class="hl-0"> </span><span class="hl-1">the</span><span class="hl-0"> [</span><span class="hl-1">default</span><span class="hl-0"> </span><span class="hl-1">http</span><span class="hl-0"> </span><span class="hl-4">module</span><span class="hl-0">](</span><span class="hl-1">https</span><span class="hl-0">:</span><span class="hl-5">//docs.nativescript.org/cookbook/http).](#a-drop-in-replacement-for-the-default-http-modulehttpsdocsnativescriptorgcookbookhttp)</span><br/><span class="hl-0">* [</span><span class="hl-1">Features</span><span class="hl-0">](#</span><span class="hl-1">features</span><span class="hl-0">)</span><br/><span class="hl-0">* [</span><span class="hl-2">FAQ</span><span class="hl-0">](#</span><span class="hl-1">faq</span><span class="hl-0">)</span><br/><span class="hl-0">* [</span><span class="hl-1">Installation</span><span class="hl-0">](#</span><span class="hl-1">installation</span><span class="hl-0">-</span><span class="hl-6">1</span><span class="hl-0">)</span><br/><span class="hl-0">* [</span><span class="hl-1">Examples</span><span class="hl-0">](#</span><span class="hl-1">examples</span><span class="hl-0">)</span><br/><span class="hl-0">    * [</span><span class="hl-1">Hitting</span><span class="hl-0"> </span><span class="hl-1">an</span><span class="hl-0"> </span><span class="hl-2">API</span><span class="hl-0"> </span><span class="hl-1">using</span><span class="hl-0"> </span><span class="hl-7">`GET`</span><span class="hl-0"> </span><span class="hl-1">method</span><span class="hl-0">](#</span><span class="hl-1">hitting</span><span class="hl-0">-</span><span class="hl-1">an</span><span class="hl-0">-</span><span class="hl-1">api</span><span class="hl-0">-</span><span class="hl-1">using</span><span class="hl-0">-</span><span class="hl-1">get</span><span class="hl-0">-</span><span class="hl-1">method</span><span class="hl-0">)</span><br/><span class="hl-0">* [</span><span class="hl-1">Configuration</span><span class="hl-0">](#</span><span class="hl-1">configuration</span><span class="hl-0">)</span><br/><span class="hl-0">    * [</span><span class="hl-1">Installing</span><span class="hl-0"> </span><span class="hl-1">your</span><span class="hl-0"> </span><span class="hl-2">SSL</span><span class="hl-0"> </span><span class="hl-1">certificate</span><span class="hl-0">](#</span><span class="hl-1">installing</span><span class="hl-0">-</span><span class="hl-1">your</span><span class="hl-0">-</span><span class="hl-1">ssl</span><span class="hl-0">-</span><span class="hl-1">certificate</span><span class="hl-0">)</span><br/><span class="hl-0">        * [</span><span class="hl-1">Enabling</span><span class="hl-0"> </span><span class="hl-2">SSL</span><span class="hl-0"> </span><span class="hl-1">pinning</span><span class="hl-0">](#</span><span class="hl-1">enabling</span><span class="hl-0">-</span><span class="hl-1">ssl</span><span class="hl-0">-</span><span class="hl-1">pinning</span><span class="hl-0">)</span><br/><span class="hl-0">        * [</span><span class="hl-1">Disabling</span><span class="hl-0"> </span><span class="hl-2">SSL</span><span class="hl-0"> </span><span class="hl-1">pinning</span><span class="hl-0">](#</span><span class="hl-1">disabling</span><span class="hl-0">-</span><span class="hl-1">ssl</span><span class="hl-0">-</span><span class="hl-1">pinning</span><span class="hl-0">)</span><br/><span class="hl-0">    * [</span><span class="hl-1">useLegacy</span><span class="hl-0">](#</span><span class="hl-1">uselegacy</span><span class="hl-0">)</span><br/><span class="hl-0">    * [</span><span class="hl-1">Cookie</span><span class="hl-0">](#</span><span class="hl-1">cookie</span><span class="hl-0">)</span><br/><span class="hl-0">    * [</span><span class="hl-1">Enabling</span><span class="hl-0"> </span><span class="hl-1">Cache</span><span class="hl-0">](#</span><span class="hl-1">enabling</span><span class="hl-0">-</span><span class="hl-1">cache</span><span class="hl-0">)</span><br/><span class="hl-0">    * [</span><span class="hl-1">Multipart</span><span class="hl-0"> </span><span class="hl-1">form</span><span class="hl-0"> </span><span class="hl-1">data</span><span class="hl-0">](#</span><span class="hl-1">multipart</span><span class="hl-0">-</span><span class="hl-1">form</span><span class="hl-0">-</span><span class="hl-1">data</span><span class="hl-0">)</span><br/><span class="hl-0">    * [</span><span class="hl-1">Options</span><span class="hl-0">](#</span><span class="hl-1">options</span><span class="hl-0">)</span><br/><span class="hl-0">* [</span><span class="hl-1">Webpack</span><span class="hl-0"> / </span><span class="hl-1">bundling</span><span class="hl-0">](#</span><span class="hl-1">webpack</span><span class="hl-0">--</span><span class="hl-1">bundling</span><span class="hl-0">)</span><br/><span class="hl-0">* [</span><span class="hl-7">`iOS`</span><span class="hl-0"> </span><span class="hl-1">Troubleshooting</span><span class="hl-0">](#</span><span class="hl-1">ios</span><span class="hl-0">-</span><span class="hl-1">troubleshooting</span><span class="hl-0">)</span><br/><span class="hl-0">* [</span><span class="hl-7">`Android`</span><span class="hl-0"> </span><span class="hl-1">troubleshooting</span><span class="hl-0">](#</span><span class="hl-1">android</span><span class="hl-0">-</span><span class="hl-1">troubleshooting</span><span class="hl-0">)</span>
+</code></pre>
+<ul>
+<li><a href="#thanks">Thanks</a>
+  * <a href="#examples-1">Examples:</a><ul>
+<li><a href="#demos-and-development">Demos and Development</a><ul>
+<li><a href="#repo-setup">Repo Setup</a></li>
+<li><a href="#build">Build</a></li>
+<li><a href="#demos">Demos</a></li>
+</ul>
+</li>
+<li><a href="#contributing">Contributing</a><ul>
+<li><a href="#update-repo-">Update repo </a></li>
+<li><a href="#update-readme-">Update readme </a></li>
+<li><a href="#update-doc-">Update doc </a></li>
+<li><a href="#publish">Publish</a></li>
+<li><a href="#modifying-submodules">modifying submodules</a></li>
+</ul>
+</li>
+<li><a href="#questions">Questions</a></li>
+</ul>
+</li>
+</ul>
+<p><a href="#installation"></a></p>
+<p><a href="#installation"></a></p>
+
+<a href="#installation" id="installation" style="color: inherit; text-decoration: none;">
+  <h2>Installation</h2>
+</a>
+<p>Run the following command from the root of your project:</p>
+<p><code>ns plugin add @nativescript-community/https</code></p>
+<p>Easily integrate the most reliable native networking libraries with the latest and greatest HTTPS security features.</p>
+<blockquote>
+<p>Android: version 4.x using okhttp 4.x changing minSDKVersion to 21! If lower needed stick to 3.x</p>
+</blockquote>
+<blockquote>
+<p>Plugin version 2.0.0 bumps <code>AFNetworking</code> on iOS to <a href="https://github.com/AFNetworking/AFNetworking/releases/tag/4.0.0">4.0.0</a> which no longer relies on <code>UIWebView</code>. Make sure to run <code>pod repo update</code> to get the latest <code>AFNetworking</code> pod on your development machine.</p>
+</blockquote>
+
+<a href="#a-drop-in-replacement-for-the-default-http-module" id="a-drop-in-replacement-for-the-default-http-module" style="color: inherit; text-decoration: none;">
+  <h4>A drop-in replacement for the <a href="https://docs.nativescript.org/cookbook/http">default http module</a>.</h4>
+</a>
+<p><a href="#features"></a></p>
+<p><a href="#features"></a></p>
+
+<a href="#features" id="features" style="color: inherit; text-decoration: none;">
+  <h2>Features</h2>
+</a>
+<ul>
+<li>Modern TLS &amp; SSL security features</li>
+<li>Shared connection pooling reduces request latency</li>
+<li>Silently recovers from common connection problems</li>
+<li>Everything runs on a native background thread</li>
+<li>Transparent GZIP</li>
+<li>HTTP/2 support</li>
+<li>Multiform part</li>
+<li>Cache</li>
+<li>Basic Cookie support</li>
+</ul>
+<p><a href="#faq"></a></p>
+<p><a href="#faq"></a></p>
+
+<a href="#faq" id="faq" style="color: inherit; text-decoration: none;">
+  <h2>FAQ</h2>
+</a>
+<blockquote>
+<p>What the flip is SSL pinning and all this security mumbo jumbo?</p>
+</blockquote>
+<p><a href="https://infinum.co/the-capsized-eight/how-to-make-your-ios-apps-more-secure-with-ssl-pinning">How to make your apps more secure with SSL pinning</a>.</p>
+<blockquote>
+<p>Do I have to use SSL pinning?</p>
+</blockquote>
+<p><strong>No.</strong> This plugin works out of the box without any security configurations needed. Either way you&#39;ll still benefit from all the features listed above.</p>
+<p><a href="#installation"></a></p>
+<p><a href="#installation"></a></p>
+
+<a href="#installation-1" id="installation-1" style="color: inherit; text-decoration: none;">
+  <h2>Installation</h2>
+</a>
+<pre><code class="language-bash"><span class="hl-0">tns </span><span class="hl-7">plugin</span><span class="hl-0"> </span><span class="hl-7">add</span><span class="hl-0"> </span><span class="hl-7">@nativescript-community/https</span>
+</code></pre>
+<p><a href="#examples"></a></p>
+<p><a href="#examples"></a></p>
+
+<a href="#examples" id="examples" style="color: inherit; text-decoration: none;">
+  <h2>Examples</h2>
+</a>
+
+<a href="#hitting-an-api-using-get-method" id="hitting-an-api-using-get-method" style="color: inherit; text-decoration: none;">
+  <h3>Hitting an API using <code>GET</code> method</h3>
+</a>
+<pre><code class="language-typescript"><span class="hl-8">import</span><span class="hl-0"> </span><span class="hl-3">*</span><span class="hl-0"> </span><span class="hl-8">as</span><span class="hl-0"> </span><span class="hl-1">Https</span><span class="hl-0"> </span><span class="hl-8">from</span><span class="hl-0"> </span><span class="hl-7">&#39;@nativescript-community/https&#39;</span><span class="hl-0">;</span><br/><span class="hl-1">Https</span><span class="hl-0">.</span><span class="hl-9">request</span><span class="hl-0">({</span><br/><span class="hl-0">    </span><span class="hl-1">url:</span><span class="hl-0"> </span><span class="hl-7">&#39;https://httpbin.org/get&#39;</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-1">method:</span><span class="hl-0"> </span><span class="hl-7">&#39;GET&#39;</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-1">timeout:</span><span class="hl-0"> </span><span class="hl-6">30</span><span class="hl-0">, </span><span class="hl-5">// seconds (default 10)</span><br/><span class="hl-0">})</span><br/><span class="hl-0">    .</span><span class="hl-9">then</span><span class="hl-0">(</span><span class="hl-3">function</span><span class="hl-0"> (</span><span class="hl-1">response</span><span class="hl-0">) {</span><br/><span class="hl-0">        </span><span class="hl-1">console</span><span class="hl-0">.</span><span class="hl-9">log</span><span class="hl-0">(</span><span class="hl-7">&#39;Https.request response&#39;</span><span class="hl-0">, </span><span class="hl-1">response</span><span class="hl-0">);</span><br/><span class="hl-0">    })</span><br/><span class="hl-0">    .</span><span class="hl-9">catch</span><span class="hl-0">(</span><span class="hl-3">function</span><span class="hl-0"> (</span><span class="hl-1">error</span><span class="hl-0">) {</span><br/><span class="hl-0">        </span><span class="hl-1">console</span><span class="hl-0">.</span><span class="hl-9">error</span><span class="hl-0">(</span><span class="hl-7">&#39;Https.request error&#39;</span><span class="hl-0">, </span><span class="hl-1">error</span><span class="hl-0">);</span><br/><span class="hl-0">    });</span>
+</code></pre>
+<p><a href="#configuration"></a></p>
+<p><a href="#configuration"></a></p>
+
+<a href="#configuration" id="configuration" style="color: inherit; text-decoration: none;">
+  <h2>Configuration</h2>
+</a>
+
+<a href="#installing-your-ssl-certificate" id="installing-your-ssl-certificate" style="color: inherit; text-decoration: none;">
+  <h3>Installing your SSL certificate</h3>
+</a>
+<p>Create a folder called <code>assets</code> in your projects <code>app</code> folder like so <code>&lt;project&gt;/app/assets</code>. Using chrome, go to the URL where the SSL certificate resides. View the details then drag and drop the certificate image into the <code>assets</code> folder.</p>
+<p><img src="http://i.imgur.com/hn4duT3.gif" alt="Installing your SSL certificate"></p>
+
+<a href="#enabling-ssl-pinning" id="enabling-ssl-pinning" style="color: inherit; text-decoration: none;">
+  <h4>Enabling SSL pinning</h4>
+</a>
+<pre><code class="language-typescript"><span class="hl-8">import</span><span class="hl-0"> { </span><span class="hl-1">knownFolders</span><span class="hl-0"> } </span><span class="hl-8">from</span><span class="hl-0"> </span><span class="hl-7">&#39;file-system&#39;</span><span class="hl-0">;</span><br/><span class="hl-8">import</span><span class="hl-0"> </span><span class="hl-3">*</span><span class="hl-0"> </span><span class="hl-8">as</span><span class="hl-0"> </span><span class="hl-1">Https</span><span class="hl-0"> </span><span class="hl-8">from</span><span class="hl-0"> </span><span class="hl-7">&#39;@nativescript-community/https&#39;</span><span class="hl-0">;</span><br/><span class="hl-3">let</span><span class="hl-0"> </span><span class="hl-1">dir</span><span class="hl-0"> = </span><span class="hl-1">knownFolders</span><span class="hl-0">.</span><span class="hl-9">currentApp</span><span class="hl-0">().</span><span class="hl-9">getFolder</span><span class="hl-0">(</span><span class="hl-7">&#39;assets&#39;</span><span class="hl-0">);</span><br/><span class="hl-3">let</span><span class="hl-0"> </span><span class="hl-1">certificate</span><span class="hl-0"> = </span><span class="hl-1">dir</span><span class="hl-0">.</span><span class="hl-9">getFile</span><span class="hl-0">(</span><span class="hl-7">&#39;httpbin.org.cer&#39;</span><span class="hl-0">).</span><span class="hl-1">path</span><span class="hl-0">;</span><br/><span class="hl-1">Https</span><span class="hl-0">.</span><span class="hl-9">enableSSLPinning</span><span class="hl-0">({ </span><span class="hl-1">host:</span><span class="hl-0"> </span><span class="hl-7">&#39;httpbin.org&#39;</span><span class="hl-0">, </span><span class="hl-1">certificate</span><span class="hl-0"> });</span>
+</code></pre>
+<p>Once you&#39;ve enabled SSL pinning you <strong>CAN NOT</strong> re-enable with a different <code>host</code> or <code>certificate</code> file.</p>
+
+<a href="#disabling-ssl-pinning" id="disabling-ssl-pinning" style="color: inherit; text-decoration: none;">
+  <h4>Disabling SSL pinning</h4>
+</a>
+<pre><code class="language-typescript"><span class="hl-8">import</span><span class="hl-0"> </span><span class="hl-3">*</span><span class="hl-0"> </span><span class="hl-8">as</span><span class="hl-0"> </span><span class="hl-1">Https</span><span class="hl-0"> </span><span class="hl-8">from</span><span class="hl-0"> </span><span class="hl-7">&#39;@nativescript-community/https&#39;</span><span class="hl-0">;</span><br/><span class="hl-1">Https</span><span class="hl-0">.</span><span class="hl-9">disableSSLPinning</span><span class="hl-0">();</span>
+</code></pre>
+<p>All requests after calling this method will no longer utilize SSL pinning until it is re-enabled once again.</p>
+
+<a href="#uselegacy" id="uselegacy" style="color: inherit; text-decoration: none;">
+  <h3>useLegacy</h3>
+</a>
+<p>There is a new option called <code>useLegacy</code>. You can set of every request options.
+When using that option the request will behave more like {N} http module.</p>
+<ul>
+<li>the <code>content</code> returned by a request is not the resulting string but an object. It follows <a href="https://docs.nativescript.org/api-reference/interfaces/_http_.httpcontent">HTTPContent</a> format for the most part. You can call <code>toJSON</code> or <code>toFile</code>. The only difference is that <code>toFile</code> returns a <code>Promise&lt;File&gt;</code> which means that it is async and run in a background thread!</li>
+<li>an error return a <code>content</code> too allowing you to read its content.</li>
+</ul>
+
+<a href="#cookie" id="cookie" style="color: inherit; text-decoration: none;">
+  <h3>Cookie</h3>
+</a>
+<p>By default basic Cookie support is enabled to work like in {N} <code>http</code> module.
+In the future more options will be added</p>
+
+<a href="#enabling-cache" id="enabling-cache" style="color: inherit; text-decoration: none;">
+  <h3>Enabling Cache</h3>
+</a>
+<pre><code class="language-typescript"><span class="hl-8">import</span><span class="hl-0"> { </span><span class="hl-1">knownFolders</span><span class="hl-0">, </span><span class="hl-1">path</span><span class="hl-0"> } </span><span class="hl-8">from</span><span class="hl-0"> </span><span class="hl-7">&#39;@nativescript/core/file-system&#39;</span><span class="hl-0">;</span><br/><span class="hl-8">import</span><span class="hl-0"> </span><span class="hl-3">*</span><span class="hl-0"> </span><span class="hl-8">as</span><span class="hl-0"> </span><span class="hl-1">Https</span><span class="hl-0"> </span><span class="hl-8">from</span><span class="hl-0"> </span><span class="hl-7">&#39;@nativescript-community/https&#39;</span><span class="hl-0">;</span><br/><span class="hl-1">Https</span><span class="hl-0">.</span><span class="hl-9">setCache</span><span class="hl-0">({</span><br/><span class="hl-0">    </span><span class="hl-1">diskLocation:</span><span class="hl-0"> </span><span class="hl-1">path</span><span class="hl-0">.</span><span class="hl-9">join</span><span class="hl-0">(</span><span class="hl-1">knownFolders</span><span class="hl-0">.</span><span class="hl-9">documents</span><span class="hl-0">().</span><span class="hl-1">path</span><span class="hl-0">, </span><span class="hl-7">&#39;httpcache&#39;</span><span class="hl-0">),</span><br/><span class="hl-0">    </span><span class="hl-1">diskSize:</span><span class="hl-0"> </span><span class="hl-6">10</span><span class="hl-0"> * </span><span class="hl-6">1024</span><span class="hl-0"> * </span><span class="hl-6">1024</span><span class="hl-0">, </span><span class="hl-5">// 10 MiB</span><br/><span class="hl-0">});</span><br/><br/><span class="hl-5">/// later on when calling your request you can use the cachePolicy option</span>
+</code></pre>
+
+<a href="#multipart-form-data" id="multipart-form-data" style="color: inherit; text-decoration: none;">
+  <h3>Multipart form data</h3>
+</a>
+<p>If you set the <code>Content-Type</code> header to <code>&quot;multipart/form-data&quot;</code> the request body will be evaluated as a multipart form data. Each body parameter is expected to be in this format:</p>
+<pre><code class="language-typescript"><span class="hl-0">{</span><br/><span class="hl-0">    </span><span class="hl-10">data</span><span class="hl-0">: </span><span class="hl-1">any</span><br/><span class="hl-0">    </span><span class="hl-10">parameterName</span><span class="hl-0">: </span><span class="hl-1">string</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-1">fileName</span><span class="hl-0">?: </span><span class="hl-1">string</span><br/><span class="hl-0">    </span><span class="hl-1">contentType</span><span class="hl-0">?: </span><span class="hl-1">string</span><br/><span class="hl-0">}</span><br/>
+</code></pre>
+<p>if <code>fileName</code> and <code>contentType</code> are set then data is expected to be either a <code>NSData</code> on iOS or a <code>native.Array&lt;number&gt;</code> on Android.</p>
+
+<a href="#options" id="options" style="color: inherit; text-decoration: none;">
+  <h3>Options</h3>
+</a>
+<pre><code class="language-typescript"><span class="hl-8">export</span><span class="hl-0"> </span><span class="hl-3">interface</span><span class="hl-0"> </span><span class="hl-4">HttpsSSLPinningOptions</span><span class="hl-0"> {</span><br/><span class="hl-0">    </span><span class="hl-1">host</span><span class="hl-0">: </span><span class="hl-4">string</span><span class="hl-0">;</span><br/><span class="hl-0">    </span><span class="hl-1">certificate</span><span class="hl-0">: </span><span class="hl-4">string</span><span class="hl-0">;</span><br/><span class="hl-0">    </span><span class="hl-1">allowInvalidCertificates</span><span class="hl-0">?: </span><span class="hl-4">boolean</span><span class="hl-0">;</span><br/><span class="hl-0">    </span><span class="hl-1">validatesDomainName</span><span class="hl-0">?: </span><span class="hl-4">boolean</span><span class="hl-0">;</span><br/><span class="hl-0">    </span><span class="hl-1">commonName</span><span class="hl-0">?: </span><span class="hl-4">string</span><span class="hl-0">;</span><br/><span class="hl-0">}</span><br/><span class="hl-8">import</span><span class="hl-0"> { </span><span class="hl-1">HttpRequestOptions</span><span class="hl-0"> } </span><span class="hl-8">from</span><span class="hl-0"> </span><span class="hl-7">&#39;tns-core-modules/http&#39;</span><span class="hl-0">;</span><br/><span class="hl-8">export</span><span class="hl-0"> </span><span class="hl-3">interface</span><span class="hl-0"> </span><span class="hl-4">HttpsRequestOptions</span><span class="hl-0"> </span><span class="hl-3">extends</span><span class="hl-0"> </span><span class="hl-4">HTTPOptions</span><span class="hl-0"> {</span><br/><span class="hl-0">    </span><span class="hl-1">useLegacy</span><span class="hl-0">?: </span><span class="hl-4">boolean</span><span class="hl-0">;</span><br/><span class="hl-0">    </span><span class="hl-1">cachePolicy</span><span class="hl-0">?: </span><span class="hl-7">&#39;noCache&#39;</span><span class="hl-0"> | </span><span class="hl-7">&#39;onlyCache&#39;</span><span class="hl-0"> | </span><span class="hl-7">&#39;ignoreCache&#39;</span><span class="hl-0">;</span><br/><span class="hl-0">    </span><span class="hl-9">onProgress</span><span class="hl-0">?: (</span><span class="hl-1">current</span><span class="hl-0">: </span><span class="hl-4">number</span><span class="hl-0">, </span><span class="hl-1">total</span><span class="hl-0">: </span><span class="hl-4">number</span><span class="hl-0">) </span><span class="hl-3">=&gt;</span><span class="hl-0"> </span><span class="hl-4">void</span><span class="hl-0">;</span><br/><span class="hl-0">}</span>
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>SSLPinning Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>host: string</code></td>
+<td>This must be the request domain name eg <code>sales.company.org</code>.</td>
+</tr>
+<tr>
+<td><code>commonName?: string</code></td>
+<td>Default: options.host, set if certificate CN is different from the host eg <code>*.company.org</code> (Android specific)</td>
+</tr>
+<tr>
+<td><code>certificate: string</code></td>
+<td>The uri path to your <code>.cer</code> certificate file.</td>
+</tr>
+<tr>
+<td><code>allowInvalidCertificates?: boolean</code></td>
+<td>Default: <code>false</code>. This should <strong>always</strong> be <code>false</code> if you are using SSL pinning. Set this to <code>true</code> if you&#39;re using a self-signed certificate.</td>
+</tr>
+<tr>
+<td><code>validatesDomainName?: boolean</code></td>
+<td>Default: <code>true</code>. Determines if the domain name should be validated with your pinned certificate.</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>Requests Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>useLegacy?: boolean</code></td>
+<td>Default: <code>false</code>. [IOS only] set to true in order to get the response data (when status &gt;= 300)in the <code>content</code> directly instead of <code>response.body.content</code>.</td>
+</tr>
+<tr>
+<td>`cachePolicy?: &#39;noCache&#39;</td>
+<td>&#39;onlyCache&#39;</td>
+</tr>
+<tr>
+<td><code>onProgress?: (current: number, total: number) =&gt; void</code></td>
+<td>[IOS only] Set the progress callback.</td>
+</tr>
+</tbody></table>
+<p><a href="#webpack--bundling"></a></p>
+<p><a href="#webpack--bundling"></a></p>
+
+<a href="#webpack--bundling" id="webpack--bundling" style="color: inherit; text-decoration: none;">
+  <h2>Webpack / bundling</h2>
+</a>
+<p>Since you&#39;re probably shipping a certificate with your app (like <a href="https://github.com/nativescript-community/https/tree/master/demo/app/assets">our demo does</a>),
+make sure it&#39;s bundled by Webpack as well. You can do this by <a href="https://github.com/nativescript-community/https/blob/a5c841c0af7ff6d9994fa23f7fba0df0514c58f1/demo/webpack.config.js#L240">adding the certificate(s) with the <code>CopyWebpackPlugin</code></a>.</p>
+<p><a href="#ios-troubleshooting"></a></p>
+<p><a href="#ios-troubleshooting"></a></p>
+
+<a href="#ios-troubleshooting" id="ios-troubleshooting" style="color: inherit; text-decoration: none;">
+  <h2><code>iOS</code> Troubleshooting</h2>
+</a>
+<blockquote>
+
+<a href="#please-educate-yourself-on-ios39s-app-transport-security-before-starting-beef" id="please-educate-yourself-on-ios39s-app-transport-security-before-starting-beef" style="color: inherit; text-decoration: none;">
+  <h3>Please educate yourself on iOS&#39;s <a href="https://github.com/codepath/ios_guides/wiki/App-Transport-Security">App Transport Security</a> before starting beef!</h3>
+</a>
+</blockquote>
+<p>If you try and hit an <code>https</code> route without adding it to App Transport Security&#39;s whitelist it will not work!
+You can bypass this behavior by adding the following to your projects <code>Info.plist</code>:</p>
+<pre><code class="language-xml"><span class="hl-11">&lt;</span><span class="hl-12">key</span><span class="hl-11">&gt;</span><span class="hl-0">NSAppTransportSecurity</span><span class="hl-11">&lt;/</span><span class="hl-12">key</span><span class="hl-11">&gt;</span><br/><span class="hl-11">&lt;</span><span class="hl-12">dict</span><span class="hl-11">&gt;</span><br/><span class="hl-0">    </span><span class="hl-11">&lt;</span><span class="hl-12">key</span><span class="hl-11">&gt;</span><span class="hl-0">NSAllowsArbitraryLoads</span><span class="hl-11">&lt;/</span><span class="hl-12">key</span><span class="hl-11">&gt;</span><br/><span class="hl-0">    </span><span class="hl-11">&lt;</span><span class="hl-12">true</span><span class="hl-11">/&gt;</span><br/><span class="hl-11">&lt;/</span><span class="hl-12">dict</span><span class="hl-11">&gt;</span>
+</code></pre>
+<blockquote>
+<p>This plugin <strong>does not</strong> add <code>NSAllowsArbitraryLoads</code> to your projects <code>Info.plist</code> for you.</p>
+</blockquote>
+<p><a href="#android-troubleshooting"></a></p>
+<p><a href="#android-troubleshooting"></a></p>
+
+<a href="#android-troubleshooting" id="android-troubleshooting" style="color: inherit; text-decoration: none;">
+  <h2><code>Android</code> troubleshooting</h2>
+</a>
+<p>If you app crashes with a message that it&#39;s doing too much networking on the main thread,
+then pass the option <code>allowLargeResponse</code> with value <code>true</code> to the <code>request</code> function.</p>
+<p><a href="#thanks"></a></p>
+<p><a href="#thanks"></a></p>
+
+<a href="#thanks" id="thanks" style="color: inherit; text-decoration: none;">
+  <h1>Thanks</h1>
+</a>
+<table>
+<thead>
+<tr>
+<th>Who</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="https://github.com/roblav96">Robert Laverty</a></td>
+<td>For creating and maintaining this plugin for a long time</td>
+</tr>
+<tr>
+<td><a href="https://github.com/gethuman">Jeff Whelple</a></td>
+<td>For contributing</td>
+</tr>
+<tr>
+<td><a href="https://github.com/EddyVerbruggen">Eddy Verbruggen</a></td>
+<td>For maintaining this before it got transferred</td>
+</tr>
+<tr>
+<td><a href="https://github.com/AFNetworking">AFNetworking</a></td>
+<td><a href="https://github.com/AFNetworking/AFNetworking">AFNetworking</a> A delightful networking framework for iOS, OS X, watchOS, and tvOS.</td>
+</tr>
+<tr>
+<td><a href="http://square.github.io/">Square</a></td>
+<td><a href="https://github.com/square/okhttp">okhttp</a> An HTTP+HTTP/2 client for Android and Java applications.</td>
+</tr>
+</tbody></table>
+
+<a href="#examples-1" id="examples-1" style="color: inherit; text-decoration: none;">
+  <h3>Examples:</h3>
+</a>
+<ul>
+<li><a href="demo-snippets/vue/Basic.vue">Basic</a><ul>
+<li>A basic example</li>
+</ul>
+</li>
+</ul>
+<p><a href="#demos-and-development"></a></p>
+<p><a href="#demos-and-development"></a></p>
+
+<a href="#demos-and-development" id="demos-and-development" style="color: inherit; text-decoration: none;">
+  <h2>Demos and Development</h2>
+</a>
+
+<a href="#repo-setup" id="repo-setup" style="color: inherit; text-decoration: none;">
+  <h3>Repo Setup</h3>
+</a>
+<p>The repo uses submodules. If you did not clone with <code> --recursive</code> then you need to call</p>
+<pre><code><span class="hl-1">git</span><span class="hl-0"> </span><span class="hl-1">submodule</span><span class="hl-0"> </span><span class="hl-1">update</span><span class="hl-0"> --</span><span class="hl-1">init</span>
+</code></pre>
+<p>The package manager used to install and link dependencies must be <code>pnpm</code> or <code>yarn</code>. <code>npm</code> wont work.</p>
+<p>To develop and test:
+if you use <code>yarn</code> then run <code>yarn</code>
+if you use <code>pnpm</code> then run <code>pnpm i</code></p>
+<p><strong>Interactive Menu:</strong></p>
+<p>To start the interactive menu, run <code>npm start</code> (or <code>yarn start</code> or <code>pnpm start</code>). This will list all of the commonly used scripts.</p>
+
+<a href="#build" id="build" style="color: inherit; text-decoration: none;">
+  <h3>Build</h3>
+</a>
+<pre><code class="language-bash"><span class="hl-0">npm </span><span class="hl-7">run</span><span class="hl-0"> </span><span class="hl-7">build.all</span>
+</code></pre>
+<p>WARNING: it seems <code>yarn build.all</code> wont always work (not finding binaries in <code>node_modules/.bin</code>) which is why the doc explicitly uses <code>npm run</code></p>
+
+<a href="#demos" id="demos" style="color: inherit; text-decoration: none;">
+  <h3>Demos</h3>
+</a>
+<pre><code class="language-bash"><span class="hl-0">npm </span><span class="hl-7">run</span><span class="hl-0"> </span><span class="hl-7">demo.[ng</span><span class="hl-0">|react|svelte|vue].[ios|android]</span><br/><br/><span class="hl-0">npm </span><span class="hl-7">run</span><span class="hl-0"> </span><span class="hl-7">demo.svelte.ios</span><span class="hl-0"> </span><span class="hl-5"># Example</span>
+</code></pre>
+<p>Demo setup is a bit special in the sense that if you want to modify/add demos you dont work directly in <code>demo-[ng|react|svelte|vue]</code>
+Instead you work in <code>demo-snippets/[ng|react|svelte|vue]</code>
+You can start from the <code>install.ts</code> of each flavor to see how to register new demos </p>
+<p><a href="#contributing"></a></p>
+<p><a href="#contributing"></a></p>
+
+<a href="#contributing" id="contributing" style="color: inherit; text-decoration: none;">
+  <h2>Contributing</h2>
+</a>
+
+<a href="#update-repo" id="update-repo" style="color: inherit; text-decoration: none;">
+  <h3>Update repo</h3>
+</a>
+<p>You can update the repo files quite easily</p>
+<p>First update the submodules</p>
+<pre><code class="language-bash"><span class="hl-0">npm </span><span class="hl-7">run</span><span class="hl-0"> </span><span class="hl-7">update</span>
+</code></pre>
+<p>Then commit the changes
+Then update common files</p>
+<pre><code class="language-bash"><span class="hl-0">npm </span><span class="hl-7">run</span><span class="hl-0"> </span><span class="hl-7">sync</span>
+</code></pre>
+<p>Then you can run <code>yarn|pnpm</code>, commit changed files if any</p>
+
+<a href="#update-readme" id="update-readme" style="color: inherit; text-decoration: none;">
+  <h3>Update readme</h3>
+</a>
+<pre><code class="language-bash"><span class="hl-0">npm </span><span class="hl-7">run</span><span class="hl-0"> </span><span class="hl-7">readme</span>
+</code></pre>
+
+<a href="#update-doc" id="update-doc" style="color: inherit; text-decoration: none;">
+  <h3>Update doc</h3>
+</a>
+<pre><code class="language-bash"><span class="hl-0">npm </span><span class="hl-7">run</span><span class="hl-0"> </span><span class="hl-7">doc</span>
+</code></pre>
+
+<a href="#publish" id="publish" style="color: inherit; text-decoration: none;">
+  <h3>Publish</h3>
+</a>
+<p>The publishing is completely handled by <code>lerna</code> (you can add <code>-- --bump major</code> to force a major release)
+Simply run </p>
+<pre><code class="language-shell"><span class="hl-0">npm </span><span class="hl-7">run</span><span class="hl-0"> </span><span class="hl-7">publish</span>
+</code></pre>
+
+<a href="#modifying-submodules" id="modifying-submodules" style="color: inherit; text-decoration: none;">
+  <h3>modifying submodules</h3>
+</a>
+<p>The repo uses https:// for submodules which means you won&#39;t be able to push directly into the submodules.
+One easy solution is t modify <code>~/.gitconfig</code> and add</p>
+<pre><code><span class="hl-0">[</span><span class="hl-1">url</span><span class="hl-0"> </span><span class="hl-7">&quot;ssh://git@github.com/&quot;</span><span class="hl-0">]</span><br/><span class="hl-0">    </span><span class="hl-1">pushInsteadOf</span><span class="hl-0"> = </span><span class="hl-10">https</span><span class="hl-0">:</span><span class="hl-5">//github.com/</span>
+</code></pre>
+<p><a href="#questions"></a></p>
+<p><a href="#questions"></a></p>
+
+<a href="#questions" id="questions" style="color: inherit; text-decoration: none;">
+  <h2>Questions</h2>
+</a>
+<p>If you have any questions/issues/comments please feel free to create an issue or start a conversation in the <a href="https://nativescript.org/discord">NativeScript Community Discord</a>.</p>
+</div></div>
+<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+<div class="tsd-navigation settings">
+<details class="tsd-index-accordion"><summary class="tsd-accordion-summary">
+<h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4.93896 8.531L12 15.591L19.061 8.531L16.939 6.409L12 11.349L7.06098 6.409L4.93896 8.531Z" fill="var(--color-text)"></path></svg> Settings</h3></summary>
+<div class="tsd-accordion-details">
+<div class="tsd-filter-visibility">
+<h4 class="uppercase">Member Visibility</h4><form>
+<ul id="tsd-filter-options">
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-protected" name="protected"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Protected</span></label></li>
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-private" name="private"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Private</span></label></li>
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li></ul></form></div>
+<div class="tsd-theme-toggle">
+<h4 class="uppercase">Theme</h4><select id="theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div>
+<nav class="tsd-navigation primary">
+<details class="tsd-index-accordion" open><summary class="tsd-accordion-summary">
+<h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4.93896 8.531L12 15.591L19.061 8.531L16.939 6.409L12 11.349L7.06098 6.409L4.93896 8.531Z" fill="var(--color-text)"></path></svg> Modules</h3></summary>
+<div class="tsd-accordion-details">
+<ul>
+<li class="current selected"><a href="modules.html">Nativescript plugin for https requests</a>
+<ul></ul></li></ul></div></details></nav>
+<nav class="tsd-navigation secondary menu-sticky">
+<ul>
+<li class="tsd-kind-interface"><a href="interfaces/CacheOptions.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><rect fill="var(--color-icon-background)" stroke="var(--color-ts-interface)" stroke-width="1.5" x="1" y="1" width="22" height="22" rx="6" id="icon-256-path"></rect><path d="M9.51 16V15.016H11.298V8.224H9.51V7.24H14.19V8.224H12.402V15.016H14.19V16H9.51Z" fill="var(--color-text)" id="icon-256-text"></path></svg>Cache<wbr/>Options</a></li>
+<li class="tsd-kind-interface"><a href="interfaces/Headers.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-256-path"></use><use href="#icon-256-text"></use></svg>Headers</a></li>
+<li class="tsd-kind-interface"><a href="interfaces/HttpsFormDataParam.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-256-path"></use><use href="#icon-256-text"></use></svg>Https<wbr/>Form<wbr/>Data<wbr/>Param</a></li>
+<li class="tsd-kind-interface"><a href="interfaces/HttpsRequest.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-256-path"></use><use href="#icon-256-text"></use></svg>Https<wbr/>Request</a></li>
+<li class="tsd-kind-interface"><a href="interfaces/HttpsRequestObject.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-256-path"></use><use href="#icon-256-text"></use></svg>Https<wbr/>Request<wbr/>Object</a></li>
+<li class="tsd-kind-interface"><a href="interfaces/HttpsRequestOptions.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-256-path"></use><use href="#icon-256-text"></use></svg>Https<wbr/>Request<wbr/>Options</a></li>
+<li class="tsd-kind-interface"><a href="interfaces/HttpsResponse.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-256-path"></use><use href="#icon-256-text"></use></svg>Https<wbr/>Response</a></li>
+<li class="tsd-kind-interface"><a href="interfaces/HttpsResponseLegacy.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-256-path"></use><use href="#icon-256-text"></use></svg>Https<wbr/>Response<wbr/>Legacy</a></li>
+<li class="tsd-kind-interface"><a href="interfaces/HttpsSSLPinningOptions.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-256-path"></use><use href="#icon-256-text"></use></svg>HttpsSSLPinning<wbr/>Options</a></li>
+<li class="tsd-kind-type-alias"><a href="types/CachePolicy.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><rect fill="var(--color-icon-background)" stroke="var(--color-ts)" stroke-width="1.5" x="1" y="1" width="22" height="22" rx="6" id="icon-4194304-path"></rect><path d="M11.31 16V8.224H8.91V7.24H14.79V8.224H12.39V16H11.31Z" fill="var(--color-text)" id="icon-4194304-text"></path></svg>Cache<wbr/>Policy</a></li>
+<li class="tsd-kind-variable"><a href="variables/interceptors.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><rect fill="var(--color-icon-background)" stroke="var(--color-ts-variable)" stroke-width="1.5" x="1" y="1" width="22" height="22" rx="6" id="icon-32-path"></rect><path d="M11.106 16L8.85 7.24H9.966L11.454 13.192C11.558 13.608 11.646 13.996 11.718 14.356C11.79 14.708 11.842 14.976 11.874 15.16C11.906 14.976 11.954 14.708 12.018 14.356C12.09 13.996 12.178 13.608 12.282 13.192L13.758 7.24H14.85L12.582 16H11.106Z" fill="var(--color-text)" id="icon-32-text"></path></svg>interceptors</a></li>
+<li class="tsd-kind-variable"><a href="variables/networkInterceptors.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-32-path"></use><use href="#icon-32-text"></use></svg>network<wbr/>Interceptors</a></li>
+<li class="tsd-kind-function"><a href="functions/addInterceptor.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><rect fill="var(--color-icon-background)" stroke="var(--color-ts-function)" stroke-width="1.5" x="1" y="1" width="22" height="22" rx="6" id="icon-64-path"></rect><path d="M9.39 16V7.24H14.55V8.224H10.446V11.128H14.238V12.112H10.47V16H9.39Z" fill="var(--color-text)" id="icon-64-text"></path></svg>add<wbr/>Interceptor</a></li>
+<li class="tsd-kind-function"><a href="functions/addNetworkInterceptor.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>add<wbr/>Network<wbr/>Interceptor</a></li>
+<li class="tsd-kind-function"><a href="functions/cancelRequest.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>cancel<wbr/>Request</a></li>
+<li class="tsd-kind-function"><a href="functions/clearCache.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>clear<wbr/>Cache</a></li>
+<li class="tsd-kind-function"><a href="functions/clearCookies.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>clear<wbr/>Cookies</a></li>
+<li class="tsd-kind-function"><a href="functions/createRequest.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>create<wbr/>Request</a></li>
+<li class="tsd-kind-function"><a href="functions/disableSSLPinning.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>disableSSLPinning</a></li>
+<li class="tsd-kind-function"><a href="functions/enableSSLPinning.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>enableSSLPinning</a></li>
+<li class="tsd-kind-function"><a href="functions/getBinary.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>get<wbr/>Binary</a></li>
+<li class="tsd-kind-function"><a href="functions/getClient.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>get<wbr/>Client</a></li>
+<li class="tsd-kind-function"><a href="functions/getFile.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>get<wbr/>File</a></li>
+<li class="tsd-kind-function"><a href="functions/getFilenameFromUrl.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>get<wbr/>Filename<wbr/>From<wbr/>Url</a></li>
+<li class="tsd-kind-function"><a href="functions/getImage.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>get<wbr/>Image</a></li>
+<li class="tsd-kind-function"><a href="functions/getJSON.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>getJSON</a></li>
+<li class="tsd-kind-function"><a href="functions/getString.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>get<wbr/>String</a></li>
+<li class="tsd-kind-function"><a href="functions/parseJSON.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>parseJSON</a></li>
+<li class="tsd-kind-function"><a href="functions/request.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>request</a></li>
+<li class="tsd-kind-function"><a href="functions/setCache.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>set<wbr/>Cache</a></li></ul></nav></div></div>
+<div class="container tsd-generator">
+<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></div>
+<div class="overlay"></div><script src="assets/main.js"></script></body></html>

@@ -1,0 +1,68 @@
+{
+    "name": "@nativescript-community/https",
+    "version": "4.0.11",
+    "description": "Nativescript plugin for https requests",
+    "main": "index",
+    "sideEffects": false,
+    "typings": "index.d.ts",
+    "nativescript": {
+        "platforms": {
+            "android": "6.2.1",
+            "ios": "6.2.1"
+        }
+    },
+    "scripts": {
+        "tsc": "cpy ../../src/https/request.d.ts ./ && tsc -d",
+        "tsc-win": "cpy ..\\..\\src\\https\\request.d.ts .\\ && tsc -d",
+        "readme": "readme generate -c ../../tools/readme/blueprint.json",
+        "build": "npm run tsc",
+        "build.watch": "npm run tsc -- -w",
+        "build.win": "npm run tsc-win",
+        "build.all": "npm run build",
+        "build.all.win": "npm run build.win",
+        "clean": "rimraf ./*.d.ts ./*.js ./*.js.map"
+    },
+    "contributors": [
+        {
+            "name": "Eddy Verbruggen",
+            "email": "eddyverbruggen@gmail.com",
+            "url": "https://github.com/EddyVerbruggen"
+        },
+        {
+            "name": "Kefah BADER ALDIN",
+            "email": "kefah.bader@gmail.com",
+            "url": "https://github.com/kefahB"
+        },
+        {
+            "name": "Kefah BADER ALDIN",
+            "email": "kefah.bader@gmail.com",
+            "url": "https://github.com/kefahB"
+        }
+    ],
+    "author": {
+        "name": "Martin Guillon",
+        "email": "dev@akylas.fr"
+    },
+    "bugs": {
+        "url": "https://github.com/nativescript-community/https/issues"
+    },
+    "license": "MIT",
+    "homepage": "https://github.com/nativescript-community/https",
+    "readmeFilename": "README.md",
+    "bootstrapper": "nativescript-plugin-seed",
+    "keywords": [
+        "secure",
+        "https",
+        "http",
+        "ssl",
+        "tls",
+        "pinning",
+        "nativescript",
+        "ecosystem:nativescript",
+        "nativescript-android",
+        "nativescript-ios",
+        "JavaScript",
+        "Android",
+        "iOS"
+    ]
+}

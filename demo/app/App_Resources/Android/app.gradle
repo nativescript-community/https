@@ -1,9 +1,0 @@
-android {
-  defaultConfig {
-    generatedDensities = []
-    applicationId = "org.nativescript.plugindemo.https"
-  }
-  aaptOptions {
-    additionalParameters "--no-version-vectors"
-  }
-}

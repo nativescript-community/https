@@ -1,4 +1,4 @@
-<!-- ⚠️ This README has been generated from the file(s) "blueprint.md" ⚠️--><!-- ⚠️ This README has been generated from the file(s) "blueprint.md" ⚠️-->
+<!-- ⚠️ This README has been generated from the file(s) "blueprint.md" ⚠️-->
 <!--  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -31,9 +31,6 @@
 
 <br />
 
-
-
-[](#table-of-contents)
 
 
 [](#table-of-contents)
@@ -76,9 +73,6 @@
 
 [](#installation)
 
-
-[](#installation)
-
 ## Installation
 Run the following command from the root of your project:
 
@@ -91,9 +85,6 @@ Easily integrate the most reliable native networking libraries with the latest a
 > Plugin version 2.0.0 bumps `AFNetworking` on iOS to [4.0.0](https://github.com/AFNetworking/AFNetworking/releases/tag/4.0.0) which no longer relies on `UIWebView`. Make sure to run `pod repo update` to get the latest `AFNetworking` pod on your development machine.
 
 #### A drop-in replacement for the [default http module](https://docs.nativescript.org/cookbook/http).
-
-
-[](#features)
 
 
 [](#features)
@@ -113,9 +104,6 @@ Easily integrate the most reliable native networking libraries with the latest a
 
 [](#faq)
 
-
-[](#faq)
-
 ## FAQ
 
 > What the flip is SSL pinning and all this security mumbo jumbo?
@@ -130,17 +118,11 @@ Easily integrate the most reliable native networking libraries with the latest a
 
 [](#installation)
 
-
-[](#installation)
-
 ## Installation
 
 ```bash
 tns plugin add @nativescript-community/https
 ```
-
-
-[](#examples)
 
 
 [](#examples)
@@ -163,9 +145,6 @@ Https.request({
         console.error('Https.request error', error);
     });
 ```
-
-
-[](#configuration)
 
 
 [](#configuration)
@@ -276,16 +255,10 @@ export interface HttpsRequestOptions extends HTTPOptions {
 
 [](#webpack--bundling)
 
-
-[](#webpack--bundling)
-
 ## Webpack / bundling
 
 Since you're probably shipping a certificate with your app (like [our demo does](https://github.com/nativescript-community/https/tree/master/demo/app/assets)),
 make sure it's bundled by Webpack as well. You can do this by [adding the certificate(s) with the `CopyWebpackPlugin`](https://github.com/nativescript-community/https/blob/a5c841c0af7ff6d9994fa23f7fba0df0514c58f1/demo/webpack.config.js#L240).
-
-
-[](#ios-troubleshooting)
 
 
 [](#ios-troubleshooting)
@@ -310,16 +283,10 @@ You can bypass this behavior by adding the following to your projects `Info.plis
 
 [](#android-troubleshooting)
 
-
-[](#android-troubleshooting)
-
 ## `Android` troubleshooting
 
 If you app crashes with a message that it's doing too much networking on the main thread,
 then pass the option `allowLargeResponse` with value `true` to the `request` function.
-
-
-[](#thanks)
 
 
 [](#thanks)
@@ -338,9 +305,6 @@ then pass the option `allowLargeResponse` with value `true` to the `request` fun
 
 - [Basic](demo-snippets/vue/Basic.vue)
   - A basic example
-
-
-[](#demos-and-development)
 
 
 [](#demos-and-development)
@@ -383,9 +347,6 @@ npm run demo.svelte.ios # Example
 Demo setup is a bit special in the sense that if you want to modify/add demos you dont work directly in `demo-[ng|react|svelte|vue]`
 Instead you work in `demo-snippets/[ng|react|svelte|vue]`
 You can start from the `install.ts` of each flavor to see how to register new demos 
-
-
-[](#contributing)
 
 
 [](#contributing)
@@ -436,9 +397,6 @@ One easy solution is t modify `~/.gitconfig` and add
 [url "ssh://git@github.com/"]
 	pushInsteadOf = https://github.com/
 ```
-
-
-[](#questions)
 
 
 [](#questions)

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.12](https://github.com/nativescript-community/https/compare/v4.0.11...v4.0.12) (2023-01-23)
+
+
+### Bug Fixes
+
+* **android:** improved native-api-usage ([5e32bb0](https://github.com/nativescript-community/https/commit/5e32bb08e3f95c75e0ec05d0594294911eda72af))
+
+
+
+
+
 ## [4.0.11](https://github.com/nativescript-community/https/compare/v4.0.10...v4.0.11) (2022-12-05)
 
 **Note:** Version bump only for package @nativescript-community/https

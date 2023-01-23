@@ -1,22 +1,22 @@
 {
-  "packages": [
-    "packages/*"
-],
-"npmClient": "yarn",
-"useWorkspaces": true,
-"command": {
-    "publish": {
-        "conventionalCommits": true,
-        "ignoreChanges": [
-            "ignored-file",
-            "*.md"
-        ]
+    "packages": [
+        "packages/*"
+    ],
+    "npmClient": "yarn",
+    "useWorkspaces": true,
+    "command": {
+        "publish": {
+            "conventionalCommits": true,
+            "ignoreChanges": [
+                "ignored-file",
+                "*.md"
+            ]
+        },
+        "bootstrap": {
+            "npmClientArgs": [
+                "--no-package-lock"
+            ]
+        }
     },
-    "bootstrap": {
-        "npmClientArgs": [
-            "--no-package-lock"
-        ]
-    }
-},
-  "version": "4.0.11"
+    "version": "4.0.12"
 }

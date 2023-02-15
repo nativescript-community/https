@@ -273,7 +273,7 @@ export function getClient(opts: Partial<HttpsRequestOptions> = {}, reload: boole
                     }
                     builder.cookieJar(cookieJar);
                 } else {
-                    builder.cookieJar(null);
+                    // builder.cookieJar(null);
                 }
             }
             return builder.build();

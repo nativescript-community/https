@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.14](https://github.com/nativescript-community/https/compare/v4.0.13...v4.0.14) (2023-02-15)
+
+
+### Bug Fixes
+
+* **android:** cookiesEnabled: false fixed ([94f6bb1](https://github.com/nativescript-community/https/commit/94f6bb18c546ef1e427730d45cc71a4726f9ab39))
+
+
+
+
+
 ## [4.0.13](https://github.com/nativescript-community/https/compare/v4.0.12...v4.0.13) (2023-01-24)
 
 

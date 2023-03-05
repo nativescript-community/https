@@ -38,7 +38,10 @@ export interface HttpsRequestOptions extends HttpRequestOptions {
     headers?: Headers;
     params?: HttpsRequestObject;
     body?: HttpsRequestObject | HttpsFormDataParam[];
-    content?: string;
+    /**
+     * content can be used to pass native custom okhttp3.RequestBody
+     */
+    content?: string | any;
     /**
      * Default 10 (seconds).
      */

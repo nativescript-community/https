@@ -478,16 +478,7 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                 }
             });
             okHttpBody = builder.build();
-            if (opts.onProgress) {
-                okHttpBody = new com.nativescript.https.ProgressRequestWrapper(
-                    okHttpBody,
-                    new com.nativescript.https.ProgressRequestWrapper.ProgressListener({
-                        onRequestProgress(bytesWritten: number, contentLength: number) {
-                            opts.onProgress(bytesWritten, contentLength);
-                        }
-                    })
-                );
-            }
+            
         } else if (type === 'application/x-www-form-urlencoded') {
             const builder = new okhttp3.FormBody.Builder();
             Object.keys(opts.body).forEach((key) => {
@@ -503,7 +494,22 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
             } else if (opts.content) {
                 body = opts.content;
             }
-            okHttpBody = okhttp3.RequestBody.create(okhttp3.MediaType.parse(type), body);
+            if (body instanceof okhttp3.RequestBody) {
+                okHttpBody = body;
+            } else {
+                okHttpBody = okhttp3.RequestBody.create(body, okhttp3.MediaType.parse(type));
+            }
+        }
+
+        if (opts.onProgress) {
+            okHttpBody = new com.nativescript.https.ProgressRequestWrapper(
+                okHttpBody,
+                new com.nativescript.https.ProgressRequestWrapper.ProgressListener({
+                    onRequestProgress(bytesWritten: number, contentLength: number) {
+                        opts.onProgress(bytesWritten, contentLength);
+                    }
+                })
+            );
         }
         request[methods[opts.method]](okHttpBody);
     }

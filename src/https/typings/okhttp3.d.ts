@@ -1,33 +1,46 @@
+/// <reference path="android-declarations.d.ts"/>
+
 declare module okhttp3 {
 	export class Address extends java.lang.Object {
 		public static class: java.lang.Class<okhttp3.Address>;
-		
-		
+		/** @deprecated */
+		public proxyAuthenticator(): okhttp3.Authenticator;
+		/** @deprecated */
+		public proxy(): java.net.Proxy;
 		public proxy(): java.net.Proxy;
 		public equals(param0: any): boolean;
 		public sslSocketFactory(): javax.net.ssl.SSLSocketFactory;
 		public equalsNonHost$okhttp(param0: okhttp3.Address): boolean;
-		
 		public certificatePinner(): okhttp3.CertificatePinner;
-		
+		/** @deprecated */
+		public proxySelector(): java.net.ProxySelector;
+		/** @deprecated */
+		public protocols(): java.util.List<okhttp3.Protocol>;
 		public protocols(): java.util.List<okhttp3.Protocol>;
 		public dns(): okhttp3.Dns;
 		public proxyAuthenticator(): okhttp3.Authenticator;
 		public hostnameVerifier(): javax.net.ssl.HostnameVerifier;
-		public hashCode(): number;
 		public constructor(param0: string, param1: number, param2: okhttp3.Dns, param3: javax.net.SocketFactory, param4: javax.net.ssl.SSLSocketFactory, param5: javax.net.ssl.HostnameVerifier, param6: okhttp3.CertificatePinner, param7: okhttp3.Authenticator, param8: java.net.Proxy, param9: java.util.List<any>, param10: java.util.List<okhttp3.ConnectionSpec>, param11: java.net.ProxySelector);
+		public hashCode(): number;
 		public connectionSpecs(): java.util.List<okhttp3.ConnectionSpec>;
-		
-		
-		
+		/** @deprecated */
+		public sslSocketFactory(): javax.net.ssl.SSLSocketFactory;
+		/** @deprecated */
+		public certificatePinner(): okhttp3.CertificatePinner;
+		/** @deprecated */
+		public url(): okhttp3.HttpUrl;
 		public proxySelector(): java.net.ProxySelector;
 		public url(): okhttp3.HttpUrl;
 		public toString(): string;
-		
-		
+		/** @deprecated */
+		public connectionSpecs(): java.util.List<okhttp3.ConnectionSpec>;
+		/** @deprecated */
+		public dns(): okhttp3.Dns;
 		public socketFactory(): javax.net.SocketFactory;
-		
-		
+		/** @deprecated */
+		public hostnameVerifier(): javax.net.ssl.HostnameVerifier;
+		/** @deprecated */
+		public socketFactory(): javax.net.SocketFactory;
 	}
 }
 
@@ -66,10 +79,11 @@ declare module okhttp3 {
 		public trackConditionalCacheHit$okhttp(): void;
 		public close(): void;
 		public directory(): java.io.File;
-		public writeAbortCount(): number;
 		public constructor(param0: java.io.File, param1: number);
+		public writeAbortCount(): number;
 		public constructor(param0: java.io.File, param1: number, param2: okhttp3.internal.io.FileSystem);
-		
+		/** @deprecated */
+		public directory(): java.io.File;
 		public isClosed(): boolean;
 		public delete(): void;
 		public put$okhttp(param0: okhttp3.Response): okhttp3.internal.cache.CacheRequest;
@@ -142,27 +156,37 @@ declare module okhttp3 {
 		public static class: java.lang.Class<okhttp3.CacheControl>;
 		public static FORCE_NETWORK: okhttp3.CacheControl;
 		public static FORCE_CACHE: okhttp3.CacheControl;
-		
-		public maxStaleSeconds(): number;
-		public toString(): string;
+		/** @deprecated */
 		public mustRevalidate(): boolean;
+		public maxStaleSeconds(): number;
+		public mustRevalidate(): boolean;
+		public toString(): string;
 		public static parse(param0: okhttp3.Headers): okhttp3.CacheControl;
-		
-		
-		
-		
+		/** @deprecated */
+		public maxAgeSeconds(): number;
+		/** @deprecated */
+		public sMaxAgeSeconds(): number;
+		/** @deprecated */
+		public noTransform(): boolean;
 		public minFreshSeconds(): number;
 		public onlyIfCached(): boolean;
+		/** @deprecated */
+		public noStore(): boolean;
 		public noCache(): boolean;
 		public noTransform(): boolean;
-		
-		
+		/** @deprecated */
+		public minFreshSeconds(): number;
+		/** @deprecated */
+		public onlyIfCached(): boolean;
 		public isPrivate(): boolean;
-		
 		public immutable(): boolean;
-		
+		/** @deprecated */
+		public noCache(): boolean;
 		public sMaxAgeSeconds(): number;
-		
+		/** @deprecated */
+		public immutable(): boolean;
+		/** @deprecated */
+		public maxStaleSeconds(): number;
 		public noStore(): boolean;
 		public maxAgeSeconds(): number;
 		public isPublic(): boolean;
@@ -176,8 +200,8 @@ declare module okhttp3 {
 			public onlyIfCached(): okhttp3.CacheControl.Builder;
 			public minFresh(param0: number, param1: java.util.concurrent.TimeUnit): okhttp3.CacheControl.Builder;
 			public maxAge(param0: number, param1: java.util.concurrent.TimeUnit): okhttp3.CacheControl.Builder;
-			public build(): okhttp3.CacheControl;
 			public constructor();
+			public build(): okhttp3.CacheControl;
 			public noStore(): okhttp3.CacheControl.Builder;
 			public noTransform(): okhttp3.CacheControl.Builder;
 		}
@@ -261,8 +285,8 @@ declare module okhttp3 {
 		public static pin(param0: java.security.cert.Certificate): string;
 		public findMatchingPins(param0: string): java.util.List<okhttp3.CertificatePinner.Pin>;
 		public hashCode(): number;
-		public check(param0: string, param1: java.util.List<any>): void;
 		public constructor(param0: java.util.Set<okhttp3.CertificatePinner.Pin>, param1: okhttp3.internal.tls.CertificateChainCleaner);
+		public check(param0: string, param1: java.util.List<any>): void;
 		public getPins(): java.util.Set<okhttp3.CertificatePinner.Pin>;
 	}
 	export module CertificatePinner {
@@ -299,7 +323,8 @@ declare module okhttp3 {
 		public static class: java.lang.Class<okhttp3.Challenge>;
 		public equals(param0: any): boolean;
 		public scheme(): string;
-		
+		/** @deprecated */
+		public scheme(): string;
 		public toString(): string;
 		public constructor(param0: string, param1: java.util.Map<string,string>);
 		public withCharset(param0: java.nio.charset.Charset): okhttp3.Challenge;
@@ -307,10 +332,13 @@ declare module okhttp3 {
 		public constructor(param0: string, param1: string);
 		public authParams(): java.util.Map<string,string>;
 		public charset(): java.nio.charset.Charset;
-		
-		
+		/** @deprecated */
+		public charset(): java.nio.charset.Charset;
+		/** @deprecated */
+		public authParams(): java.util.Map<string,string>;
 		public hashCode(): number;
-		
+		/** @deprecated */
+		public realm(): string;
 	}
 }
 
@@ -438,7 +466,8 @@ declare module okhttp3 {
 		public static TLS_AES_128_CCM_8_SHA256: okhttp3.CipherSuite;
 		public javaName(): string;
 		public static forJavaName(param0: string): okhttp3.CipherSuite;
-		
+		/** @deprecated */
+		public javaName(): string;
 		public toString(): string;
 	}
 	export module CipherSuite {
@@ -490,18 +519,21 @@ declare module okhttp3 {
 		public static MODERN_TLS: okhttp3.ConnectionSpec;
 		public static COMPATIBLE_TLS: okhttp3.ConnectionSpec;
 		public static CLEARTEXT: okhttp3.ConnectionSpec;
-		
+		/** @deprecated */
+		public supportsTlsExtensions(): boolean;
 		public cipherSuites(): java.util.List<okhttp3.CipherSuite>;
 		public equals(param0: any): boolean;
-		public tlsVersions(): java.util.List<okhttp3.TlsVersion>;
 		public supportsTlsExtensions(): boolean;
+		public tlsVersions(): java.util.List<okhttp3.TlsVersion>;
 		public toString(): string;
-		
+		/** @deprecated */
+		public cipherSuites(): java.util.List<okhttp3.CipherSuite>;
 		public hashCode(): number;
 		public isCompatible(param0: javax.net.ssl.SSLSocket): boolean;
-		public apply$okhttp(param0: javax.net.ssl.SSLSocket, param1: boolean): void;
 		public isTls(): boolean;
-		
+		public apply$okhttp(param0: javax.net.ssl.SSLSocket, param1: boolean): void;
+		/** @deprecated */
+		public tlsVersions(): java.util.List<okhttp3.TlsVersion>;
 		public constructor(param0: boolean, param1: boolean, param2: androidNative.Array<string>, param3: androidNative.Array<string>);
 	}
 	export module ConnectionSpec {
@@ -509,8 +541,8 @@ declare module okhttp3 {
 			public static class: java.lang.Class<okhttp3.ConnectionSpec.Builder>;
 			public getCipherSuites$okhttp(): androidNative.Array<string>;
 			public build(): okhttp3.ConnectionSpec;
-			public tlsVersions(param0: androidNative.Array<okhttp3.TlsVersion>): okhttp3.ConnectionSpec.Builder;
 			public constructor(param0: boolean);
+			public tlsVersions(param0: androidNative.Array<okhttp3.TlsVersion>): okhttp3.ConnectionSpec.Builder;
 			public getSupportsTlsExtensions$okhttp(): boolean;
 			public constructor(param0: okhttp3.ConnectionSpec);
 			public cipherSuites(param0: androidNative.Array<okhttp3.CipherSuite>): okhttp3.ConnectionSpec.Builder;
@@ -538,23 +570,32 @@ declare module okhttp3 {
 		public static class: java.lang.Class<okhttp3.Cookie>;
 		public equals(param0: any): boolean;
 		public matches(param0: okhttp3.HttpUrl): boolean;
-		
-		
-		public httpOnly(): boolean;
-		
+		/** @deprecated */
+		public hostOnly(): boolean;
+		/** @deprecated */
 		public expiresAt(): number;
-		
+		public httpOnly(): boolean;
+		/** @deprecated */
+		public path(): string;
+		public expiresAt(): number;
+		/** @deprecated */
+		public name(): string;
 		public toString$okhttp(param0: boolean): string;
 		public hashCode(): number;
-		
-		
+		/** @deprecated */
+		public persistent(): boolean;
 		public secure(): boolean;
-		
+		/** @deprecated */
 		public domain(): string;
+		public domain(): string;
+		/** @deprecated */
+		public httpOnly(): boolean;
 		public static parseAll(param0: okhttp3.HttpUrl, param1: okhttp3.Headers): java.util.List<okhttp3.Cookie>;
-		
+		/** @deprecated */
+		public secure(): boolean;
 		public toString(): string;
-		
+		/** @deprecated */
+		public value(): string;
 		public persistent(): boolean;
 		public static parse(param0: okhttp3.HttpUrl, param1: string): okhttp3.Cookie;
 		public hostOnly(): boolean;
@@ -632,7 +673,8 @@ declare module okhttp3 {
 		public setMaxRequestsPerHost(param0: number): void;
 		public constructor(param0: java.util.concurrent.ExecutorService);
 		public queuedCallsCount(): number;
-		
+		/** @deprecated */
+		public executorService(): java.util.concurrent.ExecutorService;
 		public finished$okhttp(param0: okhttp3.internal.connection.RealCall.AsyncCall): void;
 		public runningCallsCount(): number;
 		public runningCalls(): java.util.List<okhttp3.Call>;
@@ -734,8 +776,8 @@ declare module okhttp3 {
 declare module okhttp3 {
 	export class FormBody extends okhttp3.RequestBody {
 		public static class: java.lang.Class<okhttp3.FormBody>;
-		public value(param0: number): string;
 		public constructor();
+		public value(param0: number): string;
 		public encodedValue(param0: number): string;
 		public name(param0: number): string;
 		public size(): number;
@@ -744,13 +786,14 @@ declare module okhttp3 {
 		public contentType(): okhttp3.MediaType;
 		public writeTo(param0: okio.BufferedSink): void;
 		public contentLength(): number;
-		
+		/** @deprecated */
+		public size(): number;
 	}
 	export module FormBody {
 		export class Builder extends java.lang.Object {
 			public static class: java.lang.Class<okhttp3.FormBody.Builder>;
-			public addEncoded(param0: string, param1: string): okhttp3.FormBody.Builder;
 			public constructor(param0: java.nio.charset.Charset);
+			public addEncoded(param0: string, param1: string): okhttp3.FormBody.Builder;
 			public constructor();
 			public add(param0: string, param1: string): okhttp3.FormBody.Builder;
 			public build(): okhttp3.FormBody;
@@ -764,23 +807,29 @@ declare module okhttp3 {
 declare module okhttp3 {
 	export class Handshake extends java.lang.Object {
 		public static class: java.lang.Class<okhttp3.Handshake>;
-		
+		/** @deprecated */
+		public tlsVersion(): okhttp3.TlsVersion;
 		public equals(param0: any): boolean;
 		public localCertificates(): java.util.List<java.security.cert.Certificate>;
 		public peerCertificates(): java.util.List<java.security.cert.Certificate>;
 		public toString(): string;
 		public peerPrincipal(): java.security.Principal;
 		public static get(param0: okhttp3.TlsVersion, param1: okhttp3.CipherSuite, param2: java.util.List<any>, param3: java.util.List<any>): okhttp3.Handshake;
-		
+		/** @deprecated */
+		public cipherSuite(): okhttp3.CipherSuite;
 		public static get(param0: javax.net.ssl.SSLSession): okhttp3.Handshake;
-		
-		
 		public constructor(param0: okhttp3.TlsVersion, param1: okhttp3.CipherSuite, param2: java.util.List<any>, param3: any);
+		/** @deprecated */
+		public peerPrincipal(): java.security.Principal;
+		/** @deprecated */
+		public localPrincipal(): java.security.Principal;
 		public hashCode(): number;
-		
+		/** @deprecated */
+		public localCertificates(): java.util.List<java.security.cert.Certificate>;
 		public localPrincipal(): java.security.Principal;
 		public tlsVersion(): okhttp3.TlsVersion;
-		
+		/** @deprecated */
+		public peerCertificates(): java.util.List<java.security.cert.Certificate>;
 		public cipherSuite(): okhttp3.CipherSuite;
 	}
 	export module Handshake {
@@ -788,7 +837,8 @@ declare module okhttp3 {
 			public static class: java.lang.Class<okhttp3.Handshake.Companion>;
 			public get(param0: javax.net.ssl.SSLSession): okhttp3.Handshake;
 			public get(param0: okhttp3.TlsVersion, param1: okhttp3.CipherSuite, param2: java.util.List<any>, param3: java.util.List<any>): okhttp3.Handshake;
-			
+			/** @deprecated */
+			public get(param0: javax.net.ssl.SSLSession): okhttp3.Handshake;
 		}
 	}
 }
@@ -806,7 +856,6 @@ declare module okhttp3 {
 		public get(param0: string): string;
 		public values(param0: string): java.util.List<string>;
 		public names(): java.util.Set<string>;
-		public static of(param0: java.util.Map<string,string>): okhttp3.Headers;
 		public name(param0: number): string;
 		public size(): number;
 		public iterator(): java.util.Iterator<any>;
@@ -815,8 +864,8 @@ declare module okhttp3 {
 		public toMultimap(): java.util.Map<string,java.util.List<string>>;
 		public getDate(param0: string): java.util.Date;
 		public byteCount(): number;
-		
-		public static of(param0: androidNative.Array<string>): okhttp3.Headers;
+		/** @deprecated */
+		public size(): number;
 	}
 	export module Headers {
 		export class Builder extends java.lang.Object {
@@ -826,8 +875,8 @@ declare module okhttp3 {
 			public set(param0: string, param1: java.time.Instant): okhttp3.Headers.Builder;
 			public getNamesAndValues$okhttp(): java.util.List<string>;
 			public set(param0: string, param1: string): okhttp3.Headers.Builder;
-			public addAll(param0: okhttp3.Headers): okhttp3.Headers.Builder;
 			public constructor();
+			public addAll(param0: okhttp3.Headers): okhttp3.Headers.Builder;
 			public addLenient$okhttp(param0: string, param1: string): okhttp3.Headers.Builder;
 			public add(param0: string, param1: string): okhttp3.Headers.Builder;
 			public removeAll(param0: string): okhttp3.Headers.Builder;
@@ -840,10 +889,10 @@ declare module okhttp3 {
 		}
 		export class Companion extends java.lang.Object {
 			public static class: java.lang.Class<okhttp3.Headers.Companion>;
-			
-			public of(param0: java.util.Map<string,string>): okhttp3.Headers;
+			/** @deprecated */
 			public of(param0: androidNative.Array<string>): okhttp3.Headers;
-			
+			/** @deprecated */
+			public of(param0: java.util.Map<string,string>): okhttp3.Headers;
 		}
 	}
 }
@@ -866,58 +915,77 @@ declare module okhttp3 {
 		public equals(param0: any): boolean;
 		public topPrivateDomain(): string;
 		public queryParameterName(param0: number): string;
-		
+		/** @deprecated */
 		public queryParameterNames(): java.util.Set<string>;
-		
+		public queryParameterNames(): java.util.Set<string>;
+		/** @deprecated */
+		public port(): number;
 		public encodedPassword(): string;
 		public query(): string;
-		
-		
-		
+		/** @deprecated */
+		public pathSegments(): java.util.List<string>;
+		/** @deprecated */
+		public username(): string;
+		/** @deprecated */
+		public encodedUsername(): string;
 		public static get(param0: string): okhttp3.HttpUrl;
 		public pathSize(): number;
 		public isHttps(): boolean;
-		
+		/** @deprecated */
+		public host(): string;
 		public newBuilder(): okhttp3.HttpUrl.Builder;
 		public port(): number;
 		public encodedFragment(): string;
 		public redact(): string;
-		
-		public toString(): string;
+		/** @deprecated */
+		public scheme(): string;
 		public fragment(): string;
+		public toString(): string;
 		public uri(): java.net.URI;
-		
+		/** @deprecated */
+		public encodedQuery(): string;
 		public queryParameterValue(param0: number): string;
-		
+		/** @deprecated */
+		public encodedFragment(): string;
 		public host(): string;
 		public static get(param0: java.net.URL): okhttp3.HttpUrl;
-		
+		/** @deprecated */
+		public password(): string;
 		public url(): java.net.URL;
 		public querySize(): number;
 		public static defaultPort(param0: string): number;
 		public scheme(): string;
-		
+		/** @deprecated */
+		public uri(): java.net.URI;
 		public constructor(param0: string, param1: string, param2: string, param3: string, param4: number, param5: java.util.List<string>, param6: java.util.List<string>, param7: string, param8: string);
 		public queryParameter(param0: string): string;
-		
+		/** @deprecated */
+		public encodedPathSegments(): java.util.List<string>;
 		public password(): string;
 		public hashCode(): number;
 		public resolve(param0: string): okhttp3.HttpUrl;
 		public encodedPathSegments(): java.util.List<string>;
 		public encodedQuery(): string;
 		public encodedPath(): string;
-		
-		
+		/** @deprecated */
+		public pathSize(): number;
+		/** @deprecated */
+		public encodedPath(): string;
 		public encodedUsername(): string;
 		public queryParameterValues(param0: string): java.util.List<string>;
-		
+		/** @deprecated */
+		public fragment(): string;
 		public newBuilder(param0: string): okhttp3.HttpUrl.Builder;
-		
+		/** @deprecated */
+		public query(): string;
 		public pathSegments(): java.util.List<string>;
 		public static parse(param0: string): okhttp3.HttpUrl;
-		
-		
-		
+		/** @deprecated */
+		public url(): java.net.URL;
+		/** @deprecated */
+		public encodedPassword(): string;
+		/** @deprecated */
+		public querySize(): number;
 		public username(): string;
 	}
 	export module HttpUrl {
@@ -978,19 +1046,23 @@ declare module okhttp3 {
 		export class Companion extends java.lang.Object {
 			public static class: java.lang.Class<okhttp3.HttpUrl.Companion>;
 			public toPathString$okhttp(param0: java.util.List<string>, param1: java.lang.StringBuilder): void;
-			
+			/** @deprecated */
+			public parse(param0: string): okhttp3.HttpUrl;
 			public defaultPort(param0: string): number;
 			public get(param0: java.net.URL): okhttp3.HttpUrl;
 			public get(param0: java.net.URI): okhttp3.HttpUrl;
 			public toQueryNamesAndValues$okhttp(param0: string): java.util.List<string>;
-			
+			/** @deprecated */
+			public get(param0: string): okhttp3.HttpUrl;
 			public percentDecode$okhttp(param0: string, param1: number, param2: number, param3: boolean): string;
 			public canonicalize$okhttp(param0: string, param1: number, param2: number, param3: string, param4: boolean, param5: boolean, param6: boolean, param7: boolean, param8: java.nio.charset.Charset): string;
 			public toQueryString$okhttp(param0: java.util.List<string>, param1: java.lang.StringBuilder): void;
 			public get(param0: string): okhttp3.HttpUrl;
 			public parse(param0: string): okhttp3.HttpUrl;
-			
-			
+			/** @deprecated */
+			public get(param0: java.net.URL): okhttp3.HttpUrl;
+			/** @deprecated */
+			public get(param0: java.net.URI): okhttp3.HttpUrl;
 		}
 	}
 }
@@ -1049,25 +1121,29 @@ declare module okhttp3 {
 	export class MediaType extends java.lang.Object {
 		public static class: java.lang.Class<okhttp3.MediaType>;
 		public type(): string;
-		public charset(): java.nio.charset.Charset;
 		public equals(param0: any): boolean;
-		public parameter(param0: string): string;
+		public charset(): java.nio.charset.Charset;
 		public subtype(): string;
+		public parameter(param0: string): string;
 		public charset(param0: java.nio.charset.Charset): java.nio.charset.Charset;
 		public hashCode(): number;
 		public static get(param0: string): okhttp3.MediaType;
 		public static parse(param0: string): okhttp3.MediaType;
 		public toString(): string;
-		
-		
+		/** @deprecated */
+		public type(): string;
+		/** @deprecated */
+		public subtype(): string;
 	}
 	export module MediaType {
 		export class Companion extends java.lang.Object {
 			public static class: java.lang.Class<okhttp3.MediaType.Companion>;
 			public parse(param0: string): okhttp3.MediaType;
 			public get(param0: string): okhttp3.MediaType;
-			
-			
+			/** @deprecated */
+			public parse(param0: string): okhttp3.MediaType;
+			/** @deprecated */
+			public get(param0: string): okhttp3.MediaType;
 		}
 	}
 }
@@ -1081,19 +1157,23 @@ declare module okhttp3 {
 		public static PARALLEL: okhttp3.MediaType;
 		public static FORM: okhttp3.MediaType;
 		public constructor();
-		
-		
+		/** @deprecated */
+		public type(): okhttp3.MediaType;
 		public parts(): java.util.List<okhttp3.MultipartBody.Part>;
+		/** @deprecated */
+		public boundary(): string;
 		public type(): okhttp3.MediaType;
 		public writeTo(param0: okio.BufferedSink): void;
 		public boundary(): string;
 		public size(): number;
-		
-		public contentType(): okhttp3.MediaType;
+		/** @deprecated */
+		public parts(): java.util.List<okhttp3.MultipartBody.Part>;
 		public constructor(param0: okio.ByteString, param1: okhttp3.MediaType, param2: java.util.List<okhttp3.MultipartBody.Part>);
+		public contentType(): okhttp3.MediaType;
 		public part(param0: number): okhttp3.MultipartBody.Part;
 		public contentLength(): number;
-		
+		/** @deprecated */
+		public size(): number;
 	}
 	export module MultipartBody {
 		export class Builder extends java.lang.Object {
@@ -1115,8 +1195,10 @@ declare module okhttp3 {
 		export class Part extends java.lang.Object {
 			public static class: java.lang.Class<okhttp3.MultipartBody.Part>;
 			public headers(): okhttp3.Headers;
-			
-			
+			/** @deprecated */
+			public headers(): okhttp3.Headers;
+			/** @deprecated */
+			public body(): okhttp3.RequestBody;
 			public static create(param0: okhttp3.Headers, param1: okhttp3.RequestBody): okhttp3.MultipartBody.Part;
 			public static createFormData(param0: string, param1: string, param2: okhttp3.RequestBody): okhttp3.MultipartBody.Part;
 			public static create(param0: okhttp3.RequestBody): okhttp3.MultipartBody.Part;
@@ -1151,12 +1233,12 @@ declare module okhttp3 {
 		}
 		export class Part extends java.lang.Object implements java.io.Closeable {
 			public static class: java.lang.Class<okhttp3.MultipartReader.Part>;
-			public headers(): okhttp3.Headers;
 			public constructor(param0: okhttp3.Headers, param1: okio.BufferedSource);
+			public headers(): okhttp3.Headers;
 			public body(): okio.BufferedSource;
 			public close(): void;
 		}
-		export class PartSource extends java.lang.Object implements okio.Source {
+		export class PartSource extends java.lang.Object {
 			public static class: java.lang.Class<okhttp3.MultipartReader.PartSource>;
 			public constructor(param0: okhttp3.MultipartReader);
 			public timeout(): okio.Timeout;
@@ -1169,76 +1251,102 @@ declare module okhttp3 {
 declare module okhttp3 {
 	export class OkHttp extends java.lang.Object {
 		public static class: java.lang.Class<okhttp3.OkHttp>;
-		public static VERSION: string;
 		public static INSTANCE: okhttp3.OkHttp;
+		public static VERSION: string;
 	}
 }
 
 declare module okhttp3 {
 	export class OkHttpClient extends java.lang.Object implements java.lang.Cloneable, okhttp3.Call.Factory, okhttp3.WebSocket.Factory {
 		public static class: java.lang.Class<okhttp3.OkHttpClient>;
-		
-		
-		
+		/** @deprecated */
+		public proxy(): java.net.Proxy;
+		/** @deprecated */
+		public proxyAuthenticator(): okhttp3.Authenticator;
+		/** @deprecated */
+		public callTimeoutMillis(): number;
 		public connectionPool(): okhttp3.ConnectionPool;
 		public cache(): okhttp3.Cache;
-		
-		
+		/** @deprecated */
+		public protocols(): java.util.List<okhttp3.Protocol>;
+		/** @deprecated */
+		public dispatcher(): okhttp3.Dispatcher;
 		public dns(): okhttp3.Dns;
 		public proxyAuthenticator(): okhttp3.Authenticator;
 		public hostnameVerifier(): javax.net.ssl.HostnameVerifier;
 		public callTimeoutMillis(): number;
 		public connectTimeoutMillis(): number;
 		public newBuilder(): okhttp3.OkHttpClient.Builder;
-		
-		
+		/** @deprecated */
+		public networkInterceptors(): java.util.List<okhttp3.Interceptor>;
+		/** @deprecated */
+		public sslSocketFactory(): javax.net.ssl.SSLSocketFactory;
 		public constructor();
 		public followRedirects(): boolean;
 		public interceptors(): java.util.List<okhttp3.Interceptor>;
-		
-		
+		/** @deprecated */
+		public connectTimeoutMillis(): number;
+		/** @deprecated */
+		public dns(): okhttp3.Dns;
 		public socketFactory(): javax.net.SocketFactory;
 		public retryOnConnectionFailure(): boolean;
 		public constructor(param0: okhttp3.OkHttpClient.Builder);
-		
+		/** @deprecated */
+		public hostnameVerifier(): javax.net.ssl.HostnameVerifier;
 		public proxy(): java.net.Proxy;
 		public sslSocketFactory(): javax.net.ssl.SSLSocketFactory;
 		public certificatePinner(): okhttp3.CertificatePinner;
-		
+		/** @deprecated */
+		public proxySelector(): java.net.ProxySelector;
 		public clone(): any;
 		public dispatcher(): okhttp3.Dispatcher;
-		
+		/** @deprecated */
+		public interceptors(): java.util.List<okhttp3.Interceptor>;
 		public certificateChainCleaner(): okhttp3.internal.tls.CertificateChainCleaner;
 		public protocols(): java.util.List<okhttp3.Protocol>;
-		
-		
-		
-		
-		
+		/** @deprecated */
+		public followSslRedirects(): boolean;
+		/** @deprecated */
+		public writeTimeoutMillis(): number;
+		/** @deprecated */
+		public cache(): okhttp3.Cache;
+		/** @deprecated */
+		public connectionPool(): okhttp3.ConnectionPool;
+		/** @deprecated */
+		public retryOnConnectionFailure(): boolean;
 		public minWebSocketMessageToCompress(): number;
 		public cookieJar(): okhttp3.CookieJar;
 		public pingIntervalMillis(): number;
-		
+		/** @deprecated */
+		public pingIntervalMillis(): number;
 		public connectionSpecs(): java.util.List<okhttp3.ConnectionSpec>;
-		
-		
+		/** @deprecated */
+		public eventListenerFactory(): okhttp3.EventListener.Factory;
+		/** @deprecated */
+		public certificatePinner(): okhttp3.CertificatePinner;
 		public proxySelector(): java.net.ProxySelector;
-		
+		/** @deprecated */
+		public cookieJar(): okhttp3.CookieJar;
 		public readTimeoutMillis(): number;
 		public authenticator(): okhttp3.Authenticator;
 		public getRouteDatabase(): okhttp3.internal.connection.RouteDatabase;
-		
+		/** @deprecated */
+		public authenticator(): okhttp3.Authenticator;
 		public writeTimeoutMillis(): number;
-		
+		/** @deprecated */
+		public connectionSpecs(): java.util.List<okhttp3.ConnectionSpec>;
 		public newWebSocket(param0: okhttp3.Request, param1: okhttp3.WebSocketListener): okhttp3.WebSocket;
 		public followSslRedirects(): boolean;
-		
-		
+		/** @deprecated */
+		public readTimeoutMillis(): number;
+		/** @deprecated */
+		public followRedirects(): boolean;
 		public networkInterceptors(): java.util.List<okhttp3.Interceptor>;
 		public eventListenerFactory(): okhttp3.EventListener.Factory;
 		public x509TrustManager(): javax.net.ssl.X509TrustManager;
 		public newCall(param0: okhttp3.Request): okhttp3.Call;
-		
+		/** @deprecated */
+		public socketFactory(): javax.net.SocketFactory;
 	}
 	export module OkHttpClient {
 		export class Builder extends java.lang.Object {
@@ -1275,6 +1383,7 @@ declare module okhttp3 {
 			public build(): okhttp3.OkHttpClient;
 			public cache(param0: okhttp3.Cache): okhttp3.OkHttpClient.Builder;
 			public setMinWebSocketMessageToCompress$okhttp(param0: number): void;
+			public addNetworkInterceptor(param0: any): okhttp3.OkHttpClient.Builder;
 			public getConnectionPool$okhttp(): okhttp3.ConnectionPool;
 			public setCallTimeout$okhttp(param0: number): void;
 			public setCertificatePinner$okhttp(param0: okhttp3.CertificatePinner): void;
@@ -1333,6 +1442,7 @@ declare module okhttp3 {
 			public getPingInterval$okhttp(): number;
 			public setRetryOnConnectionFailure$okhttp(param0: boolean): void;
 			public proxySelector(param0: java.net.ProxySelector): okhttp3.OkHttpClient.Builder;
+			public addInterceptor(param0: any): okhttp3.OkHttpClient.Builder;
 			public getEventListenerFactory$okhttp(): okhttp3.EventListener.Factory;
 			public getSocketFactory$okhttp(): javax.net.SocketFactory;
 			public setDispatcher$okhttp(param0: okhttp3.Dispatcher): void;
@@ -1361,7 +1471,7 @@ declare module okhttp3 {
 		public static QUIC: okhttp3.Protocol;
 		public static valueOf(param0: string): okhttp3.Protocol;
 		public static get(param0: string): okhttp3.Protocol;
-		public static valueOf(param0: java.lang.Class, param1: string): java.lang.Enum;
+		public static valueOf(param0: java.lang.Class<any>, param1: string): java.lang.Enum<any>;
 		public static values(): androidNative.Array<okhttp3.Protocol>;
 		public toString(): string;
 	}
@@ -1376,9 +1486,10 @@ declare module okhttp3 {
 declare module okhttp3 {
 	export class Request extends java.lang.Object {
 		public static class: java.lang.Class<okhttp3.Request>;
-		
-		public tag(): any;
+		/** @deprecated */
+		public url(): okhttp3.HttpUrl;
 		public headers(): okhttp3.Headers;
+		public tag(): any;
 		public newBuilder(): okhttp3.Request.Builder;
 		public constructor(param0: okhttp3.HttpUrl, param1: string, param2: okhttp3.Headers, param3: okhttp3.RequestBody, param4: java.util.Map<java.lang.Class<any>,any>);
 		public url(): okhttp3.HttpUrl;
@@ -1387,14 +1498,18 @@ declare module okhttp3 {
 		public toString(): string;
 		public header(param0: string): string;
 		public headers(param0: string): java.util.List<string>;
-		
-		
-		
+		/** @deprecated */
+		public body(): okhttp3.RequestBody;
+		/** @deprecated */
+		public cacheControl(): okhttp3.CacheControl;
 		public getTags$okhttp(): java.util.Map<java.lang.Class<any>,any>;
-		public tag(param0: java.lang.Class): any;
+		/** @deprecated */
+		public method(): string;
+		public tag(param0: java.lang.Class<any>): any;
 		public body(): okhttp3.RequestBody;
 		public isHttps(): boolean;
-		
+		/** @deprecated */
+		public headers(): okhttp3.Headers;
 	}
 	export module Request {
 		export class Builder extends java.lang.Object {
@@ -1402,9 +1517,9 @@ declare module okhttp3 {
 			public setMethod$okhttp(param0: string): void;
 			public url(param0: okhttp3.HttpUrl): okhttp3.Request.Builder;
 			public tag(param0: any): okhttp3.Request.Builder;
+			public constructor(param0: okhttp3.Request);
 			public url(param0: java.net.URL): okhttp3.Request.Builder;
 			public header(param0: string, param1: string): okhttp3.Request.Builder;
-			public constructor(param0: okhttp3.Request);
 			public put(param0: okhttp3.RequestBody): okhttp3.Request.Builder;
 			public setBody$okhttp(param0: okhttp3.RequestBody): void;
 			public get(): okhttp3.Request.Builder;
@@ -1419,7 +1534,7 @@ declare module okhttp3 {
 			public setTags$okhttp(param0: java.util.Map<java.lang.Class<any>,any>): void;
 			public setUrl$okhttp(param0: okhttp3.HttpUrl): void;
 			public getMethod$okhttp(): string;
-			public tag(param0: java.lang.Class, param1: any): okhttp3.Request.Builder;
+			public tag(param0: java.lang.Class<any>, param1: any): okhttp3.Request.Builder;
 			public headers(param0: okhttp3.Headers): okhttp3.Request.Builder;
 			public delete(): okhttp3.Request.Builder;
 			public constructor();
@@ -1472,10 +1587,10 @@ declare module okhttp3 {
 			public create(param0: okhttp3.MediaType, param1: java.io.File): okhttp3.RequestBody;
 			public create(param0: java.io.File, param1: okhttp3.MediaType): okhttp3.RequestBody;
 			public create(param0: androidNative.Array<number>): okhttp3.RequestBody;
-			public create(param0: androidNative.Array<number>, param1: okhttp3.MediaType, param2: number): okhttp3.RequestBody;
-			public create(param0: androidNative.Array<number>, param1: okhttp3.MediaType): okhttp3.RequestBody;
 			/** @deprecated */
 			public create(param0: okhttp3.MediaType, param1: string): okhttp3.RequestBody;
+			public create(param0: androidNative.Array<number>, param1: okhttp3.MediaType, param2: number): okhttp3.RequestBody;
+			public create(param0: androidNative.Array<number>, param1: okhttp3.MediaType): okhttp3.RequestBody;
 			public create(param0: okio.ByteString, param1: okhttp3.MediaType): okhttp3.RequestBody;
 			public create(param0: androidNative.Array<number>, param1: okhttp3.MediaType, param2: number, param3: number): okhttp3.RequestBody;
 			/** @deprecated */
@@ -1497,40 +1612,53 @@ declare module okhttp3 {
 		public sentRequestAtMillis(): number;
 		public cacheControl(): okhttp3.CacheControl;
 		public exchange(): okhttp3.internal.connection.Exchange;
-		public peekBody(param0: number): okhttp3.ResponseBody;
 		public handshake(): okhttp3.Handshake;
-		
-		
+		public peekBody(param0: number): okhttp3.ResponseBody;
+		/** @deprecated */
+		public request(): okhttp3.Request;
+		/** @deprecated */
+		public code(): number;
 		public header(param0: string, param1: string): string;
 		public header(param0: string): string;
-		
-		
+		/** @deprecated */
+		public priorResponse(): okhttp3.Response;
 		public body(): okhttp3.ResponseBody;
 		public networkResponse(): okhttp3.Response;
+		/** @deprecated */
+		public networkResponse(): okhttp3.Response;
 		public trailers(): okhttp3.Headers;
-		
+		/** @deprecated */
+		public cacheControl(): okhttp3.CacheControl;
 		public request(): okhttp3.Request;
 		public code(): number;
 		public protocol(): okhttp3.Protocol;
-		
-		
+		/** @deprecated */
+		public protocol(): okhttp3.Protocol;
+		/** @deprecated */
+		public headers(): okhttp3.Headers;
 		public priorResponse(): okhttp3.Response;
-		
-		public cacheResponse(): okhttp3.Response;
+		/** @deprecated */
+		public body(): okhttp3.ResponseBody;
 		public constructor(param0: okhttp3.Request, param1: okhttp3.Protocol, param2: string, param3: number, param4: okhttp3.Handshake, param5: okhttp3.Headers, param6: okhttp3.ResponseBody, param7: okhttp3.Response, param8: okhttp3.Response, param9: okhttp3.Response, param10: number, param11: number, param12: okhttp3.internal.connection.Exchange);
-		
+		public cacheResponse(): okhttp3.Response;
+		/** @deprecated */
+		public sentRequestAtMillis(): number;
 		public toString(): string;
 		public isSuccessful(): boolean;
-		
-		
+		/** @deprecated */
+		public receivedResponseAtMillis(): number;
+		/** @deprecated */
+		public cacheResponse(): okhttp3.Response;
 		public headers(param0: string): java.util.List<string>;
 		public newBuilder(): okhttp3.Response.Builder;
-		
+		/** @deprecated */
 		public message(): string;
-		public challenges(): java.util.List<okhttp3.Challenge>;
+		public message(): string;
 		public receivedResponseAtMillis(): number;
+		public challenges(): java.util.List<okhttp3.Challenge>;
 		public isRedirect(): boolean;
-		
+		/** @deprecated */
+		public handshake(): okhttp3.Handshake;
 	}
 	export module Response {
 		export class Builder extends java.lang.Object {
@@ -1618,8 +1746,8 @@ declare module okhttp3 {
 			public constructor();
 			public constructor(param0: okio.BufferedSource, param1: java.nio.charset.Charset);
 			public close(): void;
-			public read(param0: androidNative.Array<string>, param1: number, param2: number): number;
 			public constructor(param0: any);
+			public read(param0: androidNative.Array<string>, param1: number, param2: number): number;
 			public read(): number;
 		}
 		export class Companion extends java.lang.Object {
@@ -1643,15 +1771,18 @@ declare module okhttp3 {
 declare module okhttp3 {
 	export class Route extends java.lang.Object {
 		public static class: java.lang.Class<okhttp3.Route>;
-		
+		/** @deprecated */
 		public proxy(): java.net.Proxy;
-		public equals(param0: any): boolean;
+		public proxy(): java.net.Proxy;
 		public constructor(param0: okhttp3.Address, param1: java.net.Proxy, param2: java.net.InetSocketAddress);
+		public equals(param0: any): boolean;
 		public address(): okhttp3.Address;
 		public hashCode(): number;
-		
+		/** @deprecated */
+		public socketAddress(): java.net.InetSocketAddress;
 		public toString(): string;
-		
+		/** @deprecated */
+		public address(): okhttp3.Address;
 		public requiresTunnel(): boolean;
 		public socketAddress(): java.net.InetSocketAddress;
 	}
@@ -1667,8 +1798,9 @@ declare module okhttp3 {
 		public static SSL_3_0: okhttp3.TlsVersion;
 		public javaName(): string;
 		public static values(): androidNative.Array<okhttp3.TlsVersion>;
-		public static valueOf(param0: java.lang.Class, param1: string): java.lang.Enum;
-		
+		public static valueOf(param0: java.lang.Class<any>, param1: string): java.lang.Enum<any>;
+		/** @deprecated */
+		public javaName(): string;
 		public static valueOf(param0: string): okhttp3.TlsVersion;
 		public static forJavaName(param0: string): okhttp3.TlsVersion;
 	}
@@ -1786,7 +1918,7 @@ declare module okhttp3 {
 			public static format(param0: string, param1: androidNative.Array<any>): string;
 			public static withSuppressed(param0: java.lang.Exception, param1: java.util.List<any>): java.lang.Throwable;
 			public static headersContentLength(param0: okhttp3.Response): number;
-			public static addIfAbsent(param0: java.util.List, param1: any): void;
+			public static addIfAbsent(param0: java.util.List<any>, param1: any): void;
 			public static canParseAsIpAddress(param0: string): boolean;
 			public static isHealthy(param0: java.net.Socket, param1: okio.BufferedSource): boolean;
 			public static asFactory(param0: okhttp3.EventListener): okhttp3.EventListener.Factory;
@@ -1799,7 +1931,7 @@ declare module okhttp3 {
 			public static skipAll(param0: okio.Buffer, param1: number): number;
 			public static toHexString(param0: number): string;
 			public static intersect(param0: androidNative.Array<string>, param1: androidNative.Array<string>, param2: java.util.Comparator<any>): androidNative.Array<string>;
-			public static toImmutableList(param0: java.util.List): java.util.List;
+			public static toImmutableList(param0: java.util.List<any>): java.util.List<any>;
 			public static assertThreadHoldsLock(param0: any): void;
 			public static notify(param0: any): void;
 			public static threadFactory(param0: string, param1: boolean): java.util.concurrent.ThreadFactory;
@@ -1807,15 +1939,15 @@ declare module okhttp3 {
 			public static skipAll(param0: okio.Source, param1: number, param2: java.util.concurrent.TimeUnit): boolean;
 			public static checkOffsetAndCount(param0: number, param1: number, param2: number): void;
 			public wait(param0: number): void;
-			public static readFieldOrNull(param0: any, param1: java.lang.Class, param2: string): any;
-			public static filterList(param0: java.lang.Iterable, param1: any): java.util.List;
+			public static readFieldOrNull(param0: any, param1: java.lang.Class<any>, param2: string): any;
+			public static filterList(param0: java.lang.Iterable<any>, param1: any): java.util.List<any>;
 			public static hasIntersection(param0: androidNative.Array<string>, param1: androidNative.Array<string>, param2: java.util.Comparator<any>): boolean;
 			public static indexOfFirstNonAsciiWhitespace(param0: string, param1: number, param2: number): number;
 			public static toNonNegativeInt(param0: string, param1: number): number;
 			public static indexOfControlOrNonAscii(param0: string): number;
 			public static wait(param0: any): void;
 			public static delimiterOffset(param0: string, param1: string, param2: number, param3: number): number;
-			public static immutableListOf(param0: androidNative.Array<any>): java.util.List;
+			public static immutableListOf(param0: androidNative.Array<any>): java.util.List<any>;
 			public wait(): void;
 			public static ignoreIoExceptions(param0: any): void;
 			public static closeQuietly(param0: java.io.Closeable): void;
@@ -1823,7 +1955,7 @@ declare module okhttp3 {
 			public notify(): void;
 			public static closeQuietly(param0: java.net.Socket): void;
 			public static checkDuration(param0: string, param1: number, param2: java.util.concurrent.TimeUnit): number;
-			public static toImmutableMap(param0: java.util.Map): java.util.Map;
+			public static toImmutableMap(param0: java.util.Map<any,any>): java.util.Map<any,any>;
 			public static notifyAll(param0: any): void;
 			public static readMedium(param0: okio.BufferedSource): number;
 			public static toHeaders(param0: java.util.List<okhttp3.internal.http2.Header>): okhttp3.Headers;
@@ -1901,9 +2033,9 @@ declare module okhttp3 {
 		export module cache {
 			export class CacheStrategy extends java.lang.Object {
 				public static class: java.lang.Class<okhttp3.internal.cache.CacheStrategy>;
+				public constructor(param0: okhttp3.Request, param1: okhttp3.Response);
 				public getNetworkRequest(): okhttp3.Request;
 				public getCacheResponse(): okhttp3.Response;
-				public constructor(param0: okhttp3.Request, param1: okhttp3.Response);
 			}
 			export module CacheStrategy {
 				export class Companion extends java.lang.Object {
@@ -1974,15 +2106,15 @@ declare module okhttp3 {
 					public commit(): void;
 					public newSink(param0: number): okio.Sink;
 					public getEntry$okhttp(): okhttp3.internal.cache.DiskLruCache.Entry;
-					public getWritten$okhttp(): androidNative.Array<boolean>;
 					public constructor(param0: okhttp3.internal.cache.DiskLruCache.Entry);
+					public getWritten$okhttp(): androidNative.Array<boolean>;
 					public abort(): void;
 				}
 				export class Entry extends java.lang.Object {
 					public static class: java.lang.Class<okhttp3.internal.cache.DiskLruCache.Entry>;
 					public getReadable$okhttp(): boolean;
-					public getLengths$okhttp(): androidNative.Array<number>;
 					public constructor(param0: string);
+					public getLengths$okhttp(): androidNative.Array<number>;
 					public getZombie$okhttp(): boolean;
 					public snapshot$okhttp(): okhttp3.internal.cache.DiskLruCache.Snapshot;
 					public setReadable$okhttp(param0: boolean): void;
@@ -1992,8 +2124,8 @@ declare module okhttp3 {
 					public getLockingSourceCount$okhttp(): number;
 					public setCurrentEditor$okhttp(param0: okhttp3.internal.cache.DiskLruCache.Editor): void;
 					public getCleanFiles$okhttp(): java.util.List<java.io.File>;
-					public getSequenceNumber$okhttp(): number;
 					public getKey$okhttp(): string;
+					public getSequenceNumber$okhttp(): number;
 					public setLockingSourceCount$okhttp(param0: number): void;
 					public getDirtyFiles$okhttp(): java.util.List<java.io.File>;
 					public setZombie$okhttp(param0: boolean): void;
@@ -2016,12 +2148,10 @@ declare module okhttp3 {
 declare module okhttp3 {
 	export module internal {
 		export module cache {
-			export class FaultHidingSink extends okio.ForwardingSink {
+			export class FaultHidingSink {
 				public static class: java.lang.Class<okhttp3.internal.cache.FaultHidingSink>;
 				public close(): void;
-				public timeout(): okio.Timeout;
 				public getOnException(): any;
-				public constructor(param0: okio.Sink);
 				public constructor(param0: okio.Sink, param1: any);
 				public write(param0: okio.Buffer, param1: number): void;
 				public flush(): void;
@@ -2036,8 +2166,8 @@ declare module okhttp3 {
 			export class FileOperator extends java.lang.Object {
 				public static class: java.lang.Class<okhttp3.internal.cache2.FileOperator>;
 				public write(param0: number, param1: okio.Buffer, param2: number): void;
-				public read(param0: number, param1: okio.Buffer, param2: number): void;
 				public constructor(param0: java.nio.channels.FileChannel);
+				public read(param0: number, param1: okio.Buffer, param2: number): void;
 			}
 		}
 	}
@@ -2076,7 +2206,7 @@ declare module okhttp3 {
 					public edit(param0: java.io.File, param1: okio.Source, param2: okio.ByteString, param3: number): okhttp3.internal.cache2.Relay;
 					public read(param0: java.io.File): okhttp3.internal.cache2.Relay;
 				}
-				export class RelaySource extends java.lang.Object implements okio.Source {
+				export class RelaySource extends java.lang.Object {
 					public static class: java.lang.Class<okhttp3.internal.cache2.Relay.RelaySource>;
 					public constructor(param0: okhttp3.internal.cache2.Relay);
 					public close(): void;
@@ -2096,12 +2226,12 @@ declare module okhttp3 {
 				public getNextExecuteNanoTime$okhttp(): number;
 				public runOnce(): number;
 				public setNextExecuteNanoTime$okhttp(param0: number): void;
-				public setQueue$okhttp(param0: okhttp3.internal.concurrent.TaskQueue): void;
 				public constructor(param0: string, param1: boolean);
-				public getQueue$okhttp(): okhttp3.internal.concurrent.TaskQueue;
+				public setQueue$okhttp(param0: okhttp3.internal.concurrent.TaskQueue): void;
 				public getCancelable(): boolean;
-				public initQueue$okhttp(param0: okhttp3.internal.concurrent.TaskQueue): void;
+				public getQueue$okhttp(): okhttp3.internal.concurrent.TaskQueue;
 				public getName(): string;
+				public initQueue$okhttp(param0: okhttp3.internal.concurrent.TaskQueue): void;
 				public toString(): string;
 			}
 		}
@@ -2113,14 +2243,14 @@ declare module okhttp3 {
 		export module concurrent {
 			export class TaskQueue extends java.lang.Object {
 				public static class: java.lang.Class<okhttp3.internal.concurrent.TaskQueue>;
-				public getActiveTask$okhttp(): okhttp3.internal.concurrent.Task;
 				public constructor(param0: okhttp3.internal.concurrent.TaskRunner, param1: string);
+				public getActiveTask$okhttp(): okhttp3.internal.concurrent.Task;
 				public getName$okhttp(): string;
 				public toString(): string;
 				public scheduleAndDecide$okhttp(param0: okhttp3.internal.concurrent.Task, param1: number, param2: boolean): boolean;
 				public schedule(param0: string, param1: number, param2: any): void;
-				public getFutureTasks$okhttp(): java.util.List<okhttp3.internal.concurrent.Task>;
 				public getTaskRunner$okhttp(): okhttp3.internal.concurrent.TaskRunner;
+				public getFutureTasks$okhttp(): java.util.List<okhttp3.internal.concurrent.Task>;
 				public shutdown(): void;
 				public getCancelActiveTask$okhttp(): boolean;
 				public getScheduledTasks(): java.util.List<okhttp3.internal.concurrent.Task>;
@@ -2155,8 +2285,8 @@ declare module okhttp3 {
 				public static INSTANCE: okhttp3.internal.concurrent.TaskRunner;
 				public kickCoordinator$okhttp(param0: okhttp3.internal.concurrent.TaskQueue): void;
 				public cancelAll(): void;
-				public activeQueues(): java.util.List<okhttp3.internal.concurrent.TaskQueue>;
 				public getBackend(): okhttp3.internal.concurrent.TaskRunner.Backend;
+				public activeQueues(): java.util.List<okhttp3.internal.concurrent.TaskQueue>;
 				public constructor(param0: okhttp3.internal.concurrent.TaskRunner.Backend);
 				public awaitTaskToRun(): okhttp3.internal.concurrent.Task;
 				public newQueue(): okhttp3.internal.concurrent.TaskQueue;
@@ -2232,8 +2362,8 @@ declare module okhttp3 {
 				public static class: java.lang.Class<okhttp3.internal.connection.Exchange>;
 				public finishRequest(): void;
 				public getCall$okhttp(): okhttp3.internal.connection.RealCall;
-				public trailers(): okhttp3.Headers;
 				public getEventListener$okhttp(): okhttp3.EventListener;
+				public trailers(): okhttp3.Headers;
 				public isDuplex$okhttp(): boolean;
 				public getConnection$okhttp(): okhttp3.internal.connection.RealConnection;
 				public readResponseHeaders(param0: boolean): okhttp3.Response.Builder;
@@ -2241,13 +2371,13 @@ declare module okhttp3 {
 				public writeRequestHeaders(param0: okhttp3.Request): void;
 				public responseHeadersStart(): void;
 				public noRequestBody(): void;
-				public isCoalescedConnection$okhttp(): boolean;
 				public getFinder$okhttp(): okhttp3.internal.connection.ExchangeFinder;
+				public isCoalescedConnection$okhttp(): boolean;
 				public detachWithViolence(): void;
 				public openResponseBody(param0: okhttp3.Response): okhttp3.ResponseBody;
 				public responseHeadersEnd(param0: okhttp3.Response): void;
-				public webSocketUpgradeFailed(): void;
 				public constructor(param0: okhttp3.internal.connection.RealCall, param1: okhttp3.EventListener, param2: okhttp3.internal.connection.ExchangeFinder, param3: okhttp3.internal.http.ExchangeCodec);
+				public webSocketUpgradeFailed(): void;
 				public createRequestBody(param0: okhttp3.Request, param1: boolean): okio.Sink;
 				public cancel(): void;
 				public flushRequest(): void;
@@ -2255,22 +2385,18 @@ declare module okhttp3 {
 				public bodyComplete(param0: number, param1: boolean, param2: boolean, param3: java.io.IOException): java.io.IOException;
 			}
 			export module Exchange {
-				export class RequestBodySink extends okio.ForwardingSink {
+				export class RequestBodySink {
 					public static class: java.lang.Class<okhttp3.internal.connection.Exchange.RequestBodySink>;
 					public close(): void;
-					public constructor(param0: okio.Sink);
 					public flush(): void;
 					public write(param0: okio.Buffer, param1: number): void;
-					public timeout(): okio.Timeout;
 					public constructor(param0: okio.Sink, param1: number);
 				}
-				export class ResponseBodySource extends okio.ForwardingSource {
+				export class ResponseBodySource {
 					public static class: java.lang.Class<okhttp3.internal.connection.Exchange.ResponseBodySource>;
 					public constructor(param0: okio.Source, param1: number);
 					public close(): void;
-					public constructor(param0: okio.Source);
 					public complete(param0: java.io.IOException): java.io.IOException;
-					public timeout(): okio.Timeout;
 					public read(param0: okio.Buffer, param1: number): number;
 				}
 			}
@@ -2314,15 +2440,15 @@ declare module okhttp3 {
 				public releaseConnectionNoEvents$okhttp(): java.net.Socket;
 				public cancel(): void;
 				public execute(): okhttp3.Response;
+				public getForWebSocket(): boolean;
 				public getConnection(): okhttp3.internal.connection.RealConnection;
 				public noMoreExchanges$okhttp(param0: java.io.IOException): java.io.IOException;
-				public getForWebSocket(): boolean;
 				public enqueue(param0: okhttp3.Callback): void;
 				public enterNetworkInterceptorExchange(param0: okhttp3.Request, param1: boolean): void;
 				public messageDone$okhttp(param0: okhttp3.internal.connection.Exchange, param1: boolean, param2: boolean, param3: java.io.IOException): java.io.IOException;
 				public retryAfterFailure(): boolean;
-				public timeout(): okio.AsyncTimeout;
 				public getClient(): okhttp3.OkHttpClient;
+				public timeout(): okio.AsyncTimeout;
 				public clone(): okhttp3.internal.connection.RealCall;
 				public exitNetworkInterceptorExchange$okhttp(param0: boolean): void;
 				public clone(): okhttp3.Call;
@@ -2338,8 +2464,8 @@ declare module okhttp3 {
 					public getCallsPerHost(): java.util.concurrent.atomic.AtomicInteger;
 					public executeOn(param0: java.util.concurrent.ExecutorService): void;
 					public run(): void;
-					public getRequest(): okhttp3.Request;
 					public constructor(param0: okhttp3.Callback);
+					public getRequest(): okhttp3.Request;
 					public getCall(): okhttp3.internal.connection.RealCall;
 					public getHost(): string;
 				}
@@ -2365,11 +2491,11 @@ declare module okhttp3 {
 				public connect(param0: number, param1: number, param2: number, param3: number, param4: boolean, param5: okhttp3.Call, param6: okhttp3.EventListener): void;
 				public protocol(): okhttp3.Protocol;
 				public socket(): java.net.Socket;
-				public noNewExchanges$okhttp(): void;
 				public constructor();
+				public noNewExchanges$okhttp(): void;
 				public trackFailure$okhttp(param0: okhttp3.internal.connection.RealCall, param1: java.io.IOException): void;
-				public isHealthy(param0: boolean): boolean;
 				public getConnectionPool(): okhttp3.internal.connection.RealConnectionPool;
+				public isHealthy(param0: boolean): boolean;
 				public cancel(): void;
 				public handshake(): okhttp3.Handshake;
 				public getCalls(): java.util.List<java.lang.ref.Reference<okhttp3.internal.connection.RealCall>>;
@@ -2410,9 +2536,9 @@ declare module okhttp3 {
 			export class RealConnectionPool extends java.lang.Object {
 				public static class: java.lang.Class<okhttp3.internal.connection.RealConnectionPool>;
 				public cleanup(param0: number): number;
+				public constructor(param0: okhttp3.internal.concurrent.TaskRunner, param1: number, param2: number, param3: java.util.concurrent.TimeUnit);
 				public connectionCount(): number;
 				public callAcquirePooledConnection(param0: okhttp3.Address, param1: okhttp3.internal.connection.RealCall, param2: java.util.List<okhttp3.Route>, param3: boolean): boolean;
-				public constructor(param0: okhttp3.internal.concurrent.TaskRunner, param1: number, param2: number, param3: java.util.concurrent.TimeUnit);
 				public put(param0: okhttp3.internal.connection.RealConnection): void;
 				public evictAll(): void;
 				public idleConnectionCount(): number;
@@ -2450,8 +2576,8 @@ declare module okhttp3 {
 				public getLastConnectException(): java.io.IOException;
 				public constructor(param0: java.io.IOException);
 				public addConnectException(param0: java.io.IOException): void;
-				public getFirstConnectException(): java.io.IOException;
 				public constructor(param0: string, param1: java.lang.Throwable);
+				public getFirstConnectException(): java.io.IOException;
 				public constructor(param0: java.lang.Throwable);
 				public constructor(param0: string);
 				public constructor();
@@ -2591,23 +2717,23 @@ declare module okhttp3 {
 		export module http {
 			export class RealInterceptorChain extends java.lang.Object implements okhttp3.Interceptor.Chain {
 				public static class: java.lang.Class<okhttp3.internal.http.RealInterceptorChain>;
-				public request(): okhttp3.Request;
 				public getConnectTimeoutMillis$okhttp(): number;
+				public request(): okhttp3.Request;
 				public getCall$okhttp(): okhttp3.internal.connection.RealCall;
 				public getRequest$okhttp(): okhttp3.Request;
 				public connectTimeoutMillis(): number;
 				public getReadTimeoutMillis$okhttp(): number;
 				public getWriteTimeoutMillis$okhttp(): number;
-				public withWriteTimeout(param0: number, param1: java.util.concurrent.TimeUnit): okhttp3.Interceptor.Chain;
 				public constructor(param0: okhttp3.internal.connection.RealCall, param1: java.util.List<any>, param2: number, param3: okhttp3.internal.connection.Exchange, param4: okhttp3.Request, param5: number, param6: number, param7: number);
+				public withWriteTimeout(param0: number, param1: java.util.concurrent.TimeUnit): okhttp3.Interceptor.Chain;
 				public connection(): okhttp3.Connection;
 				public writeTimeoutMillis(): number;
 				public copy$okhttp(param0: number, param1: okhttp3.internal.connection.Exchange, param2: okhttp3.Request, param3: number, param4: number, param5: number): okhttp3.internal.http.RealInterceptorChain;
 				public readTimeoutMillis(): number;
 				public call(): okhttp3.Call;
 				public withConnectTimeout(param0: number, param1: java.util.concurrent.TimeUnit): okhttp3.Interceptor.Chain;
-				public proceed(param0: okhttp3.Request): okhttp3.Response;
 				public getExchange$okhttp(): okhttp3.internal.connection.Exchange;
+				public proceed(param0: okhttp3.Request): okhttp3.Response;
 				public withReadTimeout(param0: number, param1: java.util.concurrent.TimeUnit): okhttp3.Interceptor.Chain;
 			}
 		}
@@ -2691,8 +2817,8 @@ declare module okhttp3 {
 		export module http1 {
 			export class HeadersReader extends java.lang.Object {
 				public static class: java.lang.Class<okhttp3.internal.http1.HeadersReader>;
-				public readHeaders(): okhttp3.Headers;
 				public constructor(param0: okio.BufferedSource);
+				public readHeaders(): okhttp3.Headers;
 				public getSource(): okio.BufferedSource;
 				public readLine(): string;
 			}
@@ -2721,23 +2847,22 @@ declare module okhttp3 {
 				public reportedContentLength(param0: okhttp3.Response): number;
 				public cancel(): void;
 				public flushRequest(): void;
-				public createRequestBody(param0: okhttp3.Request, param1: number): okio.Sink;
 				public constructor(param0: okhttp3.OkHttpClient, param1: okhttp3.internal.connection.RealConnection, param2: okio.BufferedSource, param3: okio.BufferedSink);
+				public createRequestBody(param0: okhttp3.Request, param1: number): okio.Sink;
 				public getConnection(): okhttp3.internal.connection.RealConnection;
 			}
 			export module Http1ExchangeCodec {
-				export abstract class AbstractSource extends java.lang.Object implements okio.Source {
+				export abstract class AbstractSource extends java.lang.Object {
 					public static class: java.lang.Class<okhttp3.internal.http1.Http1ExchangeCodec.AbstractSource>;
 					public responseBodyComplete(): void;
 					public constructor(param0: okhttp3.internal.http1.Http1ExchangeCodec);
 					public getTimeout(): okio.ForwardingTimeout;
 					public getClosed(): boolean;
-					public close(): void;
 					public timeout(): okio.Timeout;
 					public setClosed(param0: boolean): void;
 					public read(param0: okio.Buffer, param1: number): number;
 				}
-				export class ChunkedSink extends java.lang.Object implements okio.Sink {
+				export class ChunkedSink extends java.lang.Object {
 					public static class: java.lang.Class<okhttp3.internal.http1.Http1ExchangeCodec.ChunkedSink>;
 					public constructor(param0: okhttp3.internal.http1.Http1ExchangeCodec);
 					public close(): void;
@@ -2750,7 +2875,6 @@ declare module okhttp3 {
 					public constructor(param0: okhttp3.internal.http1.Http1ExchangeCodec);
 					public constructor(param0: okhttp3.HttpUrl);
 					public close(): void;
-					public timeout(): okio.Timeout;
 					public read(param0: okio.Buffer, param1: number): number;
 				}
 				export class Companion extends java.lang.Object {
@@ -2760,11 +2884,10 @@ declare module okhttp3 {
 					public static class: java.lang.Class<okhttp3.internal.http1.Http1ExchangeCodec.FixedLengthSource>;
 					public constructor(param0: okhttp3.internal.http1.Http1ExchangeCodec);
 					public close(): void;
-					public timeout(): okio.Timeout;
 					public read(param0: okio.Buffer, param1: number): number;
 					public constructor(param0: number);
 				}
-				export class KnownLengthSink extends java.lang.Object implements okio.Sink {
+				export class KnownLengthSink extends java.lang.Object {
 					public static class: java.lang.Class<okhttp3.internal.http1.Http1ExchangeCodec.KnownLengthSink>;
 					public constructor(param0: okhttp3.internal.http1.Http1ExchangeCodec);
 					public close(): void;
@@ -2776,7 +2899,6 @@ declare module okhttp3 {
 					public static class: java.lang.Class<okhttp3.internal.http1.Http1ExchangeCodec.UnknownLengthSource>;
 					public constructor(param0: okhttp3.internal.http1.Http1ExchangeCodec);
 					public close(): void;
-					public timeout(): okio.Timeout;
 					public read(param0: okio.Buffer, param1: number): number;
 				}
 			}
@@ -2821,7 +2943,7 @@ declare module okhttp3 {
 				public static values(): androidNative.Array<okhttp3.internal.http2.ErrorCode>;
 				public static valueOf(param0: string): okhttp3.internal.http2.ErrorCode;
 				public getHttpCode(): number;
-				public static valueOf(param0: java.lang.Class, param1: string): java.lang.Enum;
+				public static valueOf(param0: java.lang.Class<any>, param1: string): java.lang.Enum<any>;
 			}
 			export module ErrorCode {
 				export class Companion extends java.lang.Object {
@@ -2838,9 +2960,9 @@ declare module okhttp3 {
 		export module http2 {
 			export class Header extends java.lang.Object {
 				public static class: java.lang.Class<okhttp3.internal.http2.Header>;
-				public hpackSize: number;
 				public name: okio.ByteString;
 				public value: okio.ByteString;
+				public hpackSize: number;
 				public static PSEUDO_PREFIX: okio.ByteString;
 				public static RESPONSE_STATUS_UTF8: string;
 				public static TARGET_METHOD_UTF8: string;
@@ -2887,8 +3009,8 @@ declare module okhttp3 {
 					public dynamicTable: androidNative.Array<okhttp3.internal.http2.Header>;
 					public headerCount: number;
 					public dynamicTableByteCount: number;
-					public maxDynamicTableByteCount(): number;
 					public constructor(param0: okio.Source, param1: number, param2: number);
+					public maxDynamicTableByteCount(): number;
 					public constructor(param0: okio.Source, param1: number);
 					public readHeaders(): void;
 					public readByteString(): okio.ByteString;
@@ -2897,11 +3019,11 @@ declare module okhttp3 {
 				}
 				export class Writer extends java.lang.Object {
 					public static class: java.lang.Class<okhttp3.internal.http2.Hpack.Writer>;
+					public headerTableSizeSetting: number;
 					public maxDynamicTableByteCount: number;
 					public dynamicTable: androidNative.Array<okhttp3.internal.http2.Header>;
 					public headerCount: number;
 					public dynamicTableByteCount: number;
-					public headerTableSizeSetting: number;
 					public writeByteString(param0: okio.ByteString): void;
 					public writeHeaders(param0: java.util.List<okhttp3.internal.http2.Header>): void;
 					public constructor(param0: number, param1: okio.Buffer);
@@ -2920,6 +3042,7 @@ declare module okhttp3 {
 		export module http2 {
 			export class Http2 extends java.lang.Object {
 				public static class: java.lang.Class<okhttp3.internal.http2.Http2>;
+				public static INSTANCE: okhttp3.internal.http2.Http2;
 				public static CONNECTION_PREFACE: okio.ByteString;
 				public static INITIAL_MAX_FRAME_SIZE: number;
 				public static TYPE_DATA: number;
@@ -2940,7 +3063,6 @@ declare module okhttp3 {
 				public static FLAG_PADDED: number;
 				public static FLAG_PRIORITY: number;
 				public static FLAG_COMPRESSED: number;
-				public static INSTANCE: okhttp3.internal.http2.Http2;
 				public formattedType$okhttp(param0: number): string;
 				public formatFlags(param0: number, param1: number): string;
 				public frameLog(param0: boolean, param1: number, param2: number, param3: number, param4: number): string;
@@ -3002,8 +3124,8 @@ declare module okhttp3 {
 				public setPeerSettings(param0: okhttp3.internal.http2.Settings): void;
 				public close$okhttp(param0: okhttp3.internal.http2.ErrorCode, param1: okhttp3.internal.http2.ErrorCode, param2: java.io.IOException): void;
 				public writeData(param0: number, param1: boolean, param2: okio.Buffer, param3: number): void;
-				public start(param0: boolean): void;
 				public sendDegradedPingLater$okhttp(): void;
+				public start(param0: boolean): void;
 				public shutdown(param0: okhttp3.internal.http2.ErrorCode): void;
 				public pushRequestLater$okhttp(param0: number, param1: java.util.List<okhttp3.internal.http2.Header>): void;
 				public getStreams$okhttp(): java.util.Map<java.lang.Integer,okhttp3.internal.http2.Http2Stream>;
@@ -3019,14 +3141,14 @@ declare module okhttp3 {
 					public listener(param0: okhttp3.internal.http2.Http2Connection.Listener): okhttp3.internal.http2.Http2Connection.Builder;
 					public build(): okhttp3.internal.http2.Http2Connection;
 					public setSocket$okhttp(param0: java.net.Socket): void;
-					public socket(param0: java.net.Socket, param1: string, param2: okio.BufferedSource): okhttp3.internal.http2.Http2Connection.Builder;
 					public getClient$okhttp(): boolean;
+					public socket(param0: java.net.Socket, param1: string, param2: okio.BufferedSource): okhttp3.internal.http2.Http2Connection.Builder;
 					public pushObserver(param0: okhttp3.internal.http2.PushObserver): okhttp3.internal.http2.Http2Connection.Builder;
 					public setClient$okhttp(param0: boolean): void;
 					public getSocket$okhttp(): java.net.Socket;
 					public getListener$okhttp(): okhttp3.internal.http2.Http2Connection.Listener;
-					public socket(param0: java.net.Socket, param1: string): okhttp3.internal.http2.Http2Connection.Builder;
 					public pingIntervalMillis(param0: number): okhttp3.internal.http2.Http2Connection.Builder;
+					public socket(param0: java.net.Socket, param1: string): okhttp3.internal.http2.Http2Connection.Builder;
 					public constructor(param0: boolean, param1: okhttp3.internal.concurrent.TaskRunner);
 					public setConnectionName$okhttp(param0: string): void;
 					public setPingIntervalMillis$okhttp(param0: number): void;
@@ -3067,8 +3189,8 @@ declare module okhttp3 {
 					public applyAndAckSettings(param0: boolean, param1: okhttp3.internal.http2.Settings): void;
 					public pushPromise(param0: number, param1: number, param2: java.util.List<okhttp3.internal.http2.Header>): void;
 					public constructor(param0: okhttp3.internal.http2.Http2Reader);
-					public settings(param0: boolean, param1: okhttp3.internal.http2.Settings): void;
 					public getReader$okhttp(): okhttp3.internal.http2.Http2Reader;
+					public settings(param0: boolean, param1: okhttp3.internal.http2.Settings): void;
 					public alternateService(param0: number, param1: string, param2: okio.ByteString, param3: string, param4: number, param5: number): void;
 					public data(param0: boolean, param1: number, param2: okio.BufferedSource, param3: number): void;
 					public rstStream(param0: number, param1: okhttp3.internal.http2.ErrorCode): void;
@@ -3088,9 +3210,9 @@ declare module okhttp3 {
 				public static class: java.lang.Class<okhttp3.internal.http2.Http2ExchangeCodec>;
 				public finishRequest(): void;
 				public trailers(): okhttp3.Headers;
+				public constructor(param0: okhttp3.OkHttpClient, param1: okhttp3.internal.connection.RealConnection, param2: okhttp3.internal.http.RealInterceptorChain, param3: okhttp3.internal.http2.Http2Connection);
 				public reportedContentLength(param0: okhttp3.Response): number;
 				public openResponseBodySource(param0: okhttp3.Response): okio.Source;
-				public constructor(param0: okhttp3.OkHttpClient, param1: okhttp3.internal.connection.RealConnection, param2: okhttp3.internal.http.RealInterceptorChain, param3: okhttp3.internal.http2.Http2Connection);
 				public readResponseHeaders(param0: boolean): okhttp3.Response.Builder;
 				public cancel(): void;
 				public flushRequest(): void;
@@ -3116,8 +3238,8 @@ declare module okhttp3 {
 				public static class: java.lang.Class<okhttp3.internal.http2.Http2Reader>;
 				public close(): void;
 				public nextFrame(param0: boolean, param1: okhttp3.internal.http2.Http2Reader.Handler): boolean;
-				public readConnectionPreface(param0: okhttp3.internal.http2.Http2Reader.Handler): void;
 				public constructor(param0: okio.BufferedSource, param1: boolean);
+				public readConnectionPreface(param0: okhttp3.internal.http2.Http2Reader.Handler): void;
 			}
 			export module Http2Reader {
 				export class Companion extends java.lang.Object {
@@ -3125,15 +3247,15 @@ declare module okhttp3 {
 					public getLogger(): java.util.logging.Logger;
 					public lengthWithoutPadding(param0: number, param1: number, param2: number): number;
 				}
-				export class ContinuationSource extends java.lang.Object implements okio.Source {
+				export class ContinuationSource extends java.lang.Object {
 					public static class: java.lang.Class<okhttp3.internal.http2.Http2Reader.ContinuationSource>;
 					public getFlags(): number;
 					public setStreamId(param0: number): void;
 					public getLength(): number;
 					public timeout(): okio.Timeout;
 					public read(param0: okio.Buffer, param1: number): number;
-					public setLength(param0: number): void;
 					public constructor(param0: okio.BufferedSource);
+					public setLength(param0: number): void;
 					public getStreamId(): number;
 					public getPadding(): number;
 					public setPadding(param0: number): void;
@@ -3227,12 +3349,12 @@ declare module okhttp3 {
 				export class Companion extends java.lang.Object {
 					public static class: java.lang.Class<okhttp3.internal.http2.Http2Stream.Companion>;
 				}
-				export class FramingSink extends java.lang.Object implements okio.Sink {
+				export class FramingSink extends java.lang.Object {
 					public static class: java.lang.Class<okhttp3.internal.http2.Http2Stream.FramingSink>;
 					public getTrailers(): okhttp3.Headers;
 					public constructor(param0: boolean);
-					public setTrailers(param0: okhttp3.Headers): void;
 					public getFinished(): boolean;
+					public setTrailers(param0: okhttp3.Headers): void;
 					public getClosed(): boolean;
 					public close(): void;
 					public flush(): void;
@@ -3241,7 +3363,7 @@ declare module okhttp3 {
 					public setClosed(param0: boolean): void;
 					public setFinished(param0: boolean): void;
 				}
-				export class FramingSource extends java.lang.Object implements okio.Source {
+				export class FramingSource extends java.lang.Object {
 					public static class: java.lang.Class<okhttp3.internal.http2.Http2Stream.FramingSource>;
 					public getTrailers(): okhttp3.Headers;
 					public receive$okhttp(param0: okio.BufferedSource, param1: number): void;
@@ -3257,12 +3379,11 @@ declare module okhttp3 {
 					public getReceiveBuffer(): okio.Buffer;
 					public setClosed$okhttp(param0: boolean): void;
 				}
-				export class StreamTimeout extends okio.AsyncTimeout {
+				export class StreamTimeout {
 					public static class: java.lang.Class<okhttp3.internal.http2.Http2Stream.StreamTimeout>;
 					public timedOut(): void;
 					public newTimeoutException(param0: java.io.IOException): java.io.IOException;
 					public exitAndThrowIfTimedOut(): void;
-					public constructor();
 					public constructor(param0: okhttp3.internal.http2.Http2Stream);
 				}
 			}
@@ -3357,8 +3478,8 @@ declare module okhttp3 {
 						public static class: java.lang.Class<okhttp3.internal.http2.PushObserver.Companion.PushObserverCancel>;
 						public onRequest(param0: number, param1: java.util.List<okhttp3.internal.http2.Header>): boolean;
 						public onHeaders(param0: number, param1: java.util.List<okhttp3.internal.http2.Header>, param2: boolean): boolean;
-						public onReset(param0: number, param1: okhttp3.internal.http2.ErrorCode): void;
 						public constructor();
+						public onReset(param0: number, param1: okhttp3.internal.http2.ErrorCode): void;
 						public onData(param0: number, param1: okio.BufferedSource, param2: number, param3: boolean): boolean;
 					}
 				}
@@ -3384,9 +3505,9 @@ declare module okhttp3 {
 				public getHeaderTableSize(): number;
 				public getEnablePush(param0: boolean): boolean;
 				public get(param0: number): number;
+				public constructor();
 				public getInitialWindowSize(): number;
 				public size(): number;
-				public constructor();
 				public getMaxConcurrentStreams(): number;
 				public clear(): void;
 				public isSet(param0: number): boolean;
@@ -3603,10 +3724,10 @@ declare module okhttp3 {
 					public static class: java.lang.Class<okhttp3.internal.platform.Jdk8WithJettyBootPlatform.AlpnProvider>;
 					public getSelected(): string;
 					public setUnsupported(param0: boolean): void;
+					public constructor(param0: java.util.List<string>);
 					public getUnsupported(): boolean;
 					public setSelected(param0: string): void;
 					public invoke(param0: any, param1: java.lang.reflect.Method, param2: androidNative.Array<any>): any;
-					public constructor(param0: java.util.List<string>);
 				}
 				export class Companion extends java.lang.Object {
 					public static class: java.lang.Class<okhttp3.internal.platform.Jdk8WithJettyBootPlatform.Companion>;
@@ -3788,8 +3909,8 @@ declare module okhttp3 {
 					public static class: java.lang.Class<okhttp3.internal.platform.android.AndroidSocketAdapter>;
 					public isSupported(): boolean;
 					public matchesSocket(param0: javax.net.ssl.SSLSocket): boolean;
-					public configureTlsExtensions(param0: javax.net.ssl.SSLSocket, param1: string, param2: java.util.List<any>): void;
 					public constructor(param0: java.lang.Class<any>);
+					public configureTlsExtensions(param0: javax.net.ssl.SSLSocket, param1: string, param2: java.util.List<any>): void;
 					public getSelectedProtocol(param0: javax.net.ssl.SSLSocket): string;
 					public trustManager(param0: javax.net.ssl.SSLSocketFactory): javax.net.ssl.X509TrustManager;
 					public matchesSocketFactory(param0: javax.net.ssl.SSLSocketFactory): boolean;
@@ -4015,8 +4136,8 @@ declare module okhttp3 {
 				public hashCode(): number;
 				public equals(param0: any): boolean;
 				public constructor(param0: okhttp3.internal.tls.TrustRootIndex);
-				public clean(param0: java.util.List<any>, param1: string): java.util.List<java.security.cert.Certificate>;
 				public constructor();
+				public clean(param0: java.util.List<any>, param1: string): java.util.List<java.security.cert.Certificate>;
 			}
 			export module BasicCertificateChainCleaner {
 				export class Companion extends java.lang.Object {
@@ -4046,8 +4167,8 @@ declare module okhttp3 {
 		export module tls {
 			export abstract class CertificateChainCleaner extends java.lang.Object {
 				public static class: java.lang.Class<okhttp3.internal.tls.CertificateChainCleaner>;
-				public clean(param0: java.util.List<any>, param1: string): java.util.List<java.security.cert.Certificate>;
 				public constructor();
+				public clean(param0: java.util.List<any>, param1: string): java.util.List<java.security.cert.Certificate>;
 			}
 			export module CertificateChainCleaner {
 				export class Companion extends java.lang.Object {
@@ -4167,8 +4288,8 @@ declare module okhttp3 {
 				export class Message extends java.lang.Object {
 					public static class: java.lang.Class<okhttp3.internal.ws.RealWebSocket.Message>;
 					public getData(): okio.ByteString;
-					public getFormatOpcode(): number;
 					public constructor(param0: number, param1: okio.ByteString);
+					public getFormatOpcode(): number;
 				}
 				export abstract class Streams extends java.lang.Object implements java.io.Closeable {
 					public static class: java.lang.Class<okhttp3.internal.ws.RealWebSocket.Streams>;
@@ -4200,13 +4321,13 @@ declare module okhttp3 {
 				public serverMaxWindowBits: java.lang.Integer;
 				public serverNoContextTakeover: boolean;
 				public unknownValues: boolean;
-				public noContextTakeover(param0: boolean): boolean;
 				public constructor(param0: boolean, param1: java.lang.Integer, param2: boolean, param3: java.lang.Integer, param4: boolean, param5: boolean);
+				public noContextTakeover(param0: boolean): boolean;
 				public component1(): boolean;
 				public component5(): boolean;
 				public toString(): string;
-				public constructor();
 				public component3(): boolean;
+				public constructor();
 				public copy(param0: boolean, param1: java.lang.Integer, param2: boolean, param3: java.lang.Integer, param4: boolean, param5: boolean): okhttp3.internal.ws.WebSocketExtensions;
 				public hashCode(): number;
 				public equals(param0: any): boolean;
@@ -4229,6 +4350,7 @@ declare module okhttp3 {
 		export module ws {
 			export class WebSocketProtocol extends java.lang.Object {
 				public static class: java.lang.Class<okhttp3.internal.ws.WebSocketProtocol>;
+				public static INSTANCE: okhttp3.internal.ws.WebSocketProtocol;
 				public static ACCEPT_MAGIC: string;
 				public static B0_FLAG_FIN: number;
 				public static B0_FLAG_RSV1: number;
@@ -4251,7 +4373,6 @@ declare module okhttp3 {
 				public static PAYLOAD_LONG: number;
 				public static CLOSE_CLIENT_GOING_AWAY: number;
 				public static CLOSE_NO_STATUS_CODE: number;
-				public static INSTANCE: okhttp3.internal.ws.WebSocketProtocol;
 				public validateCloseCode(param0: number): void;
 				public closeCodeExceptionMessage(param0: number): string;
 				public acceptHeader(param0: string): string;
@@ -4306,1067 +4427,13 @@ declare module okhttp3 {
 				public writePing(param0: okio.ByteString): void;
 				public writeClose(param0: number, param1: okio.ByteString): void;
 				public getRandom(): java.util.Random;
+				public getSink(): okio.BufferedSink;
 				public writePong(param0: okio.ByteString): void;
 				public writeMessageFrame(param0: number, param1: okio.ByteString): void;
-				public getSink(): okio.BufferedSink;
 			}
 		}
 	}
 }
 
-declare module okio {
-	export class AsyncTimeout extends okio.Timeout {
-		public static class: java.lang.Class<okio.AsyncTimeout>;
-		public enter(): void;
-		public sink(param0: okio.Sink): okio.Sink;
-		public access$newTimeoutException(param0: java.io.IOException): java.io.IOException;
-		public constructor();
-		public withTimeout(param0: any): any;
-		public timedOut(): void;
-		public newTimeoutException(param0: java.io.IOException): java.io.IOException;
-		public source(param0: okio.Source): okio.Source;
-		public exit(): boolean;
-	}
-	export module AsyncTimeout {
-		export class Companion extends java.lang.Object {
-			public static class: java.lang.Class<okio.AsyncTimeout.Companion>;
-			public awaitTimeout$okio(): okio.AsyncTimeout;
-		}
-		export class Watchdog extends java.lang.Thread {
-			public static class: java.lang.Class<okio.AsyncTimeout.Watchdog>;
-			public constructor(param0: java.lang.Runnable);
-			public constructor(param0: java.lang.ThreadGroup, param1: java.lang.Runnable, param2: string);
-			public constructor(param0: java.lang.Runnable, param1: string);
-			public constructor(param0: java.lang.ThreadGroup, param1: java.lang.Runnable, param2: string, param3: number);
-			public run(): void;
-			public constructor();
-			public constructor(param0: java.lang.ThreadGroup, param1: java.lang.Runnable);
-			public constructor(param0: java.lang.ThreadGroup, param1: string);
-			public constructor(param0: string);
-		}
-	}
-}
-
-declare module okio {
-	export class BlackholeSink extends java.lang.Object implements okio.Sink {
-		public static class: java.lang.Class<okio.BlackholeSink>;
-		public constructor();
-		public close(): void;
-		public write(param0: okio.Buffer, param1: number): void;
-		public flush(): void;
-		public timeout(): okio.Timeout;
-	}
-}
-
-declare module okio {
-	export class Buffer extends java.lang.Object implements okio.BufferedSource, okio.BufferedSink, java.lang.Cloneable, java.nio.channels.ByteChannel {
-		public static class: java.lang.Class<okio.Buffer>;
-		public head: okio.Segment;
-		public readIntLe(): number;
-		public writeUtf8(param0: string): okio.Buffer;
-		public writeDecimalLong(param0: number): okio.Buffer;
-		public readFrom(param0: java.io.InputStream, param1: number): okio.Buffer;
-		public writeUtf8(param0: string, param1: number, param2: number): okio.Buffer;
-		public readUtf8(param0: number): string;
-		public copyTo(param0: java.io.OutputStream): okio.Buffer;
-		public writeUtf8CodePoint(param0: number): okio.BufferedSink;
-		public writeUtf8(param0: string, param1: number, param2: number): okio.BufferedSink;
-		public indexOf(param0: number): number;
-		public copy(): okio.Buffer;
-		public readByte(): number;
-		public emitCompleteSegments(): okio.BufferedSink;
-		public write(param0: okio.ByteString, param1: number, param2: number): okio.Buffer;
-		public readLong(): number;
-		public read(param0: okio.Buffer, param1: number): number;
-		public writeIntLe(param0: number): okio.BufferedSink;
-		public write(param0: androidNative.Array<number>, param1: number, param2: number): okio.Buffer;
-		public copyTo(param0: okio.Buffer, param1: number, param2: number): okio.Buffer;
-		public indexOfElement(param0: okio.ByteString): number;
-		public write(param0: java.nio.ByteBuffer): number;
-		public readAll(param0: okio.Sink): number;
-		public sha1(): okio.ByteString;
-		public write(param0: okio.ByteString): okio.BufferedSink;
-		public select(param0: okio.Options): number;
-		public readFrom(param0: java.io.InputStream): okio.Buffer;
-		public writeTo(param0: java.io.OutputStream): okio.Buffer;
-		public outputStream(): java.io.OutputStream;
-		public clear(): void;
-		public require(param0: number): void;
-		public request(param0: number): boolean;
-		public indexOf(param0: okio.ByteString, param1: number): number;
-		public readString(param0: java.nio.charset.Charset): string;
-		public writeLongLe(param0: number): okio.Buffer;
-		public writeLong(param0: number): okio.BufferedSink;
-		public writeString(param0: string, param1: java.nio.charset.Charset): okio.Buffer;
-		public writeByte(param0: number): okio.BufferedSink;
-		public readUtf8LineStrict(): string;
-		public writeUtf8CodePoint(param0: number): okio.Buffer;
-		public writeInt(param0: number): okio.BufferedSink;
-		public hmacSha512(param0: okio.ByteString): okio.ByteString;
-		public readByteArray(param0: number): androidNative.Array<number>;
-		public getBuffer(): okio.Buffer;
-		public sha512(): okio.ByteString;
-		public writeShort(param0: number): okio.BufferedSink;
-		public setSize$okio(param0: number): void;
-		public rangeEquals(param0: number, param1: okio.ByteString, param2: number, param3: number): boolean;
-		public skip(param0: number): void;
-		public getByte(param0: number): number;
-		public write(param0: okio.ByteString, param1: number, param2: number): okio.BufferedSink;
-		public readInt(): number;
-		public writeString(param0: string, param1: number, param2: number, param3: java.nio.charset.Charset): okio.Buffer;
-		public write(param0: androidNative.Array<number>): okio.BufferedSink;
-		public read(param0: androidNative.Array<number>, param1: number, param2: number): number;
-		public copyTo(param0: java.io.OutputStream, param1: number, param2: number): okio.Buffer;
-		public writeTo(param0: java.io.OutputStream, param1: number): okio.Buffer;
-		public writeAll(param0: okio.Source): number;
-		public timeout(): okio.Timeout;
-		public equals(param0: any): boolean;
-		public close(): void;
-		public writeDecimalLong(param0: number): okio.BufferedSink;
-		public inputStream(): java.io.InputStream;
-		public readUtf8LineStrict(param0: number): string;
-		public write(param0: okio.ByteString): okio.Buffer;
-		public readByteArray(): androidNative.Array<number>;
-		public writeHexadecimalUnsignedLong(param0: number): okio.Buffer;
-		public writeShortLe(param0: number): okio.BufferedSink;
-		public writeUtf8(param0: string): okio.BufferedSink;
-		public copyTo(param0: java.io.OutputStream, param1: number): okio.Buffer;
-		public readUtf8CodePoint(): number;
-		public read(param0: androidNative.Array<number>): number;
-		public writeShortLe(param0: number): okio.Buffer;
-		public readAndWriteUnsafe(): okio.Buffer.UnsafeCursor;
-		public snapshot(param0: number): okio.ByteString;
-		public writeHexadecimalUnsignedLong(param0: number): okio.BufferedSink;
-		public readHexadecimalUnsignedLong(): number;
-		public emit(): okio.BufferedSink;
-		public writeInt(param0: number): okio.Buffer;
-		public constructor();
-		public readUnsafe(param0: okio.Buffer.UnsafeCursor): okio.Buffer.UnsafeCursor;
-		public readUtf8(): string;
-		
-		/** @deprecated */
-		public buffer(): okio.Buffer;
-		public write(param0: okio.Buffer, param1: number): void;
-		public readByteString(param0: number): okio.ByteString;
-		public writeShort(param0: number): okio.Buffer;
-		public readUnsafe(): okio.Buffer.UnsafeCursor;
-		public completeSegmentByteCount(): number;
-		public toString(): string;
-		public md5(): okio.ByteString;
-		public flush(): void;
-		public writeString(param0: string, param1: java.nio.charset.Charset): okio.BufferedSink;
-		public writeLongLe(param0: number): okio.BufferedSink;
-		public readAndWriteUnsafe(param0: okio.Buffer.UnsafeCursor): okio.Buffer.UnsafeCursor;
-		public readShort(): number;
-		public peek(): okio.BufferedSource;
-		public writableSegment$okio(param0: number): okio.Segment;
-		public write(param0: androidNative.Array<number>): okio.Buffer;
-		public readShortLe(): number;
-		public write(param0: okio.Source, param1: number): okio.Buffer;
-		
-		public readUtf8Line(): string;
-		public readFully(param0: androidNative.Array<number>): void;
-		public readByteString(): okio.ByteString;
-		public writeString(param0: string, param1: number, param2: number, param3: java.nio.charset.Charset): okio.BufferedSink;
-		public writeIntLe(param0: number): okio.Buffer;
-		public clone(): any;
-		public hmacSha1(param0: okio.ByteString): okio.ByteString;
-		public size(): number;
-		public write(param0: androidNative.Array<number>, param1: number, param2: number): okio.BufferedSink;
-		public emit(): okio.Buffer;
-		public hashCode(): number;
-		public indexOf(param0: number, param1: number, param2: number): number;
-		public readString(param0: number, param1: java.nio.charset.Charset): string;
-		public readLongLe(): number;
-		public readFully(param0: okio.Buffer, param1: number): void;
-		public snapshot(): okio.ByteString;
-		public read(param0: java.nio.ByteBuffer): number;
-		public clone(): okio.Buffer;
-		public emitCompleteSegments(): okio.Buffer;
-		public readDecimalLong(): number;
-		public sha256(): okio.ByteString;
-		public writeByte(param0: number): okio.Buffer;
-		public rangeEquals(param0: number, param1: okio.ByteString): boolean;
-		public isOpen(): boolean;
-		public copyTo(param0: okio.Buffer, param1: number): okio.Buffer;
-		public writeLong(param0: number): okio.Buffer;
-		public indexOfElement(param0: okio.ByteString, param1: number): number;
-		public exhausted(): boolean;
-		public write(param0: okio.Source, param1: number): okio.BufferedSink;
-		public buffer(): okio.Buffer;
-		public hmacSha256(param0: okio.ByteString): okio.ByteString;
-		public indexOf(param0: number, param1: number): number;
-		public indexOf(param0: okio.ByteString): number;
-	}
-	export module Buffer {
-		export class UnsafeCursor extends java.lang.Object implements java.io.Closeable {
-			public static class: java.lang.Class<okio.Buffer.UnsafeCursor>;
-			public buffer: okio.Buffer;
-			public readWrite: boolean;
-			public offset: number;
-			public data: androidNative.Array<number>;
-			public start: number;
-			public end: number;
-			public next(): number;
-			public seek(param0: number): number;
-			public resizeBuffer(param0: number): number;
-			public constructor();
-			public expandBuffer(param0: number): number;
-			public close(): void;
-		}
-	}
-}
-
-declare module okio {
-	export class BufferedSink extends java.lang.Object implements okio.Sink, java.nio.channels.WritableByteChannel {
-		public static class: java.lang.Class<okio.BufferedSink>;
-		/**
-		 * Constructs a new instance of the okio.BufferedSink interface with the provided implementation. An empty constructor exists calling super() when extending the interface class.
-		 */
-		public constructor(implementation: {
-			buffer(): okio.Buffer;
-			getBuffer(): okio.Buffer;
-			write(param0: okio.ByteString): okio.BufferedSink;
-			write(param0: okio.ByteString, param1: number, param2: number): okio.BufferedSink;
-			write(param0: androidNative.Array<number>): okio.BufferedSink;
-			write(param0: androidNative.Array<number>, param1: number, param2: number): okio.BufferedSink;
-			writeAll(param0: okio.Source): number;
-			write(param0: okio.Source, param1: number): okio.BufferedSink;
-			writeUtf8(param0: string): okio.BufferedSink;
-			writeUtf8(param0: string, param1: number, param2: number): okio.BufferedSink;
-			writeUtf8CodePoint(param0: number): okio.BufferedSink;
-			writeString(param0: string, param1: java.nio.charset.Charset): okio.BufferedSink;
-			writeString(param0: string, param1: number, param2: number, param3: java.nio.charset.Charset): okio.BufferedSink;
-			writeByte(param0: number): okio.BufferedSink;
-			writeShort(param0: number): okio.BufferedSink;
-			writeShortLe(param0: number): okio.BufferedSink;
-			writeInt(param0: number): okio.BufferedSink;
-			writeIntLe(param0: number): okio.BufferedSink;
-			writeLong(param0: number): okio.BufferedSink;
-			writeLongLe(param0: number): okio.BufferedSink;
-			writeDecimalLong(param0: number): okio.BufferedSink;
-			writeHexadecimalUnsignedLong(param0: number): okio.BufferedSink;
-			flush(): void;
-			emit(): okio.BufferedSink;
-			emitCompleteSegments(): okio.BufferedSink;
-			outputStream(): java.io.OutputStream;
-			write(param0: okio.Buffer, param1: number): void;
-			flush(): void;
-			timeout(): okio.Timeout;
-			close(): void;
-			write(param0: java.nio.ByteBuffer): number;
-			close(): void;
-			flush(): void;
-			isOpen(): boolean;
-			close(): void;
-			close(): void;
-			close(): void;
-			close(): void;
-		});
-		public constructor();
-		public writeDecimalLong(param0: number): okio.BufferedSink;
-		public close(): void;
-		public writeByte(param0: number): okio.BufferedSink;
-		public writeString(param0: string, param1: number, param2: number, param3: java.nio.charset.Charset): okio.BufferedSink;
-		public writeShortLe(param0: number): okio.BufferedSink;
-		public writeInt(param0: number): okio.BufferedSink;
-		public getBuffer(): okio.Buffer;
-		public writeUtf8CodePoint(param0: number): okio.BufferedSink;
-		public writeUtf8(param0: string): okio.BufferedSink;
-		public writeUtf8(param0: string, param1: number, param2: number): okio.BufferedSink;
-		public writeShort(param0: number): okio.BufferedSink;
-		public writeHexadecimalUnsignedLong(param0: number): okio.BufferedSink;
-		public write(param0: androidNative.Array<number>, param1: number, param2: number): okio.BufferedSink;
-		public emitCompleteSegments(): okio.BufferedSink;
-		public emit(): okio.BufferedSink;
-		/** @deprecated */
-		public buffer(): okio.Buffer;
-		public writeIntLe(param0: number): okio.BufferedSink;
-		public write(param0: okio.Buffer, param1: number): void;
-		public write(param0: java.nio.ByteBuffer): number;
-		public write(param0: okio.ByteString, param1: number, param2: number): okio.BufferedSink;
-		public flush(): void;
-		public isOpen(): boolean;
-		public write(param0: okio.ByteString): okio.BufferedSink;
-		public writeString(param0: string, param1: java.nio.charset.Charset): okio.BufferedSink;
-		public writeLongLe(param0: number): okio.BufferedSink;
-		public write(param0: okio.Source, param1: number): okio.BufferedSink;
-		public write(param0: androidNative.Array<number>): okio.BufferedSink;
-		public outputStream(): java.io.OutputStream;
-		public writeAll(param0: okio.Source): number;
-		public writeLong(param0: number): okio.BufferedSink;
-		public timeout(): okio.Timeout;
-	}
-}
-
-declare module okio {
-	export class BufferedSource extends java.lang.Object implements okio.Source, java.nio.channels.ReadableByteChannel {
-		public static class: java.lang.Class<okio.BufferedSource>;
-		/**
-		 * Constructs a new instance of the okio.BufferedSource interface with the provided implementation. An empty constructor exists calling super() when extending the interface class.
-		 */
-		public constructor(implementation: {
-			buffer(): okio.Buffer;
-			getBuffer(): okio.Buffer;
-			exhausted(): boolean;
-			require(param0: number): void;
-			request(param0: number): boolean;
-			readByte(): number;
-			readShort(): number;
-			readShortLe(): number;
-			readInt(): number;
-			readIntLe(): number;
-			readLong(): number;
-			readLongLe(): number;
-			readDecimalLong(): number;
-			readHexadecimalUnsignedLong(): number;
-			skip(param0: number): void;
-			readByteString(): okio.ByteString;
-			readByteString(param0: number): okio.ByteString;
-			select(param0: okio.Options): number;
-			readByteArray(): androidNative.Array<number>;
-			readByteArray(param0: number): androidNative.Array<number>;
-			read(param0: androidNative.Array<number>): number;
-			readFully(param0: androidNative.Array<number>): void;
-			read(param0: androidNative.Array<number>, param1: number, param2: number): number;
-			readFully(param0: okio.Buffer, param1: number): void;
-			readAll(param0: okio.Sink): number;
-			readUtf8(): string;
-			readUtf8(param0: number): string;
-			readUtf8Line(): string;
-			readUtf8LineStrict(): string;
-			readUtf8LineStrict(param0: number): string;
-			readUtf8CodePoint(): number;
-			readString(param0: java.nio.charset.Charset): string;
-			readString(param0: number, param1: java.nio.charset.Charset): string;
-			indexOf(param0: number): number;
-			indexOf(param0: number, param1: number): number;
-			indexOf(param0: number, param1: number, param2: number): number;
-			indexOf(param0: okio.ByteString): number;
-			indexOf(param0: okio.ByteString, param1: number): number;
-			indexOfElement(param0: okio.ByteString): number;
-			indexOfElement(param0: okio.ByteString, param1: number): number;
-			rangeEquals(param0: number, param1: okio.ByteString): boolean;
-			rangeEquals(param0: number, param1: okio.ByteString, param2: number, param3: number): boolean;
-			peek(): okio.BufferedSource;
-			inputStream(): java.io.InputStream;
-			read(param0: okio.Buffer, param1: number): number;
-			timeout(): okio.Timeout;
-			close(): void;
-			read(param0: java.nio.ByteBuffer): number;
-			close(): void;
-			isOpen(): boolean;
-			close(): void;
-			close(): void;
-			close(): void;
-			close(): void;
-		});
-		public constructor();
-		public close(): void;
-		public inputStream(): java.io.InputStream;
-		public readIntLe(): number;
-		public readUtf8LineStrict(param0: number): string;
-		public readByteArray(): androidNative.Array<number>;
-		public readUtf8(param0: number): string;
-		public read(param0: androidNative.Array<number>): number;
-		public readUtf8CodePoint(): number;
-		public indexOf(param0: number): number;
-		public readByte(): number;
-		public readHexadecimalUnsignedLong(): number;
-		public readLong(): number;
-		public read(param0: okio.Buffer, param1: number): number;
-		public readUtf8(): string;
-		/** @deprecated */
-		public buffer(): okio.Buffer;
-		public readByteString(param0: number): okio.ByteString;
-		public indexOfElement(param0: okio.ByteString): number;
-		public readAll(param0: okio.Sink): number;
-		public select(param0: okio.Options): number;
-		public readShort(): number;
-		public require(param0: number): void;
-		public request(param0: number): boolean;
-		public indexOf(param0: okio.ByteString, param1: number): number;
-		public peek(): okio.BufferedSource;
-		public readString(param0: java.nio.charset.Charset): string;
-		public readShortLe(): number;
-		public readUtf8Line(): string;
-		public readFully(param0: androidNative.Array<number>): void;
-		public readByteString(): okio.ByteString;
-		public readUtf8LineStrict(): string;
-		public readByteArray(param0: number): androidNative.Array<number>;
-		public getBuffer(): okio.Buffer;
-		public indexOf(param0: number, param1: number, param2: number): number;
-		public readString(param0: number, param1: java.nio.charset.Charset): string;
-		public readLongLe(): number;
-		public readFully(param0: okio.Buffer, param1: number): void;
-		public rangeEquals(param0: number, param1: okio.ByteString, param2: number, param3: number): boolean;
-		public read(param0: java.nio.ByteBuffer): number;
-		public skip(param0: number): void;
-		public readDecimalLong(): number;
-		public readInt(): number;
-		public rangeEquals(param0: number, param1: okio.ByteString): boolean;
-		public isOpen(): boolean;
-		public indexOfElement(param0: okio.ByteString, param1: number): number;
-		public exhausted(): boolean;
-		public read(param0: androidNative.Array<number>, param1: number, param2: number): number;
-		public indexOf(param0: number, param1: number): number;
-		public indexOf(param0: okio.ByteString): number;
-		public timeout(): okio.Timeout;
-	}
-}
-
-declare module okio {
-	export class ByteString extends java.lang.Object {
-		public static class: java.lang.Class<okio.ByteString>;
-		public static EMPTY: okio.ByteString;
-		public base64(): string;
-		public equals(param0: any): boolean;
-		public static encodeString(param0: string, param1: java.nio.charset.Charset): okio.ByteString;
-		public rangeEquals(param0: number, param1: androidNative.Array<number>, param2: number, param3: number): boolean;
-		public base64Url(): string;
-		public constructor(param0: androidNative.Array<number>);
-		public getHashCode$okio(): number;
-		public asByteBuffer(): java.nio.ByteBuffer;
-		public setHashCode$okio(param0: number): void;
-		public lastIndexOf(param0: okio.ByteString, param1: number): number;
-		
-		public static of(param0: androidNative.Array<number>, param1: number, param2: number): okio.ByteString;
-		public compareTo(param0: okio.ByteString): number;
-		public endsWith(param0: androidNative.Array<number>): boolean;
-		public toString(): string;
-		public indexOf(param0: androidNative.Array<number>): number;
-		public string(param0: java.nio.charset.Charset): string;
-		public md5(): okio.ByteString;
-		public static encodeUtf8(param0: string): okio.ByteString;
-		public startsWith(param0: okio.ByteString): boolean;
-		public endsWith(param0: okio.ByteString): boolean;
-		public lastIndexOf(param0: androidNative.Array<number>, param1: number): number;
-		public toAsciiLowercase(): okio.ByteString;
-		public sha1(): okio.ByteString;
-		public write(param0: java.io.OutputStream): void;
-		public substring(param0: number, param1: number): okio.ByteString;
-		public indexOf(param0: okio.ByteString, param1: number): number;
-		public static of(param0: androidNative.Array<number>): okio.ByteString;
-		
-		public substring(param0: number): okio.ByteString;
-		public substring(): okio.ByteString;
-		public getData$okio(): androidNative.Array<number>;
-		public hmacSha512(param0: okio.ByteString): okio.ByteString;
-		public hmacSha1(param0: okio.ByteString): okio.ByteString;
-		public setUtf8$okio(param0: string): void;
-		public static read(param0: java.io.InputStream, param1: number): okio.ByteString;
-		public sha512(): okio.ByteString;
-		public size(): number;
-		public hex(): string;
-		public hashCode(): number;
-		public toAsciiUppercase(): okio.ByteString;
-		public getSize$okio(): number;
-		public lastIndexOf(param0: androidNative.Array<number>): number;
-		public static decodeBase64(param0: string): okio.ByteString;
-		public rangeEquals(param0: number, param1: okio.ByteString, param2: number, param3: number): boolean;
-		public lastIndexOf(param0: okio.ByteString): number;
-		public digest$okio(param0: string): okio.ByteString;
-		public internalGet$okio(param0: number): number;
-		public static decodeHex(param0: string): okio.ByteString;
-		public getUtf8$okio(): string;
-		public toByteArray(): androidNative.Array<number>;
-		public sha256(): okio.ByteString;
-		public getByte(param0: number): number;
-		public static of(param0: java.nio.ByteBuffer): okio.ByteString;
-		public hmac$okio(param0: string, param1: okio.ByteString): okio.ByteString;
-		public internalArray$okio(): androidNative.Array<number>;
-		public write$okio(param0: okio.Buffer, param1: number, param2: number): void;
-		public indexOf(param0: androidNative.Array<number>, param1: number): number;
-		public utf8(): string;
-		public hmacSha256(param0: okio.ByteString): okio.ByteString;
-		public startsWith(param0: androidNative.Array<number>): boolean;
-		public indexOf(param0: okio.ByteString): number;
-	}
-	export module ByteString {
-		export class Companion extends java.lang.Object {
-			public static class: java.lang.Class<okio.ByteString.Companion>;
-			
-			
-			
-			
-			public encodeString(param0: string, param1: java.nio.charset.Charset): okio.ByteString;
-			public decodeBase64(param0: string): okio.ByteString;
-			public encodeUtf8(param0: string): okio.ByteString;
-			
-			public of(param0: java.nio.ByteBuffer): okio.ByteString;
-			public read(param0: java.io.InputStream, param1: number): okio.ByteString;
-			
-			public of(param0: androidNative.Array<number>): okio.ByteString;
-			public of(param0: androidNative.Array<number>, param1: number, param2: number): okio.ByteString;
-			public decodeHex(param0: string): okio.ByteString;
-			
-		}
-	}
-}
-
-declare module okio {
-	export class DeflaterSink extends java.lang.Object implements okio.Sink {
-		public static class: java.lang.Class<okio.DeflaterSink>;
-		public finishDeflate$okio(): void;
-		public close(): void;
-		public write(param0: okio.Buffer, param1: number): void;
-		public constructor(param0: okio.BufferedSink, param1: java.util.zip.Deflater);
-		public constructor(param0: okio.Sink, param1: java.util.zip.Deflater);
-		public toString(): string;
-		public flush(): void;
-		public timeout(): okio.Timeout;
-	}
-}
-
-declare module okio {
-	export abstract class ForwardingSink extends java.lang.Object implements okio.Sink {
-		public static class: java.lang.Class<okio.ForwardingSink>;
-		public close(): void;
-		public delegate(): okio.Sink;
-		public constructor(param0: okio.Sink);
-		public write(param0: okio.Buffer, param1: number): void;
-		
-		public toString(): string;
-		public flush(): void;
-		public timeout(): okio.Timeout;
-	}
-}
-
-declare module okio {
-	export abstract class ForwardingSource extends java.lang.Object implements okio.Source {
-		public static class: java.lang.Class<okio.ForwardingSource>;
-		public close(): void;
-		public constructor(param0: okio.Source);
-		public delegate(): okio.Source;
-		
-		public toString(): string;
-		public read(param0: okio.Buffer, param1: number): number;
-		public timeout(): okio.Timeout;
-	}
-}
-
-declare module okio {
-	export class ForwardingTimeout extends okio.Timeout {
-		public static class: java.lang.Class<okio.ForwardingTimeout>;
-		public throwIfReached(): void;
-		public constructor();
-		public setDelegate(param0: okio.Timeout): okio.ForwardingTimeout;
-		public clearDeadline(): okio.Timeout;
-		public hasDeadline(): boolean;
-		public timeout(param0: number, param1: java.util.concurrent.TimeUnit): okio.Timeout;
-		public delegate(): okio.Timeout;
-		public timeoutNanos(): number;
-		public deadlineNanoTime(): number;
-		public deadlineNanoTime(param0: number): okio.Timeout;
-		public clearTimeout(): okio.Timeout;
-		public constructor(param0: okio.Timeout);
-	}
-}
-
-declare module okio {
-	export class GzipSink extends java.lang.Object implements okio.Sink {
-		public static class: java.lang.Class<okio.GzipSink>;
-		public deflater(): java.util.zip.Deflater;
-		public close(): void;
-		public constructor(param0: okio.Sink);
-		public write(param0: okio.Buffer, param1: number): void;
-		
-		public flush(): void;
-		public timeout(): okio.Timeout;
-	}
-}
-
-declare module okio {
-	export class GzipSource extends java.lang.Object implements okio.Source {
-		public static class: java.lang.Class<okio.GzipSource>;
-		public close(): void;
-		public constructor(param0: okio.Source);
-		public read(param0: okio.Buffer, param1: number): number;
-		public timeout(): okio.Timeout;
-	}
-}
-
-declare module okio {
-	export class HashingSink extends okio.ForwardingSink {
-		public static class: java.lang.Class<okio.HashingSink>;
-		public constructor(param0: okio.Sink, param1: okio.ByteString, param2: string);
-		public close(): void;
-		public constructor(param0: okio.Sink);
-		public static hmacSha256(param0: okio.Sink, param1: okio.ByteString): okio.HashingSink;
-		public write(param0: okio.Buffer, param1: number): void;
-		
-		public constructor(param0: okio.Sink, param1: string);
-		public static sha1(param0: okio.Sink): okio.HashingSink;
-		public static hmacSha512(param0: okio.Sink, param1: okio.ByteString): okio.HashingSink;
-		public static sha256(param0: okio.Sink): okio.HashingSink;
-		public flush(): void;
-		public static sha512(param0: okio.Sink): okio.HashingSink;
-		public static hmacSha1(param0: okio.Sink, param1: okio.ByteString): okio.HashingSink;
-		public static md5(param0: okio.Sink): okio.HashingSink;
-		public hash(): okio.ByteString;
-		public timeout(): okio.Timeout;
-	}
-	export module HashingSink {
-		export class Companion extends java.lang.Object {
-			public static class: java.lang.Class<okio.HashingSink.Companion>;
-			public md5(param0: okio.Sink): okio.HashingSink;
-			public hmacSha1(param0: okio.Sink, param1: okio.ByteString): okio.HashingSink;
-			public sha512(param0: okio.Sink): okio.HashingSink;
-			public hmacSha256(param0: okio.Sink, param1: okio.ByteString): okio.HashingSink;
-			public sha1(param0: okio.Sink): okio.HashingSink;
-			public sha256(param0: okio.Sink): okio.HashingSink;
-			public hmacSha512(param0: okio.Sink, param1: okio.ByteString): okio.HashingSink;
-		}
-	}
-}
-
-declare module okio {
-	export class HashingSource extends okio.ForwardingSource {
-		public static class: java.lang.Class<okio.HashingSource>;
-		public close(): void;
-		public constructor(param0: okio.Source);
-		public static hmacSha512(param0: okio.Source, param1: okio.ByteString): okio.HashingSource;
-		public constructor(param0: okio.Source, param1: okio.ByteString, param2: string);
-		public static md5(param0: okio.Source): okio.HashingSource;
-		public static sha256(param0: okio.Source): okio.HashingSource;
-		public static hmacSha1(param0: okio.Source, param1: okio.ByteString): okio.HashingSource;
-		
-		public constructor(param0: okio.Source, param1: string);
-		public static hmacSha256(param0: okio.Source, param1: okio.ByteString): okio.HashingSource;
-		public static sha512(param0: okio.Source): okio.HashingSource;
-		public static sha1(param0: okio.Source): okio.HashingSource;
-		public hash(): okio.ByteString;
-		public read(param0: okio.Buffer, param1: number): number;
-		public timeout(): okio.Timeout;
-	}
-	export module HashingSource {
-		export class Companion extends java.lang.Object {
-			public static class: java.lang.Class<okio.HashingSource.Companion>;
-			public sha512(param0: okio.Source): okio.HashingSource;
-			public sha1(param0: okio.Source): okio.HashingSource;
-			public hmacSha256(param0: okio.Source, param1: okio.ByteString): okio.HashingSource;
-			public hmacSha512(param0: okio.Source, param1: okio.ByteString): okio.HashingSource;
-			public md5(param0: okio.Source): okio.HashingSource;
-			public sha256(param0: okio.Source): okio.HashingSource;
-			public hmacSha1(param0: okio.Source, param1: okio.ByteString): okio.HashingSource;
-		}
-	}
-}
-
-declare module okio {
-	export class InflaterSource extends java.lang.Object implements okio.Source {
-		public static class: java.lang.Class<okio.InflaterSource>;
-		public readOrInflate(param0: okio.Buffer, param1: number): number;
-		public close(): void;
-		public refill(): boolean;
-		public constructor(param0: okio.Source, param1: java.util.zip.Inflater);
-		public constructor(param0: okio.BufferedSource, param1: java.util.zip.Inflater);
-		public read(param0: okio.Buffer, param1: number): number;
-		public timeout(): okio.Timeout;
-	}
-}
-
-declare module okio {
-	export class InputStreamSource extends java.lang.Object implements okio.Source {
-		public static class: java.lang.Class<okio.InputStreamSource>;
-		public close(): void;
-		public constructor(param0: java.io.InputStream, param1: okio.Timeout);
-		public toString(): string;
-		public read(param0: okio.Buffer, param1: number): number;
-		public timeout(): okio.Timeout;
-	}
-}
-
-declare module okio {
-	export class Okio extends java.lang.Object {
-		public static class: java.lang.Class<okio.Okio>;
-		public static source(param0: java.nio.file.Path, param1: androidNative.Array<java.nio.file.OpenOption>): okio.Source;
-		public static appendingSink(param0: java.io.File): okio.Sink;
-		public static blackhole(): okio.Sink;
-		public static sink(param0: java.io.File): okio.Sink;
-		public static source(param0: java.net.Socket): okio.Source;
-		public static sink(param0: java.io.File, param1: boolean): okio.Sink;
-		public static isAndroidGetsocknameError(param0: java.lang.AssertionError): boolean;
-		public static buffer(param0: okio.Source): okio.BufferedSource;
-		public static source(param0: java.io.InputStream): okio.Source;
-		public static sink(param0: java.io.OutputStream): okio.Sink;
-		public static source(param0: java.io.File): okio.Source;
-		public static buffer(param0: okio.Sink): okio.BufferedSink;
-		public static sink(param0: java.net.Socket): okio.Sink;
-		public static sink(param0: java.nio.file.Path, param1: androidNative.Array<java.nio.file.OpenOption>): okio.Sink;
-	}
-}
-
-declare module okio {
-	export class Options extends java.lang.Object implements java.util.RandomAccess  {
-		public static class: java.lang.Class<okio.Options>;
-		public contains(param0: okio.ByteString): boolean;
-		public lastIndexOf(param0: okio.ByteString): number;
-		public contains(param0: any): boolean;
-		public getByteStrings$okio(): androidNative.Array<okio.ByteString>;
-		public get(param0: number): okio.ByteString;
-		public indexOf(param0: any): number;
-		public getSize(): number;
-		public getTrie$okio(): androidNative.Array<number>;
-		public lastIndexOf(param0: any): number;
-		public indexOf(param0: okio.ByteString): number;
-		public static of(param0: androidNative.Array<okio.ByteString>): okio.Options;
-	}
-	export module Options {
-		export class Companion extends java.lang.Object {
-			public static class: java.lang.Class<okio.Options.Companion>;
-			public of(param0: androidNative.Array<okio.ByteString>): okio.Options;
-		}
-	}
-}
-
-declare module okio {
-	export class OutputStreamSink extends java.lang.Object implements okio.Sink {
-		public static class: java.lang.Class<okio.OutputStreamSink>;
-		public close(): void;
-		public write(param0: okio.Buffer, param1: number): void;
-		public constructor(param0: java.io.OutputStream, param1: okio.Timeout);
-		public toString(): string;
-		public flush(): void;
-		public timeout(): okio.Timeout;
-	}
-}
-
-declare module okio {
-	export class PeekSource extends java.lang.Object implements okio.Source {
-		public static class: java.lang.Class<okio.PeekSource>;
-		public constructor(param0: okio.BufferedSource);
-		public close(): void;
-		public read(param0: okio.Buffer, param1: number): number;
-		public timeout(): okio.Timeout;
-	}
-}
-
-declare module okio {
-	export class Pipe extends java.lang.Object {
-		public static class: java.lang.Class<okio.Pipe>;
-		public getSourceClosed$okio(): boolean;
-		public sink(): okio.Sink;
-		
-		public constructor(param0: number);
-		public getSinkClosed$okio(): boolean;
-		public fold(param0: okio.Sink): void;
-		public source(): okio.Source;
-		public setSinkClosed$okio(param0: boolean): void;
-		public cancel(): void;
-		public setFoldedSink$okio(param0: okio.Sink): void;
-		public setSourceClosed$okio(param0: boolean): void;
-		
-		public getBuffer$okio(): okio.Buffer;
-		public getFoldedSink$okio(): okio.Sink;
-		public getCanceled$okio(): boolean;
-		public setCanceled$okio(param0: boolean): void;
-		public getMaxBufferSize$okio(): number;
-	}
-}
-
-declare module okio {
-	export class RealBufferedSink extends java.lang.Object implements okio.BufferedSink {
-		public static class: java.lang.Class<okio.RealBufferedSink>;
-		public bufferField: okio.Buffer;
-		public closed: boolean;
-		public sink: okio.Sink;
-		public writeDecimalLong(param0: number): okio.BufferedSink;
-		public close(): void;
-		public writeByte(param0: number): okio.BufferedSink;
-		public writeString(param0: string, param1: number, param2: number, param3: java.nio.charset.Charset): okio.BufferedSink;
-		public writeShortLe(param0: number): okio.BufferedSink;
-		public writeInt(param0: number): okio.BufferedSink;
-		public getBuffer(): okio.Buffer;
-		public writeUtf8CodePoint(param0: number): okio.BufferedSink;
-		public writeUtf8(param0: string): okio.BufferedSink;
-		public writeUtf8(param0: string, param1: number, param2: number): okio.BufferedSink;
-		public writeShort(param0: number): okio.BufferedSink;
-		public writeHexadecimalUnsignedLong(param0: number): okio.BufferedSink;
-		public write(param0: androidNative.Array<number>, param1: number, param2: number): okio.BufferedSink;
-		public emitCompleteSegments(): okio.BufferedSink;
-		public emit(): okio.BufferedSink;
-		public writeIntLe(param0: number): okio.BufferedSink;
-		/** @deprecated */
-		public buffer(): okio.Buffer;
-		public constructor(param0: okio.Sink);
-		public write(param0: okio.Buffer, param1: number): void;
-		public write(param0: java.nio.ByteBuffer): number;
-		public toString(): string;
-		public write(param0: okio.ByteString, param1: number, param2: number): okio.BufferedSink;
-		public flush(): void;
-		public isOpen(): boolean;
-		public write(param0: okio.ByteString): okio.BufferedSink;
-		public writeString(param0: string, param1: java.nio.charset.Charset): okio.BufferedSink;
-		public writeLongLe(param0: number): okio.BufferedSink;
-		public write(param0: okio.Source, param1: number): okio.BufferedSink;
-		public buffer(): okio.Buffer;
-		public write(param0: androidNative.Array<number>): okio.BufferedSink;
-		public outputStream(): java.io.OutputStream;
-		public writeAll(param0: okio.Source): number;
-		public writeLong(param0: number): okio.BufferedSink;
-		public timeout(): okio.Timeout;
-	}
-}
-
-declare module okio {
-	export class RealBufferedSource extends java.lang.Object implements okio.BufferedSource {
-		public static class: java.lang.Class<okio.RealBufferedSource>;
-		public bufferField: okio.Buffer;
-		public closed: boolean;
-		public source: okio.Source;
-		public close(): void;
-		public inputStream(): java.io.InputStream;
-		public readIntLe(): number;
-		public readUtf8LineStrict(param0: number): string;
-		public readByteArray(): androidNative.Array<number>;
-		public readUtf8(param0: number): string;
-		public read(param0: androidNative.Array<number>): number;
-		public readUtf8CodePoint(): number;
-		public indexOf(param0: number): number;
-		public readByte(): number;
-		public readHexadecimalUnsignedLong(): number;
-		public read(param0: okio.Buffer, param1: number): number;
-		public readLong(): number;
-		public readUtf8(): string;
-		/** @deprecated */
-		public buffer(): okio.Buffer;
-		public constructor(param0: okio.Source);
-		public readByteString(param0: number): okio.ByteString;
-		public indexOfElement(param0: okio.ByteString): number;
-		public toString(): string;
-		public readAll(param0: okio.Sink): number;
-		public select(param0: okio.Options): number;
-		public readShort(): number;
-		public require(param0: number): void;
-		public request(param0: number): boolean;
-		public indexOf(param0: okio.ByteString, param1: number): number;
-		public peek(): okio.BufferedSource;
-		public readString(param0: java.nio.charset.Charset): string;
-		public readShortLe(): number;
-		public readUtf8Line(): string;
-		public readFully(param0: androidNative.Array<number>): void;
-		public readByteString(): okio.ByteString;
-		public readUtf8LineStrict(): string;
-		public readByteArray(param0: number): androidNative.Array<number>;
-		public getBuffer(): okio.Buffer;
-		public indexOf(param0: number, param1: number, param2: number): number;
-		public readString(param0: number, param1: java.nio.charset.Charset): string;
-		public readLongLe(): number;
-		public readFully(param0: okio.Buffer, param1: number): void;
-		public read(param0: java.nio.ByteBuffer): number;
-		public rangeEquals(param0: number, param1: okio.ByteString, param2: number, param3: number): boolean;
-		public skip(param0: number): void;
-		public readDecimalLong(): number;
-		public readInt(): number;
-		public rangeEquals(param0: number, param1: okio.ByteString): boolean;
-		public isOpen(): boolean;
-		public indexOfElement(param0: okio.ByteString, param1: number): number;
-		public exhausted(): boolean;
-		public buffer(): okio.Buffer;
-		public read(param0: androidNative.Array<number>, param1: number, param2: number): number;
-		public indexOf(param0: number, param1: number): number;
-		public indexOf(param0: okio.ByteString): number;
-		public timeout(): okio.Timeout;
-	}
-}
-
-declare module okio {
-	export class Segment extends java.lang.Object {
-		public static class: java.lang.Class<okio.Segment>;
-		public data: androidNative.Array<number>;
-		public pos: number;
-		public limit: number;
-		public shared: boolean;
-		public owner: boolean;
-		public next: okio.Segment;
-		public prev: okio.Segment;
-		public static SIZE: number;
-		public static SHARE_MINIMUM: number;
-		public constructor();
-		public unsharedCopy(): okio.Segment;
-		public push(param0: okio.Segment): okio.Segment;
-		public writeTo(param0: okio.Segment, param1: number): void;
-		public compact(): void;
-		public constructor(param0: androidNative.Array<number>, param1: number, param2: number, param3: boolean, param4: boolean);
-		public pop(): okio.Segment;
-		public sharedCopy(): okio.Segment;
-		public split(param0: number): okio.Segment;
-	}
-	export module Segment {
-		export class Companion extends java.lang.Object {
-			public static class: java.lang.Class<okio.Segment.Companion>;
-		}
-	}
-}
-
-declare module okio {
-	export class SegmentPool extends java.lang.Object {
-		public static class: java.lang.Class<okio.SegmentPool>;
-		public static INSTANCE: okio.SegmentPool;
-		public getByteCount(): number;
-		public static recycle(param0: okio.Segment): void;
-		public getMAX_SIZE(): number;
-		public static take(): okio.Segment;
-	}
-}
-
-declare module okio {
-	export class SegmentedByteString extends okio.ByteString {
-		public static class: java.lang.Class<okio.SegmentedByteString>;
-		public base64(): string;
-		public substring(param0: number): okio.ByteString;
-		public equals(param0: any): boolean;
-		public substring(): okio.ByteString;
-		public rangeEquals(param0: number, param1: androidNative.Array<number>, param2: number, param3: number): boolean;
-		public base64Url(): string;
-		public getDirectory$okio(): androidNative.Array<number>;
-		public constructor(param0: androidNative.Array<number>);
-		public asByteBuffer(): java.nio.ByteBuffer;
-		public hex(): string;
-		public hashCode(): number;
-		public toAsciiUppercase(): okio.ByteString;
-		public getSize$okio(): number;
-		public lastIndexOf(param0: androidNative.Array<number>): number;
-		public lastIndexOf(param0: okio.ByteString, param1: number): number;
-		public rangeEquals(param0: number, param1: okio.ByteString, param2: number, param3: number): boolean;
-		public lastIndexOf(param0: okio.ByteString): number;
-		public digest$okio(param0: string): okio.ByteString;
-		public internalGet$okio(param0: number): number;
-		public toByteArray(): androidNative.Array<number>;
-		public toString(): string;
-		public indexOf(param0: androidNative.Array<number>): number;
-		public string(param0: java.nio.charset.Charset): string;
-		public lastIndexOf(param0: androidNative.Array<number>, param1: number): number;
-		public toAsciiLowercase(): okio.ByteString;
-		public hmac$okio(param0: string, param1: okio.ByteString): okio.ByteString;
-		public getSegments$okio(): androidNative.Array<androidNative.Array<number>>;
-		public constructor(param0: androidNative.Array<androidNative.Array<number>>, param1: androidNative.Array<number>);
-		public write(param0: java.io.OutputStream): void;
-		public internalArray$okio(): androidNative.Array<number>;
-		public write$okio(param0: okio.Buffer, param1: number, param2: number): void;
-		public indexOf(param0: androidNative.Array<number>, param1: number): number;
-		public substring(param0: number, param1: number): okio.ByteString;
-		public indexOf(param0: okio.ByteString, param1: number): number;
-		public indexOf(param0: okio.ByteString): number;
-	}
-}
-
-declare module okio {
-	export class Sink extends java.lang.Object implements java.io.Closeable, java.io.Flushable {
-		public static class: java.lang.Class<okio.Sink>;
-		/**
-		 * Constructs a new instance of the okio.Sink interface with the provided implementation. An empty constructor exists calling super() when extending the interface class.
-		 */
-		public constructor(implementation: {
-			write(param0: okio.Buffer, param1: number): void;
-			flush(): void;
-			timeout(): okio.Timeout;
-			close(): void;
-			close(): void;
-			flush(): void;
-			close(): void;
-		});
-		public constructor();
-		public close(): void;
-		public write(param0: okio.Buffer, param1: number): void;
-		public flush(): void;
-		public timeout(): okio.Timeout;
-	}
-}
-
-declare module okio {
-	export class SocketAsyncTimeout extends okio.AsyncTimeout {
-		public static class: java.lang.Class<okio.SocketAsyncTimeout>;
-		public constructor();
-		public constructor(param0: java.net.Socket);
-		public newTimeoutException(param0: java.io.IOException): java.io.IOException;
-		public timedOut(): void;
-	}
-}
-
-declare module okio {
-	export class Source extends java.lang.Object implements java.io.Closeable {
-		public static class: java.lang.Class<okio.Source>;
-		/**
-		 * Constructs a new instance of the okio.Source interface with the provided implementation. An empty constructor exists calling super() when extending the interface class.
-		 */
-		public constructor(implementation: {
-			read(param0: okio.Buffer, param1: number): number;
-			timeout(): okio.Timeout;
-			close(): void;
-			close(): void;
-			close(): void;
-		});
-		public constructor();
-		public close(): void;
-		public read(param0: okio.Buffer, param1: number): number;
-		public timeout(): okio.Timeout;
-	}
-}
-
-declare module okio {
-	export class Throttler extends java.lang.Object {
-		public static class: java.lang.Class<okio.Throttler>;
-		public bytesPerSecond(param0: number): void;
-		public sink(param0: okio.Sink): okio.Sink;
-		public constructor();
-		public bytesPerSecond(param0: number, param1: number, param2: number): void;
-		public take$okio(param0: number): number;
-		public bytesPerSecond(param0: number, param1: number): void;
-		public constructor(param0: number);
-		public source(param0: okio.Source): okio.Source;
-		public byteCountOrWaitNanos$okio(param0: number, param1: number): number;
-	}
-}
-
-declare module okio {
-	export class Timeout extends java.lang.Object {
-		public static class: java.lang.Class<okio.Timeout>;
-		public static NONE: okio.Timeout;
-		public throwIfReached(): void;
-		public constructor();
-		public deadline(param0: number, param1: java.util.concurrent.TimeUnit): okio.Timeout;
-		public clearDeadline(): okio.Timeout;
-		public hasDeadline(): boolean;
-		public timeout(param0: number, param1: java.util.concurrent.TimeUnit): okio.Timeout;
-		public timeoutNanos(): number;
-		public waitUntilNotified(param0: any): void;
-		public deadlineNanoTime(): number;
-		public deadlineNanoTime(param0: number): okio.Timeout;
-		public intersectWith(param0: okio.Timeout, param1: any): void;
-		public clearTimeout(): okio.Timeout;
-	}
-	export module Timeout {
-		export class Companion extends java.lang.Object {
-			public static class: java.lang.Class<okio.Timeout.Companion>;
-			public minTimeout(param0: number, param1: number): number;
-		}
-	}
-}
-
-declare module okio {
-	export class Utf8 extends java.lang.Object {
-		public static class: java.lang.Class<okio.Utf8>;
-		public static REPLACEMENT_BYTE: number;
-		public static REPLACEMENT_CHARACTER: string;
-		public static REPLACEMENT_CODE_POINT: number;
-		public static HIGH_SURROGATE_HEADER: number;
-		public static LOG_SURROGATE_HEADER: number;
-		public static MASK_2BYTES: number;
-		public static MASK_3BYTES: number;
-		public static MASK_4BYTES: number;
-		public static isIsoControl(param0: number): boolean;
-		public static process4Utf8Bytes(param0: androidNative.Array<number>, param1: number, param2: number, param3: any): number;
-		public static size(param0: string, param1: number, param2: number): number;
-		public static process2Utf8Bytes(param0: androidNative.Array<number>, param1: number, param2: number, param3: any): number;
-		public static size(param0: string): number;
-		public static size(param0: string, param1: number): number;
-		public static processUtf8CodePoints(param0: androidNative.Array<number>, param1: number, param2: number, param3: any): void;
-		public static processUtf16Chars(param0: androidNative.Array<number>, param1: number, param2: number, param3: any): void;
-		public static processUtf8Bytes(param0: string, param1: number, param2: number, param3: any): void;
-		public static isUtf8Continuation(param0: number): boolean;
-		public static process3Utf8Bytes(param0: androidNative.Array<number>, param1: number, param2: number, param3: any): number;
-	}
-}
+//Generics information:
 

@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.15](https://github.com/nativescript-community/https/compare/v4.0.14...v4.0.15) (2023-03-06)
+
+
+### Bug Fixes
+
+* **android:** update to latest okhttp lib ([c4b7870](https://github.com/nativescript-community/https/commit/c4b78703637e21bbfa84647d7f8a6f07348c9f44))
+
+
+### Features
+
+* **android:** support passing custom RequestBody as `content` parameter ([4e5b513](https://github.com/nativescript-community/https/commit/4e5b5136f19487a87911638ef4b9fc7a174dd619))
+
+
+
+
+
 ## [4.0.14](https://github.com/nativescript-community/https/compare/v4.0.13...v4.0.14) (2023-02-15)
 
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.15](https://github.com/nativescript-community/https/compare/v4.0.14...v4.0.15) (2023-03-06)
+
+
+### Bug Fixes
+
+* **android:** update to latest okhttp lib ([c4b7870](https://github.com/nativescript-community/https/commit/c4b78703637e21bbfa84647d7f8a6f07348c9f44))
+
+
+
+
+
 ## [4.0.14](https://github.com/nativescript-community/https/compare/v4.0.13...v4.0.14) (2023-02-15)
 
 **Note:** Version bump only for package @nativescript-community/https

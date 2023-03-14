@@ -308,6 +308,11 @@ export function cancelRequest(tag: string) {
         runningRequests[tag].cancel();
     }
 }
+export function cancelAllRequests() {
+    Object.values(runningRequests).forEach(request=>{
+        request.cancel()
+    })
+}
 
 export function clearCookies() {
     const storage = NSHTTPCookieStorage.sharedHTTPCookieStorage;

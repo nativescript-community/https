@@ -112,6 +112,7 @@ export function setCache(options?: CacheOptions);
 export function clearCache();
 export function createRequest(opts: HttpsRequestOptions): HttpsRequest;
 export function cancelRequest(tag: string);
+export function cancelAllRequests();
 export function clearCookies();
 export function addNetworkInterceptor(interceptor);
 

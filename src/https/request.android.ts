@@ -467,8 +467,11 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
 
             (opts.body as HttpsFormDataParam[]).forEach((param) => {
                 if (param.fileName && param.contentType) {
-                    const MEDIA_TYPE = okhttp3.MediaType.parse(param.contentType);
-                    builder.addFormDataPart(param.parameterName, param.fileName, okhttp3.RequestBody.create(param.data, MEDIA_TYPE));
+                    if (param.data instanceof okhttp3.RequestBody) {
+                        builder.addFormDataPart(param.parameterName, param.fileName, param.data);
+                    } else {
+                        builder.addFormDataPart(param.parameterName, param.fileName, okhttp3.RequestBody.create(param.data, okhttp3.MediaType.parse(param.contentType)));
+                    }
                 } else {
                     if (typeof param.data === 'string') {
                         builder.addFormDataPart(param.parameterName, param.data);

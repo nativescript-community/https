@@ -405,6 +405,32 @@ export function cancelRequest(tag: string, client: okhttp3.OkHttpClient = runnin
     }
 }
 
+export function cancelAllRequests() {
+    Object.values(notClosedResponses).forEach((req) => req.cancel());
+
+    Object.values(runningClients).forEach((client) => {
+        const dispatcher = client.dispatcher();
+        //When you want to cancel:
+        //A) go through the queued calls and cancel if the tag matches:
+        if (dispatcher.queuedCallsCount() > 0) {
+            const queuedCalls = dispatcher.queuedCalls();
+            for (let index = 0; index < queuedCalls.size(); index++) {
+                const call = queuedCalls.get(index);
+                call.cancel();
+            }
+        }
+
+        //B) go through the running calls and cancel if the tag matches:
+        if (dispatcher.runningCallsCount() > 0) {
+            const runningCalls = dispatcher.runningCalls();
+            for (let index = 0; index < runningCalls.size(); index++) {
+                const call = runningCalls.get(index);
+                call.cancel();
+            }
+        }
+    });
+}
+
 export function clearCookies() {
     if (cookieJar) {
         cookieJar = null;

@@ -468,7 +468,7 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
             (opts.body as HttpsFormDataParam[]).forEach((param) => {
                 if (param.fileName && param.contentType) {
                     const MEDIA_TYPE = okhttp3.MediaType.parse(param.contentType);
-                    builder.addFormDataPart(param.parameterName, param.fileName, okhttp3.RequestBody.create(MEDIA_TYPE, param.data));
+                    builder.addFormDataPart(param.parameterName, param.fileName, okhttp3.RequestBody.create(param.data, MEDIA_TYPE));
                 } else {
                     if (typeof param.data === 'string') {
                         builder.addFormDataPart(param.parameterName, param.data);
@@ -478,7 +478,6 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                 }
             });
             okHttpBody = builder.build();
-            
         } else if (type === 'application/x-www-form-urlencoded') {
             const builder = new okhttp3.FormBody.Builder();
             Object.keys(opts.body).forEach((key) => {

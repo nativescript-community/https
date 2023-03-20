@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.17](https://github.com/nativescript-community/https/compare/v4.0.16...v4.0.17) (2023-03-20)
+
+
+### Bug Fixes
+
+* **android:** support native data for form data parameters ([47e9002](https://github.com/nativescript-community/https/commit/47e9002ddd4c1ec8acf106035e36c6649829ae85))
+
+
+
+
+
 ## [4.0.16](https://github.com/nativescript-community/https/compare/v4.0.15...v4.0.16) (2023-03-14)
 
 

@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.1.0](https://github.com/nativescript-community/https/compare/v4.0.17...v4.1.0) (2023-04-30)
+
+
+### Features
+
+* angular module ([dc3761a](https://github.com/nativescript-community/https/commit/dc3761ac33d99ddaa35d47e56c3275774af647f1))
+* angular support ([ff92deb](https://github.com/nativescript-community/https/commit/ff92deb51bc95605c02eafe9ae4f066434fe8dcd))
+
+
+
+
+
 ## [4.0.17](https://github.com/nativescript-community/https/compare/v4.0.16...v4.0.17) (2023-03-20)
 
 **Note:** Version bump only for package @nativescript-community/https

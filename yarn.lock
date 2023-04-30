@@ -33,6 +33,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@angular/common@npm:^15.2.8":
+  version: 15.2.8
+  resolution: "@angular/common@npm:15.2.8"
+  dependencies:
+    tslib: ^2.3.0
+  peerDependencies:
+    "@angular/core": 15.2.8
+    rxjs: ^6.5.3 || ^7.4.0
+  checksum: a4c8c33ec27a409c5352653b6a3f0529acb766a0a402d62cb6bd7a9f378c2061dfecf3ce42cb4b2b188b0cf407dee3e302cadc6de4cc769dbf01ecb566ba9bd6
+  languageName: node
+  linkType: hard
+
 "@angular/common@npm:~14.2.12":
   version: 14.2.12
   resolution: "@angular/common@npm:14.2.12"
@@ -81,6 +93,18 @@ __metadata:
     "@angular/core":
       optional: true
   checksum: becadd62bcdad5a95b566093d4da8d00bbf478089ea249e4db81166169ecea0335ee1f8702920aee53dfe3a319bb7eb357ab681b236b630e5b633e99f36df2b0
+  languageName: node
+  linkType: hard
+
+"@angular/core@npm:^15.2.8":
+  version: 15.2.8
+  resolution: "@angular/core@npm:15.2.8"
+  dependencies:
+    tslib: ^2.3.0
+  peerDependencies:
+    rxjs: ^6.5.3 || ^7.4.0
+    zone.js: ~0.11.4 || ~0.12.0 || ~0.13.0
+  checksum: befdf1517ca107c66eeda8a8d146909089e282d4c4a4274bcc43cdc90c9e1e2bf035a5cd83908d51e7def72c0d04c7652f2fbc81226722eb0496ca152634c126
   languageName: node
   linkType: hard
 
@@ -2207,7 +2231,7 @@ __metadata:
 
 "@nativescript-community/plugin-seed-tools@file:tools::locator=root-workspace-0b6124%40workspace%3A.":
   version: 1.0.0
-  resolution: "@nativescript-community/plugin-seed-tools@file:tools#tools::hash=c24459&locator=root-workspace-0b6124%40workspace%3A."
+  resolution: "@nativescript-community/plugin-seed-tools@file:tools#tools::hash=21bc81&locator=root-workspace-0b6124%40workspace%3A."
   dependencies:
     "@angular/animations": ~14.2.12
     "@angular/common": ~14.2.12
@@ -2266,7 +2290,7 @@ __metadata:
     vue: ~2.6.14
     yargs: ^17.6.2
     zone.js: ~0.12.0
-  checksum: cf4c25d0218c115fd5808d27c175d0eeaeacdb34e0368e2693addf779561448ec6ba53943a55fed05f69fa0982dbe01bb3a2a07eba323a4b9e4be8f872e1a5d4
+  checksum: 133eaca99071344bb30daaded1d5891a45bf51e80034ac3e7c92e39b2a446d8266f14bfb886103e5c3a2fac1a218128a8545afb2fc544d3b3fa7fbe4853c6752
   languageName: node
   linkType: hard
 
@@ -2280,10 +2304,10 @@ __metadata:
 
 "@nativescript-community/template-snippet@file:demo-snippets::locator=root-workspace-0b6124%40workspace%3A.":
   version: 0.0.1
-  resolution: "@nativescript-community/template-snippet@file:demo-snippets#demo-snippets::hash=c63ecc&locator=root-workspace-0b6124%40workspace%3A."
+  resolution: "@nativescript-community/template-snippet@file:demo-snippets#demo-snippets::hash=07d2c5&locator=root-workspace-0b6124%40workspace%3A."
   dependencies:
     "@nativescript-community/https": 4.0.11
-  checksum: d1cf63a6261cb4e69527dd6b596fd7e0db2e9cf14be9e511d2079230faf7c577da96d0350d3d05610f6c8fac45d2d851b316d5df84cf8d678134af971829fb8b
+  checksum: 0034d1e678e6ffbb0d898b54ba4bde0216d2005a10c4f49d5b23ed59c03ea64d736eadb4a683bff0bca9031cdd3aa9620f181ab6a3bbe1ce6912408a8841ef6c
   languageName: node
   linkType: hard
 
@@ -2291,6 +2315,16 @@ __metadata:
   version: 8.4.0
   resolution: "@nativescript/android@npm:8.4.0"
   checksum: 15575d82c03f94f2c31cfd15b9f4569a3b825f9c979927c5fa30bd1323892cc3bc233ac825cdb7d54bd0abd46c8670f7e4fa6ea1834ee342754b3a43bf1d2fd6
+  languageName: node
+  linkType: hard
+
+"@nativescript/angular@npm:^15.2.0":
+  version: 15.2.0
+  resolution: "@nativescript/angular@npm:15.2.0"
+  dependencies:
+    "@nativescript/zone-js": ^3.0.0
+    tslib: ^2.3.0
+  checksum: d7507d517865810a4f82a6fdb783331c059a952691c5a9ef03b02cda979f6da7520cc6a48465a696182943b679960f5f456665cddf7d1f09ab1a090b3d637c58
   languageName: node
   linkType: hard
 
@@ -7442,7 +7476,7 @@ __metadata:
 
 "fsevents@patch:fsevents@^2.3.2#~builtin<compat/fsevents>, fsevents@patch:fsevents@~2.3.2#~builtin<compat/fsevents>":
   version: 2.3.2
-  resolution: "fsevents@patch:fsevents@npm%3A2.3.2#~builtin<compat/fsevents>::version=2.3.2&hash=18f3a7"
+  resolution: "fsevents@patch:fsevents@npm%3A2.3.2#~builtin<compat/fsevents>::version=2.3.2&hash=df0bf1"
   dependencies:
     node-gyp: latest
   conditions: os=darwin
@@ -13155,7 +13189,7 @@ __metadata:
 
 "resolve@patch:resolve@^1.1.6#~builtin<compat/resolve>, resolve@patch:resolve@^1.1.7#~builtin<compat/resolve>, resolve@patch:resolve@^1.10.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.19.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.20.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.22.1#~builtin<compat/resolve>, resolve@patch:resolve@^1.9.0#~builtin<compat/resolve>":
   version: 1.22.1
-  resolution: "resolve@patch:resolve@npm%3A1.22.1#~builtin<compat/resolve>::version=1.22.1&hash=07638b"
+  resolution: "resolve@patch:resolve@npm%3A1.22.1#~builtin<compat/resolve>::version=1.22.1&hash=c3c19d"
   dependencies:
     is-core-module: ^2.9.0
     path-parse: ^1.0.7
@@ -13168,7 +13202,7 @@ __metadata:
 
 "resolve@patch:resolve@^2.0.0-next.3#~builtin<compat/resolve>":
   version: 2.0.0-next.4
-  resolution: "resolve@patch:resolve@npm%3A2.0.0-next.4#~builtin<compat/resolve>::version=2.0.0-next.4&hash=07638b"
+  resolution: "resolve@patch:resolve@npm%3A2.0.0-next.4#~builtin<compat/resolve>::version=2.0.0-next.4&hash=c3c19d"
   dependencies:
     is-core-module: ^2.9.0
     path-parse: ^1.0.7
@@ -13303,8 +13337,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
+    "@angular/common": ^15.2.8
+    "@angular/core": ^15.2.8
     "@nativescript-community/plugin-seed-tools": "file:tools"
     "@nativescript-community/template-snippet": "file:demo-snippets"
+    "@nativescript/angular": ^15.2.0
   languageName: unknown
   linkType: soft
 
@@ -14874,17 +14911,17 @@ __metadata:
 
 "typescript@patch:typescript@^3 || ^4#~builtin<compat/typescript>, typescript@patch:typescript@^4.6.4#~builtin<compat/typescript>":
   version: 4.9.4
-  resolution: "typescript@patch:typescript@npm%3A4.9.4#~builtin<compat/typescript>::version=4.9.4&hash=a1c5e5"
+  resolution: "typescript@patch:typescript@npm%3A4.9.4#~builtin<compat/typescript>::version=4.9.4&hash=ad5954"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 37f6e2c3c5e2aa5934b85b0fddbf32eeac8b1bacf3a5b51d01946936d03f5377fe86255d4e5a4ae628fd0cd553386355ad362c57f13b4635064400f3e8e05b9d
+  checksum: 1caaea6cb7f813e64345190fddc4e6c924d0b698ab81189b503763c4a18f7f5501c69362979d36e19c042d89d936443e768a78b0675690b35eb663d19e0eae71
   languageName: node
   linkType: hard
 
 "typescript@patch:typescript@^3.5.3#~builtin<compat/typescript>":
   version: 3.9.10
-  resolution: "typescript@patch:typescript@npm%3A3.9.10#~builtin<compat/typescript>::version=3.9.10&hash=a1c5e5"
+  resolution: "typescript@patch:typescript@npm%3A3.9.10#~builtin<compat/typescript>::version=3.9.10&hash=3bd3d3"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
@@ -14894,7 +14931,7 @@ __metadata:
 
 "typescript@patch:typescript@~4.2.3#~builtin<compat/typescript>":
   version: 4.2.4
-  resolution: "typescript@patch:typescript@npm%3A4.2.4#~builtin<compat/typescript>::version=4.2.4&hash=a1c5e5"
+  resolution: "typescript@patch:typescript@npm%3A4.2.4#~builtin<compat/typescript>::version=4.2.4&hash=334f98"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
@@ -14904,11 +14941,11 @@ __metadata:
 
 "typescript@patch:typescript@~4.8.4#~builtin<compat/typescript>":
   version: 4.8.4
-  resolution: "typescript@patch:typescript@npm%3A4.8.4#~builtin<compat/typescript>::version=4.8.4&hash=a1c5e5"
+  resolution: "typescript@patch:typescript@npm%3A4.8.4#~builtin<compat/typescript>::version=4.8.4&hash=0102e9"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 563a0ef47abae6df27a9a3ab38f75fc681f633ccf1a3502b1108e252e187787893de689220f4544aaf95a371a4eb3141e4a337deb9895de5ac3c1ca76430e5f0
+  checksum: 301459fc3eb3b1a38fe91bf96d98eb55da88a9cb17b4ef80b4d105d620f4d547ba776cc27b44cc2ef58b66eda23fe0a74142feb5e79a6fb99f54fc018a696afa
   languageName: node
   linkType: hard
 

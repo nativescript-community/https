@@ -59,9 +59,9 @@
             "url": "https://github.com/kefahB"
         },
         {
-            "name": "Kefah BADER ALDIN",
-            "email": "kefah.bader@gmail.com",
-            "url": "https://github.com/kefahB"
+            "name": "Ruslan Lekhman",
+            "email": "lekhman112@gmail.com",
+            "url": "https://github.com/lekhmanrus"
         }
     ],
     "author": {
@@ -75,8 +75,11 @@
     "homepage": "https://github.com/nativescript-community/https",
     "readmeFilename": "README.md",
     "devDependencies": {
+        "@angular/common": "^15.2.8",
+        "@angular/core": "^15.2.8",
         "@nativescript-community/plugin-seed-tools": "file:tools",
-        "@nativescript-community/template-snippet": "file:demo-snippets"
+        "@nativescript-community/template-snippet": "file:demo-snippets",
+        "@nativescript/angular": "^15.2.0"
     },
     "bootstrapper": "nativescript-plugin-seed",
     "commitlint": {

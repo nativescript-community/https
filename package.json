@@ -75,11 +75,8 @@
     "homepage": "https://github.com/nativescript-community/https",
     "readmeFilename": "README.md",
     "devDependencies": {
-        "@angular/common": "^15.2.8",
-        "@angular/core": "^15.2.8",
         "@nativescript-community/plugin-seed-tools": "file:tools",
-        "@nativescript-community/template-snippet": "file:demo-snippets",
-        "@nativescript/angular": "^15.2.0"
+        "@nativescript-community/template-snippet": "file:demo-snippets"
     },
     "bootstrapper": "nativescript-plugin-seed",
     "commitlint": {

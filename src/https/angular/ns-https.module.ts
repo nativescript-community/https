@@ -1,7 +1,7 @@
 import { NgModule, ModuleWithProviders, Optional, Inject, InjectionToken } from '@angular/core';
 import { HttpBackend } from '@angular/common/http';
 import { NativeScriptHttpClientModule } from '@nativescript/angular';
-import { HttpsSSLPinningOptions, enableSSLPinning } from '../request';
+import { HttpsSSLPinningOptions, enableSSLPinning } from '@nativescript-community/https';
 import {
   HTTPS_REQUEST_DEFAULT_OPTIONS,
   NativeScriptHttpXhrBackend,

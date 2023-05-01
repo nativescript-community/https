@@ -4,5 +4,6 @@
         "rootDir": "../../src/https",
         "outDir": "./"
     },
-    "include": ["../../src/https/**/*", "../../references.d.ts", "../../tools/references.d.ts", "../../src/references.d.ts"]
+    "include": ["../../src/https/**/*", "../../references.d.ts", "../../tools/references.d.ts", "../../src/references.d.ts"],
+    "exclude": ["../../src/https/angular/**"]
 }

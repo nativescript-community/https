@@ -2207,7 +2207,7 @@ __metadata:
 
 "@nativescript-community/plugin-seed-tools@file:tools::locator=root-workspace-0b6124%40workspace%3A.":
   version: 1.0.0
-  resolution: "@nativescript-community/plugin-seed-tools@file:tools#tools::hash=c24459&locator=root-workspace-0b6124%40workspace%3A."
+  resolution: "@nativescript-community/plugin-seed-tools@file:tools#tools::hash=21bc81&locator=root-workspace-0b6124%40workspace%3A."
   dependencies:
     "@angular/animations": ~14.2.12
     "@angular/common": ~14.2.12
@@ -2266,7 +2266,7 @@ __metadata:
     vue: ~2.6.14
     yargs: ^17.6.2
     zone.js: ~0.12.0
-  checksum: cf4c25d0218c115fd5808d27c175d0eeaeacdb34e0368e2693addf779561448ec6ba53943a55fed05f69fa0982dbe01bb3a2a07eba323a4b9e4be8f872e1a5d4
+  checksum: 133eaca99071344bb30daaded1d5891a45bf51e80034ac3e7c92e39b2a446d8266f14bfb886103e5c3a2fac1a218128a8545afb2fc544d3b3fa7fbe4853c6752
   languageName: node
   linkType: hard
 
@@ -2280,10 +2280,10 @@ __metadata:
 
 "@nativescript-community/template-snippet@file:demo-snippets::locator=root-workspace-0b6124%40workspace%3A.":
   version: 0.0.1
-  resolution: "@nativescript-community/template-snippet@file:demo-snippets#demo-snippets::hash=d4e9e3&locator=root-workspace-0b6124%40workspace%3A."
+  resolution: "@nativescript-community/template-snippet@file:demo-snippets#demo-snippets::hash=07d2c5&locator=root-workspace-0b6124%40workspace%3A."
   dependencies:
     "@nativescript-community/https": 4.0.11
-  checksum: f014928308c7935ca7a73bf49dde7c195c6e55a49c1ce9bd11b521c3e460cfc8953443e26d17803960a7df369513bf2c0d49dd73b61e665bbe3eeb0e5e8af62d
+  checksum: 0034d1e678e6ffbb0d898b54ba4bde0216d2005a10c4f49d5b23ed59c03ea64d736eadb4a683bff0bca9031cdd3aa9620f181ab6a3bbe1ce6912408a8841ef6c
   languageName: node
   linkType: hard
 

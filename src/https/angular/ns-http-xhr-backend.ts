@@ -16,7 +16,7 @@ import {
   HttpsRequestOptions,
   HttpsResponse,
   request as httpsRequest
-} from '../request';
+} from '@nativescript-community/https';
 import { ExcludedService } from './excluded.service';
 
 /** Https request default options. */

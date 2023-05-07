@@ -22,6 +22,7 @@ const peer: Ipeer = {
 
 let cache: okhttp3.Cache;
 let forceCache = false;
+
 export function setCache(options?: CacheOptions) {
     if (options) {
         forceCache = options.forceCache === true;
@@ -34,6 +35,7 @@ export function setCache(options?: CacheOptions) {
         getClient(undefined, true);
     }
 }
+
 export function clearCache() {
     if (cache) {
         cache.evictAll();

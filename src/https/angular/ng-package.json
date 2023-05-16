@@ -1,9 +1,9 @@
 {
     "dest": "../../../packages/https/angular",
     "lib": {
-      "entryFile": "index.ts"
+        "entryFile": "index.ts"
     },
     "allowedNonPeerDependencies": [
-      "."
+        "."
     ]
 }

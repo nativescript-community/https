@@ -1,6 +1,7 @@
 import { ImageSource } from '@nativescript/core';
-import { request } from './request';
 import type { HttpsRequestOptions } from './request';
+// eslint-disable-next-line no-duplicate-imports
+import { request } from './request';
 export * from './request';
 
 /**
@@ -9,7 +10,7 @@ export * from './request';
  */
 export async function getString(arg: string | HttpsRequestOptions): Promise<string> {
     const r = await request(typeof arg === 'string' ? { url: arg, method: 'GET' } : arg);
-    return r.content.toString();
+    return r.content.toStringAsync();
 }
 
 /**
@@ -18,7 +19,7 @@ export async function getString(arg: string | HttpsRequestOptions): Promise<stri
  */
 export async function getJSON<T>(arg: string | HttpsRequestOptions): Promise<T> {
     const r = await request(typeof arg === 'string' ? { url: arg, method: 'GET' } : arg);
-    return r.content.toJSON();
+    return r.content.toJSONAsync();
 }
 
 /**

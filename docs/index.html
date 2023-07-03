@@ -132,7 +132,7 @@
 <a href="#installation-1" id="installation-1" style="color: inherit; text-decoration: none;">
   <h2>Installation</h2>
 </a>
-<pre><code class="language-bash"><span class="hl-0">tns </span><span class="hl-7">plugin</span><span class="hl-0"> </span><span class="hl-7">add</span><span class="hl-0"> </span><span class="hl-7">@nativescript-community/https</span>
+<pre><code class="language-bash"><span class="hl-8">tns</span><span class="hl-0"> </span><span class="hl-7">plugin</span><span class="hl-0"> </span><span class="hl-7">add</span><span class="hl-0"> </span><span class="hl-7">@nativescript-community/https</span>
 </code></pre>
 <p><a href="#examples"></a></p>
 <p><a href="#examples"></a></p>
@@ -144,7 +144,7 @@
 <a href="#hitting-an-api-using-get-method" id="hitting-an-api-using-get-method" style="color: inherit; text-decoration: none;">
   <h3>Hitting an API using <code>GET</code> method</h3>
 </a>
-<pre><code class="language-typescript"><span class="hl-8">import</span><span class="hl-0"> </span><span class="hl-3">*</span><span class="hl-0"> </span><span class="hl-8">as</span><span class="hl-0"> </span><span class="hl-1">Https</span><span class="hl-0"> </span><span class="hl-8">from</span><span class="hl-0"> </span><span class="hl-7">&#39;@nativescript-community/https&#39;</span><span class="hl-0">;</span><br/><span class="hl-1">Https</span><span class="hl-0">.</span><span class="hl-9">request</span><span class="hl-0">({</span><br/><span class="hl-0">    </span><span class="hl-1">url:</span><span class="hl-0"> </span><span class="hl-7">&#39;https://httpbin.org/get&#39;</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-1">method:</span><span class="hl-0"> </span><span class="hl-7">&#39;GET&#39;</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-1">timeout:</span><span class="hl-0"> </span><span class="hl-6">30</span><span class="hl-0">, </span><span class="hl-5">// seconds (default 10)</span><br/><span class="hl-0">})</span><br/><span class="hl-0">    .</span><span class="hl-9">then</span><span class="hl-0">(</span><span class="hl-3">function</span><span class="hl-0"> (</span><span class="hl-1">response</span><span class="hl-0">) {</span><br/><span class="hl-0">        </span><span class="hl-1">console</span><span class="hl-0">.</span><span class="hl-9">log</span><span class="hl-0">(</span><span class="hl-7">&#39;Https.request response&#39;</span><span class="hl-0">, </span><span class="hl-1">response</span><span class="hl-0">);</span><br/><span class="hl-0">    })</span><br/><span class="hl-0">    .</span><span class="hl-9">catch</span><span class="hl-0">(</span><span class="hl-3">function</span><span class="hl-0"> (</span><span class="hl-1">error</span><span class="hl-0">) {</span><br/><span class="hl-0">        </span><span class="hl-1">console</span><span class="hl-0">.</span><span class="hl-9">error</span><span class="hl-0">(</span><span class="hl-7">&#39;Https.request error&#39;</span><span class="hl-0">, </span><span class="hl-1">error</span><span class="hl-0">);</span><br/><span class="hl-0">    });</span>
+<pre><code class="language-typescript"><span class="hl-9">import</span><span class="hl-0"> </span><span class="hl-3">*</span><span class="hl-0"> </span><span class="hl-9">as</span><span class="hl-0"> </span><span class="hl-1">Https</span><span class="hl-0"> </span><span class="hl-9">from</span><span class="hl-0"> </span><span class="hl-7">&#39;@nativescript-community/https&#39;</span><span class="hl-0">;</span><br/><span class="hl-1">Https</span><span class="hl-0">.</span><span class="hl-8">request</span><span class="hl-0">({</span><br/><span class="hl-0">    </span><span class="hl-1">url:</span><span class="hl-0"> </span><span class="hl-7">&#39;https://httpbin.org/get&#39;</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-1">method:</span><span class="hl-0"> </span><span class="hl-7">&#39;GET&#39;</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-1">timeout:</span><span class="hl-0"> </span><span class="hl-6">30</span><span class="hl-0">, </span><span class="hl-5">// seconds (default 10)</span><br/><span class="hl-0">})</span><br/><span class="hl-0">    .</span><span class="hl-8">then</span><span class="hl-0">(</span><span class="hl-3">function</span><span class="hl-0"> (</span><span class="hl-1">response</span><span class="hl-0">) {</span><br/><span class="hl-0">        </span><span class="hl-1">console</span><span class="hl-0">.</span><span class="hl-8">log</span><span class="hl-0">(</span><span class="hl-7">&#39;Https.request response&#39;</span><span class="hl-0">, </span><span class="hl-1">response</span><span class="hl-0">);</span><br/><span class="hl-0">    })</span><br/><span class="hl-0">    .</span><span class="hl-8">catch</span><span class="hl-0">(</span><span class="hl-3">function</span><span class="hl-0"> (</span><span class="hl-1">error</span><span class="hl-0">) {</span><br/><span class="hl-0">        </span><span class="hl-1">console</span><span class="hl-0">.</span><span class="hl-8">error</span><span class="hl-0">(</span><span class="hl-7">&#39;Https.request error&#39;</span><span class="hl-0">, </span><span class="hl-1">error</span><span class="hl-0">);</span><br/><span class="hl-0">    });</span>
 </code></pre>
 <p><a href="#configuration"></a></p>
 <p><a href="#configuration"></a></p>
@@ -162,14 +162,14 @@
 <a href="#enabling-ssl-pinning" id="enabling-ssl-pinning" style="color: inherit; text-decoration: none;">
   <h4>Enabling SSL pinning</h4>
 </a>
-<pre><code class="language-typescript"><span class="hl-8">import</span><span class="hl-0"> { </span><span class="hl-1">knownFolders</span><span class="hl-0"> } </span><span class="hl-8">from</span><span class="hl-0"> </span><span class="hl-7">&#39;file-system&#39;</span><span class="hl-0">;</span><br/><span class="hl-8">import</span><span class="hl-0"> </span><span class="hl-3">*</span><span class="hl-0"> </span><span class="hl-8">as</span><span class="hl-0"> </span><span class="hl-1">Https</span><span class="hl-0"> </span><span class="hl-8">from</span><span class="hl-0"> </span><span class="hl-7">&#39;@nativescript-community/https&#39;</span><span class="hl-0">;</span><br/><span class="hl-3">let</span><span class="hl-0"> </span><span class="hl-1">dir</span><span class="hl-0"> = </span><span class="hl-1">knownFolders</span><span class="hl-0">.</span><span class="hl-9">currentApp</span><span class="hl-0">().</span><span class="hl-9">getFolder</span><span class="hl-0">(</span><span class="hl-7">&#39;assets&#39;</span><span class="hl-0">);</span><br/><span class="hl-3">let</span><span class="hl-0"> </span><span class="hl-1">certificate</span><span class="hl-0"> = </span><span class="hl-1">dir</span><span class="hl-0">.</span><span class="hl-9">getFile</span><span class="hl-0">(</span><span class="hl-7">&#39;httpbin.org.cer&#39;</span><span class="hl-0">).</span><span class="hl-1">path</span><span class="hl-0">;</span><br/><span class="hl-1">Https</span><span class="hl-0">.</span><span class="hl-9">enableSSLPinning</span><span class="hl-0">({ </span><span class="hl-1">host:</span><span class="hl-0"> </span><span class="hl-7">&#39;httpbin.org&#39;</span><span class="hl-0">, </span><span class="hl-1">certificate</span><span class="hl-0"> });</span>
+<pre><code class="language-typescript"><span class="hl-9">import</span><span class="hl-0"> { </span><span class="hl-1">knownFolders</span><span class="hl-0"> } </span><span class="hl-9">from</span><span class="hl-0"> </span><span class="hl-7">&#39;file-system&#39;</span><span class="hl-0">;</span><br/><span class="hl-9">import</span><span class="hl-0"> </span><span class="hl-3">*</span><span class="hl-0"> </span><span class="hl-9">as</span><span class="hl-0"> </span><span class="hl-1">Https</span><span class="hl-0"> </span><span class="hl-9">from</span><span class="hl-0"> </span><span class="hl-7">&#39;@nativescript-community/https&#39;</span><span class="hl-0">;</span><br/><span class="hl-3">let</span><span class="hl-0"> </span><span class="hl-1">dir</span><span class="hl-0"> = </span><span class="hl-1">knownFolders</span><span class="hl-0">.</span><span class="hl-8">currentApp</span><span class="hl-0">().</span><span class="hl-8">getFolder</span><span class="hl-0">(</span><span class="hl-7">&#39;assets&#39;</span><span class="hl-0">);</span><br/><span class="hl-3">let</span><span class="hl-0"> </span><span class="hl-1">certificate</span><span class="hl-0"> = </span><span class="hl-1">dir</span><span class="hl-0">.</span><span class="hl-8">getFile</span><span class="hl-0">(</span><span class="hl-7">&#39;httpbin.org.cer&#39;</span><span class="hl-0">).</span><span class="hl-1">path</span><span class="hl-0">;</span><br/><span class="hl-1">Https</span><span class="hl-0">.</span><span class="hl-8">enableSSLPinning</span><span class="hl-0">({ </span><span class="hl-1">host:</span><span class="hl-0"> </span><span class="hl-7">&#39;httpbin.org&#39;</span><span class="hl-0">, </span><span class="hl-1">certificate</span><span class="hl-0"> });</span>
 </code></pre>
 <p>Once you&#39;ve enabled SSL pinning you <strong>CAN NOT</strong> re-enable with a different <code>host</code> or <code>certificate</code> file.</p>
 
 <a href="#disabling-ssl-pinning" id="disabling-ssl-pinning" style="color: inherit; text-decoration: none;">
   <h4>Disabling SSL pinning</h4>
 </a>
-<pre><code class="language-typescript"><span class="hl-8">import</span><span class="hl-0"> </span><span class="hl-3">*</span><span class="hl-0"> </span><span class="hl-8">as</span><span class="hl-0"> </span><span class="hl-1">Https</span><span class="hl-0"> </span><span class="hl-8">from</span><span class="hl-0"> </span><span class="hl-7">&#39;@nativescript-community/https&#39;</span><span class="hl-0">;</span><br/><span class="hl-1">Https</span><span class="hl-0">.</span><span class="hl-9">disableSSLPinning</span><span class="hl-0">();</span>
+<pre><code class="language-typescript"><span class="hl-9">import</span><span class="hl-0"> </span><span class="hl-3">*</span><span class="hl-0"> </span><span class="hl-9">as</span><span class="hl-0"> </span><span class="hl-1">Https</span><span class="hl-0"> </span><span class="hl-9">from</span><span class="hl-0"> </span><span class="hl-7">&#39;@nativescript-community/https&#39;</span><span class="hl-0">;</span><br/><span class="hl-1">Https</span><span class="hl-0">.</span><span class="hl-8">disableSSLPinning</span><span class="hl-0">();</span>
 </code></pre>
 <p>All requests after calling this method will no longer utilize SSL pinning until it is re-enabled once again.</p>
 
@@ -192,7 +192,7 @@ In the future more options will be added</p>
 <a href="#enabling-cache" id="enabling-cache" style="color: inherit; text-decoration: none;">
   <h3>Enabling Cache</h3>
 </a>
-<pre><code class="language-typescript"><span class="hl-8">import</span><span class="hl-0"> { </span><span class="hl-1">knownFolders</span><span class="hl-0">, </span><span class="hl-1">path</span><span class="hl-0"> } </span><span class="hl-8">from</span><span class="hl-0"> </span><span class="hl-7">&#39;@nativescript/core/file-system&#39;</span><span class="hl-0">;</span><br/><span class="hl-8">import</span><span class="hl-0"> </span><span class="hl-3">*</span><span class="hl-0"> </span><span class="hl-8">as</span><span class="hl-0"> </span><span class="hl-1">Https</span><span class="hl-0"> </span><span class="hl-8">from</span><span class="hl-0"> </span><span class="hl-7">&#39;@nativescript-community/https&#39;</span><span class="hl-0">;</span><br/><span class="hl-1">Https</span><span class="hl-0">.</span><span class="hl-9">setCache</span><span class="hl-0">({</span><br/><span class="hl-0">    </span><span class="hl-1">diskLocation:</span><span class="hl-0"> </span><span class="hl-1">path</span><span class="hl-0">.</span><span class="hl-9">join</span><span class="hl-0">(</span><span class="hl-1">knownFolders</span><span class="hl-0">.</span><span class="hl-9">documents</span><span class="hl-0">().</span><span class="hl-1">path</span><span class="hl-0">, </span><span class="hl-7">&#39;httpcache&#39;</span><span class="hl-0">),</span><br/><span class="hl-0">    </span><span class="hl-1">diskSize:</span><span class="hl-0"> </span><span class="hl-6">10</span><span class="hl-0"> * </span><span class="hl-6">1024</span><span class="hl-0"> * </span><span class="hl-6">1024</span><span class="hl-0">, </span><span class="hl-5">// 10 MiB</span><br/><span class="hl-0">});</span><br/><br/><span class="hl-5">/// later on when calling your request you can use the cachePolicy option</span>
+<pre><code class="language-typescript"><span class="hl-9">import</span><span class="hl-0"> { </span><span class="hl-1">knownFolders</span><span class="hl-0">, </span><span class="hl-1">path</span><span class="hl-0"> } </span><span class="hl-9">from</span><span class="hl-0"> </span><span class="hl-7">&#39;@nativescript/core/file-system&#39;</span><span class="hl-0">;</span><br/><span class="hl-9">import</span><span class="hl-0"> </span><span class="hl-3">*</span><span class="hl-0"> </span><span class="hl-9">as</span><span class="hl-0"> </span><span class="hl-1">Https</span><span class="hl-0"> </span><span class="hl-9">from</span><span class="hl-0"> </span><span class="hl-7">&#39;@nativescript-community/https&#39;</span><span class="hl-0">;</span><br/><span class="hl-1">Https</span><span class="hl-0">.</span><span class="hl-8">setCache</span><span class="hl-0">({</span><br/><span class="hl-0">    </span><span class="hl-1">diskLocation:</span><span class="hl-0"> </span><span class="hl-1">path</span><span class="hl-0">.</span><span class="hl-8">join</span><span class="hl-0">(</span><span class="hl-1">knownFolders</span><span class="hl-0">.</span><span class="hl-8">documents</span><span class="hl-0">().</span><span class="hl-1">path</span><span class="hl-0">, </span><span class="hl-7">&#39;httpcache&#39;</span><span class="hl-0">),</span><br/><span class="hl-0">    </span><span class="hl-1">diskSize:</span><span class="hl-0"> </span><span class="hl-6">10</span><span class="hl-0"> * </span><span class="hl-6">1024</span><span class="hl-0"> * </span><span class="hl-6">1024</span><span class="hl-0">, </span><span class="hl-5">// 10 MiB</span><br/><span class="hl-0">});</span><br/><br/><span class="hl-5">/// later on when calling your request you can use the cachePolicy option</span>
 </code></pre>
 
 <a href="#multipart-form-data" id="multipart-form-data" style="color: inherit; text-decoration: none;">
@@ -206,7 +206,7 @@ In the future more options will be added</p>
 <a href="#options" id="options" style="color: inherit; text-decoration: none;">
   <h3>Options</h3>
 </a>
-<pre><code class="language-typescript"><span class="hl-8">export</span><span class="hl-0"> </span><span class="hl-3">interface</span><span class="hl-0"> </span><span class="hl-4">HttpsSSLPinningOptions</span><span class="hl-0"> {</span><br/><span class="hl-0">    </span><span class="hl-1">host</span><span class="hl-0">: </span><span class="hl-4">string</span><span class="hl-0">;</span><br/><span class="hl-0">    </span><span class="hl-1">certificate</span><span class="hl-0">: </span><span class="hl-4">string</span><span class="hl-0">;</span><br/><span class="hl-0">    </span><span class="hl-1">allowInvalidCertificates</span><span class="hl-0">?: </span><span class="hl-4">boolean</span><span class="hl-0">;</span><br/><span class="hl-0">    </span><span class="hl-1">validatesDomainName</span><span class="hl-0">?: </span><span class="hl-4">boolean</span><span class="hl-0">;</span><br/><span class="hl-0">    </span><span class="hl-1">commonName</span><span class="hl-0">?: </span><span class="hl-4">string</span><span class="hl-0">;</span><br/><span class="hl-0">}</span><br/><span class="hl-8">import</span><span class="hl-0"> { </span><span class="hl-1">HttpRequestOptions</span><span class="hl-0"> } </span><span class="hl-8">from</span><span class="hl-0"> </span><span class="hl-7">&#39;tns-core-modules/http&#39;</span><span class="hl-0">;</span><br/><span class="hl-8">export</span><span class="hl-0"> </span><span class="hl-3">interface</span><span class="hl-0"> </span><span class="hl-4">HttpsRequestOptions</span><span class="hl-0"> </span><span class="hl-3">extends</span><span class="hl-0"> </span><span class="hl-4">HTTPOptions</span><span class="hl-0"> {</span><br/><span class="hl-0">    </span><span class="hl-1">useLegacy</span><span class="hl-0">?: </span><span class="hl-4">boolean</span><span class="hl-0">;</span><br/><span class="hl-0">    </span><span class="hl-1">cachePolicy</span><span class="hl-0">?: </span><span class="hl-7">&#39;noCache&#39;</span><span class="hl-0"> | </span><span class="hl-7">&#39;onlyCache&#39;</span><span class="hl-0"> | </span><span class="hl-7">&#39;ignoreCache&#39;</span><span class="hl-0">;</span><br/><span class="hl-0">    </span><span class="hl-9">onProgress</span><span class="hl-0">?: (</span><span class="hl-1">current</span><span class="hl-0">: </span><span class="hl-4">number</span><span class="hl-0">, </span><span class="hl-1">total</span><span class="hl-0">: </span><span class="hl-4">number</span><span class="hl-0">) </span><span class="hl-3">=&gt;</span><span class="hl-0"> </span><span class="hl-4">void</span><span class="hl-0">;</span><br/><span class="hl-0">}</span>
+<pre><code class="language-typescript"><span class="hl-9">export</span><span class="hl-0"> </span><span class="hl-3">interface</span><span class="hl-0"> </span><span class="hl-4">HttpsSSLPinningOptions</span><span class="hl-0"> {</span><br/><span class="hl-0">    </span><span class="hl-1">host</span><span class="hl-0">: </span><span class="hl-4">string</span><span class="hl-0">;</span><br/><span class="hl-0">    </span><span class="hl-1">certificate</span><span class="hl-0">: </span><span class="hl-4">string</span><span class="hl-0">;</span><br/><span class="hl-0">    </span><span class="hl-1">allowInvalidCertificates</span><span class="hl-0">?: </span><span class="hl-4">boolean</span><span class="hl-0">;</span><br/><span class="hl-0">    </span><span class="hl-1">validatesDomainName</span><span class="hl-0">?: </span><span class="hl-4">boolean</span><span class="hl-0">;</span><br/><span class="hl-0">    </span><span class="hl-1">commonName</span><span class="hl-0">?: </span><span class="hl-4">string</span><span class="hl-0">;</span><br/><span class="hl-0">}</span><br/><span class="hl-9">import</span><span class="hl-0"> { </span><span class="hl-1">HttpRequestOptions</span><span class="hl-0"> } </span><span class="hl-9">from</span><span class="hl-0"> </span><span class="hl-7">&#39;tns-core-modules/http&#39;</span><span class="hl-0">;</span><br/><span class="hl-9">export</span><span class="hl-0"> </span><span class="hl-3">interface</span><span class="hl-0"> </span><span class="hl-4">HttpsRequestOptions</span><span class="hl-0"> </span><span class="hl-3">extends</span><span class="hl-0"> </span><span class="hl-4">HTTPOptions</span><span class="hl-0"> {</span><br/><span class="hl-0">    </span><span class="hl-1">useLegacy</span><span class="hl-0">?: </span><span class="hl-4">boolean</span><span class="hl-0">;</span><br/><span class="hl-0">    </span><span class="hl-1">cachePolicy</span><span class="hl-0">?: </span><span class="hl-7">&#39;noCache&#39;</span><span class="hl-0"> | </span><span class="hl-7">&#39;onlyCache&#39;</span><span class="hl-0"> | </span><span class="hl-7">&#39;ignoreCache&#39;</span><span class="hl-0">;</span><br/><span class="hl-0">    </span><span class="hl-8">onProgress</span><span class="hl-0">?: (</span><span class="hl-1">current</span><span class="hl-0">: </span><span class="hl-4">number</span><span class="hl-0">, </span><span class="hl-1">total</span><span class="hl-0">: </span><span class="hl-4">number</span><span class="hl-0">) </span><span class="hl-3">=&gt;</span><span class="hl-0"> </span><span class="hl-4">void</span><span class="hl-0">;</span><br/><span class="hl-0">}</span>
 </code></pre>
 <table>
 <thead>
@@ -358,14 +358,14 @@ if you use <code>pnpm</code> then run <code>pnpm i</code></p>
 <a href="#build" id="build" style="color: inherit; text-decoration: none;">
   <h3>Build</h3>
 </a>
-<pre><code class="language-bash"><span class="hl-0">npm </span><span class="hl-7">run</span><span class="hl-0"> </span><span class="hl-7">build.all</span>
+<pre><code class="language-bash"><span class="hl-8">npm</span><span class="hl-0"> </span><span class="hl-7">run</span><span class="hl-0"> </span><span class="hl-7">build.all</span>
 </code></pre>
 <p>WARNING: it seems <code>yarn build.all</code> wont always work (not finding binaries in <code>node_modules/.bin</code>) which is why the doc explicitly uses <code>npm run</code></p>
 
 <a href="#demos" id="demos" style="color: inherit; text-decoration: none;">
   <h3>Demos</h3>
 </a>
-<pre><code class="language-bash"><span class="hl-0">npm </span><span class="hl-7">run</span><span class="hl-0"> </span><span class="hl-7">demo.[ng</span><span class="hl-0">|react|svelte|vue].[ios|android]</span><br/><br/><span class="hl-0">npm </span><span class="hl-7">run</span><span class="hl-0"> </span><span class="hl-7">demo.svelte.ios</span><span class="hl-0"> </span><span class="hl-5"># Example</span>
+<pre><code class="language-bash"><span class="hl-8">npm</span><span class="hl-0"> </span><span class="hl-7">run</span><span class="hl-0"> </span><span class="hl-7">demo.[ng</span><span class="hl-0">|</span><span class="hl-8">react</span><span class="hl-0">|</span><span class="hl-8">svelte</span><span class="hl-0">|</span><span class="hl-8">vue].[ios</span><span class="hl-0">|</span><span class="hl-8">android]</span><br/><br/><span class="hl-8">npm</span><span class="hl-0"> </span><span class="hl-7">run</span><span class="hl-0"> </span><span class="hl-7">demo.svelte.ios</span><span class="hl-0"> </span><span class="hl-5"># Example</span>
 </code></pre>
 <p>Demo setup is a bit special in the sense that if you want to modify/add demos you dont work directly in <code>demo-[ng|react|svelte|vue]</code>
 Instead you work in <code>demo-snippets/[ng|react|svelte|vue]</code>
@@ -382,24 +382,24 @@ You can start from the <code>install.ts</code> of each flavor to see how to regi
 </a>
 <p>You can update the repo files quite easily</p>
 <p>First update the submodules</p>
-<pre><code class="language-bash"><span class="hl-0">npm </span><span class="hl-7">run</span><span class="hl-0"> </span><span class="hl-7">update</span>
+<pre><code class="language-bash"><span class="hl-8">npm</span><span class="hl-0"> </span><span class="hl-7">run</span><span class="hl-0"> </span><span class="hl-7">update</span>
 </code></pre>
 <p>Then commit the changes
 Then update common files</p>
-<pre><code class="language-bash"><span class="hl-0">npm </span><span class="hl-7">run</span><span class="hl-0"> </span><span class="hl-7">sync</span>
+<pre><code class="language-bash"><span class="hl-8">npm</span><span class="hl-0"> </span><span class="hl-7">run</span><span class="hl-0"> </span><span class="hl-7">sync</span>
 </code></pre>
 <p>Then you can run <code>yarn|pnpm</code>, commit changed files if any</p>
 
 <a href="#update-readme" id="update-readme" style="color: inherit; text-decoration: none;">
   <h3>Update readme</h3>
 </a>
-<pre><code class="language-bash"><span class="hl-0">npm </span><span class="hl-7">run</span><span class="hl-0"> </span><span class="hl-7">readme</span>
+<pre><code class="language-bash"><span class="hl-8">npm</span><span class="hl-0"> </span><span class="hl-7">run</span><span class="hl-0"> </span><span class="hl-7">readme</span>
 </code></pre>
 
 <a href="#update-doc" id="update-doc" style="color: inherit; text-decoration: none;">
   <h3>Update doc</h3>
 </a>
-<pre><code class="language-bash"><span class="hl-0">npm </span><span class="hl-7">run</span><span class="hl-0"> </span><span class="hl-7">doc</span>
+<pre><code class="language-bash"><span class="hl-8">npm</span><span class="hl-0"> </span><span class="hl-7">run</span><span class="hl-0"> </span><span class="hl-7">doc</span>
 </code></pre>
 
 <a href="#publish" id="publish" style="color: inherit; text-decoration: none;">
@@ -407,7 +407,7 @@ Then update common files</p>
 </a>
 <p>The publishing is completely handled by <code>lerna</code> (you can add <code>-- --bump major</code> to force a major release)
 Simply run </p>
-<pre><code class="language-shell"><span class="hl-0">npm </span><span class="hl-7">run</span><span class="hl-0"> </span><span class="hl-7">publish</span>
+<pre><code class="language-shell"><span class="hl-8">npm</span><span class="hl-0"> </span><span class="hl-7">run</span><span class="hl-0"> </span><span class="hl-7">publish</span>
 </code></pre>
 
 <a href="#modifying-submodules" id="modifying-submodules" style="color: inherit; text-decoration: none;">
@@ -421,6 +421,92 @@ One easy solution is t modify <code>~/.gitconfig</code> and add</p>
 <p><a href="#questions"></a></p>
 
 <a href="#questions" id="questions" style="color: inherit; text-decoration: none;">
+  <h2>Questions</h2>
+</a>
+<p>If you have any questions/issues/comments please feel free to create an issue or start a conversation in the <a href="https://nativescript.org/discord">NativeScript Community Discord</a>.</p>
+<p><a href="#demos-and-development"></a></p>
+
+<a href="#demos-and-development-1" id="demos-and-development-1" style="color: inherit; text-decoration: none;">
+  <h2>Demos and Development</h2>
+</a>
+
+<a href="#repo-setup-1" id="repo-setup-1" style="color: inherit; text-decoration: none;">
+  <h3>Repo Setup</h3>
+</a>
+<p>The repo uses submodules. If you did not clone with <code> --recursive</code> then you need to call</p>
+<pre><code><span class="hl-1">git</span><span class="hl-0"> </span><span class="hl-1">submodule</span><span class="hl-0"> </span><span class="hl-1">update</span><span class="hl-0"> --</span><span class="hl-1">init</span>
+</code></pre>
+<p>The package manager used to install and link dependencies must be <code>pnpm</code> or <code>yarn</code>. <code>npm</code> wont work.</p>
+<p>To develop and test:
+if you use <code>yarn</code> then run <code>yarn</code>
+if you use <code>pnpm</code> then run <code>pnpm i</code></p>
+<p><strong>Interactive Menu:</strong></p>
+<p>To start the interactive menu, run <code>npm start</code> (or <code>yarn start</code> or <code>pnpm start</code>). This will list all of the commonly used scripts.</p>
+
+<a href="#build-1" id="build-1" style="color: inherit; text-decoration: none;">
+  <h3>Build</h3>
+</a>
+<pre><code class="language-bash"><span class="hl-8">npm</span><span class="hl-0"> </span><span class="hl-7">run</span><span class="hl-0"> </span><span class="hl-7">build.all</span>
+</code></pre>
+<p>WARNING: it seems <code>yarn build.all</code> wont always work (not finding binaries in <code>node_modules/.bin</code>) which is why the doc explicitly uses <code>npm run</code></p>
+
+<a href="#demos-1" id="demos-1" style="color: inherit; text-decoration: none;">
+  <h3>Demos</h3>
+</a>
+<pre><code class="language-bash"><span class="hl-8">npm</span><span class="hl-0"> </span><span class="hl-7">run</span><span class="hl-0"> </span><span class="hl-7">demo.[ng</span><span class="hl-0">|</span><span class="hl-8">react</span><span class="hl-0">|</span><span class="hl-8">svelte</span><span class="hl-0">|</span><span class="hl-8">vue].[ios</span><span class="hl-0">|</span><span class="hl-8">android]</span><br/><br/><span class="hl-8">npm</span><span class="hl-0"> </span><span class="hl-7">run</span><span class="hl-0"> </span><span class="hl-7">demo.svelte.ios</span><span class="hl-0"> </span><span class="hl-5"># Example</span>
+</code></pre>
+<p>Demo setup is a bit special in the sense that if you want to modify/add demos you dont work directly in <code>demo-[ng|react|svelte|vue]</code>
+Instead you work in <code>demo-snippets/[ng|react|svelte|vue]</code>
+You can start from the <code>install.ts</code> of each flavor to see how to register new demos </p>
+<p><a href="#contributing"></a></p>
+
+<a href="#contributing-1" id="contributing-1" style="color: inherit; text-decoration: none;">
+  <h2>Contributing</h2>
+</a>
+
+<a href="#update-repo-1" id="update-repo-1" style="color: inherit; text-decoration: none;">
+  <h3>Update repo</h3>
+</a>
+<p>You can update the repo files quite easily</p>
+<p>First update the submodules</p>
+<pre><code class="language-bash"><span class="hl-8">npm</span><span class="hl-0"> </span><span class="hl-7">run</span><span class="hl-0"> </span><span class="hl-7">update</span>
+</code></pre>
+<p>Then commit the changes
+Then update common files</p>
+<pre><code class="language-bash"><span class="hl-8">npm</span><span class="hl-0"> </span><span class="hl-7">run</span><span class="hl-0"> </span><span class="hl-7">sync</span>
+</code></pre>
+<p>Then you can run <code>yarn|pnpm</code>, commit changed files if any</p>
+
+<a href="#update-readme-1" id="update-readme-1" style="color: inherit; text-decoration: none;">
+  <h3>Update readme</h3>
+</a>
+<pre><code class="language-bash"><span class="hl-8">npm</span><span class="hl-0"> </span><span class="hl-7">run</span><span class="hl-0"> </span><span class="hl-7">readme</span>
+</code></pre>
+
+<a href="#update-doc-1" id="update-doc-1" style="color: inherit; text-decoration: none;">
+  <h3>Update doc</h3>
+</a>
+<pre><code class="language-bash"><span class="hl-8">npm</span><span class="hl-0"> </span><span class="hl-7">run</span><span class="hl-0"> </span><span class="hl-7">doc</span>
+</code></pre>
+
+<a href="#publish-1" id="publish-1" style="color: inherit; text-decoration: none;">
+  <h3>Publish</h3>
+</a>
+<p>The publishing is completely handled by <code>lerna</code> (you can add <code>-- --bump major</code> to force a major release)
+Simply run </p>
+<pre><code class="language-shell"><span class="hl-8">npm</span><span class="hl-0"> </span><span class="hl-7">run</span><span class="hl-0"> </span><span class="hl-7">publish</span>
+</code></pre>
+
+<a href="#modifying-submodules-1" id="modifying-submodules-1" style="color: inherit; text-decoration: none;">
+  <h3>modifying submodules</h3>
+</a>
+<p>The repo uses https:// for submodules which means you won&#39;t be able to push directly into the submodules.
+One easy solution is t modify <code>~/.gitconfig</code> and add</p>
+<pre><code><span class="hl-0">[</span><span class="hl-1">url</span><span class="hl-0"> </span><span class="hl-7">&quot;ssh://git@github.com/&quot;</span><span class="hl-0">]</span><br/><span class="hl-0">    </span><span class="hl-1">pushInsteadOf</span><span class="hl-0"> = </span><span class="hl-10">https</span><span class="hl-0">:</span><span class="hl-5">//github.com/</span>
+</code></pre>
+<p><a href="#questions"></a></p>
+
+<a href="#questions-1" id="questions-1" style="color: inherit; text-decoration: none;">
   <h2>Questions</h2>
 </a>
 <p>If you have any questions/issues/comments please feel free to create an issue or start a conversation in the <a href="https://nativescript.org/discord">NativeScript Community Discord</a>.</p>

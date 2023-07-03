@@ -16,11 +16,11 @@
         "plugin.watch.android": "npm i && npm-watch build.android",
         "plugin.watch.ios": "npm i && npm-watch build.ios",
         "plugin.watch": "npm run plugin.watch.tsc & npm run plugin.watch.android & npm run plugin.watch.ios",
-        "publish": "npm run clean && npm run build.all && npm run readme && npm run doc && lerna publish --no-private --create-release=github --force-publish",
+        "publish": "npm run clean ; npm run build.all ; npm run readme ; npm run doc ; npm run commit_readme_doc_changes ; lerna publish",
         "publish.major": "npm run build && lerna publish major --create-release=github --force-publish",
         "sync": "node ./tools/sync.js",
         "commitmsg": "commitlint -e $GIT_PARAMS",
-        "build.all": "npm run build",
+        "build.all": "lerna run build.all",
         "fullclean": "npm run clean && rimraf 'packages/**/node_modules' 'demo-*/hooks' 'demo-*/node_modules' 'package-lock.json' 'pnpm-lock.yaml' 'node_modules'",
         "demo.vue.android": "cd ./demo-vue && ns run android --no-hmr --env.watchNodeModules",
         "demo.vue.clean": "cd ./demo-vue && ns clean",
@@ -31,7 +31,8 @@
         "setup": "npm run submodules && ts-patch install",
         "start": "./node_modules/.bin/ntl -A -s 15 -o",
         "submodules": "git submodule update --init",
-        "update": "node ./tools/update.js"
+        "update": "node ./tools/update.js",
+        "commit_readme_doc_changes": "git add docs *.md ; git commit -m \"readme/doc\""
     },
     "keywords": [
         "secure",
@@ -88,8 +89,8 @@
     "ntl": {
         "descriptions": {
             "build": "Build the plugin",
-            "build.all": "Build the plugin for all platforms",
             "build.angular": "Build the plugin for Angular",
+            "build.all": "Build the plugin for all platforms",
             "clean": "Clean the local environment.",
             "demo.vue.android": "Runs the Vue demo on Android.",
             "demo.vue.ios": "Runs the Vue demo on iOS.",

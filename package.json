@@ -8,6 +8,7 @@
         "build.android": "bash src-native/android/build.sh",
         "build.ios": "bash src-native/ios/build.sh",
         "build.native": "npm run build.android && npm run build.ios",
+        "build.angular": "lerna run build.angular",
         "build": "lerna run build",
         "demo.ios": "npm run build && cd ./demo && tns run ios",
         "demo.android": "npm run build && cd ./demo && tns run android",
@@ -88,6 +89,7 @@
         "descriptions": {
             "build": "Build the plugin",
             "build.all": "Build the plugin for all platforms",
+            "build.angular": "Build the plugin for Angular",
             "clean": "Clean the local environment.",
             "demo.vue.android": "Runs the Vue demo on Android.",
             "demo.vue.ios": "Runs the Vue demo on iOS.",

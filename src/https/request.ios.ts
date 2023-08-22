@@ -13,6 +13,7 @@ export function setCache(options?: CacheOptions) {
     }
     NSURLCache.sharedURLCache = cache;
 }
+
 export function clearCache() {
     NSURLCache.sharedURLCache.removeAllCachedResponses();
 }
@@ -31,7 +32,12 @@ const policies: Ipolicies = {
 policies.def.allowInvalidCertificates = true;
 policies.def.validatesDomainName = false;
 
+const configuration = NSURLSessionConfiguration.defaultSessionConfiguration;
+let manager = AFHTTPSessionManager.alloc().initWithSessionConfiguration(configuration);
+
 export function enableSSLPinning(options: HttpsSSLPinningOptions) {
+    const url = NSURL.URLWithString(options.host);
+    manager = AFHTTPSessionManager.alloc().initWithSessionConfiguration(configuration).initWithBaseURL(url);
     if (!policies.secure) {
         policies.secure = AFSecurityPolicy.policyWithPinningMode(AFSSLPinningMode.PublicKey);
         policies.secure.allowInvalidCertificates = Utils.isDefined(options.allowInvalidCertificates) ? options.allowInvalidCertificates : false;
@@ -298,8 +304,6 @@ function bodyToNative(cont) {
     }
     return dict;
 }
-const configuration = NSURLSessionConfiguration.defaultSessionConfiguration;
-const manager = AFHTTPSessionManager.alloc().initWithSessionConfiguration(configuration);
 
 const runningRequests: { [k: string]: NSURLSessionDataTask } = {};
 
@@ -308,10 +312,11 @@ export function cancelRequest(tag: string) {
         runningRequests[tag].cancel();
     }
 }
+
 export function cancelAllRequests() {
-    Object.values(runningRequests).forEach(request=>{
-        request.cancel()
-    })
+    Object.values(runningRequests).forEach((request) => {
+        request.cancel();
+    });
 }
 
 export function clearCookies() {
@@ -373,8 +378,8 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
 
     const progress = opts.onProgress
         ? (progress: NSProgress) => {
-            opts.onProgress(progress.completedUnitCount, progress.totalUnitCount);
-        }
+              opts.onProgress(progress.completedUnitCount, progress.totalUnitCount);
+          }
         : null;
     let task: NSURLSessionDataTask;
     const tag = opts.tag;
@@ -500,7 +505,8 @@ export function request(opts: HttpsRequestOptions, useLegacy: boolean = true) {
         }
     });
 }
-//Android only
+
+// Android only
 export function getClient(opts: Partial<HttpsRequestOptions>) {
     return undefined;
 }

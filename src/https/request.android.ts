@@ -159,7 +159,7 @@ class HttpsResponseLegacy implements IHttpsResponseLegacy {
         }
         return new Promise<ImageSource>((resolve, reject) => {
             this.getOrCreateCloseCallback();
-            this.response.toBitmapAsync(this.getCallback(resolve, reject)).then((r) => {
+            this.response.toImageAsync(this.getCallback(resolve, reject)).then((r) => {
                 this.imageSource = r;
                 return r;
             });

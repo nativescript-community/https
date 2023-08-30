@@ -275,7 +275,7 @@ function AFFailure(resolve, reject, task: NSURLSessionDataTask, error: NSError, 
         sendi.content = new HttpsResponseLegacy(data, sendi.contentLength, url);
         resolve(sendi);
     } else {
-        const content: any = {
+        const response: any = {
             body: parsedData,
             contentLength: sendi.contentLength,
             description: error.description,
@@ -284,9 +284,10 @@ function AFFailure(resolve, reject, task: NSURLSessionDataTask, error: NSError, 
         };
 
         if (policies.secured === true) {
-            content.description = '@nativescript-community/https > Invalid SSL certificate! ' + content.description;
+            response.description = '@nativescript-community/https > Invalid SSL certificate! ' + response.description;
         }
-        sendi.content = content;
+        sendi.content = parsedData;
+        sendi.response = response;
 
         resolve(sendi);
     }
@@ -369,9 +370,9 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
 
     let dict = null;
     if (opts.body) {
-        dict = NSJSONSerialization.JSONObjectWithDataOptionsError(NSString.stringWithString(JSON.stringify(opts.body)).dataUsingEncoding(NSUTF8StringEncoding), 0);
+        dict = NSJSONSerialization.JSONObjectWithDataOptionsError(NSString.stringWithString(JSON.stringify(opts.body)).dataUsingEncoding(NSUTF8StringEncoding), 0 as any);
     } else if (opts.content) {
-        dict = NSJSONSerialization.JSONObjectWithDataOptionsError(NSString.stringWithString(opts.content).dataUsingEncoding(NSUTF8StringEncoding), 0);
+        dict = NSJSONSerialization.JSONObjectWithDataOptionsError(NSString.stringWithString(opts.content).dataUsingEncoding(NSUTF8StringEncoding), 0 as any);
     }
 
     manager.requestSerializer.timeoutInterval = opts.timeout ? opts.timeout : 10;

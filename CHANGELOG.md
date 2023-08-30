@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.2](https://github.com/nativescript-community/https/compare/v4.1.1...v4.1.2) (2023-08-30)
+
+### Bug Fixes
+
+* **android:** toBitmapAsync is not a function error fix ([63b19f0](https://github.com/nativescript-community/https/commit/63b19f03334d8ae742dddc47d48db530d88db63f))
+* **ios:** base URL for AFHTTPSessionManager ([0ee4640](https://github.com/nativescript-community/https/commit/0ee46405eed8fe2902b01ddb1f871f604424bf51))
+* **ios:** non legacy report format fix ([1cec77e](https://github.com/nativescript-community/https/commit/1cec77ef3144c4840fb205142aa4d7e761262196))
+
 ## [4.1.1](https://github.com/nativescript-community/https/compare/v4.1.0...v4.1.1) (2023-07-03)
 
 ### Bug Fixes

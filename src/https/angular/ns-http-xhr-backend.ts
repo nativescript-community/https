@@ -56,10 +56,19 @@ export class NativeScriptHttpXhrBackend extends NsHttpBackEnd {
 
     private _request(request: HttpRequest<any>) {
         const method = request.method as 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'HEAD';
+        let url = request.url;
+        if (request.params) {
+            const params = request.params.toString();
+            if (params.length) {
+                const qIdx = url.indexOf('?');
+                const sep = qIdx === -1 ? '?' : (qIdx < url.length - 1 ? '&' : '');
+                url += sep + params;
+            }
+        }
         return from(
             httpsRequest(
                 {
-                    url: request.url,
+                    url,
                     method,
                     headers: this._mapHeaders(request),
                     params: this._mapParams(request),

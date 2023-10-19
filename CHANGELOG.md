@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.3](https://github.com/nativescript-community/https/compare/v4.1.2...v4.1.3) (2023-10-19)
+
+### Features
+
+* **angular:** handle params ([eff8222](https://github.com/nativescript-community/https/commit/eff82226bf4727b73d8484014245956248931d70))
+
 ## [4.1.2](https://github.com/nativescript-community/https/compare/v4.1.1...v4.1.2) (2023-08-30)
 
 ### Bug Fixes

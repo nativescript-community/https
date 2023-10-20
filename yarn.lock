@@ -1986,7 +1986,7 @@ __metadata:
 
 "@nativescript-community/plugin-seed-tools@file:tools::locator=root-workspace-0b6124%40workspace%3A.":
   version: 1.0.0
-  resolution: "@nativescript-community/plugin-seed-tools@file:tools#tools::hash=f4b4ad&locator=root-workspace-0b6124%40workspace%3A."
+  resolution: "@nativescript-community/plugin-seed-tools@file:tools#tools::hash=d71f44&locator=root-workspace-0b6124%40workspace%3A."
   dependencies:
     "@angular/animations": ~16.2.8
     "@angular/common": ~16.2.8
@@ -2051,7 +2051,7 @@ __metadata:
     vue: ~2.6.14
     yargs: ^17.7.2
     zone.js: ~0.14.0
-  checksum: fe973b2c49a1357848af17e8ea9e01cfd9cf4774987d802c091635e843667e4d39e990a3b1a54aad84c28aed7d1153e380b67fa5742a9cc3b82fc23ec28821ea
+  checksum: 2059f167166f1aaa5f3486fa3c0a0fadbe457879cfcff2eb46dd3d33d904d9dc2c2c785b98936d515ef58703a2dfda4bda014965d62e5ad5af361b8905e0c94f
   languageName: node
   linkType: hard
 
@@ -2065,10 +2065,10 @@ __metadata:
 
 "@nativescript-community/template-snippet@file:demo-snippets::locator=root-workspace-0b6124%40workspace%3A.":
   version: 0.0.1
-  resolution: "@nativescript-community/template-snippet@file:demo-snippets#demo-snippets::hash=782440&locator=root-workspace-0b6124%40workspace%3A."
+  resolution: "@nativescript-community/template-snippet@file:demo-snippets#demo-snippets::hash=07d2c5&locator=root-workspace-0b6124%40workspace%3A."
   dependencies:
     "@nativescript-community/https": 4.0.11
-  checksum: ccdd4156f6de1627b2e9264fbc9af529f976841f1a2e9402c641e7fdb0f8cbd95e45c2a03483de54d972a4142a9d8dff9b8c43f65143368e8872a768ff31b205
+  checksum: 0034d1e678e6ffbb0d898b54ba4bde0216d2005a10c4f49d5b23ed59c03ea64d736eadb4a683bff0bca9031cdd3aa9620f181ab6a3bbe1ce6912408a8841ef6c
   languageName: node
   linkType: hard
 
@@ -16324,11 +16324,11 @@ __metadata:
 
 "typescript@patch:typescript@^4.6.4 || ^5.0.0#~builtin<compat/typescript>":
   version: 5.1.6
-  resolution: "typescript@patch:typescript@npm%3A5.1.6#~builtin<compat/typescript>::version=5.1.6&hash=ad5954"
+  resolution: "typescript@patch:typescript@npm%3A5.1.6#~builtin<compat/typescript>::version=5.1.6&hash=5da071"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 21e88b0a0c0226f9cb9fd25b9626fb05b4c0f3fddac521844a13e1f30beb8f14e90bd409a9ac43c812c5946d714d6e0dee12d5d02dfc1c562c5aacfa1f49b606
+  checksum: f53bfe97f7c8b2b6d23cf572750d4e7d1e0c5fff1c36d859d0ec84556a827b8785077bc27676bf7e71fae538e517c3ecc0f37e7f593be913d884805d931bc8be
   languageName: node
   linkType: hard
 
@@ -16344,21 +16344,21 @@ __metadata:
 
 "typescript@patch:typescript@~4.8.4#~builtin<compat/typescript>":
   version: 4.8.4
-  resolution: "typescript@patch:typescript@npm%3A4.8.4#~builtin<compat/typescript>::version=4.8.4&hash=0102e9"
+  resolution: "typescript@patch:typescript@npm%3A4.8.4#~builtin<compat/typescript>::version=4.8.4&hash=1a91c8"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 301459fc3eb3b1a38fe91bf96d98eb55da88a9cb17b4ef80b4d105d620f4d547ba776cc27b44cc2ef58b66eda23fe0a74142feb5e79a6fb99f54fc018a696afa
+  checksum: c981e82b77a5acdcc4e69af9c56cdecf5b934a87a08e7b52120596701e389a878b8e3f860e73ffb287bf649cc47a8c741262ce058148f71de4cdd88bb9c75153
   languageName: node
   linkType: hard
 
 "typescript@patch:typescript@~4.9.5#~builtin<compat/typescript>":
   version: 4.9.5
-  resolution: "typescript@patch:typescript@npm%3A4.9.5#~builtin<compat/typescript>::version=4.9.5&hash=ad5954"
+  resolution: "typescript@patch:typescript@npm%3A4.9.5#~builtin<compat/typescript>::version=4.9.5&hash=289587"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 8f6260acc86b56bfdda6004bc53f32ea548f543e8baef7071c8e34d29d292f3e375c8416556c8de10b24deef6933cd1c16a8233dc84a3dd43a13a13265d0faab
+  checksum: 1f8f3b6aaea19f0f67cba79057674ba580438a7db55057eb89cc06950483c5d632115c14077f6663ea76fd09fce3c190e6414bb98582ec80aa5a4eaf345d5b68
   languageName: node
   linkType: hard
 

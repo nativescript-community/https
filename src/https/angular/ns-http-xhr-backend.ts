@@ -1,5 +1,6 @@
 import { Inject, Injectable, InjectionToken, Optional } from '@angular/core';
-import { HttpErrorResponse, HttpEvent, HttpHeaders, HttpRequest, HttpResponse, XhrFactory } from '@angular/common/http';
+import { XhrFactory } from '@angular/common';
+import { HttpErrorResponse, HttpEvent, HttpHeaders, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Observable, from, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { NSFileSystem, NsHttpBackEnd } from '@nativescript/angular';

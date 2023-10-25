@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.4](https://github.com/nativescript-community/https/compare/v4.1.3...v4.1.4) (2023-10-25)
+
+### Bug Fixes
+
+* **angular:** xhr factory import ([71a3609](https://github.com/nativescript-community/https/commit/71a3609abd8a0180f1519b051b02e633605bdfe1))
+
 ## [4.1.3](https://github.com/nativescript-community/https/compare/v4.1.2...v4.1.3) (2023-10-19)
 
 ### Features

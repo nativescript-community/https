@@ -17,8 +17,8 @@ declare namespace com {
                 toByteArrayAsync(callback: OkHttpResponse.OkHttpResponseAsyncCallback);
                 asString();
                 asStringAsync(callback: OkHttpResponse.OkHttpResponseAsyncCallback);
-                toBitmap();
-                toBitmapAsync(callback: OkHttpResponse.OkHttpResponseAsyncCallback);
+                toImage();
+                toImageAsync(callback: OkHttpResponse.OkHttpResponseAsyncCallback);
                 toFile();
                 toFileAsync(filePath: string, callback: OkHttpResponse.OkHttpResponseAsyncCallback);
 

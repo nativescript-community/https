@@ -15,6 +15,7 @@ export function getFilenameFromUrl(url: string) {
 
     return result;
 }
+
 export function parseJSON(source: string): any {
     const src = source.trim();
     if (src.lastIndexOf(')') === src.length - 1) {
@@ -25,10 +26,13 @@ export function parseJSON(source: string): any {
 }
 
 export const interceptors = [];
+
 export function addInterceptor(interceptor) {
     interceptors.push(interceptor);
 }
+
 export const networkInterceptors = [];
+
 export function addNetworkInterceptor(interceptor) {
     networkInterceptors.push(interceptor);
 }

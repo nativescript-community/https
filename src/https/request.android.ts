@@ -22,6 +22,7 @@ const peer: Ipeer = {
 
 let cache: okhttp3.Cache;
 let forceCache = false;
+
 export function setCache(options?: CacheOptions) {
     if (options) {
         forceCache = options.forceCache === true;
@@ -34,6 +35,7 @@ export function setCache(options?: CacheOptions) {
         getClient(undefined, true);
     }
 }
+
 export function clearCache() {
     if (cache) {
         cache.evictAll();
@@ -159,7 +161,7 @@ class HttpsResponseLegacy implements IHttpsResponseLegacy {
         }
         return new Promise<ImageSource>((resolve, reject) => {
             this.getOrCreateCloseCallback();
-            this.response.toBitmapAsync(this.getCallback(resolve, reject)).then((r) => {
+            this.response.toImageAsync(this.getCallback(resolve, reject)).then((r) => {
                 this.imageSource = r;
                 return r;
             });
@@ -493,8 +495,11 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
 
             (opts.body as HttpsFormDataParam[]).forEach((param) => {
                 if (param.fileName && param.contentType) {
-                    const MEDIA_TYPE = okhttp3.MediaType.parse(param.contentType);
-                    builder.addFormDataPart(param.parameterName, param.fileName, okhttp3.RequestBody.create(MEDIA_TYPE, param.data));
+                    if (param.data instanceof okhttp3.RequestBody) {
+                        builder.addFormDataPart(param.parameterName, param.fileName, param.data);
+                    } else {
+                        builder.addFormDataPart(param.parameterName, param.fileName, okhttp3.RequestBody.create(param.data, okhttp3.MediaType.parse(param.contentType)));
+                    }
                 } else {
                     if (typeof param.data === 'string') {
                         builder.addFormDataPart(param.parameterName, param.data);

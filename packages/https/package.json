@@ -1,6 +1,6 @@
 {
     "name": "@nativescript-community/https",
-    "version": "4.0.16",
+    "version": "4.1.4",
     "description": "Nativescript plugin for https requests",
     "main": "index",
     "sideEffects": false,
@@ -17,7 +17,8 @@
         "build": "npm run tsc",
         "build.watch": "npm run tsc -- -w",
         "build.win": "npm run tsc-win",
-        "build.all": "npm run build",
+        "build.all": "npm run build && npm run build.angular",
+        "build.angular": "ng-packagr -p ../../src/https/angular/ng-package.json -c ../../src/https/angular/tsconfig.json",
         "build.all.win": "npm run build.win",
         "clean": "rimraf ./*.d.ts ./*.js ./*.js.map"
     },
@@ -33,9 +34,9 @@
             "url": "https://github.com/kefahB"
         },
         {
-            "name": "Kefah BADER ALDIN",
-            "email": "kefah.bader@gmail.com",
-            "url": "https://github.com/kefahB"
+            "name": "Ruslan Lekhman",
+            "email": "lekhman112@gmail.com",
+            "url": "https://github.com/lekhmanrus"
         }
     ],
     "author": {

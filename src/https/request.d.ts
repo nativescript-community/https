@@ -72,6 +72,7 @@ export interface HttpsResponse<T = any> {
     statusCode?: number;
     contentLength: number;
     content?: T;
+    response?: string;
     reason?: string;
     description?: string;
     url?: string;

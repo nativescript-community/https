@@ -3,65 +3,80 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## [4.0.16](https://github.com/nativescript-community/https/compare/v4.0.15...v4.0.16) (2023-03-14)
+## [4.1.4](https://github.com/nativescript-community/https/compare/v4.1.3...v4.1.4) (2023-10-25)
 
+### Bug Fixes
+
+* **angular:** xhr factory import ([71a3609](https://github.com/nativescript-community/https/commit/71a3609abd8a0180f1519b051b02e633605bdfe1))
+
+## [4.1.3](https://github.com/nativescript-community/https/compare/v4.1.2...v4.1.3) (2023-10-19)
+
+### Features
+
+* **angular:** handle params ([eff8222](https://github.com/nativescript-community/https/commit/eff82226bf4727b73d8484014245956248931d70))
+
+## [4.1.2](https://github.com/nativescript-community/https/compare/v4.1.1...v4.1.2) (2023-08-30)
+
+### Bug Fixes
+
+* **android:** toBitmapAsync is not a function error fix ([63b19f0](https://github.com/nativescript-community/https/commit/63b19f03334d8ae742dddc47d48db530d88db63f))
+* **ios:** base URL for AFHTTPSessionManager ([0ee4640](https://github.com/nativescript-community/https/commit/0ee46405eed8fe2902b01ddb1f871f604424bf51))
+* **ios:** non legacy report format fix ([1cec77e](https://github.com/nativescript-community/https/commit/1cec77ef3144c4840fb205142aa4d7e761262196))
+
+## [4.1.1](https://github.com/nativescript-community/https/compare/v4.1.0...v4.1.1) (2023-07-03)
+
+### Bug Fixes
+
+* angular build ([0290951](https://github.com/nativescript-community/https/commit/0290951a20d41a9158e406f6120ea9f2a1459219))
+* angular code formatting & error handling ([e1893e4](https://github.com/nativescript-community/https/commit/e1893e4481793abecf32bb44ef6185c498935d2d))
+* call async methods to prevent android.os.NetworkOnMainThreadException errors ([ec82cef](https://github.com/nativescript-community/https/commit/ec82cef78897de459f879b42f3a83eb7504d5fec))
+
+# [4.1.0](https://github.com/nativescript-community/https/compare/v4.0.17...v4.1.0) (2023-04-30)
+
+### Features
+
+* angular module ([dc3761a](https://github.com/nativescript-community/https/commit/dc3761ac33d99ddaa35d47e56c3275774af647f1))
+* angular support ([ff92deb](https://github.com/nativescript-community/https/commit/ff92deb51bc95605c02eafe9ae4f066434fe8dcd))
+
+## [4.0.17](https://github.com/nativescript-community/https/compare/v4.0.16...v4.0.17) (2023-03-20)
+
+### Bug Fixes
+
+* **android:** support native data for form data parameters ([47e9002](https://github.com/nativescript-community/https/commit/47e9002ddd4c1ec8acf106035e36c6649829ae85))
+
+## [4.0.16](https://github.com/nativescript-community/https/compare/v4.0.15...v4.0.16) (2023-03-14)
 
 ### Features
 
 * `cancelAllRequests` ([3a014bc](https://github.com/nativescript-community/https/commit/3a014bc9fe797d9b1405b9ed75348fba776d6eb2))
 
-
-
-
-
 ## [4.0.15](https://github.com/nativescript-community/https/compare/v4.0.14...v4.0.15) (2023-03-06)
-
 
 ### Bug Fixes
 
 * **android:** update to latest okhttp lib ([c4b7870](https://github.com/nativescript-community/https/commit/c4b78703637e21bbfa84647d7f8a6f07348c9f44))
 
-
 ### Features
 
 * **android:** support passing custom RequestBody as `content` parameter ([4e5b513](https://github.com/nativescript-community/https/commit/4e5b5136f19487a87911638ef4b9fc7a174dd619))
 
-
-
-
-
 ## [4.0.14](https://github.com/nativescript-community/https/compare/v4.0.13...v4.0.14) (2023-02-15)
-
 
 ### Bug Fixes
 
 * **android:** cookiesEnabled: false fixed ([94f6bb1](https://github.com/nativescript-community/https/commit/94f6bb18c546ef1e427730d45cc71a4726f9ab39))
 
-
-
-
-
 ## [4.0.13](https://github.com/nativescript-community/https/compare/v4.0.12...v4.0.13) (2023-01-24)
-
 
 ### Bug Fixes
 
 * **android:** native-api-usage fix ([0f5ca06](https://github.com/nativescript-community/https/commit/0f5ca062c06c0f2c31677be8c528c1b072070e50))
 
-
-
-
-
 ## [4.0.12](https://github.com/nativescript-community/https/compare/v4.0.11...v4.0.12) (2023-01-23)
-
 
 ### Bug Fixes
 
 * **android:** improved native-api-usage ([5e32bb0](https://github.com/nativescript-community/https/commit/5e32bb08e3f95c75e0ec05d0594294911eda72af))
-
-
-
-
 
 ## [4.0.11](https://github.com/nativescript-community/https/compare/v4.0.10...v4.0.11) (2022-12-05)
 

@@ -13,6 +13,7 @@ export function setCache(options?: CacheOptions) {
     }
     NSURLCache.sharedURLCache = cache;
 }
+
 export function clearCache() {
     NSURLCache.sharedURLCache.removeAllCachedResponses();
 }
@@ -31,7 +32,12 @@ const policies: Ipolicies = {
 policies.def.allowInvalidCertificates = true;
 policies.def.validatesDomainName = false;
 
+const configuration = NSURLSessionConfiguration.defaultSessionConfiguration;
+let manager = AFHTTPSessionManager.alloc().initWithSessionConfiguration(configuration);
+
 export function enableSSLPinning(options: HttpsSSLPinningOptions) {
+    const url = NSURL.URLWithString(options.host);
+    manager = AFHTTPSessionManager.alloc().initWithSessionConfiguration(configuration).initWithBaseURL(url);
     if (!policies.secure) {
         policies.secure = AFSecurityPolicy.policyWithPinningMode(AFSSLPinningMode.PublicKey);
         policies.secure.allowInvalidCertificates = Utils.isDefined(options.allowInvalidCertificates) ? options.allowInvalidCertificates : false;
@@ -269,7 +275,7 @@ function AFFailure(resolve, reject, task: NSURLSessionDataTask, error: NSError, 
         sendi.content = new HttpsResponseLegacy(data, sendi.contentLength, url);
         resolve(sendi);
     } else {
-        const content: any = {
+        const response: any = {
             body: parsedData,
             contentLength: sendi.contentLength,
             description: error.description,
@@ -278,9 +284,10 @@ function AFFailure(resolve, reject, task: NSURLSessionDataTask, error: NSError, 
         };
 
         if (policies.secured === true) {
-            content.description = '@nativescript-community/https > Invalid SSL certificate! ' + content.description;
+            response.description = '@nativescript-community/https > Invalid SSL certificate! ' + response.description;
         }
-        sendi.content = content;
+        sendi.content = parsedData;
+        sendi.response = response;
 
         resolve(sendi);
     }
@@ -298,8 +305,6 @@ function bodyToNative(cont) {
     }
     return dict;
 }
-const configuration = NSURLSessionConfiguration.defaultSessionConfiguration;
-const manager = AFHTTPSessionManager.alloc().initWithSessionConfiguration(configuration);
 
 const runningRequests: { [k: string]: NSURLSessionDataTask } = {};
 
@@ -308,10 +313,11 @@ export function cancelRequest(tag: string) {
         runningRequests[tag].cancel();
     }
 }
+
 export function cancelAllRequests() {
-    Object.values(runningRequests).forEach(request=>{
-        request.cancel()
-    })
+    Object.values(runningRequests).forEach((request) => {
+        request.cancel();
+    });
 }
 
 export function clearCookies() {
@@ -364,17 +370,17 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
 
     let dict = null;
     if (opts.body) {
-        dict = NSJSONSerialization.JSONObjectWithDataOptionsError(NSString.stringWithString(JSON.stringify(opts.body)).dataUsingEncoding(NSUTF8StringEncoding), 0);
+        dict = NSJSONSerialization.JSONObjectWithDataOptionsError(NSString.stringWithString(JSON.stringify(opts.body)).dataUsingEncoding(NSUTF8StringEncoding), 0 as any);
     } else if (opts.content) {
-        dict = NSJSONSerialization.JSONObjectWithDataOptionsError(NSString.stringWithString(opts.content).dataUsingEncoding(NSUTF8StringEncoding), 0);
+        dict = NSJSONSerialization.JSONObjectWithDataOptionsError(NSString.stringWithString(opts.content).dataUsingEncoding(NSUTF8StringEncoding), 0 as any);
     }
 
     manager.requestSerializer.timeoutInterval = opts.timeout ? opts.timeout : 10;
 
     const progress = opts.onProgress
         ? (progress: NSProgress) => {
-            opts.onProgress(progress.completedUnitCount, progress.totalUnitCount);
-        }
+              opts.onProgress(progress.completedUnitCount, progress.totalUnitCount);
+          }
         : null;
     let task: NSURLSessionDataTask;
     const tag = opts.tag;
@@ -500,7 +506,8 @@ export function request(opts: HttpsRequestOptions, useLegacy: boolean = true) {
         }
     });
 }
-//Android only
+
+// Android only
 export function getClient(opts: Partial<HttpsRequestOptions>) {
     return undefined;
 }

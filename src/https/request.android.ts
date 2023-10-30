@@ -474,19 +474,19 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
         request.cacheControl(cacheControlBuilder.build());
     }
 
-    const methods = {
-        GET: 'get',
-        HEAD: 'head',
-        DELETE: 'delete',
-        POST: 'post',
-        PUT: 'put',
-        PATCH: 'patch'
-    };
-    let type;
-    if (['GET', 'HEAD'].indexOf(opts.method) !== -1 || (opts.method === 'DELETE' && !Utils.isDefined(opts.body) && !Utils.isDefined(opts.content))) {
-        request[methods[opts.method]]();
-    } else {
-        type = opts.headers && opts.headers['Content-Type'] ? opts.headers['Content-Type'] : 'application/json';
+    // const methods = {
+    //     GET: 'get',
+    //     HEAD: 'head',
+    //     DELETE: 'delete',
+    //     POST: 'post',
+    //     PUT: 'put',
+    //     PATCH: 'patch'
+    // };
+    // let type;
+    // if (['GET', 'HEAD'].indexOf(opts.method) !== -1 || (opts.method === 'DELETE' && !Utils.isDefined(opts.body) && !Utils.isDefined(opts.content))) {
+    //     request[methods[opts.method]]();
+    // } else {
+       let type = opts.headers && opts.headers['Content-Type'] ? opts.headers['Content-Type'] : 'application/json';
         const MEDIA_TYPE = okhttp3.MediaType.parse(type);
         let okHttpBody: okhttp3.RequestBody;
         if (type.startsWith('multipart/form-data')) {
@@ -518,15 +518,22 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
         } else {
             let body;
             if (opts.body) {
-                try {
-                    body = JSON.stringify(opts.body);
-                } catch (ignore) {}
+                // TODO: add support for Buffers
+                if (opts.body instanceof File) {
+                    okHttpBody = okhttp3.RequestBody.create(new java.io.File(opts.body.path), okhttp3.MediaType.parse(type));
+                } else if (typeof opts.body === 'string') {
+                    body = opts.body;
+                } else{
+                    try {
+                        body = JSON.stringify(opts.body);
+                    } catch (ignore) {}
+                }
             } else if (opts.content) {
                 body = opts.content;
             }
             if (body instanceof okhttp3.RequestBody) {
                 okHttpBody = body;
-            } else {
+            } else if (body) {
                 okHttpBody = okhttp3.RequestBody.create(body, okhttp3.MediaType.parse(type));
             }
         }
@@ -541,8 +548,9 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                 })
             );
         }
-        request[methods[opts.method]](okHttpBody);
-    }
+        request.method(opts.method, okHttpBody);
+        // request[methods[opts.method]](okHttpBody);
+    // }
     const tag = opts.tag || `okhttp_request_${CALL_ID++}`;
     const call = client.newCall(request.tag(tag).build());
     runningClients[tag] = client;

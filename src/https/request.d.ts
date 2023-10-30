@@ -37,7 +37,7 @@ export interface HttpsRequestOptions extends HttpRequestOptions {
     method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'HEAD';
     headers?: Headers;
     params?: HttpsRequestObject;
-    body?: HttpsRequestObject | HttpsFormDataParam[];
+    body?: HttpsRequestObject | HttpsFormDataParam[] | File;
     /**
      * content can be used to pass native custom okhttp3.RequestBody
      */

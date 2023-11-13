@@ -538,7 +538,7 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
             }
         }
 
-        if (opts.onProgress) {
+        if (okHttpBody && opts.onProgress) {
             okHttpBody = new com.nativescript.https.ProgressRequestWrapper(
                 okHttpBody,
                 new com.nativescript.https.ProgressRequestWrapper.ProgressListener({

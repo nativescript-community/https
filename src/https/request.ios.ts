@@ -368,12 +368,6 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
         );
     }
 
-    let dict = null;
-    if (opts.body) {
-        dict = NSJSONSerialization.JSONObjectWithDataOptionsError(NSString.stringWithString(JSON.stringify(opts.body)).dataUsingEncoding(NSUTF8StringEncoding), 0 as any);
-    } else if (opts.content) {
-        dict = NSJSONSerialization.JSONObjectWithDataOptionsError(NSString.stringWithString(opts.content).dataUsingEncoding(NSUTF8StringEncoding), 0 as any);
-    }
 
     manager.requestSerializer.timeoutInterval = opts.timeout ? opts.timeout : 10;
 
@@ -467,29 +461,66 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                     default:
                         throw new Error('method_not_supported_multipart');
                 }
-            } else {
-                switch (opts.method) {
-                    case 'GET':
-                        task = manager.GETParametersHeadersProgressSuccessFailure(opts.url, dict, headers, progress, success, failure);
-                        break;
-                    case 'POST':
-                        task = manager.POSTParametersHeadersProgressSuccessFailure(opts.url, dict, headers, progress, success, failure);
-                        break;
-                    case 'PUT':
-                        task = manager.PUTParametersHeadersSuccessFailure(opts.url, dict, headers, success, failure);
-                        break;
-                    case 'DELETE':
-                        task = manager.DELETEParametersHeadersSuccessFailure(opts.url, dict, headers, success, failure);
-                        break;
-                    case 'PATCH':
-                        task = manager.PATCHParametersHeadersSuccessFailure(opts.url, dict, headers, success, failure);
-                        break;
-                    case 'HEAD':
-                        task = manager.HEADParametersHeadersSuccessFailure(opts.url, dict, headers, success, failure);
-                        break;
-                    default:
-                        throw new Error('method_not_supported_multipart');
+            } else if (opts.method === 'PUT'){
+                if (opts.body instanceof File) {
+                    const request = NSURLRequest.requestWithURL(NSURL.URLWithString(opts.url));
+                    task = manager.uploadTaskWithRequestFromFileProgressCompletionHandler(request, NSURL.fileURLWithPath(opts.body.path), progress, (response: NSURLResponse, responseObject: any, error: NSError)=>{
+                        if (error){
+                            failure(task, error);
+                        } else {
+                            success(task, responseObject);
+                        }
+                    });
+                } else {
+                    let data: NSData;
+                    // TODO: add support for Buffers
+                    if (opts.content instanceof NSData) {
+                        data = opts.content;
+                    } else if (typeof opts.body === 'string') {
+                        data = NSString.stringWithString(opts.body).dataUsingEncoding(NSUTF8StringEncoding);
+                    } else {
+                        data = NSString.stringWithString(JSON.stringify(opts.body)).dataUsingEncoding(NSUTF8StringEncoding);
+                    }
+                const request = NSURLRequest.requestWithURL(NSURL.URLWithString(opts.url));
+                        task = manager.uploadTaskWithRequestFromDataProgressCompletionHandler(request, data, progress, (response: NSURLResponse, responseObject: any, error: NSError)=>{
+                            if (error){
+                                failure(task, error);
+                            } else {
+                                success(task, responseObject);
+                            }
+                        });
                 }
+            } else {
+                let dict = null;
+                if (opts.body) {
+                    dict = NSJSONSerialization.JSONObjectWithDataOptionsError(NSString.stringWithString(JSON.stringify(opts.body)).dataUsingEncoding(NSUTF8StringEncoding), 0 as any);
+                } else if (typeof opts.content === 'string') {
+                    dict = NSJSONSerialization.JSONObjectWithDataOptionsError(NSString.stringWithString(opts.content).dataUsingEncoding(NSUTF8StringEncoding), 0 as any);
+                }
+                task = manager.dataTaskWithHTTPMethodURLStringParametersHeadersUploadProgressDownloadProgressSuccessFailure(opts.method, opts.url, dict, headers, progress, progress, success, failure);
+                // switch (opts.method) {
+                //     case 'GET':
+                //         task = manager.GETParametersHeadersProgressSuccessFailure(opts.url, dict, headers, progress, success, failure);
+                //         manager.requestSerializer.requestWithMethodURLStringParametersError(method, URLString, parameters)
+                //         break;
+                //     case 'POST':
+                //         task = manager.POSTParametersHeadersProgressSuccessFailure(opts.url, dict, headers, progress, success, failure);
+                //         break;
+                //     case 'PUT':
+                //         task = manager.PUTParametersHeadersSuccessFailure(opts.url, dict, headers, success, failure);
+                //         break;
+                //     case 'DELETE':
+                //         task = manager.DELETEParametersHeadersSuccessFailure(opts.url, dict, headers, success, failure);
+                //         break;
+                //     case 'PATCH':
+                //         task = manager.PATCHParametersHeadersSuccessFailure(opts.url, dict, headers, success, failure);
+                //         break;
+                //     case 'HEAD':
+                //         task = manager.HEADParametersHeadersSuccessFailure(opts.url, dict, headers, success, failure);
+                //         break;
+                //     default:
+                //         throw new Error('method_not_supported_multipart');
+                // }
             }
             if (task && tag) {
                 runningRequests[tag] = task;

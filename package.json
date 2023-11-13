@@ -16,7 +16,7 @@
         "plugin.watch.android": "npm i && npm-watch build.android",
         "plugin.watch.ios": "npm i && npm-watch build.ios",
         "plugin.watch": "npm run plugin.watch.tsc & npm run plugin.watch.android & npm run plugin.watch.ios",
-        "publish": "npm run setup && npm run clean && npm run build.all && npm run readme && npm run doc && npm run commit_readme_doc_changes && lerna publish",
+        "publish": "npm run setup && npm run clean && npm run build.all && npm run readme && npm run doc && npm run commit_readme_doc_changes ; lerna publish",
         "publish.major": "npm run build && lerna publish major --create-release=github --force-publish",
         "sync": "node ./tools/sync.js",
         "commitmsg": "commitlint -e $GIT_PARAMS",

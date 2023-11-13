@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.6](https://github.com/nativescript-community/https/compare/v4.1.4...v4.1.6) (2023-11-13)
+
+### Bug Fixes
+
+* **android:** prevent error with GET and onProgress ([ae50812](https://github.com/nativescript-community/https/commit/ae508120411543c5a6822196dd890b29890a0804))
+* refactor to allow all HTTP methods. better support for uploading files ([b7ad6b9](https://github.com/nativescript-community/https/commit/b7ad6b99c7d8952249215e7170dcd4ca51070ddd))
+
 ## [4.1.4](https://github.com/nativescript-community/https/compare/v4.1.3...v4.1.4) (2023-10-25)
 
 ### Bug Fixes

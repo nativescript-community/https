@@ -1,4 +1,5 @@
 import { File, ImageSource, Utils } from '@nativescript/core';
+import { dispatchToMainThread} from '@nativescript/core/utils';
 import { CacheOptions, HttpsFormDataParam, HttpsRequest, HttpsRequestOptions, HttpsResponse, HttpsSSLPinningOptions, HttpsResponseLegacy as IHttpsResponseLegacy } from '.';
 import { getFilenameFromUrl, parseJSON } from './request.common';
 export { addInterceptor, addNetworkInterceptor } from './request.common';
@@ -373,7 +374,10 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
 
     const progress = opts.onProgress
         ? (progress: NSProgress) => {
+            dispatchToMainThread(()=>{
               opts.onProgress(progress.completedUnitCount, progress.totalUnitCount);
+            })
+
           }
         : null;
     let task: NSURLSessionDataTask;

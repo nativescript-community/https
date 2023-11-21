@@ -463,7 +463,11 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                 }
             } else if (opts.method === 'PUT'){
                 if (opts.body instanceof File) {
-                    const request = NSURLRequest.requestWithURL(NSURL.URLWithString(opts.url));
+                    const request = NSMutableURLRequest.alloc().initWithURL(NSURL.URLWithString(opts.url));
+                    request.HTTPMethod = opts.method;
+                    Object.keys(heads).forEach(k=>{
+                        request.setValueForHTTPHeaderField(heads[k], k);
+                    });
                     task = manager.uploadTaskWithRequestFromFileProgressCompletionHandler(request, NSURL.fileURLWithPath(opts.body.path), progress, (response: NSURLResponse, responseObject: any, error: NSError)=>{
                         if (error){
                             failure(task, error);
@@ -471,6 +475,7 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                             success(task, responseObject);
                         }
                     });
+                    task.resume();
                 } else {
                     let data: NSData;
                     // TODO: add support for Buffers
@@ -481,14 +486,19 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                     } else {
                         data = NSString.stringWithString(JSON.stringify(opts.body)).dataUsingEncoding(NSUTF8StringEncoding);
                     }
-                const request = NSURLRequest.requestWithURL(NSURL.URLWithString(opts.url));
-                        task = manager.uploadTaskWithRequestFromDataProgressCompletionHandler(request, data, progress, (response: NSURLResponse, responseObject: any, error: NSError)=>{
-                            if (error){
-                                failure(task, error);
-                            } else {
-                                success(task, responseObject);
-                            }
-                        });
+                    const request = NSMutableURLRequest.alloc().initWithURL(NSURL.URLWithString(opts.url));
+                    request.HTTPMethod = opts.method;
+                    Object.keys(heads).forEach(k=>{
+                        request.setValueForHTTPHeaderField(heads[k], k);
+                    });
+                    task = manager.uploadTaskWithRequestFromDataProgressCompletionHandler(request, data, progress, (response: NSURLResponse, responseObject: any, error: NSError)=>{
+                        if (error){
+                            failure(task, error);
+                        } else {
+                            success(task, responseObject);
+                        }
+                    });
+                    task.resume();
                 }
             } else {
                 let dict = null;
@@ -498,29 +508,7 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                     dict = NSJSONSerialization.JSONObjectWithDataOptionsError(NSString.stringWithString(opts.content).dataUsingEncoding(NSUTF8StringEncoding), 0 as any);
                 }
                 task = manager.dataTaskWithHTTPMethodURLStringParametersHeadersUploadProgressDownloadProgressSuccessFailure(opts.method, opts.url, dict, headers, progress, progress, success, failure);
-                // switch (opts.method) {
-                //     case 'GET':
-                //         task = manager.GETParametersHeadersProgressSuccessFailure(opts.url, dict, headers, progress, success, failure);
-                //         manager.requestSerializer.requestWithMethodURLStringParametersError(method, URLString, parameters)
-                //         break;
-                //     case 'POST':
-                //         task = manager.POSTParametersHeadersProgressSuccessFailure(opts.url, dict, headers, progress, success, failure);
-                //         break;
-                //     case 'PUT':
-                //         task = manager.PUTParametersHeadersSuccessFailure(opts.url, dict, headers, success, failure);
-                //         break;
-                //     case 'DELETE':
-                //         task = manager.DELETEParametersHeadersSuccessFailure(opts.url, dict, headers, success, failure);
-                //         break;
-                //     case 'PATCH':
-                //         task = manager.PATCHParametersHeadersSuccessFailure(opts.url, dict, headers, success, failure);
-                //         break;
-                //     case 'HEAD':
-                //         task = manager.HEADParametersHeadersSuccessFailure(opts.url, dict, headers, success, failure);
-                //         break;
-                //     default:
-                //         throw new Error('method_not_supported_multipart');
-                // }
+                task.resume();
             }
             if (task && tag) {
                 runningRequests[tag] = task;

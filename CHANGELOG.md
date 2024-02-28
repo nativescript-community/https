@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.8](https://github.com/nativescript-community/https/compare/v4.1.7...v4.1.8) (2023-11-21)
+
+### Bug Fixes
+
+* **ios:** ensure progress is run on main thread(for now) ([60a4453](https://github.com/nativescript-community/https/commit/60a44530f2371996a952c8566f2d9fded26d5b1e))
+
+## [4.1.7](https://github.com/nativescript-community/https/compare/v4.1.6...v4.1.7) (2023-11-21)
+
+## [4.1.5](https://github.com/nativescript-community/https/compare/v4.1.4...v4.1.5) (2023-11-02)
+
+### Bug Fixes
+
+* **ios:** rewrote to support all HTTP methods. ([4a25a73](https://github.com/nativescript-community/https/commit/4a25a73dc672e051370591e11e2dfe98127a60a5))
+
 ## [4.1.6](https://github.com/nativescript-community/https/compare/v4.1.4...v4.1.6) (2023-11-13)
 
 ### Bug Fixes

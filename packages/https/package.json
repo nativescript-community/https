@@ -18,7 +18,7 @@
         "build.watch": "npm run tsc -- -w",
         "build.win": "npm run tsc-win",
         "build.all": "npm run build && npm run build.angular",
-        "build.angular": "ng-packagr -p ../../src/https/angular/ng-package.json -c ../../src/https/angular/tsconfig.json",
+        "build.angular": "ng-packagr -p ../../src/https/angular/ng-package.json -c ../../src/https/angular/tsconfig.json && rm angular/.npmignore",
         "build.all.win": "npm run build.win",
         "clean": "rimraf ./*.d.ts ./*.js ./*.js.map"
     },

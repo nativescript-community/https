@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.9](https://github.com/nativescript-community/https/compare/v4.1.8...v4.1.9) (2024-02-28)
+
+### Bug Fixes
+
+* **android:** wrap native errors in js Error ([c6f11c5](https://github.com/nativescript-community/https/commit/c6f11c5132116560d98901246f69d6ec52911917))
+
 ## [4.1.8](https://github.com/nativescript-community/https/compare/v4.1.7...v4.1.8) (2023-11-21)
 
 ### Bug Fixes

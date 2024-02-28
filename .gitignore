@@ -43,17 +43,19 @@ packages/**/*.d.ts
 bin
 build
 Pods
-!packages/platforms
+!packages/*/platforms
 /packages/**/*.aar
+/packages/**/*.framework
+/packages/**/*.xcframework
 /demo-snippets/**/*.aar
 *.xcuserdatad
 /packages/README.md
 packages/**/*js.map
 packages/**/*js
-packages/**/angular/*.json
-packages/*.ngsummary.json
-packages/*.metadata.json
 packages/angular
 packages/typings
+!packages/**/angular/*.json
+packages/**/*.ngsummary.json
+packages/**/*.metadata.json
 
 /blueprint.md

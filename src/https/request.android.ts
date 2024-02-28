@@ -13,7 +13,16 @@ interface Ipeer {
     certificate?: string;
     x509Certificate?: java.security.cert.Certificate;
 }
-
+function wrapJavaException(ex) {
+    if (ex instanceof java.lang.Exception) {
+        const err = new Error(ex.toString());
+        err['nativeException'] = ex;
+        //@ts-ignore
+        err['stackTrace'] = com.tns.NativeScriptException.getStackTraceAsString(ex);
+        return err;
+    }
+    return ex;
+}
 const peer: Ipeer = {
     enabled: false,
     allowInvalidCertificates: false,
@@ -612,13 +621,13 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                         } catch (error) {
                             console.error(error);
                             delete runningClients[tag];
-                            reject(error);
+                            reject(wrapJavaException(error));
                         }
                     },
                     onFailure(task, error) {
                         console.error(error);
                         delete runningClients[tag];
-                        reject(error);
+                        reject(wrapJavaException(error));
                     }
                 })
             );

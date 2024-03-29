@@ -1075,7 +1075,6 @@ declare module okhttp3 {
 		 */
 		public constructor(implementation: {
 			intercept(param0: okhttp3.Interceptor.Chain): okhttp3.Response;
-			<clinit>(): void;
 		});
 		public constructor();
 		public intercept(param0: okhttp3.Interceptor.Chain): okhttp3.Response;

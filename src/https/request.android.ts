@@ -58,7 +58,11 @@ let _cookiesEnabled = true;
 
 class HttpsResponseLegacy implements IHttpsResponseLegacy {
     private callback?: com.nativescript.https.OkHttpResponse.OkHttpResponseAsyncCallback;
-    constructor(private response: com.nativescript.https.OkHttpResponse, private tag: string, private url: string) {}
+    constructor(
+        private response: com.nativescript.https.OkHttpResponse,
+        private tag: string,
+        private url: string
+    ) {}
 
     get contentLength() {
         return this.response.contentLength();
@@ -495,70 +499,70 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
     // if (['GET', 'HEAD'].indexOf(opts.method) !== -1 || (opts.method === 'DELETE' && !Utils.isDefined(opts.body) && !Utils.isDefined(opts.content))) {
     //     request[methods[opts.method]]();
     // } else {
-       let type = opts.headers && opts.headers['Content-Type'] ? opts.headers['Content-Type'] : 'application/json';
-        const MEDIA_TYPE = okhttp3.MediaType.parse(type);
-        let okHttpBody: okhttp3.RequestBody;
-        if (type.startsWith('multipart/form-data')) {
-            const builder = new okhttp3.MultipartBody.Builder();
-            builder.setType(MEDIA_TYPE);
+    const type = opts.headers && opts.headers['Content-Type'] ? opts.headers['Content-Type'] : 'application/json';
+    const MEDIA_TYPE = okhttp3.MediaType.parse(type);
+    let okHttpBody: okhttp3.RequestBody;
+    if (type.startsWith('multipart/form-data')) {
+        const builder = new okhttp3.MultipartBody.Builder();
+        builder.setType(MEDIA_TYPE);
 
-            (opts.body as HttpsFormDataParam[]).forEach((param) => {
-                if (param.fileName && param.contentType) {
-                    if (param.data instanceof okhttp3.RequestBody) {
-                        builder.addFormDataPart(param.parameterName, param.fileName, param.data);
-                    } else {
-                        builder.addFormDataPart(param.parameterName, param.fileName, okhttp3.RequestBody.create(param.data, okhttp3.MediaType.parse(param.contentType)));
-                    }
+        (opts.body as HttpsFormDataParam[]).forEach((param) => {
+            if (param.fileName && param.contentType) {
+                if (param.data instanceof okhttp3.RequestBody) {
+                    builder.addFormDataPart(param.parameterName, param.fileName, param.data);
                 } else {
-                    if (typeof param.data === 'string') {
-                        builder.addFormDataPart(param.parameterName, param.data);
-                    } else {
-                        builder.addFormDataPart(param.parameterName, param.data + '');
-                    }
+                    builder.addFormDataPart(param.parameterName, param.fileName, okhttp3.RequestBody.create(param.data, okhttp3.MediaType.parse(param.contentType)));
                 }
-            });
-            okHttpBody = builder.build();
-        } else if (type === 'application/x-www-form-urlencoded') {
-            const builder = new okhttp3.FormBody.Builder();
-            Object.keys(opts.body).forEach((key) => {
-                builder.add(key, opts.body[key]);
-            });
-            okHttpBody = builder.build();
-        } else {
-            let body;
-            if (opts.body) {
-                // TODO: add support for Buffers
-                if (opts.body instanceof File) {
-                    okHttpBody = okhttp3.RequestBody.create(new java.io.File(opts.body.path), okhttp3.MediaType.parse(type));
-                } else if (typeof opts.body === 'string') {
-                    body = opts.body;
-                } else{
-                    try {
-                        body = JSON.stringify(opts.body);
-                    } catch (ignore) {}
+            } else {
+                if (typeof param.data === 'string') {
+                    builder.addFormDataPart(param.parameterName, param.data);
+                } else {
+                    builder.addFormDataPart(param.parameterName, param.data + '');
                 }
-            } else if (opts.content) {
-                body = opts.content;
             }
-            if (body instanceof okhttp3.RequestBody) {
-                okHttpBody = body;
-            } else if (body) {
-                okHttpBody = okhttp3.RequestBody.create(body, okhttp3.MediaType.parse(type));
+        });
+        okHttpBody = builder.build();
+    } else if (type === 'application/x-www-form-urlencoded') {
+        const builder = new okhttp3.FormBody.Builder();
+        Object.keys(opts.body).forEach((key) => {
+            builder.add(key, opts.body[key]);
+        });
+        okHttpBody = builder.build();
+    } else {
+        let body;
+        if (opts.body) {
+            // TODO: add support for Buffers
+            if (opts.body instanceof File) {
+                okHttpBody = okhttp3.RequestBody.create(new java.io.File(opts.body.path), okhttp3.MediaType.parse(type));
+            } else if (typeof opts.body === 'string') {
+                body = opts.body;
+            } else {
+                try {
+                    body = JSON.stringify(opts.body);
+                } catch (ignore) {}
             }
+        } else if (opts.content) {
+            body = opts.content;
         }
+        if (body instanceof okhttp3.RequestBody) {
+            okHttpBody = body;
+        } else if (body) {
+            okHttpBody = okhttp3.RequestBody.create(body, okhttp3.MediaType.parse(type));
+        }
+    }
 
-        if (okHttpBody && opts.onProgress) {
-            okHttpBody = new com.nativescript.https.ProgressRequestWrapper(
-                okHttpBody,
-                new com.nativescript.https.ProgressRequestWrapper.ProgressListener({
-                    onRequestProgress(bytesWritten: number, contentLength: number) {
-                        opts.onProgress(bytesWritten, contentLength);
-                    }
-                })
-            );
-        }
-        request.method(opts.method, okHttpBody);
-        // request[methods[opts.method]](okHttpBody);
+    if (okHttpBody && opts.onProgress) {
+        okHttpBody = new com.nativescript.https.ProgressRequestWrapper(
+            okHttpBody,
+            new com.nativescript.https.ProgressRequestWrapper.ProgressListener({
+                onRequestProgress(bytesWritten: number, contentLength: number) {
+                    opts.onProgress(bytesWritten, contentLength);
+                }
+            })
+        );
+    }
+    request.method(opts.method, okHttpBody);
+    // request[methods[opts.method]](okHttpBody);
     // }
     const tag = opts.tag || `okhttp_request_${CALL_ID++}`;
     const call = client.newCall(request.tag(tag).build());

@@ -11,7 +11,7 @@ public class CacheInterceptor {
         String cacheControlHeader = originalRequest.header("Cache-Control");
         Response originalResponse = chain.proceed(originalRequest);
         if (cacheControlHeader != null) {
-            return originalResponse.newBuilder().header("Cache-Control", cacheControlHeader).build();
+            return originalResponse.newBuilder().header("Cache-Control", cacheControlHeader).removeHeader("Pragma").build();
         } else {
             return originalResponse;
         }

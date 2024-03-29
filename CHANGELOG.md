@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.10](https://github.com/nativescript-community/https/compare/v4.1.9...v4.1.10) (2024-03-29)
+
+### Bug Fixes
+
+* **android:** `forceCache` fix ([b3319ea](https://github.com/nativescript-community/https/commit/b3319ead68353f19e07a0eade5367ba7428e72fd))
+
 ## [4.1.9](https://github.com/nativescript-community/https/compare/v4.1.8...v4.1.9) (2024-02-28)
 
 ### Bug Fixes

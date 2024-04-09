@@ -149,7 +149,7 @@ class HttpsResponseLegacy implements IHttpsResponseLegacy {
         return Promise.resolve(this.toString(encoding));
     }
     jsonResponse: any;
-    toJSON(encoding?: any) {
+    toJSON<T>(encoding?: any) {
         if (!this.data) {
             return null;
         }
@@ -165,27 +165,23 @@ class HttpsResponseLegacy implements IHttpsResponseLegacy {
             this.jsonResponse = data;
             return data;
         }
-        try {
-            this.stringResponse = data;
-            this.jsonResponse = parseJSON(data);
-            return this.jsonResponse;
-        } catch (err) {
-            console.error('HttpsResponse.toJSON', err);
-            return null;
-        }
+        this.stringResponse = data;
+        this.jsonResponse = parseJSON(data);
+        return this.jsonResponse as T;
+       
     }
-    toJSONAsync(): Promise<any> {
-        return Promise.resolve(this.toJSON());
+    toJSONAsync<T>() {
+        return Promise.resolve<T>(this.toJSON());
     }
     imageSource: ImageSource;
-    toImage(): Promise<ImageSource> {
+    async toImage(): Promise<ImageSource> {
         if (!this.data) {
             return Promise.resolve(null);
         }
         if (this.imageSource) {
             return Promise.resolve(this.imageSource);
         }
-        return new Promise<ImageSource>((resolve, reject) => {
+        const r = await new Promise<ImageSource>((resolve, reject) => {
             (UIImage as any).tns_decodeImageWithDataCompletion(this.data, (image) => {
                 if (image) {
                     resolve(new ImageSource(image));
@@ -193,20 +189,19 @@ class HttpsResponseLegacy implements IHttpsResponseLegacy {
                     reject(new Error('Response content may not be converted to an Image'));
                 }
             });
-        }).then((r) => {
-            this.imageSource = r;
-            return r;
         });
+        this.imageSource = r;
+        return r;
     }
     file: File;
-    toFile(destinationFilePath?: string): Promise<File> {
+    async toFile(destinationFilePath?: string): Promise<File> {
         if (!this.data) {
             return Promise.resolve(null);
         }
         if (this.file) {
             return Promise.resolve(this.file);
         }
-        return new Promise<File>((resolve, reject) => {
+        const r = await new Promise<File>((resolve, reject) => {
             if (!destinationFilePath) {
                 destinationFilePath = getFilenameFromUrl(this.url);
             }
@@ -215,7 +210,7 @@ class HttpsResponseLegacy implements IHttpsResponseLegacy {
                 const file = File.fromPath(destinationFilePath);
 
                 const result = this.data.writeToFileAtomically(destinationFilePath, true);
-                if (resolve) {
+                if (result) {
                     resolve(file);
                 } else {
                     reject(new Error(`Cannot save file with path: ${destinationFilePath}.`));
@@ -223,16 +218,15 @@ class HttpsResponseLegacy implements IHttpsResponseLegacy {
             } else {
                 reject(new Error(`Cannot save file with path: ${destinationFilePath}.`));
             }
-        }).then((f) => {
-            this.file = f;
-            return f;
-        });
+        })
+        this.file = r;
+        return r;
     }
 }
 
 function AFFailure(resolve, reject, task: NSURLSessionDataTask, error: NSError, useLegacy: boolean, url) {
     if (error.code === -999) {
-        return reject(new Error(error.localizedDescription));
+        return reject(error);
     }
     let getHeaders = () => ({});
     const sendi = {
@@ -265,6 +259,7 @@ function AFFailure(resolve, reject, task: NSURLSessionDataTask, error: NSError, 
             return reject(error.localizedDescription);
         }
         const failure: any = {
+            error,
             description: error.description,
             reason: error.localizedDescription,
             url: failingURL ? failingURL.description : url
@@ -277,6 +272,7 @@ function AFFailure(resolve, reject, task: NSURLSessionDataTask, error: NSError, 
         resolve(sendi);
     } else {
         const response: any = {
+            error,
             body: parsedData,
             contentLength: sendi.contentLength,
             description: error.description,

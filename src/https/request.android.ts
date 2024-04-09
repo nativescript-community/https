@@ -623,15 +623,13 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                                 });
                             }
                         } catch (error) {
-                            console.error(error);
                             delete runningClients[tag];
-                            reject(wrapJavaException(error));
+                            reject(error);
                         }
                     },
                     onFailure(task, error) {
-                        console.error(error);
                         delete runningClients[tag];
-                        reject(wrapJavaException(error));
+                        reject(error);
                     }
                 })
             );

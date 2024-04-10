@@ -396,31 +396,10 @@ public class OkHttpResponse {
     }
 
     public String asString() throws IOException {
-        // if (getMainHandler().getLooper() != Looper.myLooper()) {
-                // try {
-            return responseBodyToString(this);
-            // } catch (final Exception ex) {
-            //         Log.d("JS", "RuntimeException "  + ex);
-            //         return null;
-            //     }
+        // if (RUN_ON_MAIN_THREAD && getMainHandler().getLooper() === Looper.myLooper()) {
+        // } else {
+        return responseBodyToString(this);
         // }
-        // final Object[] arr = new Object[1];
-        // Log.d("JS", "test asString");
-        // postAndWait(getMainHandler(), new Runnable() {
-        //     @Override
-        //     public void run() {
-        //             Log.d("JS", "test asString runnable");
-        //         try {
-        //             arr[1] = responseBodyToString(OkHttpResponse.this);
-        //             Log.d("JS", "test asString runnable result "  + (String)arr[1]);
-        //         } catch (final Exception ex) {
-        //             Log.d("JS", "RuntimeException "  + ex);
-        //             // throw new RuntimeException(ex);
-        //         }
-        //     }
-        // });
-        // Log.d("JS", "test asString result "  + (String)arr[1]);
-        // return (String)arr[1];
     }
 
     public void asStringAsync(final OkHttpResponseAsyncCallback callback) {

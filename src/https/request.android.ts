@@ -589,8 +589,10 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                             const message = OkHttpResponse.getMessage(response);
                             const statusCode = OkHttpResponse.getStatusCode(response);
                             const getHeaders = function () {
-                                const heads = OkHttpResponse.getHeaders(response);
-                                return JSON.parse(heads);
+                                if (response) {
+                                    const heads = OkHttpResponse.getHeaders(response);
+                                    return JSON.parse(heads);
+                                }
                             };
                             if (useLegacy) {
                                 const nResponse = new OkHttpResponse(responseBody);

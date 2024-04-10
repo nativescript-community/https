@@ -108,17 +108,16 @@ class HttpsResponseLegacy implements IHttpsResponseLegacy {
             return null;
         }
     }
-    toArrayBufferAsync(): Promise<ArrayBuffer> {
+    async toArrayBufferAsync() {
         if (this.arrayBuffer) {
             return Promise.resolve(this.arrayBuffer);
         }
-        return new Promise((resolve, reject) => {
+        const r = await new Promise<ArrayBuffer>((resolve, reject) => {
             this.getOrCreateCloseCallback();
             this.response.toByteArrayAsync(this.getCallback(resolve, reject));
-        }).then((r: ArrayBuffer) => {
-            this.arrayBuffer = r;
-            return this.arrayBuffer;
         });
+        this.arrayBuffer = r;
+        return r;
     }
 
     // cache it because asking it again wont work as the socket is closed
@@ -152,7 +151,7 @@ class HttpsResponseLegacy implements IHttpsResponseLegacy {
         return this.jsonResponse;
     }
 
-    async toJSONAsync() {
+    async toJSONAsync<T>() {
         if (this.jsonResponse !== undefined) {
             return this.jsonResponse;
         }
@@ -163,7 +162,7 @@ class HttpsResponseLegacy implements IHttpsResponseLegacy {
         // TODO: handle arraybuffer already stored
         const r = await this.toStringAsync();
         this.jsonResponse = r ? parseJSON(r) : null;
-        return this.jsonResponse;
+        return this.jsonResponse as T;
     }
 
     // cache it because asking it again wont work as the socket is closed
@@ -172,13 +171,12 @@ class HttpsResponseLegacy implements IHttpsResponseLegacy {
         if (this.imageSource) {
             return this.imageSource;
         }
-        return new Promise<ImageSource>((resolve, reject) => {
+        const r = await new Promise<ImageSource>((resolve, reject) => {
             this.getOrCreateCloseCallback();
-            this.response.toImageAsync(this.getCallback(resolve, reject)).then((r) => {
-                this.imageSource = r;
-                return r;
-            });
+            this.response.toImageAsync(this.getCallback(resolve, reject));
         });
+        this.imageSource = r;
+        return r;
     }
     // toFile(destinationFilePath: string): File {
     //     if (!destinationFilePath) {
@@ -625,15 +623,13 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                                 });
                             }
                         } catch (error) {
-                            console.error(error);
                             delete runningClients[tag];
-                            reject(wrapJavaException(error));
+                            reject(error);
                         }
                     },
                     onFailure(task, error) {
-                        console.error(error);
                         delete runningClients[tag];
-                        reject(wrapJavaException(error));
+                        reject(error);
                     }
                 })
             );

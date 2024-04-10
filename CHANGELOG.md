@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.12](https://github.com/nativescript-community/https/compare/v4.1.11...v4.1.12) (2024-04-10)
+
+### Bug Fixes
+
+* **android:** prevent null exception ([73817e3](https://github.com/nativescript-community/https/commit/73817e3f706dc77b8ed78fc406bfe7eea1330839))
+
 ## [4.1.11](https://github.com/nativescript-community/https/compare/v4.1.10...v4.1.11) (2024-04-09)
 
 ### Bug Fixes

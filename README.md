@@ -315,9 +315,10 @@ You can bypass this behavior by adding the following to your projects `Info.plis
 
 ## `Android` troubleshooting
 
-If you app crashes with a message that it's doing too much networking on the main thread,
+* If you app crashes with a message that it's doing too much networking on the main thread,
 then pass the option `allowLargeResponse` with value `true` to the `request` function.
-
+* When using `useLegacy` (which is the default) `content.toString()` and `content.toJSON()` might throw `android.os.NetworkOnMainThreadException` if called from the main thread (seems to depend on response headers). Either call those from a background thread or use `content.toStringAsync()` or `content.toJSONAsync()`
+* once you've called `content.[toString,toStringAsync,toJSON,toJSONAsync,...]` the response is closed and will throw `java.lang.IllegalStateException: closed` if called again. So choose the right one and only call once. The reason is that we need to close the response so that you dont have too.
 
 [](#thanks)
 

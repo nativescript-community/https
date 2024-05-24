@@ -30,6 +30,48 @@ public class OkHttpResponse {
     public OkHttpResponseProgressCallback progressCallback = null;
     public OkHttpResponseCloseCallback closeCallback = null;
 
+    public static class ProgressInputStream extends InputStream {
+        private final InputStream inputStream;
+        private final ProgressListener listener;
+        private long totalBytesRead = 0;
+        private long contentLength = 0;
+
+        public interface ProgressListener {
+            void update(long bytesRead, long contentLength, boolean done);
+        }
+
+        public ProgressInputStream(InputStream inputStream, ProgressListener listener, long contentLength) {
+            this.inputStream = inputStream;
+            this.listener = listener;
+            this.contentLength = contentLength;
+        }
+
+        @Override
+        public int read() throws IOException {
+            int bytesRead = inputStream.read();
+            if (bytesRead >= 0) {
+                totalBytesRead++;
+                listener.update(totalBytesRead, contentLength, totalBytesRead == contentLength);
+            }
+            return bytesRead;
+        }
+
+        @Override
+        public int read(byte[] b, int off, int len) throws IOException {
+            int bytesRead = inputStream.read(b, off, len);
+            if (bytesRead >= 0) {
+                totalBytesRead += bytesRead;
+                listener.update(totalBytesRead, contentLength, totalBytesRead == contentLength);
+            }
+            return bytesRead;
+        }
+
+        @Override
+        public void close() throws IOException {
+            inputStream.close();
+        }
+    }
+
     public static interface OkHttpResponseAsyncCallback {
         void onException(final Exception exc);
 
@@ -66,7 +108,6 @@ public class OkHttpResponse {
         @Override
         public void run() {
             synchronized (mHandler) {
-                Log.d("JS", "NotifyRunnable run");
                 mRunnable.run();
                 mFinished = true;
                 mHandler.notifyAll();
@@ -80,16 +121,12 @@ public class OkHttpResponse {
             r.run();
         } else {
             synchronized (handler) {
-                Log.d("JS", "postAndWait1");
                 NotifyRunnable runnable = new NotifyRunnable(handler, r);
                 handler.post(runnable);
-                Log.d("JS", "postAndWait2");
                 while (!runnable.isFinished()) {
-                    Log.d("JS", "postAndWait3");
                     try {
                         handler.wait();
                     } catch (InterruptedException is) {
-                        Log.d("JS", "postAndWait4", is);
                         // ignore
                     }
                 }
@@ -210,46 +247,27 @@ public class OkHttpResponse {
     static Bitmap responseBodyToBitmap(OkHttpResponse response, OkHttpResponseProgressCallback progressCallback)
             throws Exception {
         
-        BufferedInputStream input = null;
-        OutputStream output = null;
+        InputStream inputStream = null;
         try {
-            PipedInputStream in = new PipedInputStream();
-            InputStream is = response.responseBody.byteStream();
 
-            input = new BufferedInputStream(is);
-
-            output = new PipedOutputStream(in);
-
-            byte[] data = new byte[1024];
             long contentLength = response.responseBody.contentLength();
-
-            long total = 0;
-            int count = 0;
-            if (progressCallback != null) {
-                progressCallback.onProgress(total, contentLength);
-            }
-            while ((count = input.read(data)) != -1 && !response.cancelled) {
-                total += count;
-                output.write(data, 0, count);
-                if (progressCallback != null) {
-                    progressCallback.onProgress(total, contentLength);
+            inputStream = new ProgressInputStream(response.responseBody.byteStream(), new ProgressInputStream.ProgressListener() {
+                @Override
+                public void update(long bytesRead, long contentLength, boolean done) {
+                    if (progressCallback != null) {
+                        progressCallback.onProgress(bytesRead, contentLength);
+                    }
                 }
-            }
-            if (response.cancelled && total != contentLength) {
-                throw new Exception("cancelled");
-            }
-            return BitmapFactory.decodeStream(in);
+            }, contentLength);
+
+            // Decode the bitmap
+            return BitmapFactory.decodeStream(inputStream);
         } catch (Exception e) {
             throw e;
         } finally {
-            if (output != null) {
-                output.flush();
-                output.close();
+            if (inputStream != null) {
+                inputStream.close();
             }
-            if (input != null) {
-                input.close();
-            }
-            input.close();
             response.closeResponseBody();
         }
     }
@@ -260,7 +278,6 @@ public class OkHttpResponse {
 
     public void toFileAsync(final String filePath, final OkHttpResponseAsyncCallback callback) {
         final OkHttpResponse fme = this;
-        // Log.d(TAG, "toFileAsync");
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {

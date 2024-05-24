@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.13](https://github.com/nativescript-community/https/compare/v4.1.12...v4.1.13) (2024-05-24)
+
+### Bug Fixes
+
+* **android:** getImage fix ([dae5f65](https://github.com/nativescript-community/https/commit/dae5f6541a8ffe4ba561021b0bd4267aaeb8a92c))
+
 ## [4.1.12](https://github.com/nativescript-community/https/compare/v4.1.11...v4.1.12) (2024-04-10)
 
 **Note:** Version bump only for package @nativescript-community/https

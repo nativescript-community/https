@@ -3,6 +3,7 @@
     "version": "4.1.12",
     "description": "Nativescript plugin for https requests",
     "main": "index",
+    "funding": "https://github.com/sponsors/farfromrefug",
     "sideEffects": false,
     "typings": "index.d.ts",
     "nativescript": {

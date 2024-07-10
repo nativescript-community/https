@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.14](https://github.com/nativescript-community/https/compare/v4.1.13...v4.1.14) (2024-07-10)
+
+### Bug Fixes
+
+* android timeout ([d648278](https://github.com/nativescript-community/https/commit/d6482785485f60655227491b81f8c070889cb4e5))
+
 ## [4.1.13](https://github.com/nativescript-community/https/compare/v4.1.12...v4.1.13) (2024-05-24)
 
 ### Bug Fixes

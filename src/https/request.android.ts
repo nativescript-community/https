@@ -265,7 +265,7 @@ export function getClient(opts: Partial<HttpsRequestOptions> = {}, reload: boole
     const timeout = opts.timeout ?? 10;
     const cookiesEnabled = opts.cookiesEnabled ?? true;
     if (Client && reload === false) {
-        const needTimeoutChange = timeout === _timeout;
+        const needTimeoutChange = timeout !== _timeout;
         const needCookiesChange = cookiesEnabled === _cookiesEnabled;
         if (!needTimeoutChange && !needCookiesChange) {
             return Client;

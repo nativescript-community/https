@@ -51,6 +51,22 @@ export function clearCache() {
     }
 }
 
+export function removeCachedResponse(url: string) {
+    if (!cache) {
+        return;
+    }
+
+    const iterator = cache.urls();
+
+    while (iterator.hasNext()) {
+        const cacheUrl = iterator.next();
+        if (cacheUrl === url) {
+            iterator.remove();
+            break;
+        }
+    }
+}
+
 // TODO: rewrite this to not have to handle
 // every single property
 let _timeout = 10;

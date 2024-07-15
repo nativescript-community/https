@@ -111,6 +111,7 @@ export declare function request<T = any, U extends boolean = true>(
 ): U extends true ? Promise<HttpsResponse<HttpsResponseLegacy<T>>> : Promise<HttpsResponse<T>>;
 export function setCache(options?: CacheOptions);
 export function clearCache();
+export function removeCachedResponse(url: string);
 export function createRequest(opts: HttpsRequestOptions): HttpsRequest;
 export function cancelRequest(tag: string);
 export function cancelAllRequests();

@@ -30,6 +30,7 @@
         "java.net:CookiePolicy",
         "com.nativescript.https:QuotePreservingCookieJar",
         "com.nativescript.https:CacheInterceptor",
+        "com.nativescript.https:CacheUtils",
         "com.nativescript.https:OkHttpResponse",
         "java.util:Collections",
         "java.security.cert:CertificateFactory",

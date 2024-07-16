@@ -51,6 +51,12 @@ export function clearCache() {
     }
 }
 
+export function removeCachedResponse(url: string) {
+    if (cache) {
+        com.nativescript.https.CacheUtils.removeCachedResponse(url, cache);
+    }
+}
+
 // TODO: rewrite this to not have to handle
 // every single property
 let _timeout = 10;

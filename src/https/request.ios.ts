@@ -1,5 +1,4 @@
 import { File, ImageSource, Utils } from '@nativescript/core';
-import { dispatchToMainThread} from '@nativescript/core/utils';
 import { CacheOptions, HttpsFormDataParam, HttpsRequest, HttpsRequestOptions, HttpsResponse, HttpsSSLPinningOptions, HttpsResponseLegacy as IHttpsResponseLegacy } from '.';
 import { getFilenameFromUrl, parseJSON } from './request.common';
 export { addInterceptor, addNetworkInterceptor } from './request.common';
@@ -17,6 +16,10 @@ export function setCache(options?: CacheOptions) {
 
 export function clearCache() {
     NSURLCache.sharedURLCache.removeAllCachedResponses();
+}
+
+export function removeCachedResponse(url: string) {
+    NSURLCache.sharedURLCache.removeCachedResponseForRequest(createNSRequest(url));
 }
 
 interface Ipolicies {
@@ -97,6 +100,10 @@ function getData(data) {
     return content;
 }
 
+function createNSRequest(url: string): NSMutableURLRequest {
+    return NSMutableURLRequest.alloc().initWithURL(NSURL.URLWithString(url));
+}
+
 class HttpsResponseLegacy implements IHttpsResponseLegacy {
     //     private callback?: com.nativescript.https.OkhttpResponse.OkHttpResponseAsyncCallback;
     constructor(private data: NSDictionary<string, any> & NSData & NSArray<any>, public contentLength, private url: string) {}
@@ -168,7 +175,6 @@ class HttpsResponseLegacy implements IHttpsResponseLegacy {
         this.stringResponse = data;
         this.jsonResponse = parseJSON(data);
         return this.jsonResponse as T;
-       
     }
     toJSONAsync<T>() {
         return Promise.resolve<T>(this.toJSON());
@@ -370,10 +376,9 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
 
     const progress = opts.onProgress
         ? (progress: NSProgress) => {
-            dispatchToMainThread(()=>{
+            Utils.dispatchToMainThread(() => {
               opts.onProgress(progress.completedUnitCount, progress.totalUnitCount);
-            })
-
+            });
           }
         : null;
     let task: NSURLSessionDataTask;
@@ -463,13 +468,13 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                 }
             } else if (opts.method === 'PUT'){
                 if (opts.body instanceof File) {
-                    const request = NSMutableURLRequest.alloc().initWithURL(NSURL.URLWithString(opts.url));
+                    const request = createNSRequest(opts.url);
                     request.HTTPMethod = opts.method;
-                    Object.keys(heads).forEach(k=>{
+                    Object.keys(heads).forEach(k => {
                         request.setValueForHTTPHeaderField(heads[k], k);
                     });
                     task = manager.uploadTaskWithRequestFromFileProgressCompletionHandler(request, NSURL.fileURLWithPath(opts.body.path), progress, (response: NSURLResponse, responseObject: any, error: NSError)=>{
-                        if (error){
+                        if (error) {
                             failure(task, error);
                         } else {
                             success(task, responseObject);
@@ -486,13 +491,13 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                     } else {
                         data = NSString.stringWithString(JSON.stringify(opts.body)).dataUsingEncoding(NSUTF8StringEncoding);
                     }
-                    const request = NSMutableURLRequest.alloc().initWithURL(NSURL.URLWithString(opts.url));
+                    const request = createNSRequest(opts.url);
                     request.HTTPMethod = opts.method;
-                    Object.keys(heads).forEach(k=>{
+                    Object.keys(heads).forEach(k => {
                         request.setValueForHTTPHeaderField(heads[k], k);
                     });
-                    task = manager.uploadTaskWithRequestFromDataProgressCompletionHandler(request, data, progress, (response: NSURLResponse, responseObject: any, error: NSError)=>{
-                        if (error){
+                    task = manager.uploadTaskWithRequestFromDataProgressCompletionHandler(request, data, progress, (response: NSURLResponse, responseObject: any, error: NSError) => {
+                        if (error) {
                             failure(task, error);
                         } else {
                             success(task, responseObject);

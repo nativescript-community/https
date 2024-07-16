@@ -1,17 +1,25 @@
 package com.nativescript.https;
 
+import java.util.Iterator;
 import okhttp3.Cache;
 
 public class CacheUtils {
     public static void removeCachedResponse(String url, Cache cache) {
-        final Iterator<String> it = cache.urls();
+        Iterator<String> it;
+        try {
+          it = cache.urls();
+        } catch (Exception e) {
+          it = null;
+        }
 
-        while (it.hasNext()) {
-            String cacheUrl = it.next();
-            
-            if (cacheUrl.equals(url)) {
-                it.remove();
-                break;
+        if (it != null) {
+            while (it.hasNext()) {
+                String cacheUrl = it.next();
+
+                if (cacheUrl.equals(url)) {
+                    it.remove();
+                    break;
+                }
             }
         }
     }

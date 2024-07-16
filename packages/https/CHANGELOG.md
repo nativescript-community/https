@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.15](https://github.com/nativescript-community/https/compare/v4.1.14...v4.1.15) (2024-07-16)
+
+### Bug Fixes
+
+* Compiler warnings ([87a9631](https://github.com/nativescript-community/https/commit/87a9631143f5394f298047ef02308579bb8075bb))
+
 ## [4.1.14](https://github.com/nativescript-community/https/compare/v4.1.13...v4.1.14) (2024-07-10)
 
 **Note:** Version bump only for package @nativescript-community/https

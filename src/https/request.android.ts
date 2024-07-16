@@ -52,18 +52,8 @@ export function clearCache() {
 }
 
 export function removeCachedResponse(url: string) {
-    if (!cache) {
-        return;
-    }
-
-    const iterator = cache.urls();
-
-    while (iterator.hasNext()) {
-        const cacheUrl = iterator.next();
-        if (cacheUrl === url) {
-            iterator.remove();
-            break;
-        }
+    if (cache) {
+        com.nativescript.https.CacheUtils.removeCachedResponse(url, cache);
     }
 }
 

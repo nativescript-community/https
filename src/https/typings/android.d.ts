@@ -7,6 +7,9 @@ declare namespace com {
             export class CacheInterceptor {
                 public static INTERCEPTOR: okhttp3.Interceptor;
             }
+            export class CacheUtils {
+                static removeCachedResponse(url: string, cache: okhttp3.Cache): void;
+            }
             export class OkHttpResponse {
                 progressCallback: OkHttpResponse.OkHttpResponseProgressCallback;
                 closeCallback: OkHttpResponse.OkHttpResponseCloseCallback;

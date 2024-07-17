@@ -13,6 +13,7 @@ declare namespace com {
             export class OkHttpResponse {
                 progressCallback: OkHttpResponse.OkHttpResponseProgressCallback;
                 closeCallback: OkHttpResponse.OkHttpResponseCloseCallback;
+                runOnMainThread: boolean;
                 constructor(body: okhttp3.ResponseBody);
                 contentLength(): number;
                 cancel();

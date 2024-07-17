@@ -23,10 +23,12 @@ import org.json.JSONObject;
 
 public class OkHttpResponse {
     private final static String TAG = "OkHttpResponse";
-    private ResponseBody responseBody;
     static Handler mainHandler = null;
     static boolean RUN_ON_MAIN_THREAD = true;
     public static final int DOWNLOAD_CHUNK_SIZE = 2048; // Same as Okio Segment.SIZE
+
+    private ResponseBody responseBody;
+    public boolean runOnMainThread = OkHttpResponse.RUN_ON_MAIN_THREAD;
     public OkHttpResponseProgressCallback progressCallback = null;
     public OkHttpResponseCloseCallback closeCallback = null;
 
@@ -154,12 +156,12 @@ public class OkHttpResponse {
         return mainHandler;
     }
 
-    static void runProgressCallback(final OkHttpResponseProgressCallback progressCallback, final long current,
+    private void runProgressCallback(final OkHttpResponseProgressCallback progressCallback, final long current,
             final long total) {
         if (progressCallback == null) {
             return;
         }
-        if (RUN_ON_MAIN_THREAD) {
+        if (runOnMainThread) {
             getMainHandler().post(new Runnable() {
                 @Override
                 public void run() {
@@ -171,11 +173,11 @@ public class OkHttpResponse {
         }
     }
 
-    static void runCloseCallback(final OkHttpResponseCloseCallback closeCallback) {
+    private void runCloseCallback(final OkHttpResponseCloseCallback closeCallback) {
         if (closeCallback == null) {
             return;
         }
-        if (RUN_ON_MAIN_THREAD) {
+        if (runOnMainThread) {
  
             getMainHandler().post(new Runnable() {
                 @Override
@@ -188,7 +190,7 @@ public class OkHttpResponse {
         }
     }
 
-    static File responseBodyToFile(String filePath, OkHttpResponse response,
+    private File responseBodyToFile(String filePath, OkHttpResponse response,
             OkHttpResponseProgressCallback progressCallback) throws Exception {
         BufferedInputStream input = null;
         OutputStream output = null;
@@ -239,7 +241,7 @@ public class OkHttpResponse {
         closeResponseBody(responseBody, closeCallback);
     }
 
-    private static void closeResponseBody(ResponseBody responseBody, OkHttpResponseCloseCallback closeCallback) {
+    private void closeResponseBody(ResponseBody responseBody, OkHttpResponseCloseCallback closeCallback) {
         responseBody.close();
         runCloseCallback(closeCallback);
     }
@@ -284,7 +286,7 @@ public class OkHttpResponse {
                 try {
                     // Log.d(TAG, "toFileAsync run ");
                     final File result = responseBodyToFile(filePath, fme, progressCallback);
-                    if (RUN_ON_MAIN_THREAD) {
+                    if (runOnMainThread) {
                         getMainHandler().post(new Runnable() {
                             @Override
                             public void run() {
@@ -295,7 +297,7 @@ public class OkHttpResponse {
                         callback.onFile(result);
                     }
                 } catch (final Exception exc) {
-                    if (RUN_ON_MAIN_THREAD) {
+                    if (runOnMainThread) {
                         getMainHandler().post(new Runnable() {
                             @Override
                             public void run() {
@@ -333,7 +335,7 @@ public class OkHttpResponse {
             public void run() {
                 try {
                     final Bitmap result = responseBodyToBitmap(fme, progressCallback);
-                    if (RUN_ON_MAIN_THREAD) {
+                    if (runOnMainThread) {
                         getMainHandler().post(new Runnable() {
                             @Override
                             public void run() {
@@ -344,7 +346,7 @@ public class OkHttpResponse {
                         callback.onBitmap(result);
                     }
                 } catch (final Exception exc) {
-                    if (RUN_ON_MAIN_THREAD) {
+                    if (runOnMainThread) {
                         getMainHandler().post(new Runnable() {
                             @Override
                             public void run() {
@@ -378,7 +380,7 @@ public class OkHttpResponse {
             public void run() {
                 try {
                     final java.nio.ByteBuffer result = responseBodyToByteArray(fme);
-                    if (RUN_ON_MAIN_THREAD) {
+                    if (runOnMainThread) {
                         getMainHandler().post(new Runnable() {
                             @Override
                             public void run() {
@@ -389,7 +391,7 @@ public class OkHttpResponse {
                         callback.onByteArray(result);
                     }
                 } catch (final Exception exc) {
-                    if (RUN_ON_MAIN_THREAD) {
+                    if (runOnMainThread) {
                         getMainHandler().post(new Runnable() {
                             @Override
                             public void run() {
@@ -426,7 +428,7 @@ public class OkHttpResponse {
             public void run() {
                 try {
                     final String result = responseBodyToString(fme);
-                    if (RUN_ON_MAIN_THREAD) {
+                    if (runOnMainThread) {
                         getMainHandler().post(new Runnable() {
                             @Override
                             public void run() {
@@ -437,7 +439,7 @@ public class OkHttpResponse {
                         callback.onString(result);
                     }
                 } catch (final Exception exc) {
-                    if (RUN_ON_MAIN_THREAD) {
+                    if (runOnMainThread) {
                         getMainHandler().post(new Runnable() {
                             @Override
                             public void run() {

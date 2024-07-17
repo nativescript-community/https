@@ -106,7 +106,11 @@ function createNSRequest(url: string): NSMutableURLRequest {
 
 class HttpsResponseLegacy implements IHttpsResponseLegacy {
     //     private callback?: com.nativescript.https.OkhttpResponse.OkHttpResponseAsyncCallback;
-    constructor(private data: NSDictionary<string, any> & NSData & NSArray<any>, public contentLength, private url: string) {}
+    constructor(
+        private data: NSDictionary<string, any> & NSData & NSArray<any>,
+        public contentLength,
+        private url: string
+    ) {}
     toArrayBufferAsync(): Promise<ArrayBuffer> {
         throw new Error('Method not implemented.');
     }
@@ -224,7 +228,7 @@ class HttpsResponseLegacy implements IHttpsResponseLegacy {
             } else {
                 reject(new Error(`Cannot save file with path: ${destinationFilePath}.`));
             }
-        })
+        });
         this.file = r;
         return r;
     }
@@ -371,14 +375,17 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
         );
     }
 
-
     manager.requestSerializer.timeoutInterval = opts.timeout ? opts.timeout : 10;
 
     const progress = opts.onProgress
         ? (progress: NSProgress) => {
-            Utils.dispatchToMainThread(() => {
-              opts.onProgress(progress.completedUnitCount, progress.totalUnitCount);
-            });
+              if (opts.responseOnMainThread === false) {
+                  opts.onProgress(progress.completedUnitCount, progress.totalUnitCount);
+              } else {
+                  Utils.dispatchToMainThread(() => {
+                      opts.onProgress(progress.completedUnitCount, progress.totalUnitCount);
+                  });
+              }
           }
         : null;
     let task: NSURLSessionDataTask;
@@ -466,20 +473,25 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                     default:
                         throw new Error('method_not_supported_multipart');
                 }
-            } else if (opts.method === 'PUT'){
+            } else if (opts.method === 'PUT') {
                 if (opts.body instanceof File) {
                     const request = createNSRequest(opts.url);
                     request.HTTPMethod = opts.method;
-                    Object.keys(heads).forEach(k => {
+                    Object.keys(heads).forEach((k) => {
                         request.setValueForHTTPHeaderField(heads[k], k);
                     });
-                    task = manager.uploadTaskWithRequestFromFileProgressCompletionHandler(request, NSURL.fileURLWithPath(opts.body.path), progress, (response: NSURLResponse, responseObject: any, error: NSError)=>{
-                        if (error) {
-                            failure(task, error);
-                        } else {
-                            success(task, responseObject);
+                    task = manager.uploadTaskWithRequestFromFileProgressCompletionHandler(
+                        request,
+                        NSURL.fileURLWithPath(opts.body.path),
+                        progress,
+                        (response: NSURLResponse, responseObject: any, error: NSError) => {
+                            if (error) {
+                                failure(task, error);
+                            } else {
+                                success(task, responseObject);
+                            }
                         }
-                    });
+                    );
                     task.resume();
                 } else {
                     let data: NSData;
@@ -493,7 +505,7 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                     }
                     const request = createNSRequest(opts.url);
                     request.HTTPMethod = opts.method;
-                    Object.keys(heads).forEach(k => {
+                    Object.keys(heads).forEach((k) => {
                         request.setValueForHTTPHeaderField(heads[k], k);
                     });
                     task = manager.uploadTaskWithRequestFromDataProgressCompletionHandler(request, data, progress, (response: NSURLResponse, responseObject: any, error: NSError) => {

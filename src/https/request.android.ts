@@ -600,6 +600,9 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                             };
                             if (useLegacy) {
                                 const nResponse = new OkHttpResponse(responseBody);
+                                if (opts.responseOnMainThread === false) {
+                                    nResponse.runOnMainThread = false;
+                                }
                                 if (opts.onProgress) {
                                     nResponse.progressCallback = new OkHttpResponse.OkHttpResponseProgressCallback({
                                         onProgress: opts.onProgress

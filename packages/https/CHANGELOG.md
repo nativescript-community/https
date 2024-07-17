@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.16](https://github.com/nativescript-community/https/compare/v4.1.15...v4.1.16) (2024-07-17)
+
+### Bug Fixes
+
+* new `responseOnMainThread` option which allows running requests from worker ([71885b3](https://github.com/nativescript-community/https/commit/71885b30f26e5e70f6cdfdb61597cd7ff87d499c))
+
 ## [4.1.15](https://github.com/nativescript-community/https/compare/v4.1.14...v4.1.15) (2024-07-16)
 
 ### Bug Fixes

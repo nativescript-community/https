@@ -177,7 +177,7 @@ class HttpsResponseLegacy implements IHttpsResponseLegacy {
             return data;
         }
         this.stringResponse = data;
-        this.jsonResponse = parseJSON(data);
+        this.jsonResponse = this.stringResponse ? parseJSON(data) : null;
         return this.jsonResponse as T;
     }
     toJSONAsync<T>() {

@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.17](https://github.com/nativescript-community/https/compare/v4.1.16...v4.1.17) (2024-09-25)
+
+### Bug Fixes
+
+* **ios:** encoding fix for toString ([0a1221a](https://github.com/nativescript-community/https/commit/0a1221a3b5a3ecb6b736855eb242d7a5311918e2))
+* **ios:** Unexpected end of JSON input ([949fcfb](https://github.com/nativescript-community/https/commit/949fcfb9d154f0687ae76714ed12c091ed4dcf23))
+
 ## [4.1.16](https://github.com/nativescript-community/https/compare/v4.1.15...v4.1.16) (2024-07-17)
 
 ### Bug Fixes

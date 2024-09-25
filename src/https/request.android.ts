@@ -128,12 +128,12 @@ class HttpsResponseLegacy implements IHttpsResponseLegacy {
 
     // cache it because asking it again wont work as the socket is closed
     stringResponse: string;
-    toString() {
+    toString(encoding?: string) {
         // TODO: handle arraybuffer already stored
         this.stringResponse = this.stringResponse || this.response.asString();
         return this.stringResponse;
     }
-    async toStringAsync(): Promise<string> {
+    async toStringAsync(encoding?: string): Promise<string> {
         if (this.stringResponse) {
             return this.stringResponse;
         }
@@ -147,7 +147,7 @@ class HttpsResponseLegacy implements IHttpsResponseLegacy {
 
     // cache it because asking it again wont work as the socket is closed
     jsonResponse: any;
-    toJSON(encoding?: HttpResponseEncoding) {
+    toJSON(encoding?: string) {
         if (this.jsonResponse !== undefined) {
             return this.jsonResponse;
         }

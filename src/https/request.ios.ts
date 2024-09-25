@@ -56,35 +56,36 @@ export function disableSSLPinning() {
     policies.secured = false;
 }
 
-function nativeToObj(data) {
+function nativeToObj(data, encoding?) {
     let content: any;
     if (data instanceof NSDictionary) {
         content = {};
         data.enumerateKeysAndObjectsUsingBlock((key, value, stop) => {
-            content[key] = nativeToObj(value);
+            content[key] = nativeToObj(value, encoding);
         });
         return content;
     } else if (data instanceof NSArray) {
         content = [];
         data.enumerateObjectsUsingBlock((value, index, stop) => {
-            content[index] = nativeToObj(value);
+            content[index] = nativeToObj(value, encoding);
         });
         return content;
     } else if (data instanceof NSData) {
-        return NSString.alloc().initWithDataEncoding(data, NSASCIIStringEncoding).toString();
+        return NSString.alloc().initWithDataEncoding(data, encoding === 'ascii' ? NSASCIIStringEncoding : NSUTF8StringEncoding).toString();
     } else {
         return data;
     }
 }
 
-function getData(data) {
+function getData(data, encoding?) {
     let content: any;
     if (data && data.class) {
+        const nEncoding = encoding === 'ascii' ? NSASCIIStringEncoding : NSUTF8StringEncoding;
         if (data.enumerateKeysAndObjectsUsingBlock || data instanceof NSArray) {
             const serial = NSJSONSerialization.dataWithJSONObjectOptionsError(data, NSJSONWritingOptions.PrettyPrinted);
-            content = NSString.alloc().initWithDataEncoding(serial, NSUTF8StringEncoding).toString();
+            content = NSString.alloc().initWithDataEncoding(serial, nEncoding).toString();
         } else if (data instanceof NSData) {
-            content = NSString.alloc().initWithDataEncoding(data, NSASCIIStringEncoding).toString();
+            content = NSString.alloc().initWithDataEncoding(data, nEncoding).toString();
         } else {
             content = data;
         }
@@ -146,7 +147,7 @@ class HttpsResponseLegacy implements IHttpsResponseLegacy {
             this.stringResponse = this.data;
             return this.data;
         } else {
-            const data = nativeToObj(this.data);
+            const data = nativeToObj(this.data, encoding);
             if (typeof data === 'string') {
                 this.stringResponse = data;
             } else {
@@ -171,7 +172,7 @@ class HttpsResponseLegacy implements IHttpsResponseLegacy {
             this.jsonResponse = parseJSON(this.stringResponse);
             return this.jsonResponse;
         }
-        const data = nativeToObj(this.data);
+        const data = nativeToObj(this.data, encoding);
         if (typeof data === 'object') {
             this.jsonResponse = data;
             return data;

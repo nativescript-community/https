@@ -83,9 +83,9 @@ function getData(data, encoding?) {
         const nEncoding = encoding === 'ascii' ? NSASCIIStringEncoding : NSUTF8StringEncoding;
         if (data.enumerateKeysAndObjectsUsingBlock || data instanceof NSArray) {
             const serial = NSJSONSerialization.dataWithJSONObjectOptionsError(data, NSJSONWritingOptions.PrettyPrinted);
-            content = NSString.alloc().initWithDataEncoding(serial, nEncoding).toString();
+            content = NSString.alloc().initWithDataEncoding(serial, nEncoding)?.toString();
         } else if (data instanceof NSData) {
-            content = NSString.alloc().initWithDataEncoding(data, nEncoding).toString();
+            content = NSString.alloc().initWithDataEncoding(data, nEncoding)?.toString();
         } else {
             content = data;
         }

@@ -1,1 +1,1 @@
-pod 'AFNetworking'
+pod 'AFNetworking',  :git => 'https://github.com/nativescript-community/AFNetworking'

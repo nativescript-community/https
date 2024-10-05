@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.19](https://github.com/nativescript-community/https/compare/v4.1.18...v4.1.19) (2024-10-05)
+
+### Bug Fixes
+
+* **ios:** should fix privacy submission issue ([299bd38](https://github.com/nativescript-community/https/commit/299bd3814b648e210c38a4910e537283718ca39b))
+
 ## [4.1.18](https://github.com/nativescript-community/https/compare/v4.1.17...v4.1.18) (2024-09-26)
 
 **Note:** Version bump only for package @nativescript-community/https

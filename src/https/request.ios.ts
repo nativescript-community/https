@@ -267,7 +267,7 @@ function AFFailure(resolve, reject, task: NSURLSessionDataTask, error: NSError, 
     const failingURL = error.userInfo.objectForKey('NSErrorFailingURLKey');
     if (useLegacy) {
         if (!sendi.statusCode) {
-            return reject(error.localizedDescription);
+            return reject(error);
         }
         const failure: any = {
             error,

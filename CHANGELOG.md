@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.21](https://github.com/nativescript-community/https/compare/v4.1.20...v4.1.21) (2025-10-29)
+
+### Bug Fixes
+
+* **android:** another native-api-usage fix ([f3e95a2](https://github.com/nativescript-community/https/commit/f3e95a2f3f4064a378082cf4d148bc797f2b600d))
+
 ## [4.1.20](https://github.com/nativescript-community/https/compare/v4.1.19...v4.1.20) (2025-10-29)
 
 ### Features

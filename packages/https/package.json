@@ -13,15 +13,15 @@
         }
     },
     "scripts": {
-        "tsc": "cpy '**/*.d.ts' '../../packages/https' --parents --cwd=../../src/https && tsc -d",
+        "tsc": "cpy '**/*.d.ts' '../../packages/https' --parents --cwd=../../src/https && tsc  --build",
         "readme": "readme generate -c ../../tools/readme/blueprint.json",
-        "build": "npm run tsc",
+        "build": "npm run tsc && npm run readme",
         "build.watch": "npm run tsc -- -w",
         "build.win": "npm run tsc-win",
         "build.all": "npm run build && npm run build.angular",
         "build.angular": "ng-packagr -p ../../src/https/angular/ng-package.json -c ../../src/https/angular/tsconfig.json && rm angular/.npmignore",
         "build.all.win": "npm run build.win",
-        "clean": "rimraf ./*.d.ts ./*.js ./*.js.map"
+        "clean": "bin/rimraf ./*.d.ts ./*.js ./*.js.map ./*.tsbuildinfo ./*.mjs ./*.mjs.map ./angular ./svelte ./vue* ./react"
     },
     "contributors": [
         {

@@ -3,7 +3,7 @@
     "description": "Nativescript plugin for https requests",
     "scripts": {
         "tsc": "cp src/index.d.ts src/request.d.ts plugin && tsc -skipLibCheck -d",
-        "clean": "rimraf 'packages/**/*.d.ts' 'packages/**/*.js' 'packages/**/*.js.map' 'packages/**/*.metada' 'packages/**/angular/ng-package.json'",
+        "clean": "rimraf -g 'packages/**/*.d.ts' 'packages/**/*.tsbuildinfo' 'packages/**/*.js' 'packages/**/*.mjs' 'packages/**/*.js.map' 'packages/**/*.mjs.map' 'packages/**/*.metada' 'packages/**/angular/ng-package.json'",
         "build.plugin": " cp README.md plugin/ && rm -f .tsbuildinfo && npm run tsc",
         "build.android": "bash src-native/android/build.sh",
         "build.ios": "bash src-native/ios/build.sh",
@@ -18,10 +18,10 @@
         "plugin.watch": "npm run plugin.watch.tsc & npm run plugin.watch.android & npm run plugin.watch.ios",
         "publish": "npm run setup && npm run clean && npm run build.all && npm run readme && npm run doc && npm run commit_readme_doc_changes && lerna publish",
         "publish.major": "npm run build && lerna publish major --create-release=github --force-publish",
-        "sync": "node ./tools/sync.js",
+        "sync": "node ./tools/sync.mjs",
         "commitmsg": "commitlint -e $GIT_PARAMS",
         "build.all": "lerna run build.all",
-        "fullclean": "npm run clean && rimraf 'packages/**/node_modules' 'demo-*/hooks' 'demo-*/node_modules' 'package-lock.json' 'pnpm-lock.yaml' 'node_modules'",
+        "fullclean": "npm run clean && rimraf -g 'packages/**/node_modules' 'demo-*/hooks' 'demo-*/node_modules' 'package-lock.json' 'pnpm-lock.yaml' 'node_modules'",
         "demo.vue.android": "cd ./demo-vue && ns run android --no-hmr --env.watchNodeModules",
         "demo.vue.clean": "cd ./demo-vue && ns clean",
         "demo.vue.ios": "cd ./demo-vue && ns run ios --no-hmr --env.watchNodeModules",
@@ -77,7 +77,7 @@
     "homepage": "https://github.com/nativescript-community/https",
     "readmeFilename": "README.md",
     "devDependencies": {
-        "@nativescript-community/plugin-seed-tools": "file:tools",
+        "@nativescript-community/plugin-seed-tools": "portal:tools",
         "@nativescript-community/template-snippet": "file:demo-snippets"
     },
     "bootstrapper": "nativescript-plugin-seed",
@@ -106,5 +106,6 @@
         "yarn": ">=1.19.1",
         "pnpm": ">=7.0.0",
         "node": "^14.20.0 || ^16.13.0 || >=18.10.0"
-    }
+    },
+    "packageManager": "yarn@4.10.2"
 }

@@ -32,6 +32,8 @@
         "com.nativescript.https:CacheInterceptor",
         "com.nativescript.https:CacheUtils",
         "com.nativescript.https:OkHttpResponse",
+        "com.nativescript.https:OkHttpResponse.OkHttpResponseAsyncCallback",
+        "com.nativescript.https:OkHttpResponse.OkHttpResponseCloseCallback",
         "java.util:Collections",
         "java.security.cert:CertificateFactory",
         "java.security:KeyStore",

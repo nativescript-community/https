@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.22](https://github.com/nativescript-community/https/compare/v4.1.21...v4.1.22) (2025-11-25)
+
+### Bug Fixes
+
+* **android:** improved cache control interceptor ([b92d084](https://github.com/nativescript-community/https/commit/b92d0847ea79370f5b76d0ff777c58954a29598a))
+
 ## [4.1.21](https://github.com/nativescript-community/https/compare/v4.1.20...v4.1.21) (2025-10-29)
 
 ### Bug Fixes

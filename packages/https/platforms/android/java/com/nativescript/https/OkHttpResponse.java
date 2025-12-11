@@ -163,7 +163,7 @@ public class OkHttpResponse {
         if (progressCallback == null) {
             return;
         }
-        if (runOnMainThread) {
+        if (runProgressOnMainThread) {
             getMainHandler().post(new Runnable() {
                 @Override
                 public void run() {

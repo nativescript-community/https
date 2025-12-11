@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.23](https://github.com/nativescript-community/https/compare/v4.1.22...v4.1.23) (2025-12-11)
+
+### Bug Fixes
+
+* new option `runProgressOnMainThread` ([e53584a](https://github.com/nativescript-community/https/commit/e53584aa2f72fa917637da07987f6a763a69b59e))
+
 ## [4.1.22](https://github.com/nativescript-community/https/compare/v4.1.21...v4.1.22) (2025-11-25)
 
 ### Bug Fixes

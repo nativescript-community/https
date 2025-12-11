@@ -603,6 +603,9 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                                 if (opts.responseOnMainThread === false) {
                                     nResponse.runOnMainThread = false;
                                 }
+                                if (opts.progressOnMainThread === false) {
+                                    nResponse.runProgressOnMainThread = false;
+                                }
                                 if (opts.onProgress) {
                                     nResponse.progressCallback = new OkHttpResponse.OkHttpResponseProgressCallback({
                                         onProgress: opts.onProgress

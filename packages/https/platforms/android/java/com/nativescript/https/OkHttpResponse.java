@@ -25,10 +25,12 @@ public class OkHttpResponse {
     private final static String TAG = "OkHttpResponse";
     static Handler mainHandler = null;
     static boolean RUN_ON_MAIN_THREAD = true;
+    static boolean RUN_PROGRESS_ON_MAIN_THREAD = true;
     public static final int DOWNLOAD_CHUNK_SIZE = 2048; // Same as Okio Segment.SIZE
 
     private ResponseBody responseBody;
     public boolean runOnMainThread = OkHttpResponse.RUN_ON_MAIN_THREAD;
+    public boolean runProgressOnMainThread = OkHttpResponse.RUN_PROGRESS_ON_MAIN_THREAD;
     public OkHttpResponseProgressCallback progressCallback = null;
     public OkHttpResponseCloseCallback closeCallback = null;
 
@@ -415,10 +417,7 @@ public class OkHttpResponse {
     }
 
     public String asString() throws IOException {
-        // if (RUN_ON_MAIN_THREAD && getMainHandler().getLooper() === Looper.myLooper()) {
-        // } else {
         return responseBodyToString(this);
-        // }
     }
 
     public void asStringAsync(final OkHttpResponseAsyncCallback callback) {

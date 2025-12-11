@@ -380,7 +380,7 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
 
     const progress = opts.onProgress
         ? (progress: NSProgress) => {
-              if (opts.responseOnMainThread === false) {
+              if (opts.progressOnMainThread === false) {
                   opts.onProgress(progress.completedUnitCount, progress.totalUnitCount);
               } else {
                   Utils.dispatchToMainThread(() => {

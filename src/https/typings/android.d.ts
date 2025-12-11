@@ -14,6 +14,7 @@ declare namespace com {
                 progressCallback: OkHttpResponse.OkHttpResponseProgressCallback;
                 closeCallback: OkHttpResponse.OkHttpResponseCloseCallback;
                 runOnMainThread: boolean;
+                runProgressOnMainThread: boolean;
                 constructor(body: okhttp3.ResponseBody);
                 contentLength(): number;
                 cancel();

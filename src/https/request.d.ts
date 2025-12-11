@@ -63,6 +63,7 @@ export interface HttpsRequestOptions extends HttpRequestOptions {
      * default to true. Put to false to run response callback on current thread
      */
     responseOnMainThread?: boolean;
+    progressOnMainThread?: boolean;
 
     cachePolicy?: CachePolicy;
 

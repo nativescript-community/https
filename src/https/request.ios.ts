@@ -71,7 +71,9 @@ function nativeToObj(data, encoding?) {
         });
         return content;
     } else if (data instanceof NSData) {
-        return NSString.alloc().initWithDataEncoding(data, encoding === 'ascii' ? NSASCIIStringEncoding : NSUTF8StringEncoding).toString();
+        return NSString.alloc()
+            .initWithDataEncoding(data, encoding === 'ascii' ? NSASCIIStringEncoding : NSUTF8StringEncoding)
+            .toString();
     } else {
         return data;
     }
@@ -380,7 +382,7 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
 
     const progress = opts.onProgress
         ? (progress: NSProgress) => {
-              if (opts.progressOnMainThread === false) {
+              if (opts.progressOnMainThread === false || (opts.progressOnMainThread === undefined && opts.responseOnMainThread === false)) {
                   opts.onProgress(progress.completedUnitCount, progress.totalUnitCount);
               } else {
                   Utils.dispatchToMainThread(() => {

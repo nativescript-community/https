@@ -603,7 +603,7 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                                 if (opts.responseOnMainThread === false) {
                                     nResponse.runOnMainThread = false;
                                 }
-                                if (opts.progressOnMainThread === false) {
+                                if (opts.progressOnMainThread === false || (opts.progressOnMainThread === undefined && opts.responseOnMainThread === false)) {
                                     nResponse.runProgressOnMainThread = false;
                                 }
                                 if (opts.onProgress) {

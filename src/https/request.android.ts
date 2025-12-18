@@ -472,7 +472,11 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
     request.url(opts.url);
 
     if (opts.headers) {
-        Object.keys(opts.headers).forEach((key) => request.addHeader(key, opts.headers[key] as any));
+        Object.keys(opts.headers).forEach((key) => {
+            if (opts.headers[key]) {
+                request.addHeader(key, opts.headers[key] as any);
+            }
+        });
     }
 
     if (opts.cachePolicy) {

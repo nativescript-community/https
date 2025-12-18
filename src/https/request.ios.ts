@@ -370,7 +370,11 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
     if (heads) {
         headers = NSMutableDictionary.dictionary();
         Object.keys(heads).forEach(
-            (key) => headers.setValueForKey(heads[key], key)
+            (key) => {
+                if (heads[key]) {
+                    headers.setValueForKey(heads[key], key);
+                }
+            }
             // manager.requestSerializer.setValueForHTTPHeaderField(
             //     heads[key] as any,
             //     key

@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.26](https://github.com/nativescript-community/https/compare/v4.1.25...v4.1.26) (2025-12-18)
+
+### Bug Fixes
+
+* prevent error with undefined/null headers entries ([e19d7b5](https://github.com/nativescript-community/https/commit/e19d7b557166a44b6d5b7d74077bb88651a70fc6))
+
 ## [4.1.25](https://github.com/nativescript-community/https/compare/v4.1.24...v4.1.25) (2025-12-11)
 
 **Note:** Version bump only for package https

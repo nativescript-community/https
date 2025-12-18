@@ -1,6 +1,6 @@
 {
     "name": "@nativescript-community/https",
-    "version": "4.1.25",
+    "version": "4.1.26",
     "description": "Nativescript plugin for https requests",
     "main": "index",
     "funding": "https://github.com/sponsors/farfromrefug",

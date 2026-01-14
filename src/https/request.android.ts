@@ -519,7 +519,19 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                 if (param.data instanceof okhttp3.RequestBody) {
                     builder.addFormDataPart(param.parameterName, param.fileName, param.data);
                 } else {
-                    builder.addFormDataPart(param.parameterName, param.fileName, okhttp3.RequestBody.create(param.data, okhttp3.MediaType.parse(param.contentType)));
+                    let nData = param.data;
+                    if (param.data instanceof ArrayBuffer) {
+                        const typedArray = new Uint8Array(param.data);
+                        const nativeBuffer = java.nio.ByteBuffer.wrap(Array.from(typedArray));
+                        nData = nativeBuffer.array();
+                    } else if (param.data instanceof Blob) {
+                        // Stolen from core xhr, not sure if we should use InternalAccessor, but it provides fast access.
+                        // @ts-ignore
+                        const typedArray = new Uint8Array(Blob.InternalAccessor.getBuffer(param.data).buffer.slice(0) as ArrayBuffer);
+                        const nativeBuffer = java.nio.ByteBuffer.wrap(Array.from(typedArray));
+                        nData = nativeBuffer.array();
+                    }
+                    builder.addFormDataPart(param.parameterName, param.fileName, okhttp3.RequestBody.create(nData, okhttp3.MediaType.parse(param.contentType)));
                 }
             } else {
                 if (typeof param.data === 'string') {

@@ -464,7 +464,16 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                                             let data = param.data;
                                             if (typeof data === 'string') {
                                                 data = NSString.stringWithString(data).dataUsingEncoding(NSUTF8StringEncoding);
+                                            } else if (data instanceof ArrayBuffer) {
+                                                const buffer = new Uint8Array(data);
+                                                data = NSData.dataWithData(buffer as any);
+                                            } else if (data instanceof Blob) {
+                                                // Stolen from core xhr, not sure if we should use InternalAccessor, but it provides fast access.
+                                                // @ts-ignore
+                                                const buffer = new Uint8Array(Blob.InternalAccessor.getBuffer(data).buffer.slice(0) as ArrayBuffer);
+                                                data = NSData.dataWithData(buffer as any);
                                             }
+
                                             formData.appendPartWithFileDataNameFileNameMimeType(data, param.parameterName, param.fileName, param.contentType);
                                         }
                                     } else {

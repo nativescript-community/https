@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.27](https://github.com/nativescript-community/https/compare/v4.1.26...v4.1.27) (2026-01-14)
+
+### Bug Fixes
+
+* support ArrayBuffer/Blob for form data ([54140de](https://github.com/nativescript-community/https/commit/54140de323c0e9854c86444effaa02c3b8404529))
+
 ## [4.1.26](https://github.com/nativescript-community/https/compare/v4.1.25...v4.1.26) (2025-12-18)
 
 ### Bug Fixes

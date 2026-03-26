@@ -460,6 +460,8 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                                     if (param.fileName && param.contentType) {
                                         if (param.data instanceof NSURL) {
                                             formData.appendPartWithFileURLNameFileNameMimeTypeError(param.data, param.parameterName, param.fileName, param.contentType);
+                                        } else if (param.data instanceof File) {
+                                            formData.appendPartWithFileURLNameFileNameMimeTypeError(NSURL.fileURLWithPath(param.data.path), param.parameterName, param.fileName, param.contentType);
                                         } else {
                                             let data = param.data;
                                             if (typeof data === 'string') {

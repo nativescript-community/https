@@ -518,6 +518,8 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
             if (param.fileName && param.contentType) {
                 if (param.data instanceof okhttp3.RequestBody) {
                     builder.addFormDataPart(param.parameterName, param.fileName, param.data);
+                } else if (param.data instanceof File) {
+                    builder.addFormDataPart(param.parameterName, param.fileName, okhttp3.RequestBody.create(new java.io.File(param.data.path), okhttp3.MediaType.parse(param.contentType)));
                 } else {
                     let nData = param.data;
                     if (param.data instanceof ArrayBuffer) {

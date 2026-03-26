@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.28](https://github.com/nativescript-community/https/compare/v4.1.27...v4.1.28) (2026-03-26)
+
+### Bug Fixes
+
+* form data supports File type ([486f83f](https://github.com/nativescript-community/https/commit/486f83f398cc6bc6377ca6ef5b171f63653abfa0))
+
 ## [4.1.27](https://github.com/nativescript-community/https/compare/v4.1.26...v4.1.27) (2026-01-14)
 
 ### Bug Fixes

@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.29](https://github.com/nativescript-community/https/compare/v4.1.28...v4.1.29) (2026-03-27)
+
+### Bug Fixes
+
+* **https:** android application/x-www-form-urlencoded fix ([a133e53](https://github.com/nativescript-community/https/commit/a133e53409a24e64ded19c3c19d6ba948e8c46bc))
+
 ## [4.1.28](https://github.com/nativescript-community/https/compare/v4.1.27...v4.1.28) (2026-03-26)
 
 ### Bug Fixes

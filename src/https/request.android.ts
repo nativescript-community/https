@@ -547,7 +547,9 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
     } else if (type === 'application/x-www-form-urlencoded') {
         const builder = new okhttp3.FormBody.Builder();
         Object.keys(opts.body).forEach((key) => {
-            builder.add(key, opts.body[key]);
+            if (opts.body[key] !== undefined && opts.body[key] !== null) {
+                builder.add(key, opts.body[key]);
+            }
         });
         okHttpBody = builder.build();
     } else {

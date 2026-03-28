@@ -538,7 +538,11 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
             } else {
                 let dict = null;
                 if (opts.body) {
-                    dict = NSJSONSerialization.JSONObjectWithDataOptionsError(NSString.stringWithString(JSON.stringify(opts.body)).dataUsingEncoding(NSUTF8StringEncoding), 0 as any);
+                    if (typeof opts.body === 'string') {
+                        dict = NSJSONSerialization.JSONObjectWithDataOptionsError(NSString.stringWithString(opts.body).dataUsingEncoding(NSUTF8StringEncoding), 0 as any);
+                    } else {
+                        dict = NSJSONSerialization.JSONObjectWithDataOptionsError(NSString.stringWithString(JSON.stringify(opts.body)).dataUsingEncoding(NSUTF8StringEncoding), 0 as any);
+                    }
                 } else if (typeof opts.content === 'string') {
                     dict = NSJSONSerialization.JSONObjectWithDataOptionsError(NSString.stringWithString(opts.content).dataUsingEncoding(NSUTF8StringEncoding), 0 as any);
                 }

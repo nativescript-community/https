@@ -95,8 +95,15 @@ public class AlamofireWrapper: NSObject {
         var afRequest: DataRequest = session.request(request)
         
         // Apply server trust evaluation if security policy is set
-        if let secPolicy = securityPolicy {
-            afRequest = afRequest.validate(evaluator: secPolicy)
+        if let secPolicy = securityPolicy, let host = url.host {
+            afRequest = afRequest.validate { _, response, _ in
+                do {
+                    try secPolicy.evaluate(response.serverTrust!, forHost: host)
+                    return .success(Void())
+                } catch {
+                    return .failure(error)
+                }
+            }
         }
         
         // Upload progress
@@ -115,7 +122,8 @@ public class AlamofireWrapper: NSObject {
         
         // Response handling
         afRequest.response(queue: .main) { response in
-            guard let task = response.request?.task else {
+            let task = response.request?.task as? URLSessionDataTask
+            guard let task = task else {
                 let error = NSError(domain: "AlamofireWrapper", code: -1, userInfo: [NSLocalizedDescriptionKey: "No task available"])
                 failure(nil, error)
                 return
@@ -123,16 +131,16 @@ public class AlamofireWrapper: NSObject {
             
             if let error = response.error {
                 let nsError = self.createNSError(from: error, response: response.response, data: response.data)
-                failure(task as? URLSessionDataTask, nsError)
+                failure(task, nsError)
                 return
             }
             
             // Deserialize response based on responseSerializer
             if let data = response.data {
                 let result = self.responseSerializer.deserialize(data: data, response: response.response)
-                success(task as? URLSessionDataTask ?? URLSessionDataTask(), result)
+                success(task, result)
             } else {
-                success(task as? URLSessionDataTask ?? URLSessionDataTask(), nil)
+                success(task, nil)
             }
         }
         
@@ -178,8 +186,15 @@ public class AlamofireWrapper: NSObject {
         }, with: request)
         
         // Apply server trust evaluation if security policy is set
-        if let secPolicy = securityPolicy {
-            afRequest = afRequest.validate(evaluator: secPolicy)
+        if let secPolicy = securityPolicy, let host = url.host {
+            afRequest = afRequest.validate { _, response, _ in
+                do {
+                    try secPolicy.evaluate(response.serverTrust!, forHost: host)
+                    return .success(Void())
+                } catch {
+                    return .failure(error)
+                }
+            }
         }
         
         // Upload progress
@@ -191,7 +206,8 @@ public class AlamofireWrapper: NSObject {
         
         // Response handling
         afRequest.response(queue: .main) { response in
-            guard let task = response.request?.task else {
+            let task = response.request?.task as? URLSessionDataTask
+            guard let task = task else {
                 let error = NSError(domain: "AlamofireWrapper", code: -1, userInfo: [NSLocalizedDescriptionKey: "No task available"])
                 failure(nil, error)
                 return
@@ -199,16 +215,16 @@ public class AlamofireWrapper: NSObject {
             
             if let error = response.error {
                 let nsError = self.createNSError(from: error, response: response.response, data: response.data)
-                failure(task as? URLSessionDataTask, nsError)
+                failure(task, nsError)
                 return
             }
             
             // Deserialize response based on responseSerializer
             if let data = response.data {
                 let result = self.responseSerializer.deserialize(data: data, response: response.response)
-                success(task as? URLSessionDataTask ?? URLSessionDataTask(), result)
+                success(task, result)
             } else {
-                success(task as? URLSessionDataTask ?? URLSessionDataTask(), nil)
+                success(task, nil)
             }
         }
         
@@ -227,8 +243,15 @@ public class AlamofireWrapper: NSObject {
         var afRequest = session.upload(fileURL, with: request)
         
         // Apply server trust evaluation if security policy is set
-        if let secPolicy = securityPolicy {
-            afRequest = afRequest.validate(evaluator: secPolicy)
+        if let secPolicy = securityPolicy, let host = request.url?.host {
+            afRequest = afRequest.validate { _, response, _ in
+                do {
+                    try secPolicy.evaluate(response.serverTrust!, forHost: host)
+                    return .success(Void())
+                } catch {
+                    return .failure(error)
+                }
+            }
         }
         
         // Upload progress
@@ -267,8 +290,15 @@ public class AlamofireWrapper: NSObject {
         var afRequest = session.upload(bodyData, with: request)
         
         // Apply server trust evaluation if security policy is set
-        if let secPolicy = securityPolicy {
-            afRequest = afRequest.validate(evaluator: secPolicy)
+        if let secPolicy = securityPolicy, let host = request.url?.host {
+            afRequest = afRequest.validate { _, response, _ in
+                do {
+                    try secPolicy.evaluate(response.serverTrust!, forHost: host)
+                    return .success(Void())
+                } catch {
+                    return .failure(error)
+                }
+            }
         }
         
         // Upload progress
@@ -371,8 +401,8 @@ public class RequestSerializer: NSObject {
                 }
             } else {
                 // For GET and others, encode as query parameters
-                if let dict = parameters as? [String: Any] {
-                    var components = URLComponents(url: request.url!, resolvingAgainstBaseURL: false)
+                if let dict = parameters as? [String: Any], let requestURL = request.url {
+                    var components = URLComponents(url: requestURL, resolvingAgainstBaseURL: false)
                     components?.queryItems = dict.map { URLQueryItem(name: $0.key, value: "\($0.value)") }
                     if let urlWithQuery = components?.url {
                         request.url = urlWithQuery

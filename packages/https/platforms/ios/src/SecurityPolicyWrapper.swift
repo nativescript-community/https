@@ -48,8 +48,17 @@ extension SecurityPolicyWrapper: ServerTrustEvaluating {
         }
         
         // Get the server certificates
-        let serverCertificates = (0..<SecTrustGetCertificateCount(trust)).compactMap { index -> SecCertificate? in
-            return SecTrustGetCertificateAtIndex(trust, index)
+        let serverCertificates: [SecCertificate]
+        if #available(iOS 15.0, *) {
+            if let certificateChain = SecTrustCopyCertificateChain(trust) as? [SecCertificate] {
+                serverCertificates = certificateChain
+            } else {
+                serverCertificates = []
+            }
+        } else {
+            serverCertificates = (0..<SecTrustGetCertificateCount(trust)).compactMap { index -> SecCertificate? in
+                return SecTrustGetCertificateAtIndex(trust, index)
+            }
         }
         
         // If no pinning mode, just validate the certificate chain

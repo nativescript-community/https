@@ -1,12 +1,40 @@
-# iOS and Android Behavior Parity
+# iOS and Android Streaming Behavior
 
 ## Overview
 
-The iOS implementation has been updated to match Android's response handling behavior, providing consistent cross-platform functionality.
+Both iOS and Android now implement true streaming downloads where response bodies are NOT loaded into memory until explicitly accessed. This provides memory-efficient handling of large files.
+
+## How It Works
+
+### Android (OkHttp)
+
+Android uses OkHttp's `ResponseBody` which provides a stream:
+
+1. **Request completes** - Response returned with `ResponseBody` (unopened stream)
+2. **Inspect response** - User can check status code and headers
+3. **Process data** - When `.toFile()`, `.toArrayBuffer()`, etc. is called:
+   - Stream is opened and consumed
+   - For `toFile()`: Data streams directly to disk
+   - For `toArrayBuffer()`: Data streams into memory
+   - For `toJSON()`: Data streams, parsed, returned
+
+**Memory Usage**: Only buffered data in memory during streaming (typically ~8KB at a time)
+
+### iOS (Alamofire)
+
+iOS now uses Alamofire's `DownloadRequest` which downloads to a temp file:
+
+1. **Request completes** - Response body downloaded to temp file
+2. **Inspect response** - User can check status code and headers
+3. **Process data** - When `.toFile()`, `.toArrayBuffer()`, etc. is called:
+   - For `toFile()`: Temp file is moved to destination (no copy, no memory)
+   - For `toArrayBuffer()`: Temp file loaded into memory
+   - For `toJSON()`: Temp file loaded and parsed
+   - For `toString()`: Temp file loaded as string
+
+**Memory Usage**: Temp file on disk during download, loaded into memory only when explicitly accessed
 
 ## Response Handling Behavior
-
-### How It Works
 
 Both iOS and Android now follow the same pattern:
 
@@ -55,58 +83,144 @@ if (response.statusCode === 200) {
 
 On Android, the response includes a `ResponseBody` that provides an input stream:
 
-- Request completes and returns response
-- ResponseBody is available with the data
-- When `toFile()` is called, it reads from the ResponseBody stream and writes to disk
-- When `toArrayBuffer()` is called, it reads from the ResponseBody stream into memory
+- Request completes and returns response with ResponseBody (stream not yet consumed)
+- ResponseBody stream is available but not opened
+- When `toFile()` is called, it opens the stream and writes to disk chunk by chunk
+- When `toArrayBuffer()` is called, it opens the stream and reads into memory
+- Stream is consumed only once - subsequent calls use cached data
 
 **Native Code Flow:**
 ```java
-// Response is returned with ResponseBody
+// Response is returned with ResponseBody (stream)
 ResponseBody responseBody = response.body();
 
 // Later, when toFile() is called:
 InputStream inputStream = responseBody.byteStream();
 FileOutputStream output = new FileOutputStream(file);
-// Stream data from input to output
+byte[] buffer = new byte[1024];
+while ((count = inputStream.read(buffer)) != -1) {
+    output.write(buffer, 0, count);  // Streaming write
+}
 ```
+
+**Memory Characteristics:**
+- Only buffer size (~1KB) in memory during streaming
+- Large files: ~1-2MB RAM overhead maximum
+- File writes happen progressively as data arrives
 
 ### iOS (Alamofire)
 
-On iOS, the response includes the data as NSData:
+On iOS, the response downloads to a temporary file automatically:
 
-- Request completes and returns response  
-- Data is loaded into memory as NSData
-- When `toFile()` is called, it writes the NSData to disk
-- When `toArrayBuffer()` is called, it converts NSData to ArrayBuffer
+- Request completes and downloads body to temp file  
+- Temp file path stored in response object
+- When `toFile()` is called, it moves the temp file to destination (fast file system operation)
+- When `toArrayBuffer()` is called, it loads the temp file into memory
+- When `toJSON()` is called, it loads and parses the temp file
 
 **Native Code Flow:**
 ```swift
-// Response is returned with NSData
-let data: NSData = responseData
+// Response downloads to temp file during request
+let tempFileURL = FileManager.default.temporaryDirectory
+    .appendingPathComponent(UUID().uuidString)
+// Download happens here, saved to tempFileURL
 
 // Later, when toFile() is called:
-data.writeToFile(filePath, atomically: true)
+try FileManager.default.moveItem(at: tempFileURL, to: destinationURL)
+// Fast move operation, no data copying
+
+// Or when toArrayBuffer() is called:
+let data = try Data(contentsOf: tempFileURL)
+// File loaded into memory at this point
 ```
+
+**Memory Characteristics:**
+- Temp file written to disk during download
+- No memory overhead during download (except small buffer)
+- Memory used only when explicitly loading via toArrayBuffer()/toJSON()
+- toFile() uses file move (no memory overhead)
 
 ## Memory Considerations
 
-### Android
-- ResponseBody provides a stream, so data isn't necessarily all in memory
-- OkHttp may buffer data internally
-- Large files will consume memory proportional to the buffering strategy
+### Comparison
 
-### iOS
-- Response data is loaded into memory as NSData
-- Large files will consume memory equal to the file size
-- This matches Android's effective behavior for most use cases
+| Operation | Android Memory | iOS Memory |
+|-----------|----------------|------------|
+| **During download** | ~1-2MB buffer | ~1-2MB buffer + temp file on disk |
+| **After download** | ResponseBody (minimal) | Temp file on disk (0 RAM) |
+| **toFile()** | Stream to disk (~1MB buffer) | File move (0 RAM) |
+| **toArrayBuffer()** | Load into memory | Load from temp file into memory |
+| **toJSON()** | Stream and parse | Load from temp file and parse |
 
-### Recommendation
+### Benefits
+
+Both platforms now provide true memory-efficient streaming:
+
+1. **Large File Downloads**: Won't cause OOM errors
+2. **Flexible Processing**: Inspect headers before committing to download
+3. **Efficient File Saving**: Direct streaming (Android) or file move (iOS)
+4. **On-Demand Loading**: Data loaded into memory only when explicitly requested
+
+### Recommendations
 
 For both platforms:
-- Small files (<10MB): No concern, data handling is efficient
-- Medium files (10-50MB): Monitor memory usage, should work on most devices
-- Large files (>50MB): Test on low-memory devices, consider chunked downloads if needed
+- **Small files (<10MB)**: Any method works efficiently
+- **Medium files (10-100MB)**: Use `toFile()` for best memory efficiency
+- **Large files (>100MB)**: Always use `toFile()` to avoid memory issues
+- **JSON APIs**: `toJSON()` works well for responses up to ~50MB
+
+## Example Usage
+
+```typescript
+import { request } from '@nativescript-community/https';
+
+async function downloadLargeFile() {
+    console.log('Starting download...');
+    
+    // Step 1: Make the request
+    // iOS: Downloads to temp file on disk (not in RAM)
+    // Android: Opens connection, keeps ResponseBody stream (not in RAM)
+    const response = await request({
+        method: 'GET',
+        url: 'https://example.com/large-file.zip',
+        onProgress: (current, total) => {
+            const percent = (current / total * 100).toFixed(1);
+            console.log(`Downloading: ${percent}%`);
+        }
+    });
+    
+    // Step 2: Request completes, inspect the response
+    // At this point, large file is NOT in memory on either platform!
+    console.log('Download complete!');
+    console.log('Status code:', response.statusCode);
+    console.log('Content-Type:', response.headers['Content-Type']);
+    console.log('Content-Length:', response.contentLength);
+    
+    // Step 3: Now decide what to do with the data
+    if (response.statusCode === 200) {
+        // Option A: Save to file (MOST MEMORY EFFICIENT)
+        // iOS: Moves temp file (0 RAM overhead)
+        // Android: Streams ResponseBody to file (~1MB RAM overhead)
+        const file = await response.content.toFile('~/Downloads/file.zip');
+        console.log('Saved to:', file.path);
+        
+        // Option B: Load into memory (for processing)
+        // iOS: Loads temp file into RAM
+        // Android: Streams ResponseBody into RAM
+        // WARNING: Use only for files that fit in memory!
+        // const buffer = await response.content.toArrayBuffer();
+        // console.log('Buffer size:', buffer.byteLength);
+        
+        // Option C: Parse as JSON (for APIs)
+        // iOS: Loads temp file and parses
+        // Android: Streams ResponseBody and parses
+        // const json = response.content.toJSON();
+        // console.log('Data:', json);
+    } else {
+        console.error('Download failed with status:', response.statusCode);
+    }
+}
+```
 
 ## Benefits of Consistent Behavior
 

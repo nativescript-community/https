@@ -196,11 +196,11 @@ After upgrading, test the following scenarios:
    - Upload progress for large payloads
    - Download progress for large responses
 
-5. **Cache Policies**
+6. **Cache Policies**
    - Test each cache mode (noCache, onlyCache, ignoreCache)
    - Verify cache behavior matches expectations
 
-6. **Error Handling**
+7. **Error Handling**
    - Network errors (timeout, no connection)
    - HTTP errors (4xx, 5xx)
    - SSL errors (certificate mismatch)

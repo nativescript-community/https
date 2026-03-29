@@ -98,8 +98,11 @@ public class AlamofireWrapper: NSObject {
         // Apply server trust evaluation if security policy is set
         if let secPolicy = securityPolicy, let host = url.host {
             afRequest = afRequest.validate { _, response, _ in
+                guard let serverTrust = response.serverTrust else {
+                    return .failure(AFError.serverTrustEvaluationFailed(reason: .noServerTrust))
+                }
                 do {
-                    try secPolicy.evaluate(response.serverTrust!, forHost: host)
+                    try secPolicy.evaluate(serverTrust, forHost: host)
                     return .success(Void())
                 } catch {
                     return .failure(error)
@@ -189,14 +192,19 @@ public class AlamofireWrapper: NSObject {
         // Apply server trust evaluation if security policy is set
         if let secPolicy = securityPolicy, let host = url.host {
             afRequest = afRequest.validate { _, response, _ in
+                guard let serverTrust = response.serverTrust else {
+                    return .failure(AFError.serverTrustEvaluationFailed(reason: .noServerTrust))
+                }
                 do {
-                    try secPolicy.evaluate(response.serverTrust!, forHost: host)
+                    try secPolicy.evaluate(serverTrust, forHost: host)
                     return .success(Void())
                 } catch {
                     return .failure(error)
                 }
             }
         }
+        
+        // Upload progress
         
         // Upload progress
         if let progress = progress {
@@ -247,14 +255,19 @@ public class AlamofireWrapper: NSObject {
         // Apply server trust evaluation if security policy is set
         if let secPolicy = securityPolicy, let host = request.url?.host {
             afRequest = afRequest.validate { _, response, _ in
+                guard let serverTrust = response.serverTrust else {
+                    return .failure(AFError.serverTrustEvaluationFailed(reason: .noServerTrust))
+                }
                 do {
-                    try secPolicy.evaluate(response.serverTrust!, forHost: host)
+                    try secPolicy.evaluate(serverTrust, forHost: host)
                     return .success(Void())
                 } catch {
                     return .failure(error)
                 }
             }
         }
+        
+        // Upload progress
         
         // Upload progress
         if let progress = progress {
@@ -295,14 +308,19 @@ public class AlamofireWrapper: NSObject {
         // Apply server trust evaluation if security policy is set
         if let secPolicy = securityPolicy, let host = request.url?.host {
             afRequest = afRequest.validate { _, response, _ in
+                guard let serverTrust = response.serverTrust else {
+                    return .failure(AFError.serverTrustEvaluationFailed(reason: .noServerTrust))
+                }
                 do {
-                    try secPolicy.evaluate(response.serverTrust!, forHost: host)
+                    try secPolicy.evaluate(serverTrust, forHost: host)
                     return .success(Void())
                 } catch {
                     return .failure(error)
                 }
             }
         }
+        
+        // Upload progress
         
         // Upload progress
         if let progress = progress {
@@ -376,8 +394,11 @@ public class AlamofireWrapper: NSObject {
         // Apply server trust evaluation if security policy is set
         if let secPolicy = securityPolicy, let host = url.host {
             downloadRequest = downloadRequest.validate { _, response, _ in
+                guard let serverTrust = response.serverTrust else {
+                    return .failure(AFError.serverTrustEvaluationFailed(reason: .noServerTrust))
+                }
                 do {
-                    try secPolicy.evaluate(response.serverTrust!, forHost: host)
+                    try secPolicy.evaluate(serverTrust, forHost: host)
                     return .success(Void())
                 } catch {
                     return .failure(error)

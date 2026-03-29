@@ -173,18 +173,18 @@ public class AlamofireWrapper: NSObject {
             return nil
         }
         
-        let afRequest = session.upload(multipartFormData: { multipartFormData in
+        var afRequest = session.upload(multipartFormData: { multipartFormData in
             wrapper.apply(to: multipartFormData)
         }, with: request)
         
         // Apply server trust evaluation if security policy is set
         if let secPolicy = securityPolicy {
-            afRequest.validate(evaluator: secPolicy)
+            afRequest = afRequest.validate(evaluator: secPolicy)
         }
         
         // Upload progress
         if let progress = progress {
-            afRequest.uploadProgress { progressInfo in
+            afRequest = afRequest.uploadProgress { progressInfo in
                 progress(progressInfo)
             }
         }

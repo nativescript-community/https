@@ -1,1 +1,1 @@
-pod 'AFNetworking',  :git => 'https://github.com/nativescript-community/AFNetworking'
+pod 'Alamofire', '~> 5.9'

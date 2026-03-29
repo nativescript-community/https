@@ -23,13 +23,13 @@ export function removeCachedResponse(url: string) {
 }
 
 interface Ipolicies {
-    def: AFSecurityPolicy;
+    def: SecurityPolicyWrapper;
     secured: boolean;
-    secure?: AFSecurityPolicy;
+    secure?: SecurityPolicyWrapper;
 }
 
 const policies: Ipolicies = {
-    def: AFSecurityPolicy.defaultPolicy(),
+    def: SecurityPolicyWrapper.defaultPolicy(),
     secured: false
 };
 
@@ -37,13 +37,13 @@ policies.def.allowInvalidCertificates = true;
 policies.def.validatesDomainName = false;
 
 const configuration = NSURLSessionConfiguration.defaultSessionConfiguration;
-let manager = AFHTTPSessionManager.alloc().initWithSessionConfiguration(configuration);
+let manager = AlamofireWrapper.alloc().initWithConfiguration(configuration);
 
 export function enableSSLPinning(options: HttpsSSLPinningOptions) {
     const url = NSURL.URLWithString(options.host);
-    manager = AFHTTPSessionManager.alloc().initWithSessionConfiguration(configuration).initWithBaseURL(url);
+    manager = AlamofireWrapper.alloc().initWithConfigurationBaseURL(configuration, url);
     if (!policies.secure) {
-        policies.secure = AFSecurityPolicy.policyWithPinningMode(AFSSLPinningMode.PublicKey);
+        policies.secure = SecurityPolicyWrapper.policyWithPinningMode(AFSSLPinningMode.PublicKey);
         policies.secure.allowInvalidCertificates = Utils.isDefined(options.allowInvalidCertificates) ? options.allowInvalidCertificates : false;
         policies.secure.validatesDomainName = Utils.isDefined(options.validatesDomainName) ? options.validatesDomainName : true;
         const data = NSData.dataWithContentsOfFile(options.certificate);
@@ -340,15 +340,15 @@ export function clearCookies() {
 export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = true): HttpsRequest {
     const type = opts.headers && opts.headers['Content-Type'] ? opts.headers['Content-Type'] : 'application/json';
     if (type.startsWith('application/json')) {
-        manager.requestSerializer = AFJSONRequestSerializer.serializer();
-        manager.responseSerializer = AFJSONResponseSerializer.serializerWithReadingOptions(NSJSONReadingOptions.AllowFragments);
+        manager.requestSerializerWrapper.httpShouldHandleCookies = opts.cookiesEnabled !== false;
+        manager.responseSerializerWrapper.acceptsJSON = true;
+        manager.responseSerializerWrapper.readingOptions = NSJSONReadingOptions.AllowFragments;
     } else {
-        manager.requestSerializer = AFHTTPRequestSerializer.serializer();
-        manager.responseSerializer = AFHTTPResponseSerializer.serializer();
+        manager.requestSerializerWrapper.httpShouldHandleCookies = opts.cookiesEnabled !== false;
+        manager.responseSerializerWrapper.acceptsJSON = false;
     }
-    manager.requestSerializer.allowsCellularAccess = true;
-    manager.requestSerializer.HTTPShouldHandleCookies = opts.cookiesEnabled !== false;
-    manager.securityPolicy = policies.secured === true ? policies.secure : policies.def;
+    manager.requestSerializerWrapper.allowsCellularAccess = true;
+    manager.securityPolicyWrapper = policies.secured === true ? policies.secure : policies.def;
 
     if (opts.cachePolicy) {
         switch (opts.cachePolicy) {
@@ -356,14 +356,14 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                 manager.setDataTaskWillCacheResponseBlock((session, task, cacheResponse) => null);
                 break;
             case 'onlyCache':
-                manager.requestSerializer.cachePolicy = NSURLRequestCachePolicy.ReturnCacheDataDontLoad;
+                manager.requestSerializerWrapper.cachePolicy = NSURLRequestCachePolicy.ReturnCacheDataDontLoad;
                 break;
             case 'ignoreCache':
-                manager.requestSerializer.cachePolicy = NSURLRequestCachePolicy.ReloadIgnoringLocalCacheData;
+                manager.requestSerializerWrapper.cachePolicy = NSURLRequestCachePolicy.ReloadIgnoringLocalCacheData;
                 break;
         }
     } else {
-        manager.requestSerializer.cachePolicy = NSURLRequestCachePolicy.UseProtocolCachePolicy;
+        manager.requestSerializerWrapper.cachePolicy = NSURLRequestCachePolicy.UseProtocolCachePolicy;
     }
     const heads = opts.headers;
     let headers: NSMutableDictionary<string, any> = null;
@@ -382,7 +382,7 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
         );
     }
 
-    manager.requestSerializer.timeoutInterval = opts.timeout ? opts.timeout : 10;
+    manager.requestSerializerWrapper.timeoutInterval = opts.timeout ? opts.timeout : 10;
 
     const progress = opts.onProgress
         ? (progress: NSProgress) => {

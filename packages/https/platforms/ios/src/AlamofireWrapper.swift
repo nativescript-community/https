@@ -513,6 +513,115 @@ public class AlamofireWrapper: NSObject {
         return downloadRequest.task as? URLSessionDownloadTask
     }
     
+    // MARK: - Early Resolution Support
+    
+    /**
+     * Download to temp file with early resolution on headers received.
+     * Calls headersCallback as soon as headers are available (before download completes).
+     * Calls completionHandler when download finishes with temp file path.
+     * This allows inspecting status/headers early and cancelling before full download.
+     */
+    @objc public func downloadToTempWithEarlyHeaders(
+        _ method: String,
+        _ urlString: String,
+        _ parameters: NSDictionary?,
+        _ headers: NSDictionary?,
+        _ sizeThreshold: Int64,
+        _ progress: ((Progress) -> Void)?,
+        _ headersCallback: @escaping (URLResponse?, Int64) -> Void,
+        _ completionHandler: @escaping (URLResponse?, String?, Error?) -> Void
+    ) -> URLSessionDownloadTask? {
+        
+        guard let url = URL(string: urlString) else {
+            let error = NSError(domain: "AlamofireWrapper", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])
+            completionHandler(nil, nil, error)
+            return nil
+        }
+        
+        var request: URLRequest
+        do {
+            request = try requestSerializer.createRequest(
+                url: url,
+                method: HTTPMethod(rawValue: method.uppercased()),
+                parameters: nil,
+                headers: headers
+            )
+            // Encode parameters into the request
+            try requestSerializer.encodeParameters(parameters, into: &request, method: HTTPMethod(rawValue: method.uppercased()))
+        } catch {
+            completionHandler(nil, nil, error)
+            return nil
+        }
+        
+        // Track whether we've already called headersCallback
+        var headersCallbackCalled = false
+        let headersCallbackLock = NSLock()
+        
+        // Create destination closure that saves to a temp file
+        let destination: DownloadRequest.Destination = { temporaryURL, response in
+            // Create a unique temp file path
+            let tempDir = FileManager.default.temporaryDirectory
+            let tempFileName = UUID().uuidString
+            let tempFileURL = tempDir.appendingPathComponent(tempFileName)
+            
+            // Call headersCallback on first response (only once)
+            headersCallbackLock.lock()
+            if !headersCallbackCalled {
+                headersCallbackCalled = true
+                headersCallbackLock.unlock()
+                
+                let contentLength = response.expectedContentLength
+                headersCallback(response, contentLength)
+            } else {
+                headersCallbackLock.unlock()
+            }
+            
+            return (tempFileURL, [.removePreviousFile, .createIntermediateDirectories])
+        }
+        
+        var downloadRequest = session.download(request, to: destination)
+        
+        // Apply server trust evaluation if security policy is set
+        if let secPolicy = securityPolicy, let host = url.host {
+            downloadRequest = downloadRequest.validate { _, response, _ in
+                guard let serverTrust = response.serverTrust else {
+                    return .failure(AFError.serverTrustEvaluationFailed(reason: .noServerTrust))
+                }
+                do {
+                    try secPolicy.evaluate(serverTrust, forHost: host)
+                    return .success(Void())
+                } catch {
+                    return .failure(error)
+                }
+            }
+        }
+        
+        // Download progress
+        if let progress = progress {
+            downloadRequest = downloadRequest.downloadProgress { progressInfo in
+                progress(progressInfo)
+            }
+        }
+        
+        // Response handling (fires when download completes)
+        downloadRequest.response(queue: .main) { response in
+            if let error = response.error {
+                completionHandler(response.response, nil, error)
+                return
+            }
+            
+            // Return the temp file path on success
+            if let tempFileURL = response.fileURL {
+                completionHandler(response.response, tempFileURL.path, nil)
+            } else {
+                let error = NSError(domain: "AlamofireWrapper", code: -1, userInfo: [NSLocalizedDescriptionKey: "No file URL in download response"])
+                completionHandler(response.response, nil, error)
+            }
+        }
+        
+        return downloadRequest.task as? URLSessionDownloadTask
+    }
+    
     // MARK: - Helper Methods
     
     private func createNSError(from error: Error, response: HTTPURLResponse?, data: Data?) -> NSError {

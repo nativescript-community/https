@@ -350,6 +350,92 @@ public class AlamofireWrapper: NSObject {
     
     // MARK: - Download Tasks
     
+    // Streaming download to temporary location (for deferred processing)
+    // This downloads the response body to a temp file and returns the temp path
+    // Allows inspecting headers before deciding what to do with the body
+    @objc public func downloadToTemp(
+        _ method: String,
+        _ urlString: String,
+        _ parameters: NSDictionary?,
+        _ headers: NSDictionary?,
+        _ progress: ((Progress) -> Void)?,
+        _ completionHandler: @escaping (URLResponse?, String?, Error?) -> Void
+    ) -> URLSessionDownloadTask? {
+        
+        guard let url = URL(string: urlString) else {
+            let error = NSError(domain: "AlamofireWrapper", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])
+            completionHandler(nil, nil, error)
+            return nil
+        }
+        
+        var request: URLRequest
+        do {
+            request = try requestSerializer.createRequest(
+                url: url,
+                method: HTTPMethod(rawValue: method.uppercased()),
+                parameters: nil,
+                headers: headers
+            )
+            // Encode parameters into the request
+            try requestSerializer.encodeParameters(parameters, into: &request, method: HTTPMethod(rawValue: method.uppercased()))
+        } catch {
+            completionHandler(nil, nil, error)
+            return nil
+        }
+        
+        // Create destination closure that saves to a temp file
+        let destination: DownloadRequest.Destination = { temporaryURL, response in
+            // Create a unique temp file path
+            let tempDir = FileManager.default.temporaryDirectory
+            let tempFileName = UUID().uuidString
+            let tempFileURL = tempDir.appendingPathComponent(tempFileName)
+            
+            return (tempFileURL, [.removePreviousFile, .createIntermediateDirectories])
+        }
+        
+        var downloadRequest = session.download(request, to: destination)
+        
+        // Apply server trust evaluation if security policy is set
+        if let secPolicy = securityPolicy, let host = url.host {
+            downloadRequest = downloadRequest.validate { _, response, _ in
+                guard let serverTrust = response.serverTrust else {
+                    return .failure(AFError.serverTrustEvaluationFailed(reason: .noServerTrust))
+                }
+                do {
+                    try secPolicy.evaluate(serverTrust, forHost: host)
+                    return .success(Void())
+                } catch {
+                    return .failure(error)
+                }
+            }
+        }
+        
+        // Download progress
+        if let progress = progress {
+            downloadRequest = downloadRequest.downloadProgress { progressInfo in
+                progress(progressInfo)
+            }
+        }
+        
+        // Response handling
+        downloadRequest.response(queue: .main) { response in
+            if let error = response.error {
+                completionHandler(response.response, nil, error)
+                return
+            }
+            
+            // Return the temp file path on success
+            if let tempFileURL = response.fileURL {
+                completionHandler(response.response, tempFileURL.path, nil)
+            } else {
+                let error = NSError(domain: "AlamofireWrapper", code: -1, userInfo: [NSLocalizedDescriptionKey: "No file URL in download response"])
+                completionHandler(response.response, nil, error)
+            }
+        }
+        
+        return downloadRequest.task as? URLSessionDownloadTask
+    }
+    
     // Clean API: Download file with streaming to disk (optimized, no memory loading)
     @objc public func downloadToFile(
         _ urlString: String,

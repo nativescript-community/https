@@ -113,18 +113,66 @@ function createNSRequest(url: string): NSMutableURLRequest {
 
 class HttpsResponseLegacy implements IHttpsResponseLegacy {
     //     private callback?: com.nativescript.https.OkhttpResponse.OkHttpResponseAsyncCallback;
+    private tempFilePath?: string;
+    
     constructor(
         private data: NSDictionary<string, any> & NSData & NSArray<any>,
         public contentLength,
-        private url: string
-    ) {}
+        private url: string,
+        tempFilePath?: string
+    ) {
+        this.tempFilePath = tempFilePath;
+    }
+    
+    // Helper to ensure data is loaded from temp file if needed
+    private ensureDataLoaded(): boolean {
+        // If we have data already, we're good
+        if (this.data) {
+            return true;
+        }
+        
+        // If we have a temp file, load it into memory
+        if (this.tempFilePath) {
+            try {
+                this.data = NSData.dataWithContentsOfFile(this.tempFilePath) as any;
+                return this.data != null;
+            } catch (e) {
+                console.error('Failed to load data from temp file:', e);
+                return false;
+            }
+        }
+        
+        return false;
+    }
+    
+    // Helper to get temp file path or create from data
+    private getTempFilePath(): string | null {
+        if (this.tempFilePath) {
+            return this.tempFilePath;
+        }
+        
+        // If we have data but no temp file, create a temp file
+        if (this.data && this.data instanceof NSData) {
+            const tempDir = NSTemporaryDirectory();
+            const tempFileName = NSUUID.UUID().UUIDString;
+            const tempPath = tempDir + tempFileName;
+            const success = this.data.writeToFileAtomically(tempPath, true);
+            if (success) {
+                this.tempFilePath = tempPath;
+                return tempPath;
+            }
+        }
+        
+        return null;
+    }
+    
     toArrayBufferAsync(): Promise<ArrayBuffer> {
         throw new Error('Method not implemented.');
     }
 
     arrayBuffer: ArrayBuffer;
     toArrayBuffer() {
-        if (!this.data) {
+        if (!this.ensureDataLoaded()) {
             return null;
         }
         if (this.arrayBuffer) {
@@ -139,7 +187,7 @@ class HttpsResponseLegacy implements IHttpsResponseLegacy {
     }
     stringResponse: string;
     toString(encoding?: any) {
-        if (!this.data) {
+        if (!this.ensureDataLoaded()) {
             return null;
         }
         if (this.stringResponse) {
@@ -168,7 +216,7 @@ class HttpsResponseLegacy implements IHttpsResponseLegacy {
     }
     jsonResponse: any;
     toJSON<T>(encoding?: any) {
-        if (!this.data) {
+        if (!this.ensureDataLoaded()) {
             return null;
         }
         if (this.jsonResponse) {
@@ -192,7 +240,7 @@ class HttpsResponseLegacy implements IHttpsResponseLegacy {
     }
     imageSource: ImageSource;
     async toImage(): Promise<ImageSource> {
-        if (!this.data) {
+        if (!this.ensureDataLoaded()) {
             return Promise.resolve(null);
         }
         if (this.imageSource) {
@@ -212,20 +260,47 @@ class HttpsResponseLegacy implements IHttpsResponseLegacy {
     }
     file: File;
     async toFile(destinationFilePath?: string): Promise<File> {
-        if (!this.data) {
-            return Promise.resolve(null);
-        }
         if (this.file) {
             return Promise.resolve(this.file);
         }
+        
         const r = await new Promise<File>((resolve, reject) => {
             if (!destinationFilePath) {
                 destinationFilePath = getFilenameFromUrl(this.url);
             }
-            if (this.data instanceof NSData) {
-                // ensure destination path exists by creating any missing parent directories
+            
+            // If we have a temp file, move it to destination (efficient, no memory copy)
+            if (this.tempFilePath) {
+                try {
+                    const fileManager = NSFileManager.defaultManager;
+                    const destURL = NSURL.fileURLWithPath(destinationFilePath);
+                    const tempURL = NSURL.fileURLWithPath(this.tempFilePath);
+                    
+                    // Create parent directory if needed
+                    const parentDir = destURL.URLByDeletingLastPathComponent;
+                    fileManager.createDirectoryAtURLWithIntermediateDirectoriesAttributesError(parentDir, true, null);
+                    
+                    // Remove destination if it exists
+                    if (fileManager.fileExistsAtPath(destinationFilePath)) {
+                        fileManager.removeItemAtPathError(destinationFilePath);
+                    }
+                    
+                    // Move temp file to destination
+                    const success = fileManager.moveItemAtURLToURLError(tempURL, destURL);
+                    if (success) {
+                        // Clear temp path since file has been moved
+                        this.tempFilePath = null;
+                        resolve(File.fromPath(destinationFilePath));
+                    } else {
+                        reject(new Error(`Failed to move temp file to: ${destinationFilePath}`));
+                    }
+                } catch (e) {
+                    reject(new Error(`Cannot save file with path: ${destinationFilePath}. ${e}`));
+                }
+            }
+            // Fallback: if we have data in memory, write it
+            else if (this.ensureDataLoaded() && this.data instanceof NSData) {
                 const file = File.fromPath(destinationFilePath);
-
                 const result = this.data.writeToFileAtomically(destinationFilePath, true);
                 if (result) {
                     resolve(file);
@@ -233,9 +308,10 @@ class HttpsResponseLegacy implements IHttpsResponseLegacy {
                     reject(new Error(`Cannot save file with path: ${destinationFilePath}.`));
                 }
             } else {
-                reject(new Error(`Cannot save file with path: ${destinationFilePath}.`));
+                reject(new Error(`No data available to save to file: ${destinationFilePath}.`));
             }
         });
+        
         this.file = r;
         return r;
     }
@@ -549,8 +625,63 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                 } else if (typeof opts.content === 'string') {
                     dict = NSJSONSerialization.JSONObjectWithDataOptionsError(NSString.stringWithString(opts.content).dataUsingEncoding(NSUTF8StringEncoding), 0 as any);
                 }
-                task = manager.request(opts.method, opts.url, dict, headers, progress, progress, success, failure);
-                task.resume();
+                
+                // For GET requests, use streaming download to temp file (memory efficient)
+                if (opts.method === 'GET') {
+                    const downloadTask = manager.downloadToTemp(
+                        opts.method,
+                        opts.url,
+                        dict,
+                        headers,
+                        progress,
+                        (response: NSURLResponse, tempFilePath: string, error: NSError) => {
+                            clearRunningRequest();
+                            if (error) {
+                                // Convert download task to data task for failure handling
+                                const dataTask = (task as any) as NSURLSessionDataTask;
+                                failure(dataTask, error);
+                                return;
+                            }
+                            
+                            const httpResponse = response as NSHTTPURLResponse;
+                            const contentLength = httpResponse?.expectedContentLength || 0;
+                            
+                            // Create response with temp file path (no data loaded in memory yet)
+                            const content = useLegacy 
+                                ? new HttpsResponseLegacy(null, contentLength, opts.url, tempFilePath) 
+                                : tempFilePath;
+                            
+                            let getHeaders = () => ({});
+                            const sendi = {
+                                content,
+                                contentLength,
+                                get headers() {
+                                    return getHeaders();
+                                }
+                            } as any as HttpsResponse;
+                            
+                            if (!Utils.isNullOrUndefined(httpResponse)) {
+                                sendi.statusCode = httpResponse.statusCode;
+                                getHeaders = function () {
+                                    const dict = httpResponse.allHeaderFields;
+                                    if (dict) {
+                                        const headers = {};
+                                        dict.enumerateKeysAndObjectsUsingBlock((k, v) => (headers[k] = v));
+                                        return headers;
+                                    }
+                                    return null;
+                                };
+                            }
+                            resolve(sendi);
+                        }
+                    );
+                    
+                    task = downloadTask as any;
+                } else {
+                    // For non-GET requests, use regular request (loads into memory)
+                    task = manager.request(opts.method, opts.url, dict, headers, progress, progress, success, failure);
+                    task.resume();
+                }
             }
             if (task && tag) {
                 runningRequests[tag] = task;

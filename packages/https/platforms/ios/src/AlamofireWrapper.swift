@@ -82,21 +82,17 @@ public class AlamofireWrapper: NSObject {
             request = try requestSerializer.createRequest(
                 url: url,
                 method: HTTPMethod(rawValue: method.uppercased()),
-                parameters: parameters,
+                parameters: nil,
                 headers: headers
             )
+            // Encode parameters into the request
+            try requestSerializer.encodeParameters(parameters, into: &request, method: HTTPMethod(rawValue: method.uppercased()))
         } catch {
             failure(nil, error)
             return nil
         }
         
-        var afRequest: DataRequest
-        
-        if let jsonData = parameters as? Data {
-            afRequest = session.upload(jsonData, with: request)
-        } else {
-            afRequest = session.request(request)
-        }
+        var afRequest: DataRequest = session.request(request)
         
         // Apply server trust evaluation if security policy is set
         if let secPolicy = securityPolicy {
@@ -360,23 +356,23 @@ public class RequestSerializer: NSObject {
             }
         }
         
+        return request
+    }
+    
+    public func encodeParameters(_ parameters: NSDictionary?, into request: inout URLRequest, method: HTTPMethod) throws {
         // Encode parameters
         if let parameters = parameters {
             if method == .post || method == .put || method == .patch {
                 // For POST/PUT/PATCH, encode as JSON in body
-                if let dict = parameters as? [String: Any] {
-                    let jsonData = try JSONSerialization.data(withJSONObject: dict, options: [])
-                    request.httpBody = jsonData
-                    if request.value(forHTTPHeaderField: "Content-Type") == nil {
-                        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-                    }
-                } else if let data = parameters as? Data {
-                    request.httpBody = data
+                let jsonData = try JSONSerialization.data(withJSONObject: parameters, options: [])
+                request.httpBody = jsonData
+                if request.value(forHTTPHeaderField: "Content-Type") == nil {
+                    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
                 }
             } else {
                 // For GET and others, encode as query parameters
                 if let dict = parameters as? [String: Any] {
-                    var components = URLComponents(url: url, resolvingAgainstBaseURL: false)
+                    var components = URLComponents(url: request.url!, resolvingAgainstBaseURL: false)
                     components?.queryItems = dict.map { URLQueryItem(name: $0.key, value: "\($0.value)") }
                     if let urlWithQuery = components?.url {
                         request.url = urlWithQuery
@@ -384,8 +380,6 @@ public class RequestSerializer: NSObject {
                 }
             }
         }
-        
-        return request
     }
 }
 

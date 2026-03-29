@@ -3,6 +3,10 @@ import { CacheOptions, HttpsFormDataParam, HttpsRequest, HttpsRequestOptions, Ht
 import { getFilenameFromUrl, parseJSON } from './request.common';
 export { addInterceptor, addNetworkInterceptor } from './request.common';
 
+// Error keys used by the Swift wrapper to maintain compatibility with AFNetworking
+const AFNetworkingOperationFailingURLResponseErrorKey = "AFNetworkingOperationFailingURLResponseErrorKey";
+const AFNetworkingOperationFailingURLResponseDataErrorKey = "AFNetworkingOperationFailingURLResponseDataErrorKey";
+
 let cache: NSURLCache;
 
 export function setCache(options?: CacheOptions) {

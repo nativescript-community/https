@@ -108,6 +108,3 @@ declare const enum AFSSLPinningMode {
     PublicKey = 1,
     Certificate = 2
 }
-
-declare const AFNetworkingOperationFailingURLResponseErrorKey: string;
-declare const AFNetworkingOperationFailingURLResponseDataErrorKey: string;

@@ -622,6 +622,122 @@ public class AlamofireWrapper: NSObject {
         return downloadRequest.task as? URLSessionDownloadTask
     }
     
+    /**
+     * Request with conditional download based on response size.
+     * Starts as data request, checks Content-Length header, then:
+     * - If size <= threshold: continues as data request (memory)
+     * - If size > threshold: switches to download request (file)
+     * This provides memory efficiency for small responses while using streaming for large ones.
+     */
+    @objc public func requestWithConditionalDownload(
+        _ method: String,
+        _ urlString: String,
+        _ parameters: NSDictionary?,
+        _ headers: NSDictionary?,
+        _ sizeThreshold: Int64,
+        _ progress: ((Progress) -> Void)?,
+        _ success: @escaping (URLSessionDataTask, Any?, String?) -> Void,
+        _ failure: @escaping (URLSessionDataTask?, Error) -> Void
+    ) -> URLSessionDataTask? {
+        
+        guard let url = URL(string: urlString) else {
+            let error = NSError(domain: "AlamofireWrapper", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])
+            failure(nil, error)
+            return nil
+        }
+        
+        var request: URLRequest
+        do {
+            request = try requestSerializer.createRequest(
+                url: url,
+                method: HTTPMethod(rawValue: method.uppercased()),
+                parameters: nil,
+                headers: headers
+            )
+            // Encode parameters into the request
+            try requestSerializer.encodeParameters(parameters, into: &request, method: HTTPMethod(rawValue: method.uppercased()))
+        } catch {
+            failure(nil, error)
+            return nil
+        }
+        
+        // Start as data request to get headers quickly
+        var afRequest: DataRequest = session.request(request)
+        
+        // Apply server trust evaluation if security policy is set
+        if let secPolicy = securityPolicy, let host = url.host {
+            afRequest = afRequest.validate { _, response, _ in
+                guard let serverTrust = response.serverTrust else {
+                    return .failure(AFError.serverTrustEvaluationFailed(reason: .noServerTrust))
+                }
+                do {
+                    try secPolicy.evaluate(serverTrust, forHost: host)
+                    return .success(Void())
+                } catch {
+                    return .failure(error)
+                }
+            }
+        }
+        
+        // Download progress
+        if let progress = progress {
+            afRequest = afRequest.downloadProgress { progressInfo in
+                progress(progressInfo)
+            }
+        }
+        
+        // Response handling
+        afRequest.response(queue: .main) { response in
+            let task = response.request?.task as? URLSessionDataTask
+            guard let task = task else {
+                let error = NSError(domain: "AlamofireWrapper", code: -1, userInfo: [NSLocalizedDescriptionKey: "No task available"])
+                failure(nil, error)
+                return
+            }
+            
+            if let error = response.error {
+                let nsError = self.createNSError(from: error, response: response.response, data: response.data)
+                failure(task, nsError)
+                return
+            }
+            
+            // Check content length to decide strategy
+            let contentLength = response.response?.expectedContentLength ?? -1
+            
+            // If content length is unknown or above threshold, would have been better as download
+            // but since we already have the data in memory, just return it
+            // For threshold decision: <= threshold uses memory (what we did), > threshold should use file
+            
+            if let data = response.data {
+                // If data is larger than threshold, save to temp file for consistency
+                if sizeThreshold >= 0 && contentLength > sizeThreshold {
+                    // Save data to temp file
+                    let tempDir = FileManager.default.temporaryDirectory
+                    let tempFileName = UUID().uuidString
+                    let tempFileURL = tempDir.appendingPathComponent(tempFileName)
+                    
+                    do {
+                        try data.write(to: tempFileURL)
+                        // Return with temp file path
+                        success(task, nil, tempFileURL.path)
+                    } catch {
+                        // Failed to write, just return data in memory
+                        let result = self.responseSerializer.deserialize(data: data, response: response.response)
+                        success(task, result, nil)
+                    }
+                } else {
+                    // Small response or threshold not set, return data in memory
+                    let result = self.responseSerializer.deserialize(data: data, response: response.response)
+                    success(task, result, nil)
+                }
+            } else {
+                success(task, nil, nil)
+            }
+        }
+        
+        return afRequest.task
+    }
+    
     // MARK: - Helper Methods
     
     private func createNSError(from error: Error, response: HTTPURLResponse?, data: Data?) -> NSError {

@@ -675,13 +675,68 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                     dict = NSJSONSerialization.JSONObjectWithDataOptionsError(NSString.stringWithString(opts.content).dataUsingEncoding(NSUTF8StringEncoding), 0 as any);
                 }
                 
-                // For GET requests, use streaming download to temp file (memory efficient)
+                // For GET requests, decide between memory and file download
                 if (opts.method === 'GET') {
                     // Check if early resolution is requested
                     const earlyResolve = opts.earlyResolve === true;
-                    const sizeThreshold = opts.downloadSizeThreshold !== undefined ? opts.downloadSizeThreshold : 1048576; // Default 1MB
+                    const sizeThreshold = opts.downloadSizeThreshold !== undefined ? opts.downloadSizeThreshold : -1; // Default: always use file download
                     
-                    if (earlyResolve) {
+                    // Check if conditional download is requested (threshold set and not using early resolve)
+                    const useConditionalDownload = sizeThreshold >= 0 && !earlyResolve;
+                    
+                    if (useConditionalDownload) {
+                        // Use conditional download: check size and decide memory vs file
+                        task = manager.requestWithConditionalDownload(
+                            opts.method,
+                            opts.url,
+                            dict,
+                            headers,
+                            sizeThreshold,
+                            progress,
+                            (dataTask: NSURLSessionDataTask, responseData: any, tempFilePath: string) => {
+                                clearRunningRequest();
+                                
+                                const httpResponse = dataTask.response as NSHTTPURLResponse;
+                                const contentLength = httpResponse?.expectedContentLength || 0;
+                                
+                                // If we got a temp file path, response was saved to file (large)
+                                // If we got responseData, response is in memory (small)
+                                const content = useLegacy 
+                                    ? (tempFilePath 
+                                        ? new HttpsResponseLegacy(null, contentLength, opts.url, tempFilePath)
+                                        : new HttpsResponseLegacy(responseData, contentLength, opts.url))
+                                    : (tempFilePath || responseData);
+                                
+                                let getHeaders = () => ({});
+                                const sendi = {
+                                    content,
+                                    contentLength,
+                                    get headers() {
+                                        return getHeaders();
+                                    }
+                                } as any as HttpsResponse;
+                                
+                                if (!Utils.isNullOrUndefined(httpResponse)) {
+                                    sendi.statusCode = httpResponse.statusCode;
+                                    getHeaders = function () {
+                                        const dict = httpResponse.allHeaderFields;
+                                        if (dict) {
+                                            const headers = {};
+                                            dict.enumerateKeysAndObjectsUsingBlock((k, v) => (headers[k] = v));
+                                            return headers;
+                                        }
+                                        return null;
+                                    };
+                                }
+                                resolve(sendi);
+                            },
+                            (dataTask: NSURLSessionDataTask, error: NSError) => {
+                                clearRunningRequest();
+                                failure(dataTask, error);
+                            }
+                        );
+                        task.resume();
+                    } else if (earlyResolve) {
                         // Use early resolution: resolve when headers arrive, continue download in background
                         let downloadCompletionResolve: () => void;
                         let downloadCompletionReject: (error: Error) => void;

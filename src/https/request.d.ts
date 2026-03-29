@@ -71,6 +71,12 @@ export interface HttpsRequestOptions extends HttpRequestOptions {
      * default to true. Android and iOS only store cookies in memory! it will be cleared after an app restart
      */
     cookiesEnabled?: boolean;
+    
+    /**
+     * iOS: When set, downloads will be streamed directly to the specified file path without loading into memory.
+     * This is more memory efficient for large files.
+     */
+    downloadFilePath?: string;
 }
 
 export interface HttpsResponse<T = any> {

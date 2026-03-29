@@ -60,7 +60,8 @@ public class AlamofireWrapper: NSObject {
     
     // MARK: - Request Methods
     
-    @objc public func dataTaskWithHTTPMethodURLStringParametersHeadersUploadProgressDownloadProgressSuccessFailure(
+    // Clean API: New shorter method name
+    @objc public func request(
         _ method: String,
         _ urlString: String,
         _ parameters: NSDictionary?,
@@ -149,9 +150,9 @@ public class AlamofireWrapper: NSObject {
     
     // MARK: - Multipart Form Data
     
-    @objc public func POSTParametersHeadersConstructingBodyWithBlockProgressSuccessFailure(
+    // Clean API: New shorter method name for multipart upload
+    @objc public func uploadMultipart(
         _ urlString: String,
-        _ parameters: NSDictionary?,
         _ headers: NSDictionary?,
         _ constructingBodyWithBlock: @escaping (MultipartFormDataWrapper) -> Void,
         _ progress: ((Progress) -> Void)?,
@@ -233,7 +234,8 @@ public class AlamofireWrapper: NSObject {
     
     // MARK: - Upload Tasks
     
-    @objc public func uploadTaskWithRequestFromFileProgressCompletionHandler(
+    // Clean API: Upload file
+    @objc public func uploadFile(
         _ request: URLRequest,
         _ fileURL: URL,
         _ progress: ((Progress) -> Void)?,
@@ -280,7 +282,8 @@ public class AlamofireWrapper: NSObject {
         return afRequest.task
     }
     
-    @objc public func uploadTaskWithRequestFromDataProgressCompletionHandler(
+    // Clean API: Upload data
+    @objc public func uploadData(
         _ request: URLRequest,
         _ bodyData: Data,
         _ progress: ((Progress) -> Void)?,
@@ -325,6 +328,82 @@ public class AlamofireWrapper: NSObject {
         }
         
         return afRequest.task
+    }
+    
+    // MARK: - Download Tasks
+    
+    // Clean API: Download file with streaming to disk (optimized, no memory loading)
+    @objc public func downloadToFile(
+        _ urlString: String,
+        _ destinationPath: String,
+        _ headers: NSDictionary?,
+        _ progress: ((Progress) -> Void)?,
+        _ completionHandler: @escaping (URLResponse?, String?, Error?) -> Void
+    ) -> URLSessionDownloadTask? {
+        
+        guard let url = URL(string: urlString) else {
+            let error = NSError(domain: "AlamofireWrapper", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])
+            completionHandler(nil, nil, error)
+            return nil
+        }
+        
+        var request: URLRequest
+        do {
+            request = try requestSerializer.createRequest(
+                url: url,
+                method: .get,
+                parameters: nil,
+                headers: headers
+            )
+        } catch {
+            completionHandler(nil, nil, error)
+            return nil
+        }
+        
+        // Create destination closure that moves file to the specified path
+        let destination: DownloadRequest.Destination = { temporaryURL, response in
+            let destinationURL = URL(fileURLWithPath: destinationPath)
+            
+            // Ensure parent directory exists
+            let parentDirectory = destinationURL.deletingLastPathComponent()
+            try? FileManager.default.createDirectory(at: parentDirectory, withIntermediateDirectories: true, attributes: nil)
+            
+            return (destinationURL, [.removePreviousFile, .createIntermediateDirectories])
+        }
+        
+        var downloadRequest = session.download(request, to: destination)
+        
+        // Apply server trust evaluation if security policy is set
+        if let secPolicy = securityPolicy, let host = url.host {
+            downloadRequest = downloadRequest.validate { _, response, _ in
+                do {
+                    try secPolicy.evaluate(response.serverTrust!, forHost: host)
+                    return .success(Void())
+                } catch {
+                    return .failure(error)
+                }
+            }
+        }
+        
+        // Download progress
+        if let progress = progress {
+            downloadRequest = downloadRequest.downloadProgress { progressInfo in
+                progress(progressInfo)
+            }
+        }
+        
+        // Response handling
+        downloadRequest.response(queue: .main) { response in
+            if let error = response.error {
+                completionHandler(response.response, nil, error)
+                return
+            }
+            
+            // Return the destination path on success
+            completionHandler(response.response, destinationPath, nil)
+        }
+        
+        return downloadRequest.task as? URLSessionDownloadTask
     }
     
     // MARK: - Helper Methods

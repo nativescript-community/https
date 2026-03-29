@@ -12,7 +12,8 @@ declare class AlamofireWrapper extends NSObject {
     
     setDataTaskWillCacheResponseBlock(block: (session: NSURLSession, task: NSURLSessionDataTask, cacheResponse: NSCachedURLResponse) => NSCachedURLResponse): void;
     
-    dataTaskWithHTTPMethodURLStringParametersHeadersUploadProgressDownloadProgressSuccessFailure(
+    // New clean API methods
+    request(
         method: string,
         urlString: string,
         parameters: NSDictionary<string, any>,
@@ -23,9 +24,8 @@ declare class AlamofireWrapper extends NSObject {
         failure: (task: NSURLSessionDataTask, error: NSError) => void
     ): NSURLSessionDataTask;
     
-    POSTParametersHeadersConstructingBodyWithBlockProgressSuccessFailure(
+    uploadMultipart(
         urlString: string,
-        parameters: NSDictionary<string, any>,
         headers: NSDictionary<string, any>,
         constructingBodyWithBlock: (formData: MultipartFormDataWrapper) => void,
         progress: (progress: NSProgress) => void,
@@ -33,19 +33,27 @@ declare class AlamofireWrapper extends NSObject {
         failure: (task: NSURLSessionDataTask, error: NSError) => void
     ): NSURLSessionDataTask;
     
-    uploadTaskWithRequestFromFileProgressCompletionHandler(
+    uploadFile(
         request: NSMutableURLRequest,
         fileURL: NSURL,
         progress: (progress: NSProgress) => void,
         completionHandler: (response: NSURLResponse, responseObject: any, error: NSError) => void
     ): NSURLSessionDataTask;
     
-    uploadTaskWithRequestFromDataProgressCompletionHandler(
+    uploadData(
         request: NSMutableURLRequest,
         bodyData: NSData,
         progress: (progress: NSProgress) => void,
         completionHandler: (response: NSURLResponse, responseObject: any, error: NSError) => void
     ): NSURLSessionDataTask;
+    
+    downloadToFile(
+        urlString: string,
+        destinationPath: string,
+        headers: NSDictionary<string, any>,
+        progress: (progress: NSProgress) => void,
+        completionHandler: (response: NSURLResponse, filePath: string, error: NSError) => void
+    ): NSURLSessionDownloadTask;
 }
 
 declare class RequestSerializer extends NSObject {

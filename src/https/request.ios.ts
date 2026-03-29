@@ -690,6 +690,9 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                             downloadCompletionReject = rej;
                         });
                         
+                        // Track the content object so we can update it when download completes
+                        let responseContent: HttpsResponseLegacy | undefined;
+                        
                         const downloadTask = manager.downloadToTempWithEarlyHeaders(
                             opts.method,
                             opts.url,
@@ -704,9 +707,10 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                                 const httpResponse = response as NSHTTPURLResponse;
                                 
                                 // Create response WITHOUT temp file path (download still in progress)
-                                const content = useLegacy 
-                                    ? new HttpsResponseLegacy(null, contentLength, opts.url, undefined, downloadCompletionPromise) 
-                                    : undefined;
+                                if (useLegacy) {
+                                    responseContent = new HttpsResponseLegacy(null, contentLength, opts.url, undefined, downloadCompletionPromise);
+                                }
+                                const content = useLegacy ? responseContent : undefined;
                                 
                                 let getHeaders = () => ({});
                                 const sendi = {
@@ -739,8 +743,8 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                                     downloadCompletionReject(new Error(error.localizedDescription));
                                 } else {
                                     // Update the response content with temp file path
-                                    if (useLegacy && content instanceof HttpsResponseLegacy) {
-                                        (content as any).tempFilePath = tempFilePath;
+                                    if (responseContent) {
+                                        (responseContent as any).tempFilePath = tempFilePath;
                                     }
                                     downloadCompletionResolve();
                                 }

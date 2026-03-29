@@ -12,15 +12,17 @@ Main session manager that wraps Alamofire's `Session` class.
 - Upload/download progress tracking
 - Multipart form data uploads
 - File uploads
+- Streaming downloads (memory efficient)
 - Request/response serialization
 - Security policy integration
 - Cache policy management
 
-**@objc Methods:**
-- `dataTaskWithHTTPMethodURLStringParametersHeadersUploadProgressDownloadProgressSuccessFailure` - General HTTP requests
-- `POSTParametersHeadersConstructingBodyWithBlockProgressSuccessFailure` - Multipart form POST
-- `uploadTaskWithRequestFromFileProgressCompletionHandler` - File upload
-- `uploadTaskWithRequestFromDataProgressCompletionHandler` - Data upload
+**@objc Methods (Clean API):**
+- `request(method:urlString:parameters:headers:uploadProgress:downloadProgress:success:failure:)` - General HTTP requests
+- `uploadMultipart(urlString:headers:constructingBodyWithBlock:progress:success:failure:)` - Multipart form upload
+- `uploadFile(request:fileURL:progress:completionHandler:)` - File upload
+- `uploadData(request:bodyData:progress:completionHandler:)` - Data upload
+- `downloadToFile(urlString:destinationPath:headers:progress:completionHandler:)` - Streaming download to file
 
 ### SecurityPolicyWrapper.swift
 SSL/TLS security policy wrapper that implements Alamofire's `ServerTrustEvaluating` protocol.
@@ -67,8 +69,8 @@ policy.allowInvalidCertificates = false;
 policy.validatesDomainName = true;
 manager.securityPolicyWrapper = policy;
 
-// Make a request
-const task = manager.dataTaskWithHTTPMethodURLStringParametersHeadersUploadProgressDownloadProgressSuccessFailure(
+// Make a request (clean API)
+const task = manager.request(
     'GET',
     'https://api.example.com/data',
     null,
@@ -79,6 +81,21 @@ const task = manager.dataTaskWithHTTPMethodURLStringParametersHeadersUploadProgr
     failure
 );
 task.resume();
+
+// Streaming download (memory efficient)
+manager.downloadToFile(
+    'https://example.com/large-file.zip',
+    '/path/to/destination.zip',
+    headers,
+    progress,
+    (response, filePath, error) => {
+        if (error) {
+            console.error('Download failed:', error);
+        } else {
+            console.log('Downloaded to:', filePath);
+        }
+    }
+);
 ```
 
 ## Design Decisions
@@ -91,7 +108,18 @@ Alamofire is a pure Swift library that doesn't expose its APIs to Objective-C. N
 3. Maintaining API compatibility with AFNetworking
 
 ### Method Naming
-Method names intentionally match AFNetworking's Objective-C naming conventions to minimize changes in the TypeScript code. This includes long compound names like `dataTaskWithHTTPMethodURLStringParametersHeadersUploadProgressDownloadProgressSuccessFailure`.
+Method names have been simplified from AFNetworking's verbose Objective-C conventions to cleaner, more Swift-like names:
+- `request()` - General HTTP requests (previously `dataTaskWithHTTPMethodURLStringParametersHeadersUploadProgressDownloadProgressSuccessFailure`)
+- `uploadMultipart()` - Multipart form uploads (previously `POSTParametersHeadersConstructingBodyWithBlockProgressSuccessFailure`)
+- `uploadFile()` - File uploads (previously `uploadTaskWithRequestFromFileProgressCompletionHandler`)
+- `uploadData()` - Data uploads (previously `uploadTaskWithRequestFromDataProgressCompletionHandler`)
+- `downloadToFile()` - Streaming downloads (new feature)
+
+### Streaming Downloads
+The `downloadToFile()` method uses Alamofire's download API to stream data directly to disk without loading it into memory. This is critical for:
+- Large file downloads
+- Memory-constrained devices
+- Better performance and reliability
 
 ### Error Handling
 Errors are wrapped in NSError objects with userInfo dictionaries that match AFNetworking's error structure. This ensures existing error handling code continues to work.

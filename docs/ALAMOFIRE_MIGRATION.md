@@ -34,6 +34,8 @@ Since Alamofire doesn't expose its APIs to Objective-C (no @objc annotations), w
 - Handles all HTTP requests (GET, POST, PUT, DELETE, PATCH, HEAD, OPTIONS)
 - Manages upload/download progress callbacks
 - Handles multipart form data uploads
+- **NEW: Streaming downloads** for memory-efficient file downloads
+- Clean, simplified API method names
 - Implements error handling compatible with AFNetworking
 
 #### SecurityPolicyWrapper.swift
@@ -61,15 +63,20 @@ The TypeScript implementation in `src/https/request.ios.ts` was updated to use t
 - Replaced `AFMultipartFormData` with `MultipartFormDataWrapper`
 - Updated serializer references to use wrapper properties
 - Added error key constants for AFNetworking compatibility
+- **NEW:** Simplified method names for cleaner API
+- **NEW:** Added `downloadFilePath` option for streaming downloads
 
 **Key changes:**
 - Manager initialization: `AlamofireWrapper.alloc().initWithConfiguration(configuration)`
 - Security policy: `SecurityPolicyWrapper.defaultPolicy()`
 - SSL pinning: `SecurityPolicyWrapper.policyWithPinningMode(AFSSLPinningMode.PublicKey)`
+- HTTP requests: `manager.request(method, url, params, headers, uploadProgress, downloadProgress, success, failure)`
+- Multipart uploads: `manager.uploadMultipart(url, headers, formBuilder, progress, success, failure)`
+- Streaming downloads: `manager.downloadToFile(url, destinationPath, headers, progress, completionHandler)`
 
-## Feature Preservation
+## Feature Preservation & Enhancements
 
-All features from the AFNetworking implementation have been preserved:
+All features from the AFNetworking implementation have been preserved and enhanced:
 
 ### ✅ Request Methods
 - GET, POST, PUT, DELETE, PATCH, HEAD, OPTIONS
@@ -114,11 +121,51 @@ All features from the AFNetworking implementation have been preserved:
 - Raw data responses
 - Image conversion (UIImage)
 - File saving
+- **NEW: Streaming downloads** for memory-efficient large file handling
 - Error handling with status codes
+
+## New Features
+
+### Streaming Downloads
+The new `downloadFilePath` option enables memory-efficient downloads by streaming directly to disk:
+
+```typescript
+import { request } from '@nativescript-community/https';
+
+// Option 1: Use downloadFilePath in request options
+const response = await request({
+    method: 'GET',
+    url: 'https://example.com/large-file.zip',
+    downloadFilePath: '/path/to/save/file.zip',
+    onProgress: (current, total) => {
+        console.log(`Downloaded ${current} of ${total} bytes`);
+    }
+});
+
+// Option 2: Traditional toFile() still works but loads into memory first
+const response = await request({
+    method: 'GET',
+    url: 'https://example.com/file.zip'
+});
+const file = await response.content.toFile('/path/to/save/file.zip');
+```
+
+**Benefits of streaming downloads:**
+- No memory overhead for large files
+- Better performance on memory-constrained devices
+- Progress tracking during download
+- Automatic file path creation
+
+### Cleaner API Methods
+All Swift wrapper methods now use simplified, more intuitive names:
+- `request()` instead of `dataTaskWithHTTPMethod...`
+- `uploadMultipart()` instead of `POSTParametersHeaders...`
+- `uploadFile()` instead of `uploadTaskWithRequestFromFile...`
+- `uploadData()` instead of `uploadTaskWithRequestFromData...`
 
 ## API Compatibility
 
-The TypeScript API remains **100% compatible** with the previous AFNetworking implementation. No changes are required in application code that uses this plugin.
+The TypeScript API remains **100% compatible** with the previous AFNetworking implementation. No changes are required in application code that uses this plugin. New features are opt-in through additional options.
 
 ## Testing Recommendations
 
@@ -139,7 +186,13 @@ After upgrading, test the following scenarios:
    - Multiple files in multipart form
    - Large file uploads with progress tracking
 
-4. **Progress Callbacks**
+4. **File Downloads**
+   - Small file downloads (traditional method)
+   - Large file downloads with streaming (using `downloadFilePath`)
+   - Progress tracking during downloads
+   - Memory usage with large files
+
+5. **Progress Callbacks**
    - Upload progress for large payloads
    - Download progress for large responses
 

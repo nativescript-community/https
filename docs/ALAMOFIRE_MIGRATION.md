@@ -120,41 +120,12 @@ All features from the AFNetworking implementation have been preserved and enhanc
 - JSON deserialization
 - Raw data responses
 - Image conversion (UIImage)
-- File saving
-- **NEW: Streaming downloads** for memory-efficient large file handling
+- File saving via `.toFile()` method
 - Error handling with status codes
 
-## New Features
+**Behavior:** Response data is loaded into memory as NSData (matching Android OkHttp). Users inspect status code and headers, then decide to call `.toFile()`, `.toArrayBuffer()`, etc.
 
-### Streaming Downloads
-The new `downloadFilePath` option enables memory-efficient downloads by streaming directly to disk:
-
-```typescript
-import { request } from '@nativescript-community/https';
-
-// Option 1: Use downloadFilePath in request options
-const response = await request({
-    method: 'GET',
-    url: 'https://example.com/large-file.zip',
-    downloadFilePath: '/path/to/save/file.zip',
-    onProgress: (current, total) => {
-        console.log(`Downloaded ${current} of ${total} bytes`);
-    }
-});
-
-// Option 2: Traditional toFile() still works but loads into memory first
-const response = await request({
-    method: 'GET',
-    url: 'https://example.com/file.zip'
-});
-const file = await response.content.toFile('/path/to/save/file.zip');
-```
-
-**Benefits of streaming downloads:**
-- No memory overhead for large files
-- Better performance on memory-constrained devices
-- Progress tracking during download
-- Automatic file path creation
+## API Improvements
 
 ### Cleaner API Methods
 All Swift wrapper methods now use simplified, more intuitive names:
@@ -163,9 +134,39 @@ All Swift wrapper methods now use simplified, more intuitive names:
 - `uploadFile()` instead of `uploadTaskWithRequestFromFile...`
 - `uploadData()` instead of `uploadTaskWithRequestFromData...`
 
+### Consistent Cross-Platform Behavior
+iOS now matches Android's response handling:
+
+```typescript
+import { request } from '@nativescript-community/https';
+
+// Request completes and returns with status/headers/data
+const response = await request({
+    method: 'GET',
+    url: 'https://example.com/file.zip'
+});
+
+// Inspect response first
+console.log('Status:', response.statusCode);
+console.log('Headers:', response.headers);
+
+// Then decide what to do with the data
+const file = await response.content.toFile('/path/to/save/file.zip');
+// OR
+const buffer = await response.content.toArrayBuffer();
+// OR
+const json = response.content.toJSON();
+```
+
+**Benefits:**
+- Same behavior on iOS and Android
+- Inspect status/headers before processing data
+- Flexible response handling
+- Simple, predictable API
+
 ## API Compatibility
 
-The TypeScript API remains **100% compatible** with the previous AFNetworking implementation. No changes are required in application code that uses this plugin. New features are opt-in through additional options.
+The TypeScript API remains **100% compatible** with the previous AFNetworking implementation. No changes are required in application code that uses this plugin.
 
 ## Testing Recommendations
 

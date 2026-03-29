@@ -413,58 +413,6 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
         },
         cancel: () => task && task.cancel(),
         run(resolve, reject) {
-            // Handle streaming download if downloadFilePath is specified
-            if (opts.downloadFilePath && opts.method === 'GET') {
-                const downloadTask = manager.downloadToFile(
-                    opts.url,
-                    opts.downloadFilePath,
-                    headers,
-                    progress,
-                    (response: NSURLResponse, filePath: string, error: NSError) => {
-                        clearRunningRequest();
-                        if (error) {
-                            reject(error);
-                            return;
-                        }
-                        
-                        const httpResponse = response as NSHTTPURLResponse;
-                        const contentLength = httpResponse?.expectedContentLength || 0;
-                        
-                        // Create a File object pointing to the downloaded file
-                        const file = File.fromPath(filePath);
-                        
-                        let getHeaders = () => ({});
-                        const sendi = {
-                            content: useLegacy ? { toFile: () => Promise.resolve(file) } : filePath,
-                            contentLength,
-                            get headers() {
-                                return getHeaders();
-                            }
-                        } as any as HttpsResponse;
-                        
-                        if (!Utils.isNullOrUndefined(httpResponse)) {
-                            sendi.statusCode = httpResponse.statusCode;
-                            getHeaders = function () {
-                                const dict = httpResponse.allHeaderFields;
-                                if (dict) {
-                                    const headers = {};
-                                    dict.enumerateKeysAndObjectsUsingBlock((k, v) => (headers[k] = v));
-                                    return headers;
-                                }
-                                return null;
-                            };
-                        }
-                        resolve(sendi);
-                    }
-                );
-                
-                task = downloadTask as any;
-                if (task && tag) {
-                    runningRequests[tag] = task;
-                }
-                return;
-            }
-            
             const success = function (task: NSURLSessionDataTask, data?: any) {
                 clearRunningRequest();
                 // TODO: refactor this code with failure one.

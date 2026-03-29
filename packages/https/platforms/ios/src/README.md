@@ -7,12 +7,20 @@ This directory contains Swift wrapper classes that bridge between NativeScript's
 ### AlamofireWrapper.swift
 Main session manager that wraps Alamofire's `Session` class.
 
+# Alamofire Swift Wrappers
+
+This directory contains Swift wrapper classes that bridge between NativeScript's Objective-C runtime and Alamofire's Swift-only API.
+
+## Files
+
+### AlamofireWrapper.swift
+Main session manager that wraps Alamofire's `Session` class.
+
 **Key Features:**
 - HTTP request methods (GET, POST, PUT, DELETE, PATCH, HEAD, OPTIONS)
 - Upload/download progress tracking
 - Multipart form data uploads
 - File uploads
-- Streaming downloads (memory efficient)
 - Request/response serialization
 - Security policy integration
 - Cache policy management
@@ -22,7 +30,8 @@ Main session manager that wraps Alamofire's `Session` class.
 - `uploadMultipart(urlString:headers:constructingBodyWithBlock:progress:success:failure:)` - Multipart form upload
 - `uploadFile(request:fileURL:progress:completionHandler:)` - File upload
 - `uploadData(request:bodyData:progress:completionHandler:)` - Data upload
-- `downloadToFile(urlString:destinationPath:headers:progress:completionHandler:)` - Streaming download to file
+
+**Note:** Response data is loaded into memory as NSData, matching Android OkHttp behavior. Users can inspect status code and headers, then decide to call `.toFile()`, `.toArrayBuffer()`, etc.
 
 ### SecurityPolicyWrapper.swift
 SSL/TLS security policy wrapper that implements Alamofire's `ServerTrustEvaluating` protocol.
@@ -82,20 +91,8 @@ const task = manager.request(
 );
 task.resume();
 
-// Streaming download (memory efficient)
-manager.downloadToFile(
-    'https://example.com/large-file.zip',
-    '/path/to/destination.zip',
-    headers,
-    progress,
-    (response, filePath, error) => {
-        if (error) {
-            console.error('Download failed:', error);
-        } else {
-            console.log('Downloaded to:', filePath);
-        }
-    }
-);
+// Response data is available in memory
+// User can then call toFile(), toArrayBuffer(), etc. on the response
 ```
 
 ## Design Decisions
@@ -113,13 +110,14 @@ Method names have been simplified from AFNetworking's verbose Objective-C conven
 - `uploadMultipart()` - Multipart form uploads (previously `POSTParametersHeadersConstructingBodyWithBlockProgressSuccessFailure`)
 - `uploadFile()` - File uploads (previously `uploadTaskWithRequestFromFileProgressCompletionHandler`)
 - `uploadData()` - Data uploads (previously `uploadTaskWithRequestFromDataProgressCompletionHandler`)
-- `downloadToFile()` - Streaming downloads (new feature)
 
-### Streaming Downloads
-The `downloadToFile()` method uses Alamofire's download API to stream data directly to disk without loading it into memory. This is critical for:
-- Large file downloads
-- Memory-constrained devices
-- Better performance and reliability
+### Response Data Handling
+Response data is loaded into memory as NSData (matching Android OkHttp behavior). This allows users to:
+1. Inspect status code and headers immediately after request completes
+2. Decide whether to call `.toFile()`, `.toArrayBuffer()`, `.toJSON()`, etc.
+3. Have consistent behavior across iOS and Android platforms
+
+**Note:** For large downloads, data will be loaded into memory. This matches Android's behavior where the response body is available and can be written to file when `toFile()` is called.
 
 ### Error Handling
 Errors are wrapped in NSError objects with userInfo dictionaries that match AFNetworking's error structure. This ensures existing error handling code continues to work.

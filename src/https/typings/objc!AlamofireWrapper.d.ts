@@ -46,14 +46,6 @@ declare class AlamofireWrapper extends NSObject {
         progress: (progress: NSProgress) => void,
         completionHandler: (response: NSURLResponse, responseObject: any, error: NSError) => void
     ): NSURLSessionDataTask;
-    
-    downloadToFile(
-        urlString: string,
-        destinationPath: string,
-        headers: NSDictionary<string, any>,
-        progress: (progress: NSProgress) => void,
-        completionHandler: (response: NSURLResponse, filePath: string, error: NSError) => void
-    ): NSURLSessionDownloadTask;
 }
 
 declare class RequestSerializer extends NSObject {

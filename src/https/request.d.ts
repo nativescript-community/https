@@ -1,6 +1,8 @@
 import { File, HttpRequestOptions, ImageSource } from '@nativescript/core';
 import * as Https from './request.common';
 
+export function getManager(): any; // okhttp3.OkHttpClient or AFHTTPSessionManager
+
 export interface HttpsSSLPinningOptions {
     host: string;
     certificate: string;

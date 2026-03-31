@@ -526,7 +526,7 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                         const typedArray = new Uint8Array(param.data);
                         const nativeBuffer = java.nio.ByteBuffer.wrap(Array.from(typedArray));
                         nData = nativeBuffer.array();
-                    } else if (param.data instanceof Blob) {
+                    } else if (typeof Blob !== 'undefined' && param.data instanceof Blob) {
                         // Stolen from core xhr, not sure if we should use InternalAccessor, but it provides fast access.
                         // @ts-ignore
                         const typedArray = new Uint8Array(Blob.InternalAccessor.getBuffer(param.data).buffer.slice(0) as ArrayBuffer);

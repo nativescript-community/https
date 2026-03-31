@@ -469,7 +469,7 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                                             } else if (data instanceof ArrayBuffer) {
                                                 const buffer = new Uint8Array(data);
                                                 data = NSData.dataWithData(buffer as any);
-                                            } else if (data instanceof Blob) {
+                                            } else if (typeof Blob !== 'undefined' && data instanceof Blob) {
                                                 // Stolen from core xhr, not sure if we should use InternalAccessor, but it provides fast access.
                                                 // @ts-ignore
                                                 const buffer = new Uint8Array(Blob.InternalAccessor.getBuffer(data).buffer.slice(0) as ArrayBuffer);

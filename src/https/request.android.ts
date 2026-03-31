@@ -13,16 +13,7 @@ interface Ipeer {
     certificate?: string;
     x509Certificate?: java.security.cert.Certificate;
 }
-function wrapJavaException(ex) {
-    if (ex instanceof java.lang.Exception) {
-        const err = new Error(ex.toString());
-        err['nativeException'] = ex;
-        //@ts-ignore
-        err['stackTrace'] = com.tns.NativeScriptException.getStackTraceAsString(ex);
-        return err;
-    }
-    return ex;
-}
+
 const peer: Ipeer = {
     enabled: false,
     allowInvalidCertificates: false,
@@ -55,6 +46,10 @@ export function removeCachedResponse(url: string) {
     if (cache) {
         com.nativescript.https.CacheUtils.removeCachedResponse(url, cache);
     }
+}
+
+export function getManager() {
+    return getClient({}, false);
 }
 
 // TODO: rewrite this to not have to handle

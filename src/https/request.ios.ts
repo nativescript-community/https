@@ -39,6 +39,10 @@ policies.def.validatesDomainName = false;
 const configuration = NSURLSessionConfiguration.defaultSessionConfiguration;
 let manager = AFHTTPSessionManager.alloc().initWithSessionConfiguration(configuration);
 
+export function getManager(): AFHTTPSessionManager {
+    return manager;
+}
+
 export function enableSSLPinning(options: HttpsSSLPinningOptions) {
     const url = NSURL.URLWithString(options.host);
     manager = AFHTTPSessionManager.alloc().initWithSessionConfiguration(configuration).initWithBaseURL(url);

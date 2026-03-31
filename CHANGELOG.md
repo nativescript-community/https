@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.31](https://github.com/nativescript-community/https/compare/v4.1.30...v4.1.31) (2026-03-30)
+
+### Bug Fixes
+
+* new getManager() method ([a232425](https://github.com/nativescript-community/https/commit/a232425fc8002301dc43d6a3f1786808953b0510))
+
 ## [4.1.30](https://github.com/nativescript-community/https/compare/v4.1.29...v4.1.30) (2026-03-28)
 
 ### Bug Fixes

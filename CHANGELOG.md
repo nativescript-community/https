@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.32](https://github.com/nativescript-community/https/compare/v4.1.31...v4.1.32) (2026-03-31)
+
+### Bug Fixes
+
+* error when Blob does not exist ([f20e60b](https://github.com/nativescript-community/https/commit/f20e60b3f7d8e50033e4db837ea38a7a96c62f82))
+
 ## [4.1.31](https://github.com/nativescript-community/https/compare/v4.1.30...v4.1.31) (2026-03-30)
 
 ### Bug Fixes

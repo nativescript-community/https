@@ -415,18 +415,28 @@ public class AlamofireWrapper: NSObject {
     @objc public func uploadFile(
         _ request: URLRequest,
         _ fileURL: URL,
+        _ requestId: String,
         _ progress: ((Progress) -> Void)?,
-        _ completionHandler: @escaping (URLResponse?, Any?, Error?) -> Void
-    ) -> URLSessionTask? {
+        _ success: @escaping (NSHTTPURLResponse?, Any?) -> Void,
+        _ failure: @escaping (NSHTTPURLResponse?, Error) -> Void
+    ) {
         
         var afRequest = session.upload(fileURL, with: request)
+        
+        // Store request for cancellation
+        storeRequest(afRequest, id: requestId)
+        
+        // Apply interceptors
+        for interceptor in requestInterceptors {
+            afRequest = afRequest.interceptor(interceptor) as! UploadRequest
+        }
         
         // Apply server trust evaluation if security policy is set
         if let host = request.url?.host {
             afRequest = applyServerTrustValidation(afRequest, host: host)
         }
         
-        // Upload progress (default to main thread)
+        // Upload progress
         if let progress = progress {
             afRequest = afRequest.uploadProgress(queue: .main) { progressInfo in
                 progress(progressInfo)
@@ -434,40 +444,56 @@ public class AlamofireWrapper: NSObject {
         }
         
         // Response handling
-        afRequest.response(queue: .main) { response in
+        afRequest.response(queue: .main) { [weak self] response in
+            guard let self = self else { return }
+            
+            // Remove request from active list
+            self.removeRequest(id: requestId)
+            
+            // Get the HTTP response
+            let httpResponse = response.response as? NSHTTPURLResponse
+            
             if let error = response.error {
-                completionHandler(response.response, nil, error)
+                let nsError = self.createNSError(from: error, response: response.response, data: response.data)
+                failure(httpResponse, nsError)
                 return
             }
             
-            // Deserialize response based on responseSerializer
+            // Return raw data, let TypeScript handle it
             if let data = response.data {
-                let result = self.responseSerializer.deserialize(data: data, response: response.response)
-                completionHandler(response.response, result, nil)
+                success(httpResponse, data)
             } else {
-                completionHandler(response.response, nil, nil)
+                success(httpResponse, nil)
             }
         }
-        
-        return afRequest.task
     }
     
     // Clean API: Upload data
     @objc public func uploadData(
         _ request: URLRequest,
         _ bodyData: Data,
+        _ requestId: String,
         _ progress: ((Progress) -> Void)?,
-        _ completionHandler: @escaping (URLResponse?, Any?, Error?) -> Void
-    ) -> URLSessionTask? {
+        _ success: @escaping (NSHTTPURLResponse?, Any?) -> Void,
+        _ failure: @escaping (NSHTTPURLResponse?, Error) -> Void
+    ) {
         
         var afRequest = session.upload(bodyData, with: request)
+        
+        // Store request for cancellation
+        storeRequest(afRequest, id: requestId)
+        
+        // Apply interceptors
+        for interceptor in requestInterceptors {
+            afRequest = afRequest.interceptor(interceptor) as! UploadRequest
+        }
         
         // Apply server trust evaluation if security policy is set
         if let host = request.url?.host {
             afRequest = applyServerTrustValidation(afRequest, host: host)
         }
         
-        // Upload progress (default to main thread)
+        // Upload progress
         if let progress = progress {
             afRequest = afRequest.uploadProgress(queue: .main) { progressInfo in
                 progress(progressInfo)
@@ -475,22 +501,28 @@ public class AlamofireWrapper: NSObject {
         }
         
         // Response handling
-        afRequest.response(queue: .main) { response in
+        afRequest.response(queue: .main) { [weak self] response in
+            guard let self = self else { return }
+            
+            // Remove request from active list
+            self.removeRequest(id: requestId)
+            
+            // Get the HTTP response
+            let httpResponse = response.response as? NSHTTPURLResponse
+            
             if let error = response.error {
-                completionHandler(response.response, nil, error)
+                let nsError = self.createNSError(from: error, response: response.response, data: response.data)
+                failure(httpResponse, nsError)
                 return
             }
             
-            // Deserialize response based on responseSerializer
+            // Return raw data, let TypeScript handle it
             if let data = response.data {
-                let result = self.responseSerializer.deserialize(data: data, response: response.response)
-                completionHandler(response.response, result, nil)
+                success(httpResponse, data)
             } else {
-                completionHandler(response.response, nil, nil)
+                success(httpResponse, nil)
             }
         }
-        
-        return afRequest.task
     }
     
     // MARK: - Download Tasks
@@ -503,14 +535,16 @@ public class AlamofireWrapper: NSObject {
         _ urlString: String,
         _ parameters: NSDictionary?,
         _ headers: NSDictionary?,
+        _ requestId: String,
         _ progress: ((Progress) -> Void)?,
-        _ completionHandler: @escaping (URLResponse?, String?, Error?) -> Void
-    ) -> URLSessionDownloadTask? {
+        _ success: @escaping (NSHTTPURLResponse?, String?) -> Void,
+        _ failure: @escaping (NSHTTPURLResponse?, Error) -> Void
+    ) {
         
         guard let url = URL(string: urlString) else {
             let error = NSError(domain: "AlamofireWrapper", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])
-            completionHandler(nil, nil, error)
-            return nil
+            failure(nil, error)
+            return
         }
         
         var request: URLRequest
@@ -524,8 +558,8 @@ public class AlamofireWrapper: NSObject {
             // Encode parameters into the request
             try requestSerializer.encodeParameters(parameters, into: &request, method: HTTPMethod(rawValue: method.uppercased()))
         } catch {
-            completionHandler(nil, nil, error)
-            return nil
+            failure(nil, error)
+            return
         }
         
         // Create destination closure that saves to a temp file
@@ -540,12 +574,20 @@ public class AlamofireWrapper: NSObject {
         
         var downloadRequest = session.download(request, to: destination)
         
+        // Store request for cancellation
+        storeRequest(downloadRequest, id: requestId)
+        
+        // Apply interceptors
+        for interceptor in requestInterceptors {
+            downloadRequest = downloadRequest.interceptor(interceptor) as! DownloadRequest
+        }
+        
         // Apply server trust evaluation if security policy is set
         if let host = url.host {
             downloadRequest = applyServerTrustValidation(downloadRequest, host: host)
         }
         
-        // Download progress (default to main thread)
+        // Download progress
         if let progress = progress {
             downloadRequest = downloadRequest.downloadProgress(queue: .main) { progressInfo in
                 progress(progressInfo)
@@ -553,22 +595,29 @@ public class AlamofireWrapper: NSObject {
         }
         
         // Response handling
-        downloadRequest.response(queue: .main) { response in
+        downloadRequest.response(queue: .main) { [weak self] response in
+            guard let self = self else { return }
+            
+            // Remove request from active list
+            self.removeRequest(id: requestId)
+            
+            // Get the HTTP response
+            let httpResponse = response.response as? NSHTTPURLResponse
+            
             if let error = response.error {
-                completionHandler(response.response, nil, error)
+                let nsError = self.createNSError(from: error, response: response.response, data: nil)
+                failure(httpResponse, nsError)
                 return
             }
             
             // Return the temp file path on success
             if let tempFileURL = response.fileURL {
-                completionHandler(response.response, tempFileURL.path, nil)
+                success(httpResponse, tempFileURL.path)
             } else {
                 let error = NSError(domain: "AlamofireWrapper", code: -1, userInfo: [NSLocalizedDescriptionKey: "No file URL in download response"])
-                completionHandler(response.response, nil, error)
+                failure(httpResponse, error)
             }
         }
-        
-        return downloadRequest.task as? URLSessionDownloadTask
     }
     
     // Clean API: Download file with streaming to disk (optimized, no memory loading)
@@ -576,14 +625,16 @@ public class AlamofireWrapper: NSObject {
         _ urlString: String,
         _ destinationPath: String,
         _ headers: NSDictionary?,
+        _ requestId: String,
         _ progress: ((Progress) -> Void)?,
-        _ completionHandler: @escaping (URLResponse?, String?, Error?) -> Void
-    ) -> URLSessionDownloadTask? {
+        _ success: @escaping (NSHTTPURLResponse?, String?) -> Void,
+        _ failure: @escaping (NSHTTPURLResponse?, Error) -> Void
+    ) {
         
         guard let url = URL(string: urlString) else {
             let error = NSError(domain: "AlamofireWrapper", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])
-            completionHandler(nil, nil, error)
-            return nil
+            failure(nil, error)
+            return
         }
         
         var request: URLRequest
@@ -595,8 +646,8 @@ public class AlamofireWrapper: NSObject {
                 headers: headers
             )
         } catch {
-            completionHandler(nil, nil, error)
-            return nil
+            failure(nil, error)
+            return
         }
         
         // Create destination closure that moves file to the specified path
@@ -612,12 +663,20 @@ public class AlamofireWrapper: NSObject {
         
         var downloadRequest = session.download(request, to: destination)
         
+        // Store request for cancellation
+        storeRequest(downloadRequest, id: requestId)
+        
+        // Apply interceptors
+        for interceptor in requestInterceptors {
+            downloadRequest = downloadRequest.interceptor(interceptor) as! DownloadRequest
+        }
+        
         // Apply server trust evaluation if security policy is set
         if let host = url.host {
             downloadRequest = applyServerTrustValidation(downloadRequest, host: host)
         }
         
-        // Download progress (default to main thread)
+        // Download progress
         if let progress = progress {
             downloadRequest = downloadRequest.downloadProgress(queue: .main) { progressInfo in
                 progress(progressInfo)
@@ -625,17 +684,24 @@ public class AlamofireWrapper: NSObject {
         }
         
         // Response handling
-        downloadRequest.response(queue: .main) { response in
+        downloadRequest.response(queue: .main) { [weak self] response in
+            guard let self = self else { return }
+            
+            // Remove request from active list
+            self.removeRequest(id: requestId)
+            
+            // Get the HTTP response
+            let httpResponse = response.response as? NSHTTPURLResponse
+            
             if let error = response.error {
-                completionHandler(response.response, nil, error)
+                let nsError = self.createNSError(from: error, response: response.response, data: nil)
+                failure(httpResponse, nsError)
                 return
             }
             
             // Return the destination path on success
-            completionHandler(response.response, destinationPath, nil)
+            success(httpResponse, destinationPath)
         }
-        
-        return downloadRequest.task as? URLSessionDownloadTask
     }
     
     // MARK: - Early Resolution Support
@@ -651,16 +717,18 @@ public class AlamofireWrapper: NSObject {
         _ urlString: String,
         _ parameters: NSDictionary?,
         _ headers: NSDictionary?,
+        _ requestId: String,
         _ sizeThreshold: Int64,
         _ progress: ((Progress) -> Void)?,
-        _ headersCallback: @escaping (URLResponse?, Int64) -> Void,
-        _ completionHandler: @escaping (URLResponse?, String?, Error?) -> Void
-    ) -> URLSessionDownloadTask? {
+        _ headersCallback: @escaping (NSHTTPURLResponse?, Int64) -> Void,
+        _ success: @escaping (NSHTTPURLResponse?, String?) -> Void,
+        _ failure: @escaping (NSHTTPURLResponse?, Error) -> Void
+    ) {
         
         guard let url = URL(string: urlString) else {
             let error = NSError(domain: "AlamofireWrapper", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])
-            completionHandler(nil, nil, error)
-            return nil
+            failure(nil, error)
+            return
         }
         
         var request: URLRequest
@@ -674,8 +742,8 @@ public class AlamofireWrapper: NSObject {
             // Encode parameters into the request
             try requestSerializer.encodeParameters(parameters, into: &request, method: HTTPMethod(rawValue: method.uppercased()))
         } catch {
-            completionHandler(nil, nil, error)
-            return nil
+            failure(nil, error)
+            return
         }
         
         // Use atomic Boolean class for thread-safe flag (Swift 6 compatible)
@@ -704,8 +772,9 @@ public class AlamofireWrapper: NSObject {
             
             // Call headersCallback on first response (only once)
             callbackState.callOnce {
+                let httpResponse = response as? NSHTTPURLResponse
                 let contentLength = response.expectedContentLength
-                headersCallback(response, contentLength)
+                headersCallback(httpResponse, contentLength)
             }
             
             return (tempFileURL, [.removePreviousFile, .createIntermediateDirectories])
@@ -713,12 +782,20 @@ public class AlamofireWrapper: NSObject {
         
         var downloadRequest = session.download(request, to: destination)
         
+        // Store request for cancellation
+        storeRequest(downloadRequest, id: requestId)
+        
+        // Apply interceptors
+        for interceptor in requestInterceptors {
+            downloadRequest = downloadRequest.interceptor(interceptor) as! DownloadRequest
+        }
+        
         // Apply server trust evaluation if security policy is set
         if let host = url.host {
             downloadRequest = applyServerTrustValidation(downloadRequest, host: host)
         }
         
-        // Download progress (default to main thread)
+        // Download progress
         if let progress = progress {
             downloadRequest = downloadRequest.downloadProgress(queue: .main) { progressInfo in
                 progress(progressInfo)
@@ -726,22 +803,29 @@ public class AlamofireWrapper: NSObject {
         }
         
         // Response handling (fires when download completes)
-        downloadRequest.response(queue: .main) { response in
+        downloadRequest.response(queue: .main) { [weak self] response in
+            guard let self = self else { return }
+            
+            // Remove request from active list
+            self.removeRequest(id: requestId)
+            
+            // Get the HTTP response
+            let httpResponse = response.response as? NSHTTPURLResponse
+            
             if let error = response.error {
-                completionHandler(response.response, nil, error)
+                let nsError = self.createNSError(from: error, response: response.response, data: nil)
+                failure(httpResponse, nsError)
                 return
             }
             
             // Return the temp file path on success
             if let tempFileURL = response.fileURL {
-                completionHandler(response.response, tempFileURL.path, nil)
+                success(httpResponse, tempFileURL.path)
             } else {
                 let error = NSError(domain: "AlamofireWrapper", code: -1, userInfo: [NSLocalizedDescriptionKey: "No file URL in download response"])
-                completionHandler(response.response, nil, error)
+                failure(httpResponse, error)
             }
         }
-        
-        return downloadRequest.task as? URLSessionDownloadTask
     }
     
     /**

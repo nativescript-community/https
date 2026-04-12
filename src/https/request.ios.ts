@@ -675,7 +675,7 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                 if (opts.method === 'GET') {
                     // Check if early resolution is requested
                     const earlyResolve = opts.earlyResolve === true;
-                    const sizeThreshold = opts.downloadSizeThreshold !== undefined ? opts.downloadSizeThreshold : -1; // Default: always use file download
+                    const sizeThreshold = opts.downloadSizeThreshold !== undefined ? opts.downloadSizeThreshold : 1024 * 1024 * 10; // Default: always use file download
 
                     // Check if conditional download is requested (threshold set and not using early resolve)
                     const useConditionalDownload = sizeThreshold >= 0 && !earlyResolve;

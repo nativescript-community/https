@@ -400,7 +400,7 @@ function AFFailure(resolve, reject, httpResponse: NSHTTPURLResponse, error: NSEr
             return getHeaders();
         }
     } as any as HttpsResponse;
-    
+
     // Try to get response from error or use the one passed in
     const response = httpResponse || (error.userInfo.valueForKey(AFNetworkingOperationFailingURLResponseErrorKey) as NSHTTPURLResponse);
     if (!Utils.isNullOrUndefined(response)) {
@@ -419,7 +419,7 @@ function AFFailure(resolve, reject, httpResponse: NSHTTPURLResponse, error: NSEr
     const data: NSDictionary<string, any> & NSData & NSArray<any> = error.userInfo.valueForKey(AFNetworkingOperationFailingURLResponseDataErrorKey);
     const parsedData = getData(data);
     const failingURL = error.userInfo.objectForKey('NSErrorFailingURLKey');
-    
+
     // Always use legacy response
     if (!sendi.statusCode) {
         return reject(error);
@@ -451,7 +451,7 @@ function bodyToNative(cont) {
     return dict;
 }
 
-const runningRequests: { [k: string]: string } = {};  // Maps tag to request ID
+const runningRequests: { [k: string]: string } = {}; // Maps tag to request ID
 
 export function cancelRequest(tag: string) {
     const requestId = runningRequests[tag];
@@ -542,7 +542,7 @@ export function createRequest(opts: HttpsRequestOptions): HttpsRequest {
     }
     return {
         get nativeRequest() {
-            return null;  // We no longer expose the task
+            return null; // We no longer expose the task
         },
         cancel: () => {
             const rid = runningRequests[tag];
@@ -707,9 +707,7 @@ export function createRequest(opts: HttpsRequestOptions): HttpsRequest {
 
                                 // If we got a temp file path, response was saved to file (large)
                                 // If we got responseData, response is in memory (small)
-                                const content = tempFilePath
-                                    ? new HttpsResponseLegacy(null, contentLength, opts.url, tempFilePath)
-                                    : new HttpsResponseLegacy(responseData, contentLength, opts.url);
+                                const content = tempFilePath ? new HttpsResponseLegacy(null, contentLength, opts.url, tempFilePath) : new HttpsResponseLegacy(responseData, contentLength, opts.url);
 
                                 let getHeaders = () => ({});
                                 const sendi = {
@@ -754,7 +752,7 @@ export function createRequest(opts: HttpsRequestOptions): HttpsRequest {
                         if (tag) {
                             runningRequests[tag] = requestId;
                         }
-                        
+
                         manager.downloadToTempWithEarlyHeaders(
                             opts.method,
                             opts.url,
@@ -814,7 +812,7 @@ export function createRequest(opts: HttpsRequestOptions): HttpsRequest {
                         if (tag) {
                             runningRequests[tag] = requestId;
                         }
-                        
+
                         manager.downloadToTemp(
                             opts.method,
                             opts.url,

@@ -180,8 +180,8 @@ public class AlamofireWrapper: NSObject {
         _ requestId: String,
         _ uploadProgress: ((Progress) -> Void)?,
         _ downloadProgress: ((Progress) -> Void)?,
-        _ success: @escaping (NSHTTPURLResponse?, Any?) -> Void,
-        _ failure: @escaping (NSHTTPURLResponse?, Error) -> Void
+        _ success: @escaping (HTTPURLResponse?, Any?) -> Void,
+        _ failure: @escaping (HTTPURLResponse?, Error) -> Void
     ) {
         requestWithThreading(
             method,
@@ -209,8 +209,8 @@ public class AlamofireWrapper: NSObject {
         _ progressOnMainThread: NSNumber?, // NSNumber wrapper for optional Bool
         _ uploadProgress: ((Progress) -> Void)?,
         _ downloadProgress: ((Progress) -> Void)?,
-        _ success: @escaping (NSHTTPURLResponse?, Any?) -> Void,
-        _ failure: @escaping (NSHTTPURLResponse?, Error) -> Void
+        _ success: @escaping (HTTPURLResponse?, Any?) -> Void,
+        _ failure: @escaping (HTTPURLResponse?, Error) -> Void
     ) {
         
         guard let url = URL(string: urlString) else {
@@ -277,7 +277,7 @@ public class AlamofireWrapper: NSObject {
             self.removeRequest(id: requestId)
             
             // Get the HTTP response
-            let httpResponse = response.response as? NSHTTPURLResponse
+            let httpResponse = response.response as? HTTPURLResponse
             
             if let error = response.error {
                 let nsError = self.createNSError(from: error, response: response.response, data: response.data)
@@ -303,8 +303,8 @@ public class AlamofireWrapper: NSObject {
         _ requestId: String,
         _ constructingBodyWithBlock: @escaping (MultipartFormDataWrapper) -> Void,
         _ progress: ((Progress) -> Void)?,
-        _ success: @escaping (NSHTTPURLResponse?, Any?) -> Void,
-        _ failure: @escaping (NSHTTPURLResponse?, Error) -> Void
+        _ success: @escaping (HTTPURLResponse?, Any?) -> Void,
+        _ failure: @escaping (HTTPURLResponse?, Error) -> Void
     ) {
         uploadMultipartWithThreading(
             urlString,
@@ -328,8 +328,8 @@ public class AlamofireWrapper: NSObject {
         _ progressOnMainThread: NSNumber?,
         _ constructingBodyWithBlock: @escaping (MultipartFormDataWrapper) -> Void,
         _ progress: ((Progress) -> Void)?,
-        _ success: @escaping (NSHTTPURLResponse?, Any?) -> Void,
-        _ failure: @escaping (NSHTTPURLResponse?, Error) -> Void
+        _ success: @escaping (HTTPURLResponse?, Any?) -> Void,
+        _ failure: @escaping (HTTPURLResponse?, Error) -> Void
     ) {
         
         guard let url = URL(string: urlString) else {
@@ -392,7 +392,7 @@ public class AlamofireWrapper: NSObject {
             self.removeRequest(id: requestId)
             
             // Get the HTTP response
-            let httpResponse = response.response as? NSHTTPURLResponse
+            let httpResponse = response.response as? HTTPURLResponse
             
             if let error = response.error {
                 let nsError = self.createNSError(from: error, response: response.response, data: response.data)
@@ -417,8 +417,8 @@ public class AlamofireWrapper: NSObject {
         _ fileURL: URL,
         _ requestId: String,
         _ progress: ((Progress) -> Void)?,
-        _ success: @escaping (NSHTTPURLResponse?, Any?) -> Void,
-        _ failure: @escaping (NSHTTPURLResponse?, Error) -> Void
+        _ success: @escaping (HTTPURLResponse?, Any?) -> Void,
+        _ failure: @escaping (HTTPURLResponse?, Error) -> Void
     ) {
         
         var afRequest = session.upload(fileURL, with: request)
@@ -451,7 +451,7 @@ public class AlamofireWrapper: NSObject {
             self.removeRequest(id: requestId)
             
             // Get the HTTP response
-            let httpResponse = response.response as? NSHTTPURLResponse
+            let httpResponse = response.response as? HTTPURLResponse
             
             if let error = response.error {
                 let nsError = self.createNSError(from: error, response: response.response, data: response.data)
@@ -474,8 +474,8 @@ public class AlamofireWrapper: NSObject {
         _ bodyData: Data,
         _ requestId: String,
         _ progress: ((Progress) -> Void)?,
-        _ success: @escaping (NSHTTPURLResponse?, Any?) -> Void,
-        _ failure: @escaping (NSHTTPURLResponse?, Error) -> Void
+        _ success: @escaping (HTTPURLResponse?, Any?) -> Void,
+        _ failure: @escaping (HTTPURLResponse?, Error) -> Void
     ) {
         
         var afRequest = session.upload(bodyData, with: request)
@@ -508,7 +508,7 @@ public class AlamofireWrapper: NSObject {
             self.removeRequest(id: requestId)
             
             // Get the HTTP response
-            let httpResponse = response.response as? NSHTTPURLResponse
+            let httpResponse = response.response as? HTTPURLResponse
             
             if let error = response.error {
                 let nsError = self.createNSError(from: error, response: response.response, data: response.data)
@@ -537,8 +537,8 @@ public class AlamofireWrapper: NSObject {
         _ headers: NSDictionary?,
         _ requestId: String,
         _ progress: ((Progress) -> Void)?,
-        _ success: @escaping (NSHTTPURLResponse?, String?) -> Void,
-        _ failure: @escaping (NSHTTPURLResponse?, Error) -> Void
+        _ success: @escaping (HTTPURLResponse?, String?) -> Void,
+        _ failure: @escaping (HTTPURLResponse?, Error) -> Void
     ) {
         
         guard let url = URL(string: urlString) else {
@@ -602,7 +602,7 @@ public class AlamofireWrapper: NSObject {
             self.removeRequest(id: requestId)
             
             // Get the HTTP response
-            let httpResponse = response.response as? NSHTTPURLResponse
+            let httpResponse = response.response as? HTTPURLResponse
             
             if let error = response.error {
                 let nsError = self.createNSError(from: error, response: response.response, data: nil)
@@ -627,8 +627,8 @@ public class AlamofireWrapper: NSObject {
         _ headers: NSDictionary?,
         _ requestId: String,
         _ progress: ((Progress) -> Void)?,
-        _ success: @escaping (NSHTTPURLResponse?, String?) -> Void,
-        _ failure: @escaping (NSHTTPURLResponse?, Error) -> Void
+        _ success: @escaping (HTTPURLResponse?, String?) -> Void,
+        _ failure: @escaping (HTTPURLResponse?, Error) -> Void
     ) {
         
         guard let url = URL(string: urlString) else {
@@ -691,7 +691,7 @@ public class AlamofireWrapper: NSObject {
             self.removeRequest(id: requestId)
             
             // Get the HTTP response
-            let httpResponse = response.response as? NSHTTPURLResponse
+            let httpResponse = response.response as? HTTPURLResponse
             
             if let error = response.error {
                 let nsError = self.createNSError(from: error, response: response.response, data: nil)
@@ -720,9 +720,9 @@ public class AlamofireWrapper: NSObject {
         _ requestId: String,
         _ sizeThreshold: Int64,
         _ progress: ((Progress) -> Void)?,
-        _ headersCallback: @escaping (NSHTTPURLResponse?, Int64) -> Void,
-        _ success: @escaping (NSHTTPURLResponse?, String?) -> Void,
-        _ failure: @escaping (NSHTTPURLResponse?, Error) -> Void
+        _ headersCallback: @escaping (HTTPURLResponse?, Int64) -> Void,
+        _ success: @escaping (HTTPURLResponse?, String?) -> Void,
+        _ failure: @escaping (HTTPURLResponse?, Error) -> Void
     ) {
         
         guard let url = URL(string: urlString) else {
@@ -772,7 +772,7 @@ public class AlamofireWrapper: NSObject {
             
             // Call headersCallback on first response (only once)
             callbackState.callOnce {
-                let httpResponse = response as? NSHTTPURLResponse
+                let httpResponse = response as? HTTPURLResponse
                 let contentLength = response.expectedContentLength
                 headersCallback(httpResponse, contentLength)
             }
@@ -787,7 +787,7 @@ public class AlamofireWrapper: NSObject {
         
         // Apply interceptors
         for interceptor in requestInterceptors {
-            downloadRequest = downloadRequest.interceptor(interceptor) as! DownloadRequest
+            downloadRequest = downloadRequest.interceptor(interceptor)
         }
         
         // Apply server trust evaluation if security policy is set
@@ -810,7 +810,7 @@ public class AlamofireWrapper: NSObject {
             self.removeRequest(id: requestId)
             
             // Get the HTTP response
-            let httpResponse = response.response as? NSHTTPURLResponse
+            let httpResponse = response.response as? HTTPURLResponse
             
             if let error = response.error {
                 let nsError = self.createNSError(from: error, response: response.response, data: nil)
@@ -843,8 +843,8 @@ public class AlamofireWrapper: NSObject {
         _ requestId: String,
         _ sizeThreshold: Int64,
         _ progress: ((Progress) -> Void)?,
-        _ success: @escaping (NSHTTPURLResponse?, Any?, String?) -> Void,
-        _ failure: @escaping (NSHTTPURLResponse?, Error) -> Void
+        _ success: @escaping (HTTPURLResponse?, Any?, String?) -> Void,
+        _ failure: @escaping (HTTPURLResponse?, Error) -> Void
     ) {
         
         guard let url = URL(string: urlString) else {
@@ -899,7 +899,7 @@ public class AlamofireWrapper: NSObject {
             self.removeRequest(id: requestId)
             
             // Get the HTTP response
-            let httpResponse = response.response as? NSHTTPURLResponse
+            let httpResponse = response.response as? HTTPURLResponse
             
             if let error = response.error {
                 let nsError = self.createNSError(from: error, response: response.response, data: response.data)

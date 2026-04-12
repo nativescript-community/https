@@ -1,6 +1,6 @@
 import { File, ImageSource, Utils } from '@nativescript/core';
 import { CacheOptions, HttpsFormDataParam, HttpsRequest, HttpsRequestOptions, HttpsResponse, HttpsSSLPinningOptions, HttpsResponseLegacy as IHttpsResponseLegacy } from '.';
-import { getFilenameFromUrl, parseJSON } from './request.common';
+import { getFilenameFromUrl, interceptors, networkInterceptors, parseJSON } from './request.common';
 export { addInterceptor, addNetworkInterceptor } from './request.common';
 
 // Error keys used by the Swift wrapper to maintain compatibility with AFNetworking
@@ -42,6 +42,27 @@ policies.def.validatesDomainName = false;
 
 const configuration = NSURLSessionConfiguration.defaultSessionConfiguration;
 let manager = AlamofireWrapper.alloc().initWithConfiguration(configuration);
+
+// Note: iOS interceptors must be native Alamofire RequestInterceptor or EventMonitor objects
+// They cannot be JavaScript functions like Android OkHttp interceptors
+// To use interceptors on iOS, you need to create native Swift wrapper classes
+
+// Apply interceptors from common if they are Alamofire-compatible objects
+function applyInterceptors() {
+    interceptors.forEach((interceptor) => {
+        if (interceptor && typeof interceptor === 'object' && 'adapt' in interceptor) {
+            manager.addInterceptor(interceptor);
+        }
+    });
+    networkInterceptors.forEach((monitor) => {
+        if (monitor && typeof monitor === 'object') {
+            manager.addEventMonitor(monitor);
+        }
+    });
+}
+
+// Apply any pre-existing interceptors
+applyInterceptors();
 
 export function enableSSLPinning(options: HttpsSSLPinningOptions) {
     const url = NSURL.URLWithString(options.host);

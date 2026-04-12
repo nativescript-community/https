@@ -11,6 +11,14 @@ public class AlamofireWrapper: NSObject {
     private var securityPolicy: SecurityPolicyWrapper?
     private var cacheResponseHandler: ((URLSession, URLSessionDataTask, CachedURLResponse) -> CachedURLResponse?)?
     
+    // Store active requests by ID for cancellation
+    private var activeRequests: [String: Request] = [:]
+    private let requestsLock = NSLock()
+    
+    // Interceptors
+    private var requestInterceptors: [RequestInterceptor] = []
+    private var eventMonitors: [EventMonitor] = []
+    
     @objc public static let shared = AlamofireWrapper()
     
     @objc public override init() {
@@ -78,12 +86,50 @@ public class AlamofireWrapper: NSObject {
         // Use allHostsMustBeEvaluated: false to allow default trust evaluation for non-pinned hosts
         let serverTrustManager = ServerTrustManager(allHostsMustBeEvaluated: false, evaluators: [:])
         
-        // Create new session with server trust manager
+        // Create new session with server trust manager and interceptors
         // Keep the session alive by replacing it atomically
         session = Session(
             configuration: configuration,
-            serverTrustManager: serverTrustManager
+            serverTrustManager: serverTrustManager,
+            eventMonitors: eventMonitors
         )
+    }
+    
+    // MARK: - Interceptors
+    
+    /// Add a request interceptor (for request/response modification)
+    @objc public func addInterceptor(_ interceptor: RequestInterceptor) {
+        requestInterceptors.append(interceptor)
+    }
+    
+    /// Add an event monitor (for network-level events like Android's network interceptor)
+    @objc public func addEventMonitor(_ monitor: EventMonitor) {
+        eventMonitors.append(monitor)
+        recreateSession() // Recreate session to apply new event monitors
+    }
+    
+    // MARK: - Request Management
+    
+    /// Store a request by ID
+    private func storeRequest(_ request: Request, id: String) {
+        requestsLock.lock()
+        defer { requestsLock.unlock() }
+        activeRequests[id] = request
+    }
+    
+    /// Remove a request by ID
+    private func removeRequest(id: String) {
+        requestsLock.lock()
+        defer { requestsLock.unlock() }
+        activeRequests.removeValue(forKey: id)
+    }
+    
+    /// Cancel a request by ID
+    @objc public func cancelRequest(id: String) {
+        requestsLock.lock()
+        let request = activeRequests[id]
+        requestsLock.unlock()
+        request?.cancel()
     }
     
     /// Get dispatch queue for responses
@@ -131,16 +177,18 @@ public class AlamofireWrapper: NSObject {
         _ urlString: String,
         _ parameters: NSDictionary?,
         _ headers: NSDictionary?,
+        _ requestId: String,
         _ uploadProgress: ((Progress) -> Void)?,
         _ downloadProgress: ((Progress) -> Void)?,
-        _ success: @escaping (URLSessionTask?, Any?) -> Void,
-        _ failure: @escaping (URLSessionTask?, Error) -> Void
-    ) -> URLSessionTask? {
-        return requestWithThreading(
+        _ success: @escaping (NSHTTPURLResponse?, Any?) -> Void,
+        _ failure: @escaping (NSHTTPURLResponse?, Error) -> Void
+    ) {
+        requestWithThreading(
             method,
             urlString,
             parameters,
             headers,
+            requestId,
             nil, // responseOnMainThread - defaults to true
             nil, // progressOnMainThread - defaults to responseOnMainThread
             uploadProgress,
@@ -156,18 +204,19 @@ public class AlamofireWrapper: NSObject {
         _ urlString: String,
         _ parameters: NSDictionary?,
         _ headers: NSDictionary?,
+        _ requestId: String,
         _ responseOnMainThread: NSNumber?, // NSNumber wrapper for optional Bool
         _ progressOnMainThread: NSNumber?, // NSNumber wrapper for optional Bool
         _ uploadProgress: ((Progress) -> Void)?,
         _ downloadProgress: ((Progress) -> Void)?,
-        _ success: @escaping (URLSessionTask?, Any?) -> Void,
-        _ failure: @escaping (URLSessionTask?, Error) -> Void
-    ) -> URLSessionTask? {
+        _ success: @escaping (NSHTTPURLResponse?, Any?) -> Void,
+        _ failure: @escaping (NSHTTPURLResponse?, Error) -> Void
+    ) {
         
         guard let url = URL(string: urlString) else {
             let error = NSError(domain: "AlamofireWrapper", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])
             failure(nil, error)
-            return nil
+            return
         }
         
         var request: URLRequest
@@ -182,10 +231,18 @@ public class AlamofireWrapper: NSObject {
             try requestSerializer.encodeParameters(parameters, into: &request, method: HTTPMethod(rawValue: method.uppercased()))
         } catch {
             failure(nil, error)
-            return nil
+            return
         }
         
         var afRequest: DataRequest = session.request(request)
+        
+        // Store request for cancellation
+        storeRequest(afRequest, id: requestId)
+        
+        // Apply interceptors
+        for interceptor in requestInterceptors {
+            afRequest = afRequest.interceptor(interceptor) as! DataRequest
+        }
         
         // Apply server trust evaluation if security policy is set
         if let host = url.host {
@@ -216,26 +273,25 @@ public class AlamofireWrapper: NSObject {
         afRequest.response(queue: respQueue) { [weak self] response in
             guard let self = self else { return }
             
-            // Get the actual task from the DataRequest (available after request started)
-            let task = response.request?.task
+            // Remove request from active list
+            self.removeRequest(id: requestId)
+            
+            // Get the HTTP response
+            let httpResponse = response.response as? NSHTTPURLResponse
             
             if let error = response.error {
                 let nsError = self.createNSError(from: error, response: response.response, data: response.data)
-                failure(task, nsError)
+                failure(httpResponse, nsError)
                 return
             }
             
             // Deserialize response based on responseSerializer
             if let data = response.data {
-//                let result = self.responseSerializer.deserialize(data: data, response: response.response)
-                success(task, data)
+                success(httpResponse, data)
             } else {
-                success(task, nil)
+                success(httpResponse, nil)
             }
         }
-        
-        // Return the task (it will be available after request starts)
-        return afRequest.task
     }
     
     // MARK: - Multipart Form Data
@@ -244,14 +300,16 @@ public class AlamofireWrapper: NSObject {
     @objc public func uploadMultipart(
         _ urlString: String,
         _ headers: NSDictionary?,
+        _ requestId: String,
         _ constructingBodyWithBlock: @escaping (MultipartFormDataWrapper) -> Void,
         _ progress: ((Progress) -> Void)?,
-        _ success: @escaping (URLSessionTask?, Any?) -> Void,
-        _ failure: @escaping (URLSessionTask?, Error) -> Void
-    ) -> URLSessionTask? {
-        return uploadMultipartWithThreading(
+        _ success: @escaping (NSHTTPURLResponse?, Any?) -> Void,
+        _ failure: @escaping (NSHTTPURLResponse?, Error) -> Void
+    ) {
+        uploadMultipartWithThreading(
             urlString,
             headers,
+            requestId,
             nil, // responseOnMainThread
             nil, // progressOnMainThread
             constructingBodyWithBlock,
@@ -265,18 +323,19 @@ public class AlamofireWrapper: NSObject {
     @objc public func uploadMultipartWithThreading(
         _ urlString: String,
         _ headers: NSDictionary?,
+        _ requestId: String,
         _ responseOnMainThread: NSNumber?,
         _ progressOnMainThread: NSNumber?,
         _ constructingBodyWithBlock: @escaping (MultipartFormDataWrapper) -> Void,
         _ progress: ((Progress) -> Void)?,
-        _ success: @escaping (URLSessionTask?, Any?) -> Void,
-        _ failure: @escaping (URLSessionTask?, Error) -> Void
-    ) -> URLSessionTask? {
+        _ success: @escaping (NSHTTPURLResponse?, Any?) -> Void,
+        _ failure: @escaping (NSHTTPURLResponse?, Error) -> Void
+    ) {
         
         guard let url = URL(string: urlString) else {
             let error = NSError(domain: "AlamofireWrapper", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])
             failure(nil, error)
-            return nil
+            return
         }
         
         let wrapper = MultipartFormDataWrapper()
@@ -292,12 +351,20 @@ public class AlamofireWrapper: NSObject {
             )
         } catch {
             failure(nil, error)
-            return nil
+            return
         }
         
         var afRequest = session.upload(multipartFormData: { multipartFormData in
             wrapper.apply(to: multipartFormData)
         }, with: request)
+        
+        // Store request for cancellation
+        storeRequest(afRequest, id: requestId)
+        
+        // Apply interceptors
+        for interceptor in requestInterceptors {
+            afRequest = afRequest.interceptor(interceptor) as! UploadRequest
+        }
         
         // Apply server trust evaluation if security policy is set
         if let host = url.host {
@@ -321,25 +388,25 @@ public class AlamofireWrapper: NSObject {
         afRequest.response(queue: respQueue) { [weak self] response in
             guard let self = self else { return }
             
-            // Get the actual task from the DataRequest (available after request started)
-            let task = response.request?.task
+            // Remove request from active list
+            self.removeRequest(id: requestId)
+            
+            // Get the HTTP response
+            let httpResponse = response.response as? NSHTTPURLResponse
             
             if let error = response.error {
                 let nsError = self.createNSError(from: error, response: response.response, data: response.data)
-                failure(task, nsError)
+                failure(httpResponse, nsError)
                 return
             }
             
             // Deserialize response based on responseSerializer
             if let data = response.data {
-//                let result = self.responseSerializer.deserialize(data: data, response: response.response)
-                success(task, data)
+                success(httpResponse, data)
             } else {
-                success(task, nil)
+                success(httpResponse, nil)
             }
         }
-        
-        return afRequest.task
     }
     
     // MARK: - Upload Tasks
@@ -689,16 +756,17 @@ public class AlamofireWrapper: NSObject {
         _ urlString: String,
         _ parameters: NSDictionary?,
         _ headers: NSDictionary?,
+        _ requestId: String,
         _ sizeThreshold: Int64,
         _ progress: ((Progress) -> Void)?,
-        _ success: @escaping (URLSessionTask?, Any?, String?) -> Void,
-        _ failure: @escaping (URLSessionTask?, Error) -> Void
-    ) -> URLSessionTask? {
+        _ success: @escaping (NSHTTPURLResponse?, Any?, String?) -> Void,
+        _ failure: @escaping (NSHTTPURLResponse?, Error) -> Void
+    ) {
         
         guard let url = URL(string: urlString) else {
             let error = NSError(domain: "AlamofireWrapper", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])
             failure(nil, error)
-            return nil
+            return
         }
         
         var request: URLRequest
@@ -713,11 +781,19 @@ public class AlamofireWrapper: NSObject {
             try requestSerializer.encodeParameters(parameters, into: &request, method: HTTPMethod(rawValue: method.uppercased()))
         } catch {
             failure(nil, error)
-            return nil
+            return
         }
         
         // Start as data request to get headers quickly
         var afRequest: DataRequest = session.request(request)
+        
+        // Store request for cancellation
+        storeRequest(afRequest, id: requestId)
+        
+        // Apply interceptors
+        for interceptor in requestInterceptors {
+            afRequest = afRequest.interceptor(interceptor) as! DataRequest
+        }
         
         // Apply server trust evaluation if security policy is set
         if let host = url.host {
@@ -735,12 +811,15 @@ public class AlamofireWrapper: NSObject {
         afRequest.response(queue: .main) { [weak self] response in
             guard let self = self else { return }
             
-            // Get the actual task from the DataRequest (available after request started)
-            let task = response.request?.task
+            // Remove request from active list
+            self.removeRequest(id: requestId)
+            
+            // Get the HTTP response
+            let httpResponse = response.response as? NSHTTPURLResponse
             
             if let error = response.error {
                 let nsError = self.createNSError(from: error, response: response.response, data: response.data)
-                failure(task, nsError)
+                failure(httpResponse, nsError)
                 return
             }
             
@@ -762,23 +841,21 @@ public class AlamofireWrapper: NSObject {
                     do {
                         try data.write(to: tempFileURL)
                         // Return with temp file path
-                        success(task, nil, tempFileURL.path)
+                        success(httpResponse, nil, tempFileURL.path)
                     } catch {
                         // Failed to write, just return data in memory
                         let result = self.responseSerializer.deserialize(data: data, response: response.response)
-                        success(task, result, nil)
+                        success(httpResponse, result, nil)
                     }
                 } else {
                     // Small response or threshold not set, return data in memory
                     let result = self.responseSerializer.deserialize(data: data, response: response.response)
-                    success(task, result, nil)
+                    success(httpResponse, result, nil)
                 }
             } else {
-                success(task, nil, nil)
+                success(httpResponse, nil, nil)
             }
         }
-        
-        return task
     }
     
     // MARK: - Helper Methods

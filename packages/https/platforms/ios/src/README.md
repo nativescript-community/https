@@ -47,6 +47,35 @@ SSL/TLS security policy wrapper that implements Alamofire's `ServerTrustEvaluati
 - 1 = PublicKey (pin to public keys)
 - 2 = Certificate (pin to certificates)
 
+### EventMonitorWrapper.swift
+Wrapper for Alamofire's EventMonitor protocol to enable network event tracking from TypeScript.
+
+**Key Features:**
+- Request lifecycle tracking (resume, suspend, cancel, finish)
+- Data reception monitoring
+- Request completion tracking with response/error
+- @objc-compatible callback-based API
+
+**Available Callbacks:**
+- `setRequestDidResume` - Called when request starts
+- `setRequestDidSuspend` - Called when request is paused
+- `setRequestDidCancel` - Called when request is cancelled
+- `setRequestDidFinish` - Called when request finishes
+- `setRequestDidComplete` - Called with response/error
+- `setDataTaskDidReceiveData` - Called as data is received
+
+### RequestInterceptorWrapper.swift
+Wrapper for Alamofire's RequestInterceptor protocol to enable request modification and retry logic from TypeScript.
+
+**Key Features:**
+- Request adaptation (modify requests before sending)
+- Automatic retry logic with custom conditions
+- @objc-compatible callback-based API
+
+**Available Callbacks:**
+- `setAdapt` - Modify URLRequest before sending
+- `setRetry` - Return true to retry failed requests
+
 ### MultipartFormDataWrapper.swift
 Wrapper for building multipart form data requests.
 
@@ -93,6 +122,45 @@ task.resume();
 
 // Response data is available in memory
 // User can then call toFile(), toArrayBuffer(), etc. on the response
+```
+
+### Using Interceptors and Event Monitors
+
+```typescript
+// Create an event monitor to track network events
+const eventMonitor = EventMonitorWrapper.alloc().init();
+eventMonitor.setRequestDidResume((request) => {
+    console.log('Request started:', request.URL.absoluteString);
+});
+eventMonitor.setDataTaskDidReceiveData((request, data) => {
+    console.log('Received data:', data.length, 'bytes');
+});
+eventMonitor.setRequestDidComplete((request, response, error) => {
+    if (error) {
+        console.log('Request failed:', error.localizedDescription);
+    } else {
+        console.log('Request completed:', response.statusCode);
+    }
+});
+manager.addEventMonitor(eventMonitor);
+
+// Create a request interceptor to modify requests and retry logic
+const interceptor = RequestInterceptorWrapper.alloc().init();
+interceptor.setAdapt((request) => {
+    // Add custom headers to all requests
+    const mutableRequest = request.mutableCopy();
+    mutableRequest.setValueForHTTPHeaderField('CustomToken', 'Authorization');
+    return mutableRequest;
+});
+interceptor.setRetry((request, error, retryCount) => {
+    // Retry up to 3 times on network errors
+    if (retryCount < 3) {
+        console.log(`Retrying request (attempt ${retryCount + 1})...`);
+        return true;
+    }
+    return false;
+});
+manager.addInterceptor(interceptor);
 ```
 
 ## Design Decisions

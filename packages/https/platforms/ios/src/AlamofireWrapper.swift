@@ -58,6 +58,41 @@ public class AlamofireWrapper: NSObject {
         self.cacheResponseHandler = block
     }
     
+    // MARK: - Helper Methods
+    
+    /// Apply server trust validation to a request
+    private func applyServerTrustValidation<T: Request>(_ request: T, host: String) -> T {
+        guard let secPolicy = securityPolicy else { return request }
+        
+        return request.validate { request, response, data in
+            // In Alamofire 5.11+, we need to get serverTrust from URLSession delegate
+            // The validation closure now receives the request instead of just the response
+            guard let serverTrust = request.serverTrust else {
+                return .failure(AFError.serverTrustEvaluationFailed(reason: .noServerTrust))
+            }
+            do {
+                try secPolicy.evaluate(serverTrust, forHost: host)
+                return .success(Void())
+            } catch {
+                return .failure(error)
+            }
+        }
+    }
+    
+    /// Get dispatch queue for responses
+    private func responseQueue(mainThread: Bool?) -> DispatchQueue {
+        // Default to main thread if not specified (matches Android behavior)
+        return (mainThread ?? true) ? .main : .global(qos: .userInitiated)
+    }
+    
+    /// Get dispatch queue for progress callbacks
+    private func progressQueue(progressMainThread: Bool?, responseMainThread: Bool?) -> DispatchQueue {
+        // If progressMainThread is specified, use it
+        // Otherwise, inherit from responseMainThread setting
+        let useMain = progressMainThread ?? responseMainThread ?? true
+        return useMain ? .main : .global(qos: .userInitiated)
+    }
+    
     // MARK: - Request Methods
     
     // Clean API: New shorter method name
@@ -68,9 +103,36 @@ public class AlamofireWrapper: NSObject {
         _ headers: NSDictionary?,
         _ uploadProgress: ((Progress) -> Void)?,
         _ downloadProgress: ((Progress) -> Void)?,
-        _ success: @escaping (URLSessionDataTask, Any?) -> Void,
-        _ failure: @escaping (URLSessionDataTask?, Error) -> Void
-    ) -> URLSessionDataTask? {
+        _ success: @escaping (URLSessionTask, Any?) -> Void,
+        _ failure: @escaping (URLSessionTask?, Error) -> Void
+    ) -> URLSessionTask? {
+        return requestWithThreading(
+            method,
+            urlString,
+            parameters,
+            headers,
+            nil, // responseOnMainThread - defaults to true
+            nil, // progressOnMainThread - defaults to responseOnMainThread
+            uploadProgress,
+            downloadProgress,
+            success,
+            failure
+        )
+    }
+    
+    // Extended API with threading options
+    @objc public func requestWithThreading(
+        _ method: String,
+        _ urlString: String,
+        _ parameters: NSDictionary?,
+        _ headers: NSDictionary?,
+        _ responseOnMainThread: NSNumber?, // NSNumber wrapper for optional Bool
+        _ progressOnMainThread: NSNumber?, // NSNumber wrapper for optional Bool
+        _ uploadProgress: ((Progress) -> Void)?,
+        _ downloadProgress: ((Progress) -> Void)?,
+        _ success: @escaping (URLSessionTask, Any?) -> Void,
+        _ failure: @escaping (URLSessionTask?, Error) -> Void
+    ) -> URLSessionTask? {
         
         guard let url = URL(string: urlString) else {
             let error = NSError(domain: "AlamofireWrapper", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])
@@ -96,43 +158,35 @@ public class AlamofireWrapper: NSObject {
         var afRequest: DataRequest = session.request(request)
         
         // Apply server trust evaluation if security policy is set
-        if let secPolicy = securityPolicy, let host = url.host {
-            afRequest = afRequest.validate { _, response, _ in
-                guard let serverTrust = response.serverTrust else {
-                    return .failure(AFError.serverTrustEvaluationFailed(reason: .noServerTrust))
-                }
-                do {
-                    try secPolicy.evaluate(serverTrust, forHost: host)
-                    return .success(Void())
-                } catch {
-                    return .failure(error)
-                }
-            }
+        if let host = url.host {
+            afRequest = applyServerTrustValidation(afRequest, host: host)
         }
+        
+        // Determine queue settings
+        let respMainThread = responseOnMainThread?.boolValue
+        let progMainThread = progressOnMainThread?.boolValue
+        let progQueue = progressQueue(progressMainThread: progMainThread, responseMainThread: respMainThread)
         
         // Upload progress
         if let uploadProgress = uploadProgress {
-            afRequest = afRequest.uploadProgress { progress in
+            afRequest = afRequest.uploadProgress(queue: progQueue) { progress in
                 uploadProgress(progress)
             }
         }
         
         // Download progress
         if let downloadProgress = downloadProgress {
-            afRequest = afRequest.downloadProgress { progress in
+            afRequest = afRequest.downloadProgress(queue: progQueue) { progress in
                 downloadProgress(progress)
             }
         }
         
+        // Store reference to task before async callback
+        let task = afRequest.task
+        
         // Response handling
-        afRequest.response(queue: .main) { response in
-            let task = response.request?.task as? URLSessionDataTask
-            guard let task = task else {
-                let error = NSError(domain: "AlamofireWrapper", code: -1, userInfo: [NSLocalizedDescriptionKey: "No task available"])
-                failure(nil, error)
-                return
-            }
-            
+        let respQueue = responseQueue(mainThread: respMainThread)
+        afRequest.response(queue: respQueue) { response in
             if let error = response.error {
                 let nsError = self.createNSError(from: error, response: response.response, data: response.data)
                 failure(task, nsError)
@@ -148,7 +202,7 @@ public class AlamofireWrapper: NSObject {
             }
         }
         
-        return afRequest.task
+        return task
     }
     
     // MARK: - Multipart Form Data
@@ -159,9 +213,32 @@ public class AlamofireWrapper: NSObject {
         _ headers: NSDictionary?,
         _ constructingBodyWithBlock: @escaping (MultipartFormDataWrapper) -> Void,
         _ progress: ((Progress) -> Void)?,
-        _ success: @escaping (URLSessionDataTask, Any?) -> Void,
-        _ failure: @escaping (URLSessionDataTask?, Error) -> Void
-    ) -> URLSessionDataTask? {
+        _ success: @escaping (URLSessionTask, Any?) -> Void,
+        _ failure: @escaping (URLSessionTask?, Error) -> Void
+    ) -> URLSessionTask? {
+        return uploadMultipartWithThreading(
+            urlString,
+            headers,
+            nil, // responseOnMainThread
+            nil, // progressOnMainThread
+            constructingBodyWithBlock,
+            progress,
+            success,
+            failure
+        )
+    }
+    
+    // Extended API with threading options
+    @objc public func uploadMultipartWithThreading(
+        _ urlString: String,
+        _ headers: NSDictionary?,
+        _ responseOnMainThread: NSNumber?,
+        _ progressOnMainThread: NSNumber?,
+        _ constructingBodyWithBlock: @escaping (MultipartFormDataWrapper) -> Void,
+        _ progress: ((Progress) -> Void)?,
+        _ success: @escaping (URLSessionTask, Any?) -> Void,
+        _ failure: @escaping (URLSessionTask?, Error) -> Void
+    ) -> URLSessionTask? {
         
         guard let url = URL(string: urlString) else {
             let error = NSError(domain: "AlamofireWrapper", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])
@@ -190,38 +267,28 @@ public class AlamofireWrapper: NSObject {
         }, with: request)
         
         // Apply server trust evaluation if security policy is set
-        if let secPolicy = securityPolicy, let host = url.host {
-            afRequest = afRequest.validate { _, response, _ in
-                guard let serverTrust = response.serverTrust else {
-                    return .failure(AFError.serverTrustEvaluationFailed(reason: .noServerTrust))
-                }
-                do {
-                    try secPolicy.evaluate(serverTrust, forHost: host)
-                    return .success(Void())
-                } catch {
-                    return .failure(error)
-                }
-            }
+        if let host = url.host {
+            afRequest = applyServerTrustValidation(afRequest, host: host)
         }
         
-        // Upload progress
+        // Determine queue settings
+        let respMainThread = responseOnMainThread?.boolValue
+        let progMainThread = progressOnMainThread?.boolValue
+        let progQueue = progressQueue(progressMainThread: progMainThread, responseMainThread: respMainThread)
         
         // Upload progress
         if let progress = progress {
-            afRequest = afRequest.uploadProgress { progressInfo in
+            afRequest = afRequest.uploadProgress(queue: progQueue) { progressInfo in
                 progress(progressInfo)
             }
         }
         
+        // Store reference to task before async callback
+        let task = afRequest.task
+        
         // Response handling
-        afRequest.response(queue: .main) { response in
-            let task = response.request?.task as? URLSessionDataTask
-            guard let task = task else {
-                let error = NSError(domain: "AlamofireWrapper", code: -1, userInfo: [NSLocalizedDescriptionKey: "No task available"])
-                failure(nil, error)
-                return
-            }
-            
+        let respQueue = responseQueue(mainThread: respMainThread)
+        afRequest.response(queue: respQueue) { response in
             if let error = response.error {
                 let nsError = self.createNSError(from: error, response: response.response, data: response.data)
                 failure(task, nsError)
@@ -237,7 +304,7 @@ public class AlamofireWrapper: NSObject {
             }
         }
         
-        return afRequest.task
+        return task
     }
     
     // MARK: - Upload Tasks
@@ -248,30 +315,18 @@ public class AlamofireWrapper: NSObject {
         _ fileURL: URL,
         _ progress: ((Progress) -> Void)?,
         _ completionHandler: @escaping (URLResponse?, Any?, Error?) -> Void
-    ) -> URLSessionDataTask? {
+    ) -> URLSessionTask? {
         
         var afRequest = session.upload(fileURL, with: request)
         
         // Apply server trust evaluation if security policy is set
-        if let secPolicy = securityPolicy, let host = request.url?.host {
-            afRequest = afRequest.validate { _, response, _ in
-                guard let serverTrust = response.serverTrust else {
-                    return .failure(AFError.serverTrustEvaluationFailed(reason: .noServerTrust))
-                }
-                do {
-                    try secPolicy.evaluate(serverTrust, forHost: host)
-                    return .success(Void())
-                } catch {
-                    return .failure(error)
-                }
-            }
+        if let host = request.url?.host {
+            afRequest = applyServerTrustValidation(afRequest, host: host)
         }
         
-        // Upload progress
-        
-        // Upload progress
+        // Upload progress (default to main thread)
         if let progress = progress {
-            afRequest = afRequest.uploadProgress { progressInfo in
+            afRequest = afRequest.uploadProgress(queue: .main) { progressInfo in
                 progress(progressInfo)
             }
         }
@@ -301,30 +356,18 @@ public class AlamofireWrapper: NSObject {
         _ bodyData: Data,
         _ progress: ((Progress) -> Void)?,
         _ completionHandler: @escaping (URLResponse?, Any?, Error?) -> Void
-    ) -> URLSessionDataTask? {
+    ) -> URLSessionTask? {
         
         var afRequest = session.upload(bodyData, with: request)
         
         // Apply server trust evaluation if security policy is set
-        if let secPolicy = securityPolicy, let host = request.url?.host {
-            afRequest = afRequest.validate { _, response, _ in
-                guard let serverTrust = response.serverTrust else {
-                    return .failure(AFError.serverTrustEvaluationFailed(reason: .noServerTrust))
-                }
-                do {
-                    try secPolicy.evaluate(serverTrust, forHost: host)
-                    return .success(Void())
-                } catch {
-                    return .failure(error)
-                }
-            }
+        if let host = request.url?.host {
+            afRequest = applyServerTrustValidation(afRequest, host: host)
         }
         
-        // Upload progress
-        
-        // Upload progress
+        // Upload progress (default to main thread)
         if let progress = progress {
-            afRequest = afRequest.uploadProgress { progressInfo in
+            afRequest = afRequest.uploadProgress(queue: .main) { progressInfo in
                 progress(progressInfo)
             }
         }
@@ -396,23 +439,13 @@ public class AlamofireWrapper: NSObject {
         var downloadRequest = session.download(request, to: destination)
         
         // Apply server trust evaluation if security policy is set
-        if let secPolicy = securityPolicy, let host = url.host {
-            downloadRequest = downloadRequest.validate { _, response, _ in
-                guard let serverTrust = response.serverTrust else {
-                    return .failure(AFError.serverTrustEvaluationFailed(reason: .noServerTrust))
-                }
-                do {
-                    try secPolicy.evaluate(serverTrust, forHost: host)
-                    return .success(Void())
-                } catch {
-                    return .failure(error)
-                }
-            }
+        if let host = url.host {
+            downloadRequest = applyServerTrustValidation(downloadRequest, host: host)
         }
         
-        // Download progress
+        // Download progress (default to main thread)
         if let progress = progress {
-            downloadRequest = downloadRequest.downloadProgress { progressInfo in
+            downloadRequest = downloadRequest.downloadProgress(queue: .main) { progressInfo in
                 progress(progressInfo)
             }
         }
@@ -478,23 +511,13 @@ public class AlamofireWrapper: NSObject {
         var downloadRequest = session.download(request, to: destination)
         
         // Apply server trust evaluation if security policy is set
-        if let secPolicy = securityPolicy, let host = url.host {
-            downloadRequest = downloadRequest.validate { _, response, _ in
-                guard let serverTrust = response.serverTrust else {
-                    return .failure(AFError.serverTrustEvaluationFailed(reason: .noServerTrust))
-                }
-                do {
-                    try secPolicy.evaluate(serverTrust, forHost: host)
-                    return .success(Void())
-                } catch {
-                    return .failure(error)
-                }
-            }
+        if let host = url.host {
+            downloadRequest = applyServerTrustValidation(downloadRequest, host: host)
         }
         
-        // Download progress
+        // Download progress (default to main thread)
         if let progress = progress {
-            downloadRequest = downloadRequest.downloadProgress { progressInfo in
+            downloadRequest = downloadRequest.downloadProgress(queue: .main) { progressInfo in
                 progress(progressInfo)
             }
         }
@@ -553,9 +576,22 @@ public class AlamofireWrapper: NSObject {
             return nil
         }
         
-        // Track whether we've already called headersCallback
-        var headersCallbackCalled = false
-        let headersCallbackLock = NSLock()
+        // Use atomic Boolean class for thread-safe flag (Swift 6 compatible)
+        final class HeadersCallbackState {
+            private let lock = NSLock()
+            private var called = false
+            
+            func callOnce(_ callback: () -> Void) {
+                lock.lock()
+                defer { lock.unlock() }
+                if !called {
+                    called = true
+                    callback()
+                }
+            }
+        }
+        
+        let callbackState = HeadersCallbackState()
         
         // Create destination closure that saves to a temp file
         let destination: DownloadRequest.Destination = { temporaryURL, response in
@@ -565,15 +601,9 @@ public class AlamofireWrapper: NSObject {
             let tempFileURL = tempDir.appendingPathComponent(tempFileName)
             
             // Call headersCallback on first response (only once)
-            headersCallbackLock.lock()
-            if !headersCallbackCalled {
-                headersCallbackCalled = true
-                headersCallbackLock.unlock()
-                
+            callbackState.callOnce {
                 let contentLength = response.expectedContentLength
                 headersCallback(response, contentLength)
-            } else {
-                headersCallbackLock.unlock()
             }
             
             return (tempFileURL, [.removePreviousFile, .createIntermediateDirectories])
@@ -582,23 +612,13 @@ public class AlamofireWrapper: NSObject {
         var downloadRequest = session.download(request, to: destination)
         
         // Apply server trust evaluation if security policy is set
-        if let secPolicy = securityPolicy, let host = url.host {
-            downloadRequest = downloadRequest.validate { _, response, _ in
-                guard let serverTrust = response.serverTrust else {
-                    return .failure(AFError.serverTrustEvaluationFailed(reason: .noServerTrust))
-                }
-                do {
-                    try secPolicy.evaluate(serverTrust, forHost: host)
-                    return .success(Void())
-                } catch {
-                    return .failure(error)
-                }
-            }
+        if let host = url.host {
+            downloadRequest = applyServerTrustValidation(downloadRequest, host: host)
         }
         
-        // Download progress
+        // Download progress (default to main thread)
         if let progress = progress {
-            downloadRequest = downloadRequest.downloadProgress { progressInfo in
+            downloadRequest = downloadRequest.downloadProgress(queue: .main) { progressInfo in
                 progress(progressInfo)
             }
         }
@@ -636,9 +656,9 @@ public class AlamofireWrapper: NSObject {
         _ headers: NSDictionary?,
         _ sizeThreshold: Int64,
         _ progress: ((Progress) -> Void)?,
-        _ success: @escaping (URLSessionDataTask, Any?, String?) -> Void,
-        _ failure: @escaping (URLSessionDataTask?, Error) -> Void
-    ) -> URLSessionDataTask? {
+        _ success: @escaping (URLSessionTask, Any?, String?) -> Void,
+        _ failure: @escaping (URLSessionTask?, Error) -> Void
+    ) -> URLSessionTask? {
         
         guard let url = URL(string: urlString) else {
             let error = NSError(domain: "AlamofireWrapper", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])
@@ -665,36 +685,22 @@ public class AlamofireWrapper: NSObject {
         var afRequest: DataRequest = session.request(request)
         
         // Apply server trust evaluation if security policy is set
-        if let secPolicy = securityPolicy, let host = url.host {
-            afRequest = afRequest.validate { _, response, _ in
-                guard let serverTrust = response.serverTrust else {
-                    return .failure(AFError.serverTrustEvaluationFailed(reason: .noServerTrust))
-                }
-                do {
-                    try secPolicy.evaluate(serverTrust, forHost: host)
-                    return .success(Void())
-                } catch {
-                    return .failure(error)
-                }
-            }
+        if let host = url.host {
+            afRequest = applyServerTrustValidation(afRequest, host: host)
         }
         
-        // Download progress
+        // Download progress (default to main thread)
         if let progress = progress {
-            afRequest = afRequest.downloadProgress { progressInfo in
+            afRequest = afRequest.downloadProgress(queue: .main) { progressInfo in
                 progress(progressInfo)
             }
         }
         
+        // Store reference to task before async callback
+        let task = afRequest.task
+        
         // Response handling
         afRequest.response(queue: .main) { response in
-            let task = response.request?.task as? URLSessionDataTask
-            guard let task = task else {
-                let error = NSError(domain: "AlamofireWrapper", code: -1, userInfo: [NSLocalizedDescriptionKey: "No task available"])
-                failure(nil, error)
-                return
-            }
-            
             if let error = response.error {
                 let nsError = self.createNSError(from: error, response: response.response, data: response.data)
                 failure(task, nsError)
@@ -735,7 +741,7 @@ public class AlamofireWrapper: NSObject {
             }
         }
         
-        return afRequest.task
+        return task
     }
     
     // MARK: - Helper Methods

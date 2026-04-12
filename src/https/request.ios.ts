@@ -1,7 +1,11 @@
 import { File, ImageSource, Utils } from '@nativescript/core';
 import { CacheOptions, HttpsFormDataParam, HttpsRequest, HttpsRequestOptions, HttpsResponse, HttpsSSLPinningOptions, HttpsResponseLegacy as IHttpsResponseLegacy } from '.';
-import { getFilenameFromUrl, parseJSON } from './request.common';
+import { getFilenameFromUrl, interceptors, networkInterceptors, parseJSON } from './request.common';
 export { addInterceptor, addNetworkInterceptor } from './request.common';
+
+// Error keys used by the Swift wrapper to maintain compatibility with AFNetworking
+const AFNetworkingOperationFailingURLResponseErrorKey = 'AFNetworkingOperationFailingURLResponseErrorKey';
+const AFNetworkingOperationFailingURLResponseDataErrorKey = 'AFNetworkingOperationFailingURLResponseDataErrorKey';
 
 let cache: NSURLCache;
 
@@ -23,13 +27,13 @@ export function removeCachedResponse(url: string) {
 }
 
 interface Ipolicies {
-    def: AFSecurityPolicy;
+    def: SecurityPolicyWrapper;
     secured: boolean;
-    secure?: AFSecurityPolicy;
+    secure?: SecurityPolicyWrapper;
 }
 
 const policies: Ipolicies = {
-    def: AFSecurityPolicy.defaultPolicy(),
+    def: SecurityPolicyWrapper.defaultPolicy(),
     secured: false
 };
 
@@ -37,7 +41,28 @@ policies.def.allowInvalidCertificates = true;
 policies.def.validatesDomainName = false;
 
 const configuration = NSURLSessionConfiguration.defaultSessionConfiguration;
-let manager = AFHTTPSessionManager.alloc().initWithSessionConfiguration(configuration);
+let manager = AlamofireWrapper.alloc().initWithConfiguration(configuration);
+
+// Note: iOS interceptors must be native Alamofire RequestInterceptor or EventMonitor objects
+// They cannot be JavaScript functions like Android OkHttp interceptors
+// To use interceptors on iOS, you need to create native Swift wrapper classes
+
+// Apply interceptors from common if they are Alamofire-compatible objects
+function applyInterceptors() {
+    interceptors.forEach((interceptor) => {
+        if (interceptor && typeof interceptor === 'object' && 'adapt' in interceptor) {
+            manager.addInterceptor(interceptor);
+        }
+    });
+    networkInterceptors.forEach((monitor) => {
+        if (monitor && typeof monitor === 'object') {
+            manager.addEventMonitor(monitor);
+        }
+    });
+}
+
+// Apply any pre-existing interceptors
+applyInterceptors();
 
 export function getManager(): AFHTTPSessionManager {
     return manager;
@@ -45,9 +70,9 @@ export function getManager(): AFHTTPSessionManager {
 
 export function enableSSLPinning(options: HttpsSSLPinningOptions) {
     const url = NSURL.URLWithString(options.host);
-    manager = AFHTTPSessionManager.alloc().initWithSessionConfiguration(configuration).initWithBaseURL(url);
+    manager = AlamofireWrapper.alloc().initWithConfigurationBaseURL(configuration, url);
     if (!policies.secure) {
-        policies.secure = AFSecurityPolicy.policyWithPinningMode(AFSSLPinningMode.PublicKey);
+        policies.secure = SecurityPolicyWrapper.policyWithPinningMode(AFSSLPinningMode.PublicKey);
         policies.secure.allowInvalidCertificates = Utils.isDefined(options.allowInvalidCertificates) ? options.allowInvalidCertificates : false;
         policies.secure.validatesDomainName = Utils.isDefined(options.validatesDomainName) ? options.validatesDomainName : true;
         const data = NSData.dataWithContentsOfFile(options.certificate);
@@ -113,18 +138,112 @@ function createNSRequest(url: string): NSMutableURLRequest {
 
 class HttpsResponseLegacy implements IHttpsResponseLegacy {
     //     private callback?: com.nativescript.https.OkhttpResponse.OkHttpResponseAsyncCallback;
+    private tempFilePath?: string;
+    private downloadCompletionPromise?: Promise<void>;
+    private downloadCompleted: boolean = false;
+
     constructor(
         private data: NSDictionary<string, any> & NSData & NSArray<any>,
         public contentLength,
-        private url: string
-    ) {}
+        private url: string,
+        tempFilePath?: string,
+        downloadCompletionPromise?: Promise<void>
+    ) {
+        this.tempFilePath = tempFilePath;
+        this.downloadCompletionPromise = downloadCompletionPromise;
+        // If no download promise provided, download is already complete
+        if (!downloadCompletionPromise) {
+            this.downloadCompleted = true;
+        }
+    }
+
+    // Wait for download to complete if needed
+    private async waitForDownloadCompletion(): Promise<void> {
+        if (this.downloadCompleted) {
+            return;
+        }
+        if (this.downloadCompletionPromise) {
+            await this.downloadCompletionPromise;
+            this.downloadCompleted = true;
+        }
+    }
+
+    // Helper to ensure data is loaded from temp file if needed
+    private async ensureDataLoaded(): Promise<boolean> {
+        // Wait for download to complete first
+        await this.waitForDownloadCompletion();
+
+        // If we have data already, we're good
+        if (this.data) {
+            return true;
+        }
+
+        // If we have a temp file, load it into memory
+        if (this.tempFilePath) {
+            try {
+                this.data = NSData.dataWithContentsOfFile(this.tempFilePath) as any;
+                return this.data != null;
+            } catch (e) {
+                console.error('Failed to load data from temp file:', e);
+                return false;
+            }
+        }
+
+        return false;
+    }
+
+    // Synchronous version for backward compatibility
+    private ensureDataLoadedSync(): boolean {
+        // If we have data already, we're good
+        if (this.data) {
+            return true;
+        }
+
+        // If we have a temp file, load it into memory
+        if (this.tempFilePath) {
+            try {
+                this.data = NSData.dataWithContentsOfFile(this.tempFilePath) as any;
+                return this.data != null;
+            } catch (e) {
+                console.error('Failed to load data from temp file:', e);
+                return false;
+            }
+        }
+
+        return false;
+    }
+
+    // Helper to get temp file path or create from data
+    private async getTempFilePath(): Promise<string | null> {
+        // Wait for download to complete first
+        await this.waitForDownloadCompletion();
+
+        if (this.tempFilePath) {
+            return this.tempFilePath;
+        }
+
+        // If we have data but no temp file, create a temp file
+        if (this.data && this.data instanceof NSData) {
+            const tempDir = NSTemporaryDirectory();
+            const tempFileName = NSUUID.UUID().UUIDString;
+            const tempPath = tempDir + tempFileName;
+            const success = this.data.writeToFileAtomically(tempPath, true);
+            if (success) {
+                this.tempFilePath = tempPath;
+                return tempPath;
+            }
+        }
+
+        return null;
+    }
+
     toArrayBufferAsync(): Promise<ArrayBuffer> {
-        throw new Error('Method not implemented.');
+        return this.ensureDataLoaded().then(() => this.toArrayBuffer());
     }
 
     arrayBuffer: ArrayBuffer;
     toArrayBuffer() {
-        if (!this.data) {
+        if (!this.ensureDataLoadedSync()) {
             return null;
         }
         if (this.arrayBuffer) {
@@ -139,7 +258,7 @@ class HttpsResponseLegacy implements IHttpsResponseLegacy {
     }
     stringResponse: string;
     toString(encoding?: any) {
-        if (!this.data) {
+        if (!this.ensureDataLoadedSync()) {
             return null;
         }
         if (this.stringResponse) {
@@ -164,11 +283,11 @@ class HttpsResponseLegacy implements IHttpsResponseLegacy {
         }
     }
     toStringAsync(encoding?: any) {
-        return Promise.resolve(this.toString(encoding));
+        return this.ensureDataLoaded().then(() => this.toString(encoding));
     }
     jsonResponse: any;
     toJSON<T>(encoding?: any) {
-        if (!this.data) {
+        if (!this.ensureDataLoadedSync()) {
             return null;
         }
         if (this.jsonResponse) {
@@ -188,11 +307,11 @@ class HttpsResponseLegacy implements IHttpsResponseLegacy {
         return this.jsonResponse as T;
     }
     toJSONAsync<T>() {
-        return Promise.resolve<T>(this.toJSON());
+        return this.ensureDataLoaded().then(() => this.toJSON<T>());
     }
     imageSource: ImageSource;
     async toImage(): Promise<ImageSource> {
-        if (!this.data) {
+        if (!(await this.ensureDataLoaded())) {
             return Promise.resolve(null);
         }
         if (this.imageSource) {
@@ -212,20 +331,50 @@ class HttpsResponseLegacy implements IHttpsResponseLegacy {
     }
     file: File;
     async toFile(destinationFilePath?: string): Promise<File> {
-        if (!this.data) {
-            return Promise.resolve(null);
-        }
+        // Wait for download to complete before proceeding
+        await this.waitForDownloadCompletion();
+
         if (this.file) {
             return Promise.resolve(this.file);
         }
+
         const r = await new Promise<File>((resolve, reject) => {
             if (!destinationFilePath) {
                 destinationFilePath = getFilenameFromUrl(this.url);
             }
-            if (this.data instanceof NSData) {
-                // ensure destination path exists by creating any missing parent directories
-                const file = File.fromPath(destinationFilePath);
 
+            // If we have a temp file, move it to destination (efficient, no memory copy)
+            if (this.tempFilePath) {
+                try {
+                    const fileManager = NSFileManager.defaultManager;
+                    const destURL = NSURL.fileURLWithPath(destinationFilePath);
+                    const tempURL = NSURL.fileURLWithPath(this.tempFilePath);
+
+                    // Create parent directory if needed
+                    const parentDir = destURL.URLByDeletingLastPathComponent;
+                    fileManager.createDirectoryAtURLWithIntermediateDirectoriesAttributesError(parentDir, true, null);
+
+                    // Remove destination if it exists
+                    if (fileManager.fileExistsAtPath(destinationFilePath)) {
+                        fileManager.removeItemAtPathError(destinationFilePath);
+                    }
+
+                    // Move temp file to destination
+                    const success = fileManager.moveItemAtURLToURLError(tempURL, destURL);
+                    if (success) {
+                        // Clear temp path since file has been moved
+                        this.tempFilePath = null;
+                        resolve(File.fromPath(destinationFilePath));
+                    } else {
+                        reject(new Error(`Failed to move temp file to: ${destinationFilePath}`));
+                    }
+                } catch (e) {
+                    reject(new Error(`Cannot save file with path: ${destinationFilePath}. ${e}`));
+                }
+            }
+            // Fallback: if we have data in memory, write it
+            else if (this.ensureDataLoadedSync() && this.data instanceof NSData) {
+                const file = File.fromPath(destinationFilePath);
                 const result = this.data.writeToFileAtomically(destinationFilePath, true);
                 if (result) {
                     resolve(file);
@@ -233,28 +382,31 @@ class HttpsResponseLegacy implements IHttpsResponseLegacy {
                     reject(new Error(`Cannot save file with path: ${destinationFilePath}.`));
                 }
             } else {
-                reject(new Error(`Cannot save file with path: ${destinationFilePath}.`));
+                reject(new Error(`No data available to save to file: ${destinationFilePath}.`));
             }
         });
+
         this.file = r;
         return r;
     }
 }
 
-function AFFailure(resolve, reject, task: NSURLSessionDataTask, error: NSError, useLegacy: boolean, url) {
+function AFFailure(resolve, reject, httpResponse: NSHTTPURLResponse, error: NSError, url) {
     if (error.code === -999) {
         return reject(error);
     }
     let getHeaders = () => ({});
     const sendi = {
-        task,
-        contentLength: task?.countOfBytesReceived,
+        httpResponse,
+        contentLength: httpResponse?.expectedContentLength ?? 0,
         reason: error.localizedDescription,
         get headers() {
             return getHeaders();
         }
     } as any as HttpsResponse;
-    const response = error.userInfo.valueForKey(AFNetworkingOperationFailingURLResponseErrorKey) as NSHTTPURLResponse;
+
+    // Try to get response from error or use the one passed in
+    const response = httpResponse || (error.userInfo.valueForKey(AFNetworkingOperationFailingURLResponseErrorKey) as NSHTTPURLResponse);
     if (!Utils.isNullOrUndefined(response)) {
         sendi.statusCode = response.statusCode;
         getHeaders = function () {
@@ -271,66 +423,37 @@ function AFFailure(resolve, reject, task: NSURLSessionDataTask, error: NSError, 
     const data: NSDictionary<string, any> & NSData & NSArray<any> = error.userInfo.valueForKey(AFNetworkingOperationFailingURLResponseDataErrorKey);
     const parsedData = getData(data);
     const failingURL = error.userInfo.objectForKey('NSErrorFailingURLKey');
-    if (useLegacy) {
-        if (!sendi.statusCode) {
-            return reject(error);
-        }
-        const failure: any = {
-            error,
-            description: error.description,
-            reason: error.localizedDescription,
-            url: failingURL ? failingURL.description : url
-        };
-        if (policies.secured === true) {
-            failure.description = '@nativescript-community/https > Invalid SSL certificate! ' + error.description;
-        }
-        sendi.failure = failure;
-        sendi.content = new HttpsResponseLegacy(data, sendi.contentLength, url);
-        resolve(sendi);
-    } else {
-        const response: any = {
-            error,
-            body: parsedData,
-            contentLength: sendi.contentLength,
-            description: error.description,
-            reason: error.localizedDescription,
-            url: failingURL ? failingURL.description : url
-        };
 
-        if (policies.secured === true) {
-            response.description = '@nativescript-community/https > Invalid SSL certificate! ' + response.description;
-        }
-        sendi.content = parsedData;
-        sendi.response = response;
-
-        resolve(sendi);
+    // Always use legacy response
+    if (!sendi.statusCode) {
+        return reject(error);
     }
+    const failure: any = {
+        error,
+        description: error.description,
+        reason: error.localizedDescription,
+        url: failingURL ? failingURL.description : url
+    };
+    if (policies.secured === true) {
+        failure.description = '@nativescript-community/https > Invalid SSL certificate! ' + error.description;
+    }
+    sendi.failure = failure;
+    sendi.content = new HttpsResponseLegacy(data, sendi.contentLength, url);
+    resolve(sendi);
 }
 
-function bodyToNative(cont) {
-    let dict;
-    if (Array.isArray(cont)) {
-        dict = NSArray.arrayWithArray(cont.map((item) => bodyToNative(item)));
-    } else if (Utils.isObject(cont)) {
-        dict = NSMutableDictionary.new<string, any>();
-        Object.keys(cont).forEach((key) => dict.setValueForKey(bodyToNative(cont[key]), key));
-    } else {
-        dict = cont;
-    }
-    return dict;
-}
-
-const runningRequests: { [k: string]: NSURLSessionDataTask } = {};
+const runningRequests: { [k: string]: string } = {}; // Maps tag to request ID
 
 export function cancelRequest(tag: string) {
-    if (runningRequests[tag]) {
-        runningRequests[tag].cancel();
+    const requestId = runningRequests[tag];
+    if (requestId) {
+        manager.cancelRequest(requestId);
     }
 }
 
 export function cancelAllRequests() {
-    Object.values(runningRequests).forEach((request) => {
-        request.cancel();
+    Object.values(runningRequests).forEach((requestId) => {
+        manager.cancelRequest(requestId);
     });
 }
 
@@ -341,35 +464,36 @@ export function clearCookies() {
         storage.deleteCookie(cookie);
     });
 }
-export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = true): HttpsRequest {
-    const type = opts.headers && opts.headers['Content-Type'] ? opts.headers['Content-Type'] : 'application/json';
+export function createRequest(opts: HttpsRequestOptions): HttpsRequest {
+    const type = opts.headers?.['Content-Type'] ?? 'application/json';
     if (type.startsWith('application/json')) {
-        manager.requestSerializer = AFJSONRequestSerializer.serializer();
-        manager.responseSerializer = AFJSONResponseSerializer.serializerWithReadingOptions(NSJSONReadingOptions.AllowFragments);
+        manager.requestSerializerWrapper.httpShouldHandleCookies = opts.cookiesEnabled !== false;
+        manager.responseSerializerWrapper.acceptsJSON = true;
+        manager.responseSerializerWrapper.readingOptions = NSJSONReadingOptions.AllowFragments;
     } else {
-        manager.requestSerializer = AFHTTPRequestSerializer.serializer();
-        manager.responseSerializer = AFHTTPResponseSerializer.serializer();
+        manager.requestSerializerWrapper.httpShouldHandleCookies = opts.cookiesEnabled !== false;
+        manager.responseSerializerWrapper.acceptsJSON = false;
     }
-    manager.requestSerializer.allowsCellularAccess = true;
-    manager.requestSerializer.HTTPShouldHandleCookies = opts.cookiesEnabled !== false;
-    manager.securityPolicy = policies.secured === true ? policies.secure : policies.def;
+    manager.requestSerializerWrapper.allowsCellularAccess = true;
+    manager.securityPolicyWrapper = policies.secured === true ? policies.secure : policies.def;
 
     if (opts.cachePolicy) {
         switch (opts.cachePolicy) {
             case 'noCache':
                 manager.setDataTaskWillCacheResponseBlock((session, task, cacheResponse) => null);
+                manager.requestSerializerWrapper.cachePolicy = NSURLRequestCachePolicy.ReloadIgnoringLocalCacheData;
                 break;
             case 'onlyCache':
-                manager.requestSerializer.cachePolicy = NSURLRequestCachePolicy.ReturnCacheDataDontLoad;
+                manager.requestSerializerWrapper.cachePolicy = NSURLRequestCachePolicy.ReturnCacheDataDontLoad;
                 break;
             case 'ignoreCache':
-                manager.requestSerializer.cachePolicy = NSURLRequestCachePolicy.ReloadIgnoringLocalCacheData;
+                manager.requestSerializerWrapper.cachePolicy = NSURLRequestCachePolicy.ReloadIgnoringLocalCacheData;
                 break;
         }
     } else {
-        manager.requestSerializer.cachePolicy = NSURLRequestCachePolicy.UseProtocolCachePolicy;
+        manager.requestSerializerWrapper.cachePolicy = NSURLRequestCachePolicy.UseProtocolCachePolicy;
     }
-    const heads = opts.headers;
+    const heads = opts.headers ?? {};
     let headers: NSMutableDictionary<string, any> = null;
     if (heads) {
         headers = NSMutableDictionary.dictionary();
@@ -386,7 +510,7 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
         );
     }
 
-    manager.requestSerializer.timeoutInterval = opts.timeout ? opts.timeout : 10;
+    manager.requestSerializerWrapper.timeoutInterval = opts.timeout ? opts.timeout : 10;
 
     const progress = opts.onProgress
         ? (progress: NSProgress) => {
@@ -399,8 +523,9 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
               }
           }
         : null;
-    let task: NSURLSessionDataTask;
-    const tag = opts.tag;
+    const tag = opts.tag ?? `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    // Generate request ID for tracking
+    const requestId = tag;
 
     function clearRunningRequest() {
         if (tag) {
@@ -409,15 +534,21 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
     }
     return {
         get nativeRequest() {
-            return task;
+            return null; // We no longer expose the task
         },
-        cancel: () => task && task.cancel(),
+        cancel: () => {
+            const rid = runningRequests[tag];
+            console.log('cancel', tag, rid);
+            if (rid) {
+                manager.cancelRequest(rid);
+            }
+        },
         run(resolve, reject) {
-            const success = function (task: NSURLSessionDataTask, data?: any) {
+            const success = function (response: NSHTTPURLResponse, data?: any) {
                 clearRunningRequest();
-                // TODO: refactor this code with failure one.
-                const contentLength = task.countOfBytesReceived;
-                const content = useLegacy ? new HttpsResponseLegacy(data, contentLength, opts.url) : getData(data);
+                const contentLength = response?.expectedContentLength ?? 0;
+                console.log('run done', contentLength);
+                const content = new HttpsResponseLegacy(data, contentLength, opts.url);
                 let getHeaders = () => ({});
                 const sendi = {
                     content,
@@ -427,7 +558,6 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                     }
                 } as any as HttpsResponse;
 
-                const response = task.response as NSHTTPURLResponse;
                 if (!Utils.isNullOrUndefined(response)) {
                     sendi.statusCode = response.statusCode;
                     getHeaders = function () {
@@ -446,21 +576,28 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                 //     sendi.reason = AFResponse.reason;
                 // }
             };
-            const failure = function (task: NSURLSessionDataTask, error: any) {
+            const failure = function (response: NSHTTPURLResponse, error: any) {
                 clearRunningRequest();
-                AFFailure(resolve, reject, task, error, useLegacy, opts.url);
+                AFFailure(resolve, reject, response, error, opts.url);
             };
             if (type.startsWith('multipart/form-data')) {
                 switch (opts.method) {
                     case 'POST':
                         // we need to remove the Content-Type or the boundary wont be set correctly
                         headers.removeObjectForKey('Content-Type');
-                        task = manager.POSTParametersHeadersConstructingBodyWithBlockProgressSuccessFailure(
+                        if (tag) {
+                            runningRequests[tag] = requestId;
+                        }
+                        manager.uploadMultipart(
                             opts.url,
-                            null,
                             headers,
+                            requestId,
+                            NSNumber.numberWithBool(opts.responseOnMainThread) as any as NSNumber,
+                            NSNumber.numberWithBool(opts.progressOnMainThread) as any as NSNumber,
                             (formData) => {
+                                    console.log('formData1', opts.body);
                                 (opts.body as HttpsFormDataParam[]).forEach((param) => {
+                                    console.log('formData', param.fileName, param.contentType, param.data);
                                     if (param.fileName && param.contentType) {
                                         if (param.data instanceof NSURL) {
                                             formData.appendPartWithFileURLNameFileNameMimeTypeError(param.data, param.parameterName, param.fileName, param.contentType);
@@ -502,19 +639,19 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                     Object.keys(heads).forEach((k) => {
                         request.setValueForHTTPHeaderField(heads[k], k);
                     });
-                    task = manager.uploadTaskWithRequestFromFileProgressCompletionHandler(
+                    if (tag) {
+                        runningRequests[tag] = requestId;
+                    }
+                    manager.uploadFile(
                         request,
                         NSURL.fileURLWithPath(opts.body.path),
+                        requestId,
+                        NSNumber.numberWithBool(opts.responseOnMainThread) as any as NSNumber,
+                        NSNumber.numberWithBool(opts.progressOnMainThread) as any as NSNumber,
                         progress,
-                        (response: NSURLResponse, responseObject: any, error: NSError) => {
-                            if (error) {
-                                failure(task, error);
-                            } else {
-                                success(task, responseObject);
-                            }
-                        }
+                        success,
+                        failure
                     );
-                    task.resume();
                 } else {
                     let data: NSData;
                     // TODO: add support for Buffers
@@ -530,14 +667,19 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                     Object.keys(heads).forEach((k) => {
                         request.setValueForHTTPHeaderField(heads[k], k);
                     });
-                    task = manager.uploadTaskWithRequestFromDataProgressCompletionHandler(request, data, progress, (response: NSURLResponse, responseObject: any, error: NSError) => {
-                        if (error) {
-                            failure(task, error);
-                        } else {
-                            success(task, responseObject);
-                        }
-                    });
-                    task.resume();
+                    if (tag) {
+                        runningRequests[tag] = requestId;
+                    }
+                    manager.uploadData(
+                        request,
+                        data,
+                        requestId,
+                        NSNumber.numberWithBool(opts.responseOnMainThread) as any as NSNumber,
+                        NSNumber.numberWithBool(opts.progressOnMainThread) as any as NSNumber,
+                        progress,
+                        success,
+                        failure
+                    );
                 }
             } else {
                 let dict = null;
@@ -550,19 +692,216 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                 } else if (typeof opts.content === 'string') {
                     dict = NSJSONSerialization.JSONObjectWithDataOptionsError(NSString.stringWithString(opts.content).dataUsingEncoding(NSUTF8StringEncoding), 0 as any);
                 }
-                task = manager.dataTaskWithHTTPMethodURLStringParametersHeadersUploadProgressDownloadProgressSuccessFailure(opts.method, opts.url, dict, headers, progress, progress, success, failure);
-                task.resume();
-            }
-            if (task && tag) {
-                runningRequests[tag] = task;
+
+                // For GET requests, decide between memory and file download
+                if (opts.method === 'GET') {
+                    // Check if early resolution is requested
+                    const earlyResolve = opts.earlyResolve === true;
+                    const sizeThreshold = opts.downloadSizeThreshold !== undefined ? opts.downloadSizeThreshold : 1024 * 1024 * 10; // Default: always use file download
+
+                    // Check if conditional download is requested (threshold set and not using early resolve)
+                    const useConditionalDownload = sizeThreshold >= 0 && !earlyResolve;
+
+                    if (useConditionalDownload) {
+                        // Use conditional download: check size and decide memory vs file
+                        if (tag) {
+                            runningRequests[tag] = requestId;
+                        }
+                        manager.requestWithConditionalDownload(
+                            opts.method,
+                            opts.url,
+                            dict,
+                            headers,
+                            requestId,
+                            NSNumber.numberWithBool(opts.responseOnMainThread) as any as NSNumber,
+                            NSNumber.numberWithBool(opts.progressOnMainThread) as any as NSNumber,
+                            sizeThreshold,
+                            progress,
+                            (httpResponse: NSHTTPURLResponse, responseData: any, tempFilePath: string) => {
+                                clearRunningRequest();
+
+                                const contentLength = httpResponse?.expectedContentLength || 0;
+
+                                // If we got a temp file path, response was saved to file (large)
+                                // If we got responseData, response is in memory (small)
+                                const content = tempFilePath ? new HttpsResponseLegacy(null, contentLength, opts.url, tempFilePath) : new HttpsResponseLegacy(responseData, contentLength, opts.url);
+
+                                let getHeaders = () => ({});
+                                const sendi = {
+                                    content,
+                                    contentLength,
+                                    get headers() {
+                                        return getHeaders();
+                                    }
+                                } as any as HttpsResponse;
+
+                                if (!Utils.isNullOrUndefined(httpResponse)) {
+                                    sendi.statusCode = httpResponse.statusCode;
+                                    getHeaders = function () {
+                                        const dict = httpResponse.allHeaderFields;
+                                        if (dict) {
+                                            const headers = {};
+                                            dict.enumerateKeysAndObjectsUsingBlock((k, v) => (headers[k] = v));
+                                            return headers;
+                                        }
+                                        return null;
+                                    };
+                                }
+                                resolve(sendi);
+                            },
+                            (httpResponse: NSHTTPURLResponse, error: NSError) => {
+                                clearRunningRequest();
+                                failure(httpResponse, error);
+                            }
+                        );
+                    } else if (earlyResolve) {
+                        // Use early resolution: resolve when headers arrive, continue download in background
+                        let downloadCompletionResolve: () => void;
+                        let downloadCompletionReject: (error: Error) => void;
+                        const downloadCompletionPromise = new Promise<void>((res, rej) => {
+                            downloadCompletionResolve = res;
+                            downloadCompletionReject = rej;
+                        });
+
+                        // Track the content object so we can update it when download completes
+                        let responseContent: HttpsResponseLegacy | undefined;
+
+                        if (tag) {
+                            runningRequests[tag] = requestId;
+                        }
+
+                        manager.downloadToTempWithEarlyHeaders(
+                            opts.method,
+                            opts.url,
+                            dict,
+                            headers,
+                            requestId,
+                            NSNumber.numberWithBool(opts.responseOnMainThread) as any as NSNumber,
+                            NSNumber.numberWithBool(opts.progressOnMainThread) as any as NSNumber,
+                            sizeThreshold,
+                            progress,
+                            (httpResponse: NSHTTPURLResponse, contentLength: number) => {
+                                // Headers callback - resolve request early
+                                clearRunningRequest();
+
+                                // Create response WITHOUT temp file path (download still in progress)
+                                responseContent = new HttpsResponseLegacy(null, contentLength, opts.url, undefined, downloadCompletionPromise);
+                                const content = responseContent;
+
+                                let getHeaders = () => ({});
+                                const sendi = {
+                                    content,
+                                    contentLength,
+                                    get headers() {
+                                        return getHeaders();
+                                    }
+                                } as any as HttpsResponse;
+
+                                if (!Utils.isNullOrUndefined(httpResponse)) {
+                                    sendi.statusCode = httpResponse.statusCode;
+                                    getHeaders = function () {
+                                        const dict = httpResponse.allHeaderFields;
+                                        if (dict) {
+                                            const headers = {};
+                                            dict.enumerateKeysAndObjectsUsingBlock((k, v) => (headers[k] = v));
+                                            return headers;
+                                        }
+                                        return null;
+                                    };
+                                }
+
+                                // Resolve immediately with headers
+                                resolve(sendi);
+                            },
+                            (httpResponse: NSHTTPURLResponse, tempFilePath: string) => {
+                                // Download completion callback - success
+                                // Update the response content with temp file path
+                                if (responseContent) {
+                                    (responseContent as any).tempFilePath = tempFilePath;
+                                }
+                                downloadCompletionResolve();
+                            },
+                            (httpResponse: NSHTTPURLResponse, error: NSError) => {
+                                // Download completion callback - failure
+                                downloadCompletionReject(new Error(error.localizedDescription));
+                            }
+                        );
+                    } else {
+                        // Standard download: wait for full download before resolving
+                        if (tag) {
+                            runningRequests[tag] = requestId;
+                        }
+
+                        manager.downloadToTemp(
+                            opts.method,
+                            opts.url,
+                            dict,
+                            headers,
+                            requestId,
+                            NSNumber.numberWithBool(opts.responseOnMainThread) as any as NSNumber,
+                            NSNumber.numberWithBool(opts.progressOnMainThread) as any as NSNumber,
+                            progress,
+                            (httpResponse: NSHTTPURLResponse, tempFilePath: string) => {
+                                clearRunningRequest();
+
+                                const contentLength = httpResponse?.expectedContentLength || 0;
+
+                                // Create response with temp file path (no data loaded in memory yet)
+                                const content = new HttpsResponseLegacy(null, contentLength, opts.url, tempFilePath);
+
+                                let getHeaders = () => ({});
+                                const sendi = {
+                                    content,
+                                    contentLength,
+                                    get headers() {
+                                        return getHeaders();
+                                    }
+                                } as any as HttpsResponse;
+
+                                if (!Utils.isNullOrUndefined(httpResponse)) {
+                                    sendi.statusCode = httpResponse.statusCode;
+                                    getHeaders = function () {
+                                        const dict = httpResponse.allHeaderFields;
+                                        if (dict) {
+                                            const headers = {};
+                                            dict.enumerateKeysAndObjectsUsingBlock((k, v) => (headers[k] = v));
+                                            return headers;
+                                        }
+                                        return null;
+                                    };
+                                }
+                                resolve(sendi);
+                            },
+                            failure
+                        );
+                    }
+                } else {
+                    // For non-GET requests, use regular request (loads into memory)
+                    if (tag) {
+                        runningRequests[tag] = requestId;
+                    }
+                    manager.request(
+                        opts.method,
+                        opts.url,
+                        dict,
+                        headers,
+                        requestId,
+                        NSNumber.numberWithBool(opts.responseOnMainThread) as any as NSNumber,
+                        NSNumber.numberWithBool(opts.progressOnMainThread) as any as NSNumber,
+                        progress,
+                        progress,
+                        success,
+                        failure
+                    );
+                }
             }
         }
     };
 }
-export function request(opts: HttpsRequestOptions, useLegacy: boolean = true) {
+export function request(opts: HttpsRequestOptions) {
     return new Promise((resolve, reject) => {
         try {
-            createRequest(opts, useLegacy).run(resolve, reject);
+            createRequest(opts).run(resolve, reject);
         } catch (error) {
             reject(error);
         }

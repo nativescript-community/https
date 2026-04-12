@@ -73,6 +73,22 @@ export interface HttpsRequestOptions extends HttpRequestOptions {
      * default to true. Android and iOS only store cookies in memory! it will be cleared after an app restart
      */
     cookiesEnabled?: boolean;
+
+    /**
+     * iOS only: Resolve request promise as soon as headers are received, before download completes.
+     * This allows inspecting status/headers and cancelling before full download.
+     * When true, toFile()/toJSON()/etc. will wait for download completion.
+     * Default: false (waits for full download before resolving)
+     */
+    earlyResolve?: boolean;
+
+    /**
+     * iOS only: Response size threshold (in bytes) for using file download vs memory loading.
+     * Responses larger than this will be downloaded to temp file (memory efficient).
+     * Responses smaller will be loaded into memory (faster for small responses).
+     * Default: 1048576 (1 MB). Set to 0 to always use memory, -1 to always use file download.
+     */
+    downloadSizeThreshold?: number;
 }
 
 export interface HttpsResponse<T = any> {

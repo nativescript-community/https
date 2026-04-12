@@ -15,21 +15,27 @@ public class AlamofireWrapper: NSObject {
     
     @objc public override init() {
         let configuration = URLSessionConfiguration.default
-        self.session = Session(configuration: configuration)
+        // Create session with ServerTrustManager that allows all hosts by default
+        let serverTrustManager = ServerTrustManager(allHostsMustBeEvaluated: false, evaluators: [:])
+        self.session = Session(configuration: configuration, serverTrustManager: serverTrustManager)
         self.requestSerializer = RequestSerializer()
         self.responseSerializer = ResponseSerializer()
         super.init()
     }
     
     @objc public init(configuration: URLSessionConfiguration) {
-        self.session = Session(configuration: configuration)
+        // Create session with ServerTrustManager that allows all hosts by default
+        let serverTrustManager = ServerTrustManager(allHostsMustBeEvaluated: false, evaluators: [:])
+        self.session = Session(configuration: configuration, serverTrustManager: serverTrustManager)
         self.requestSerializer = RequestSerializer()
         self.responseSerializer = ResponseSerializer()
         super.init()
     }
     
     @objc public init(configuration: URLSessionConfiguration, baseURL: URL?) {
-        self.session = Session(configuration: configuration)
+        // Create session with ServerTrustManager that allows all hosts by default
+        let serverTrustManager = ServerTrustManager(allHostsMustBeEvaluated: false, evaluators: [:])
+        self.session = Session(configuration: configuration, serverTrustManager: serverTrustManager)
         self.requestSerializer = RequestSerializer()
         self.responseSerializer = ResponseSerializer()
         super.init()
@@ -68,20 +74,16 @@ public class AlamofireWrapper: NSObject {
     private func recreateSession() {
         let configuration = session.sessionConfiguration
         
-        if let secPolicy = securityPolicy {
-            // Create a server trust manager with our security policy
-            let evaluators: [String: ServerTrustEvaluating] = [:] // Will be filled dynamically per request
-            let serverTrustManager = ServerTrustManager(allHostsMustBeEvaluated: false, evaluators: evaluators)
-            
-            // Create new session with server trust manager
-            session = Session(
-                configuration: configuration,
-                serverTrustManager: serverTrustManager
-            )
-        } else {
-            // Create session without server trust manager
-            session = Session(configuration: configuration)
-        }
+        // Create a server trust manager with our security policy
+        // Use allHostsMustBeEvaluated: false to allow default trust evaluation for non-pinned hosts
+        let serverTrustManager = ServerTrustManager(allHostsMustBeEvaluated: false, evaluators: [:])
+        
+        // Create new session with server trust manager
+        // Keep the session alive by replacing it atomically
+        session = Session(
+            configuration: configuration,
+            serverTrustManager: serverTrustManager
+        )
     }
     
     /// Get dispatch queue for responses
@@ -209,12 +211,14 @@ public class AlamofireWrapper: NSObject {
             }
         }
         
-        // Store reference to task before async callback
-        let task = afRequest.task
-        
         // Response handling
         let respQueue = responseQueue(mainThread: respMainThread)
-        afRequest.response(queue: respQueue) { response in
+        afRequest.response(queue: respQueue) { [weak self] response in
+            guard let self = self else { return }
+            
+            // Get the actual task from the DataRequest (available after request started)
+            let task = response.request?.task
+            
             if let error = response.error {
                 let nsError = self.createNSError(from: error, response: response.response, data: response.data)
                 failure(task, nsError)
@@ -230,7 +234,8 @@ public class AlamofireWrapper: NSObject {
             }
         }
         
-        return task
+        // Return the task (it will be available after request starts)
+        return afRequest.task
     }
     
     // MARK: - Multipart Form Data
@@ -311,12 +316,14 @@ public class AlamofireWrapper: NSObject {
             }
         }
         
-        // Store reference to task before async callback
-        let task = afRequest.task
-        
         // Response handling
         let respQueue = responseQueue(mainThread: respMainThread)
-        afRequest.response(queue: respQueue) { response in
+        afRequest.response(queue: respQueue) { [weak self] response in
+            guard let self = self else { return }
+            
+            // Get the actual task from the DataRequest (available after request started)
+            let task = response.request?.task
+            
             if let error = response.error {
                 let nsError = self.createNSError(from: error, response: response.response, data: response.data)
                 failure(task, nsError)
@@ -332,7 +339,7 @@ public class AlamofireWrapper: NSObject {
             }
         }
         
-        return task
+        return afRequest.task
     }
     
     // MARK: - Upload Tasks
@@ -724,11 +731,13 @@ public class AlamofireWrapper: NSObject {
             }
         }
         
-        // Store reference to task before async callback
-        let task = afRequest.task
-        
         // Response handling
-        afRequest.response(queue: .main) { response in
+        afRequest.response(queue: .main) { [weak self] response in
+            guard let self = self else { return }
+            
+            // Get the actual task from the DataRequest (available after request started)
+            let task = response.request?.task
+            
             if let error = response.error {
                 let nsError = self.createNSError(from: error, response: response.response, data: response.data)
                 failure(task, nsError)

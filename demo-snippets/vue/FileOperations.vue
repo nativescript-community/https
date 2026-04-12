@@ -439,6 +439,9 @@ export default Vue.extend({
                 const response = await Https.request({
                     url: 'https://httpbin.org/post',
                     method: 'POST',
+                    headers:{
+                        'Content-Type': 'multipart/form-data'
+                    },
                     body: [
                         {
                             data: content,
@@ -477,6 +480,9 @@ export default Vue.extend({
                 const response = await Https.request({
                     url: 'https://httpbin.org/post',
                     method: 'POST',
+                    headers:{
+                        'Content-Type': 'multipart/form-data'
+                    },
                     body: [
                         {
                             data: content1,
@@ -517,6 +523,9 @@ export default Vue.extend({
                 const response = await Https.request({
                     url: 'https://httpbin.org/post',
                     method: 'POST',
+                    headers:{
+                        'Content-Type': 'multipart/form-data'
+                    },
                     body: [
                         {
                             data: content,
@@ -551,6 +560,9 @@ export default Vue.extend({
                 const response = await Https.request({
                     url: 'https://httpbin.org/post',
                     method: 'POST',
+                    headers:{
+                        'Content-Type': 'multipart/form-data'
+                    },
                     body: [
                         { data: 'Test User', parameterName: 'username' },
                         { data: 'test@example.com', parameterName: 'email' },

@@ -234,7 +234,7 @@ class HttpsResponseLegacy implements IHttpsResponseLegacy {
     }
 
     toArrayBufferAsync(): Promise<ArrayBuffer> {
-        throw new Error('Method not implemented.');
+        return this.ensureDataLoaded().then(() => this.toArrayBuffer());
     }
 
     arrayBuffer: ArrayBuffer;
@@ -438,19 +438,6 @@ function AFFailure(resolve, reject, httpResponse: NSHTTPURLResponse, error: NSEr
     resolve(sendi);
 }
 
-function bodyToNative(cont) {
-    let dict;
-    if (Array.isArray(cont)) {
-        dict = NSArray.arrayWithArray(cont.map((item) => bodyToNative(item)));
-    } else if (Utils.isObject(cont)) {
-        dict = NSMutableDictionary.new<string, any>();
-        Object.keys(cont).forEach((key) => dict.setValueForKey(bodyToNative(cont[key]), key));
-    } else {
-        dict = cont;
-    }
-    return dict;
-}
-
 const runningRequests: { [k: string]: string } = {}; // Maps tag to request ID
 
 export function cancelRequest(tag: string) {
@@ -490,6 +477,7 @@ export function createRequest(opts: HttpsRequestOptions): HttpsRequest {
         switch (opts.cachePolicy) {
             case 'noCache':
                 manager.setDataTaskWillCacheResponseBlock((session, task, cacheResponse) => null);
+                manager.requestSerializerWrapper.cachePolicy = NSURLRequestCachePolicy.ReloadIgnoringLocalCacheData;
                 break;
             case 'onlyCache':
                 manager.requestSerializerWrapper.cachePolicy = NSURLRequestCachePolicy.ReturnCacheDataDontLoad;
@@ -501,7 +489,7 @@ export function createRequest(opts: HttpsRequestOptions): HttpsRequest {
     } else {
         manager.requestSerializerWrapper.cachePolicy = NSURLRequestCachePolicy.UseProtocolCachePolicy;
     }
-    const heads = opts.headers;
+    const heads = opts.headers ?? {};
     let headers: NSMutableDictionary<string, any> = null;
     if (heads) {
         headers = NSMutableDictionary.dictionary();
@@ -531,9 +519,9 @@ export function createRequest(opts: HttpsRequestOptions): HttpsRequest {
               }
           }
         : null;
-    const tag = opts.tag;
+    const tag = opts.tag ?? `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     // Generate request ID for tracking
-    const requestId = tag || `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const requestId = tag;
 
     function clearRunningRequest() {
         if (tag) {
@@ -546,6 +534,7 @@ export function createRequest(opts: HttpsRequestOptions): HttpsRequest {
         },
         cancel: () => {
             const rid = runningRequests[tag];
+            console.log('cancel', tag, rid);
             if (rid) {
                 manager.cancelRequest(rid);
             }
@@ -599,8 +588,12 @@ export function createRequest(opts: HttpsRequestOptions): HttpsRequest {
                             opts.url,
                             headers,
                             requestId,
+                            NSNumber.numberWithBool(opts.responseOnMainThread) as any as NSNumber,
+                            NSNumber.numberWithBool(opts.progressOnMainThread) as any as NSNumber,
                             (formData) => {
+                                    console.log('formData1', opts.body);
                                 (opts.body as HttpsFormDataParam[]).forEach((param) => {
+                                    console.log('formData', param.fileName, param.contentType, param.data);
                                     if (param.fileName && param.contentType) {
                                         if (param.data instanceof NSURL) {
                                             formData.appendPartWithFileURLNameFileNameMimeTypeError(param.data, param.parameterName, param.fileName, param.contentType);
@@ -645,7 +638,16 @@ export function createRequest(opts: HttpsRequestOptions): HttpsRequest {
                     if (tag) {
                         runningRequests[tag] = requestId;
                     }
-                    manager.uploadFile(request, NSURL.fileURLWithPath(opts.body.path), requestId, progress, success, failure);
+                    manager.uploadFile(
+                        request,
+                        NSURL.fileURLWithPath(opts.body.path),
+                        requestId,
+                        NSNumber.numberWithBool(opts.responseOnMainThread) as any as NSNumber,
+                        NSNumber.numberWithBool(opts.progressOnMainThread) as any as NSNumber,
+                        progress,
+                        success,
+                        failure
+                    );
                 } else {
                     let data: NSData;
                     // TODO: add support for Buffers
@@ -664,7 +666,16 @@ export function createRequest(opts: HttpsRequestOptions): HttpsRequest {
                     if (tag) {
                         runningRequests[tag] = requestId;
                     }
-                    manager.uploadData(request, data, requestId, progress, success, failure);
+                    manager.uploadData(
+                        request,
+                        data,
+                        requestId,
+                        NSNumber.numberWithBool(opts.responseOnMainThread) as any as NSNumber,
+                        NSNumber.numberWithBool(opts.progressOnMainThread) as any as NSNumber,
+                        progress,
+                        success,
+                        failure
+                    );
                 }
             } else {
                 let dict = null;
@@ -698,6 +709,8 @@ export function createRequest(opts: HttpsRequestOptions): HttpsRequest {
                             dict,
                             headers,
                             requestId,
+                            NSNumber.numberWithBool(opts.responseOnMainThread) as any as NSNumber,
+                            NSNumber.numberWithBool(opts.progressOnMainThread) as any as NSNumber,
                             sizeThreshold,
                             progress,
                             (httpResponse: NSHTTPURLResponse, responseData: any, tempFilePath: string) => {
@@ -759,6 +772,8 @@ export function createRequest(opts: HttpsRequestOptions): HttpsRequest {
                             dict,
                             headers,
                             requestId,
+                            NSNumber.numberWithBool(opts.responseOnMainThread) as any as NSNumber,
+                            NSNumber.numberWithBool(opts.progressOnMainThread) as any as NSNumber,
                             sizeThreshold,
                             progress,
                             (httpResponse: NSHTTPURLResponse, contentLength: number) => {
@@ -819,6 +834,8 @@ export function createRequest(opts: HttpsRequestOptions): HttpsRequest {
                             dict,
                             headers,
                             requestId,
+                            NSNumber.numberWithBool(opts.responseOnMainThread) as any as NSNumber,
+                            NSNumber.numberWithBool(opts.progressOnMainThread) as any as NSNumber,
                             progress,
                             (httpResponse: NSHTTPURLResponse, tempFilePath: string) => {
                                 clearRunningRequest();
@@ -859,7 +876,19 @@ export function createRequest(opts: HttpsRequestOptions): HttpsRequest {
                     if (tag) {
                         runningRequests[tag] = requestId;
                     }
-                    manager.request(opts.method, opts.url, dict, headers, requestId, progress, progress, success, failure);
+                    manager.request(
+                        opts.method,
+                        opts.url,
+                        dict,
+                        headers,
+                        requestId,
+                        NSNumber.numberWithBool(opts.responseOnMainThread) as any as NSNumber,
+                        NSNumber.numberWithBool(opts.progressOnMainThread) as any as NSNumber,
+                        progress,
+                        progress,
+                        success,
+                        failure
+                    );
                 }
             }
         }

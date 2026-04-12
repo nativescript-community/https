@@ -125,14 +125,14 @@ public class AlamofireWrapper: NSObject {
     }
     
     /// Remove a request by ID
-    private func removeRequest(id: String) {
+    private func removeRequest(_ id: String) {
         requestsLock.lock()
         defer { requestsLock.unlock() }
         activeRequests.removeValue(forKey: id)
     }
     
     /// Cancel a request by ID
-    @objc public func cancelRequest(id: String) {
+    @objc public func cancelRequest(_ id: String) {
         requestsLock.lock()
         let request = activeRequests[id]
         requestsLock.unlock()
@@ -185,33 +185,6 @@ public class AlamofireWrapper: NSObject {
         _ parameters: NSDictionary?,
         _ headers: NSDictionary?,
         _ requestId: String,
-        _ uploadProgress: ((Progress) -> Void)?,
-        _ downloadProgress: ((Progress) -> Void)?,
-        _ success: @escaping (HTTPURLResponse?, Any?) -> Void,
-        _ failure: @escaping (HTTPURLResponse?, Error) -> Void
-    ) {
-        requestWithThreading(
-            method,
-            urlString,
-            parameters,
-            headers,
-            requestId,
-            nil, // responseOnMainThread - defaults to true
-            nil, // progressOnMainThread - defaults to responseOnMainThread
-            uploadProgress,
-            downloadProgress,
-            success,
-            failure
-        )
-    }
-    
-    // Extended API with threading options
-    @objc public func requestWithThreading(
-        _ method: String,
-        _ urlString: String,
-        _ parameters: NSDictionary?,
-        _ headers: NSDictionary?,
-        _ requestId: String,
         _ responseOnMainThread: NSNumber?, // NSNumber wrapper for optional Bool
         _ progressOnMainThread: NSNumber?, // NSNumber wrapper for optional Bool
         _ uploadProgress: ((Progress) -> Void)?,
@@ -219,7 +192,6 @@ public class AlamofireWrapper: NSObject {
         _ success: @escaping (HTTPURLResponse?, Any?) -> Void,
         _ failure: @escaping (HTTPURLResponse?, Error) -> Void
     ) {
-        
         guard let url = URL(string: urlString) else {
             let error = NSError(domain: "AlamofireWrapper", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])
             failure(nil, error)
@@ -281,7 +253,7 @@ public class AlamofireWrapper: NSObject {
             guard let self = self else { return }
             
             // Remove request from active list
-            self.removeRequest(id: requestId)
+            self.removeRequest(requestId)
             
             // Get the HTTP response
             let httpResponse = response.response
@@ -308,29 +280,6 @@ public class AlamofireWrapper: NSObject {
         _ urlString: String,
         _ headers: NSDictionary?,
         _ requestId: String,
-        _ constructingBodyWithBlock: @escaping (MultipartFormDataWrapper) -> Void,
-        _ progress: ((Progress) -> Void)?,
-        _ success: @escaping (HTTPURLResponse?, Any?) -> Void,
-        _ failure: @escaping (HTTPURLResponse?, Error) -> Void
-    ) {
-        uploadMultipartWithThreading(
-            urlString,
-            headers,
-            requestId,
-            nil, // responseOnMainThread
-            nil, // progressOnMainThread
-            constructingBodyWithBlock,
-            progress,
-            success,
-            failure
-        )
-    }
-    
-    // Extended API with threading options
-    @objc public func uploadMultipartWithThreading(
-        _ urlString: String,
-        _ headers: NSDictionary?,
-        _ requestId: String,
         _ responseOnMainThread: NSNumber?,
         _ progressOnMainThread: NSNumber?,
         _ constructingBodyWithBlock: @escaping (MultipartFormDataWrapper) -> Void,
@@ -338,7 +287,6 @@ public class AlamofireWrapper: NSObject {
         _ success: @escaping (HTTPURLResponse?, Any?) -> Void,
         _ failure: @escaping (HTTPURLResponse?, Error) -> Void
     ) {
-        
         guard let url = URL(string: urlString) else {
             let error = NSError(domain: "AlamofireWrapper", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])
             failure(nil, error)
@@ -396,7 +344,7 @@ public class AlamofireWrapper: NSObject {
             guard let self = self else { return }
             
             // Remove request from active list
-            self.removeRequest(id: requestId)
+            self.removeRequest(requestId)
             
             // Get the HTTP response
             let httpResponse = response.response
@@ -423,6 +371,8 @@ public class AlamofireWrapper: NSObject {
         _ request: URLRequest,
         _ fileURL: URL,
         _ requestId: String,
+        _ responseOnMainThread: NSNumber?,
+        _ progressOnMainThread: NSNumber?,
         _ progress: ((Progress) -> Void)?,
         _ success: @escaping (HTTPURLResponse?, Any?) -> Void,
         _ failure: @escaping (HTTPURLResponse?, Error) -> Void
@@ -442,20 +392,26 @@ public class AlamofireWrapper: NSObject {
         if let host = request.url?.host {
             afRequest = applyServerTrustValidation(afRequest, host: host)
         }
+
+        // Determine queue settings
+        let respMainThread = responseOnMainThread?.boolValue
+        let progMainThread = progressOnMainThread?.boolValue
+        let progQueue = progressQueue(progressMainThread: progMainThread, responseMainThread: respMainThread)
+        let respQueue = responseQueue(mainThread: respMainThread)
         
         // Upload progress
         if let progress = progress {
-            afRequest = afRequest.uploadProgress(queue: .main) { progressInfo in
+            afRequest = afRequest.uploadProgress(queue: progQueue) { progressInfo in
                 progress(progressInfo)
             }
         }
         
         // Response handling
-        afRequest.response(queue: .main) { [weak self] response in
+        afRequest.response(queue: respQueue) { [weak self] response in
             guard let self = self else { return }
             
             // Remove request from active list
-            self.removeRequest(id: requestId)
+            self.removeRequest(requestId)
             
             // Get the HTTP response
             let httpResponse = response.response
@@ -480,6 +436,8 @@ public class AlamofireWrapper: NSObject {
         _ request: URLRequest,
         _ bodyData: Data,
         _ requestId: String,
+        _ responseOnMainThread: NSNumber?,
+        _ progressOnMainThread: NSNumber?,
         _ progress: ((Progress) -> Void)?,
         _ success: @escaping (HTTPURLResponse?, Any?) -> Void,
         _ failure: @escaping (HTTPURLResponse?, Error) -> Void
@@ -500,19 +458,25 @@ public class AlamofireWrapper: NSObject {
             afRequest = applyServerTrustValidation(afRequest, host: host)
         }
         
+        // Determine queue settings
+        let respMainThread = responseOnMainThread?.boolValue
+        let progMainThread = progressOnMainThread?.boolValue
+        let progQueue = progressQueue(progressMainThread: progMainThread, responseMainThread: respMainThread)
+        let respQueue = responseQueue(mainThread: respMainThread)
+        
         // Upload progress
         if let progress = progress {
-            afRequest = afRequest.uploadProgress(queue: .main) { progressInfo in
+            afRequest = afRequest.uploadProgress(queue: progQueue) { progressInfo in
                 progress(progressInfo)
             }
         }
         
         // Response handling
-        afRequest.response(queue: .main) { [weak self] response in
+        afRequest.response(queue: respQueue) { [weak self] response in
             guard let self = self else { return }
             
             // Remove request from active list
-            self.removeRequest(id: requestId)
+            self.removeRequest(requestId)
             
             // Get the HTTP response
             let httpResponse = response.response
@@ -543,6 +507,8 @@ public class AlamofireWrapper: NSObject {
         _ parameters: NSDictionary?,
         _ headers: NSDictionary?,
         _ requestId: String,
+        _ responseOnMainThread: NSNumber?,
+        _ progressOnMainThread: NSNumber?,
         _ progress: ((Progress) -> Void)?,
         _ success: @escaping (HTTPURLResponse?, String?) -> Void,
         _ failure: @escaping (HTTPURLResponse?, Error) -> Void
@@ -594,19 +560,25 @@ public class AlamofireWrapper: NSObject {
             downloadRequest = applyServerTrustValidation(downloadRequest, host: host)
         }
         
-        // Download progress
+        // Determine queue settings
+        let respMainThread = responseOnMainThread?.boolValue
+        let progMainThread = progressOnMainThread?.boolValue
+        let progQueue = progressQueue(progressMainThread: progMainThread, responseMainThread: respMainThread)
+        let respQueue = responseQueue(mainThread: respMainThread)
+        
+        // Upload progress
         if let progress = progress {
-            downloadRequest = downloadRequest.downloadProgress(queue: .main) { progressInfo in
+            downloadRequest = downloadRequest.uploadProgress(queue: progQueue) { progressInfo in
                 progress(progressInfo)
             }
         }
         
         // Response handling
-        downloadRequest.response(queue: .main) { [weak self] response in
+        downloadRequest.response(queue: respQueue) { [weak self] response in
             guard let self = self else { return }
             
             // Remove request from active list
-            self.removeRequest(id: requestId)
+            self.removeRequest(requestId)
             
             // Get the HTTP response
             let httpResponse = response.response
@@ -633,6 +605,8 @@ public class AlamofireWrapper: NSObject {
         _ destinationPath: String,
         _ headers: NSDictionary?,
         _ requestId: String,
+        _ responseOnMainThread: NSNumber?,
+        _ progressOnMainThread: NSNumber?,
         _ progress: ((Progress) -> Void)?,
         _ success: @escaping (HTTPURLResponse?, String?) -> Void,
         _ failure: @escaping (HTTPURLResponse?, Error) -> Void
@@ -682,20 +656,26 @@ public class AlamofireWrapper: NSObject {
         if let host = url.host {
             downloadRequest = applyServerTrustValidation(downloadRequest, host: host)
         }
+
+        // Determine queue settings
+        let respMainThread = responseOnMainThread?.boolValue
+        let progMainThread = progressOnMainThread?.boolValue
+        let progQueue = progressQueue(progressMainThread: progMainThread, responseMainThread: respMainThread)
+        let respQueue = responseQueue(mainThread: respMainThread)
         
         // Download progress
         if let progress = progress {
-            downloadRequest = downloadRequest.downloadProgress(queue: .main) { progressInfo in
+            downloadRequest = downloadRequest.downloadProgress(queue: progQueue) { progressInfo in
                 progress(progressInfo)
             }
         }
         
         // Response handling
-        downloadRequest.response(queue: .main) { [weak self] response in
+        downloadRequest.response(queue: respQueue) { [weak self] response in
             guard let self = self else { return }
             
             // Remove request from active list
-            self.removeRequest(id: requestId)
+            self.removeRequest(requestId)
             
             // Get the HTTP response
             let httpResponse = response.response
@@ -725,6 +705,8 @@ public class AlamofireWrapper: NSObject {
         _ parameters: NSDictionary?,
         _ headers: NSDictionary?,
         _ requestId: String,
+        _ responseOnMainThread: NSNumber?,
+        _ progressOnMainThread: NSNumber?,
         _ sizeThreshold: Int64,
         _ progress: ((Progress) -> Void)?,
         _ headersCallback: @escaping (HTTPURLResponse?, Int64) -> Void,
@@ -801,20 +783,26 @@ public class AlamofireWrapper: NSObject {
         if let host = url.host {
             downloadRequest = applyServerTrustValidation(downloadRequest, host: host)
         }
+
+        // Determine queue settings
+        let respMainThread = responseOnMainThread?.boolValue
+        let progMainThread = progressOnMainThread?.boolValue
+        let progQueue = progressQueue(progressMainThread: progMainThread, responseMainThread: respMainThread)
+        let respQueue = responseQueue(mainThread: respMainThread)
         
         // Download progress
         if let progress = progress {
-            downloadRequest = downloadRequest.downloadProgress(queue: .main) { progressInfo in
+            downloadRequest = downloadRequest.downloadProgress(queue: progQueue) { progressInfo in
                 progress(progressInfo)
             }
         }
         
         // Response handling (fires when download completes)
-        downloadRequest.response(queue: .main) { [weak self] response in
+        downloadRequest.response(queue: respQueue) { [weak self] response in
             guard let self = self else { return }
             
             // Remove request from active list
-            self.removeRequest(id: requestId)
+            self.removeRequest(requestId)
             
             // Get the HTTP response
             let httpResponse = response.response
@@ -848,6 +836,8 @@ public class AlamofireWrapper: NSObject {
         _ parameters: NSDictionary?,
         _ headers: NSDictionary?,
         _ requestId: String,
+        _ responseOnMainThread: NSNumber?,
+        _ progressOnMainThread: NSNumber?,
         _ sizeThreshold: Int64,
         _ progress: ((Progress) -> Void)?,
         _ success: @escaping (HTTPURLResponse?, Any?, String?) -> Void,
@@ -890,20 +880,26 @@ public class AlamofireWrapper: NSObject {
         if let host = url.host {
             afRequest = applyServerTrustValidation(afRequest, host: host)
         }
+
+        // Determine queue settings
+        let respMainThread = responseOnMainThread?.boolValue
+        let progMainThread = progressOnMainThread?.boolValue
+        let progQueue = progressQueue(progressMainThread: progMainThread, responseMainThread: respMainThread)
+        let respQueue = responseQueue(mainThread: respMainThread)
         
-        // Download progress (default to main thread)
+        // Download progress
         if let progress = progress {
-            afRequest = afRequest.downloadProgress(queue: .main) { progressInfo in
+            afRequest = afRequest.downloadProgress(queue: progQueue) { progressInfo in
                 progress(progressInfo)
             }
         }
         
         // Response handling
-        afRequest.response(queue: .main) { [weak self] response in
+        afRequest.response(queue: respQueue) { [weak self] response in
             guard let self = self else { return }
             
             // Remove request from active list
-            self.removeRequest(id: requestId)
+            self.removeRequest(requestId)
             
             // Get the HTTP response
             let httpResponse = response.response

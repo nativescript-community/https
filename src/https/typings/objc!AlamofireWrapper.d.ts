@@ -24,6 +24,8 @@ declare class AlamofireWrapper extends NSObject {
         parameters: NSDictionary<string, any>,
         headers: NSDictionary<string, any>,
         requestId: string,
+        responseOnMainThread: NSNumber,  // optional boolean
+        progressOnMainThread: NSNumber,  // optional boolean  
         uploadProgress: (progress: NSProgress) => void,
         downloadProgress: (progress: NSProgress) => void,
         success: (response: NSHTTPURLResponse, data: any) => void,
@@ -49,6 +51,8 @@ declare class AlamofireWrapper extends NSObject {
         urlString: string,
         headers: NSDictionary<string, any>,
         requestId: string,
+        responseOnMainThread: NSNumber,  // optional boolean
+        progressOnMainThread: NSNumber,  // optional boolean  
         constructingBodyWithBlock: (formData: MultipartFormDataWrapper) => void,
         progress: (progress: NSProgress) => void,
         success: (response: NSHTTPURLResponse, data: any) => void,
@@ -72,6 +76,8 @@ declare class AlamofireWrapper extends NSObject {
         request: NSMutableURLRequest,
         fileURL: NSURL,
         requestId: string,
+        responseOnMainThread: NSNumber,  // optional boolean
+        progressOnMainThread: NSNumber,  // optional boolean  
         progress: (progress: NSProgress) => void,
         success: (response: NSHTTPURLResponse, data: any) => void,
         failure: (response: NSHTTPURLResponse, error: NSError) => void
@@ -81,6 +87,8 @@ declare class AlamofireWrapper extends NSObject {
         request: NSMutableURLRequest,
         bodyData: NSData,
         requestId: string,
+        responseOnMainThread: NSNumber,  // optional boolean
+        progressOnMainThread: NSNumber,  // optional boolean  
         progress: (progress: NSProgress) => void,
         success: (response: NSHTTPURLResponse, data: any) => void,
         failure: (response: NSHTTPURLResponse, error: NSError) => void
@@ -92,6 +100,8 @@ declare class AlamofireWrapper extends NSObject {
         parameters: NSDictionary<string, any>,
         headers: NSDictionary<string, any>,
         requestId: string,
+        responseOnMainThread: NSNumber,  // optional boolean
+        progressOnMainThread: NSNumber,  // optional boolean  
         progress: (progress: NSProgress) => void,
         success: (response: NSHTTPURLResponse, tempFilePath: string) => void,
         failure: (response: NSHTTPURLResponse, error: NSError) => void
@@ -102,6 +112,8 @@ declare class AlamofireWrapper extends NSObject {
         destinationPath: string,
         headers: NSDictionary<string, any>,
         requestId: string,
+        responseOnMainThread: NSNumber,  // optional boolean
+        progressOnMainThread: NSNumber,  // optional boolean  
         progress: (progress: NSProgress) => void,
         success: (response: NSHTTPURLResponse, filePath: string) => void,
         failure: (response: NSHTTPURLResponse, error: NSError) => void
@@ -113,6 +125,8 @@ declare class AlamofireWrapper extends NSObject {
         parameters: NSDictionary<string, any>,
         headers: NSDictionary<string, any>,
         requestId: string,
+        responseOnMainThread: NSNumber,  // optional boolean
+        progressOnMainThread: NSNumber,  // optional boolean  
         sizeThreshold: number,
         progress: (progress: NSProgress) => void,
         headersCallback: (response: NSHTTPURLResponse, contentLength: number) => void,
@@ -126,6 +140,8 @@ declare class AlamofireWrapper extends NSObject {
         parameters: NSDictionary<string, any>,
         headers: NSDictionary<string, any>,
         requestId: string,
+        responseOnMainThread: NSNumber,  // optional boolean
+        progressOnMainThread: NSNumber,  // optional boolean  
         sizeThreshold: number,
         progress: (progress: NSProgress) => void,
         success: (response: NSHTTPURLResponse, data: any, tempFilePath: string) => void,

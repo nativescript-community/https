@@ -65,10 +65,10 @@ export default Vue.extend({
         };
     },
     methods: {
-        log(message: string) {
+        log(...args) {
             const timestamp = new Date().toLocaleTimeString();
-            this.results = `[${timestamp}] ${message}\n\n${this.results}`;
-            console.log(message);
+            this.results = `[${timestamp}] ${args.join(' ')}\n\n${this.results}`;
+            console.log(...args);
         },
         
         async test404() {
@@ -195,11 +195,11 @@ export default Vue.extend({
         },
         
         async testConnectionTimeout() {
+            const start = Date.now();
             try {
                 this.log('Testing connection timeout...');
                 this.log('Using 1 second timeout with 10 second delay...');
                 
-                const start = Date.now();
                 await Https.request({
                     url: 'https://httpbin.org/delay/10',
                     method: 'GET',
@@ -347,7 +347,7 @@ export default Vue.extend({
                     const json = response.content.toJSON();
                     this.log(`Unexpected: Parsed as ${JSON.stringify(json)}`);
                 } catch (parseError) {
-                    this.log(`✓ Parse error caught for corrupted data: ${parseError}`);
+                    this.log(`✓ Parse error caught for corrupted data: ${parseError}`, parseError.stack);
                 }
             } catch (error) {
                 this.log(`Request error: ${error}`);

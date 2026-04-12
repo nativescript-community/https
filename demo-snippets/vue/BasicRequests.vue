@@ -57,10 +57,10 @@ export default Vue.extend({
         };
     },
     methods: {
-        log(message: string) {
+        log(...args) {
             const timestamp = new Date().toLocaleTimeString();
-            this.results = `[${timestamp}] ${message}\n\n${this.results}`;
-            console.log(message);
+            this.results = `[${timestamp}] ${args.join(' ')}\n\n${this.results}`;
+            console.log(...args);
         },
 
         async testGet() {
@@ -215,7 +215,7 @@ export default Vue.extend({
                 this.log(`✓ PUT success: ${response.statusCode}`);
                 this.log(`Response: ${response.content.toString().substring(0, 100)}...`);
             } catch (error) {
-                this.log(`✗ PUT failed: ${error}`);
+                this.log(`✗ PUT failed: ${error}`, error.stack);
             }
         },
 

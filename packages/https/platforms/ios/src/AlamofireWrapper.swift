@@ -927,14 +927,12 @@ public class AlamofireWrapper: NSObject {
                         // Return with temp file path
                         success(httpResponse, nil, tempFileURL.path)
                     } catch {
-                        // Failed to write, just return data in memory
-                        let result = self.responseSerializer.deserialize(data: data, response: response.response)
-                        success(httpResponse, result, nil)
+                        // Failed to write, just return raw data in memory
+                        success(httpResponse, data, nil)
                     }
                 } else {
-                    // Small response or threshold not set, return data in memory
-                    let result = self.responseSerializer.deserialize(data: data, response: response.response)
-                    success(httpResponse, result, nil)
+                    // Small response or threshold not set, return raw data in memory
+                    success(httpResponse, data, nil)
                 }
             } else {
                 success(httpResponse, nil, nil)

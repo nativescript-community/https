@@ -12,17 +12,23 @@ declare class AlamofireWrapper extends NSObject {
     
     setDataTaskWillCacheResponseBlock(block: (session: NSURLSession, task: NSURLSessionDataTask, cacheResponse: NSCachedURLResponse) => NSCachedURLResponse): void;
     
-    // New clean API methods - updated to use NSURLSessionTask for flexibility
+    // Request management
+    cancelRequest(id: string): void;
+    addInterceptor(interceptor: any): void;
+    addEventMonitor(monitor: any): void;
+    
+    // New clean API methods - using request IDs and NSHTTPURLResponse callbacks
     request(
         method: string,
         urlString: string,
         parameters: NSDictionary<string, any>,
         headers: NSDictionary<string, any>,
+        requestId: string,
         uploadProgress: (progress: NSProgress) => void,
         downloadProgress: (progress: NSProgress) => void,
-        success: (task: NSURLSessionTask, data: any) => void,
-        failure: (task: NSURLSessionTask, error: NSError) => void
-    ): NSURLSessionTask;
+        success: (response: NSHTTPURLResponse, data: any) => void,
+        failure: (response: NSHTTPURLResponse, error: NSError) => void
+    ): void;
     
     // Extended API with threading options
     requestWithThreading(
@@ -30,87 +36,101 @@ declare class AlamofireWrapper extends NSObject {
         urlString: string,
         parameters: NSDictionary<string, any>,
         headers: NSDictionary<string, any>,
+        requestId: string,
         responseOnMainThread: NSNumber,  // optional boolean
         progressOnMainThread: NSNumber,  // optional boolean  
         uploadProgress: (progress: NSProgress) => void,
         downloadProgress: (progress: NSProgress) => void,
-        success: (task: NSURLSessionTask, data: any) => void,
-        failure: (task: NSURLSessionTask, error: NSError) => void
-    ): NSURLSessionTask;
+        success: (response: NSHTTPURLResponse, data: any) => void,
+        failure: (response: NSHTTPURLResponse, error: NSError) => void
+    ): void;
     
     uploadMultipart(
         urlString: string,
         headers: NSDictionary<string, any>,
+        requestId: string,
         constructingBodyWithBlock: (formData: MultipartFormDataWrapper) => void,
         progress: (progress: NSProgress) => void,
-        success: (task: NSURLSessionTask, data: any) => void,
-        failure: (task: NSURLSessionTask, error: NSError) => void
-    ): NSURLSessionTask;
+        success: (response: NSHTTPURLResponse, data: any) => void,
+        failure: (response: NSHTTPURLResponse, error: NSError) => void
+    ): void;
     
     // Extended API with threading options
     uploadMultipartWithThreading(
         urlString: string,
         headers: NSDictionary<string, any>,
+        requestId: string,
         responseOnMainThread: NSNumber,  // optional boolean
         progressOnMainThread: NSNumber,  // optional boolean
         constructingBodyWithBlock: (formData: MultipartFormDataWrapper) => void,
         progress: (progress: NSProgress) => void,
-        success: (task: NSURLSessionTask, data: any) => void,
-        failure: (task: NSURLSessionTask, error: NSError) => void
-    ): NSURLSessionTask;
+        success: (response: NSHTTPURLResponse, data: any) => void,
+        failure: (response: NSHTTPURLResponse, error: NSError) => void
+    ): void;
     
     uploadFile(
         request: NSMutableURLRequest,
         fileURL: NSURL,
+        requestId: string,
         progress: (progress: NSProgress) => void,
-        completionHandler: (response: NSURLResponse, responseObject: any, error: NSError) => void
-    ): NSURLSessionTask;
+        success: (response: NSHTTPURLResponse, data: any) => void,
+        failure: (response: NSHTTPURLResponse, error: NSError) => void
+    ): void;
     
     uploadData(
         request: NSMutableURLRequest,
         bodyData: NSData,
+        requestId: string,
         progress: (progress: NSProgress) => void,
-        completionHandler: (response: NSURLResponse, responseObject: any, error: NSError) => void
-    ): NSURLSessionTask;
+        success: (response: NSHTTPURLResponse, data: any) => void,
+        failure: (response: NSHTTPURLResponse, error: NSError) => void
+    ): void;
     
     downloadToTemp(
         method: string,
         urlString: string,
         parameters: NSDictionary<string, any>,
         headers: NSDictionary<string, any>,
+        requestId: string,
         progress: (progress: NSProgress) => void,
-        completionHandler: (response: NSURLResponse, tempFilePath: string, error: NSError) => void
-    ): NSURLSessionDownloadTask;
+        success: (response: NSHTTPURLResponse, tempFilePath: string) => void,
+        failure: (response: NSHTTPURLResponse, error: NSError) => void
+    ): void;
     
     downloadToFile(
         urlString: string,
         destinationPath: string,
         headers: NSDictionary<string, any>,
+        requestId: string,
         progress: (progress: NSProgress) => void,
-        completionHandler: (response: NSURLResponse, filePath: string, error: NSError) => void
-    ): NSURLSessionDownloadTask;
+        success: (response: NSHTTPURLResponse, filePath: string) => void,
+        failure: (response: NSHTTPURLResponse, error: NSError) => void
+    ): void;
     
     downloadToTempWithEarlyHeaders(
         method: string,
         urlString: string,
         parameters: NSDictionary<string, any>,
         headers: NSDictionary<string, any>,
+        requestId: string,
         sizeThreshold: number,
         progress: (progress: NSProgress) => void,
-        headersCallback: (response: NSURLResponse, contentLength: number) => void,
-        completionHandler: (response: NSURLResponse, tempFilePath: string, error: NSError) => void
-    ): NSURLSessionDownloadTask;
+        headersCallback: (response: NSHTTPURLResponse, contentLength: number) => void,
+        success: (response: NSHTTPURLResponse, tempFilePath: string) => void,
+        failure: (response: NSHTTPURLResponse, error: NSError) => void
+    ): void;
     
     requestWithConditionalDownload(
         method: string,
         urlString: string,
         parameters: NSDictionary<string, any>,
         headers: NSDictionary<string, any>,
+        requestId: string,
         sizeThreshold: number,
         progress: (progress: NSProgress) => void,
-        success: (task: NSURLSessionTask, data: any, tempFilePath: string) => void,
-        failure: (task: NSURLSessionTask, error: NSError) => void
-    ): NSURLSessionTask;
+        success: (response: NSHTTPURLResponse, data: any, tempFilePath: string) => void,
+        failure: (response: NSHTTPURLResponse, error: NSError) => void
+    ): void;
 }
 
 declare class RequestSerializer extends NSObject {

@@ -98,15 +98,15 @@ public class AlamofireWrapper: NSObject {
     // MARK: - Interceptors
     
     /// Add a request interceptor (for request/response modification)
-    @objc public func addInterceptor(_ interceptor: RequestInterceptor) {
-        requestInterceptors.append(interceptor)
-    }
+    // @objc public func addInterceptor(_ interceptor: RequestInterceptor) {
+    //     requestInterceptors.append(interceptor)
+    // }
     
-    /// Add an event monitor (for network-level events like Android's network interceptor)
-    @objc public func addEventMonitor(_ monitor: EventMonitor) {
-        eventMonitors.append(monitor)
-        recreateSession() // Recreate session to apply new event monitors
-    }
+    // /// Add an event monitor (for network-level events like Android's network interceptor)
+    // @objc public func addEventMonitor(_ monitor: EventMonitor) {
+    //     eventMonitors.append(monitor)
+    //     recreateSession() // Recreate session to apply new event monitors
+    // }
     
     // MARK: - Request Management
     
@@ -241,7 +241,7 @@ public class AlamofireWrapper: NSObject {
         
         // Apply interceptors
         for interceptor in requestInterceptors {
-            afRequest = afRequest.interceptor(interceptor) as! DataRequest
+            afRequest = afRequest.interceptor(interceptor)
         }
         
         // Apply server trust evaluation if security policy is set
@@ -277,7 +277,7 @@ public class AlamofireWrapper: NSObject {
             self.removeRequest(id: requestId)
             
             // Get the HTTP response
-            let httpResponse = response.response as? HTTPURLResponse
+            let httpResponse = response.response
             
             if let error = response.error {
                 let nsError = self.createNSError(from: error, response: response.response, data: response.data)
@@ -363,7 +363,7 @@ public class AlamofireWrapper: NSObject {
         
         // Apply interceptors
         for interceptor in requestInterceptors {
-            afRequest = afRequest.interceptor(interceptor) as! UploadRequest
+            afRequest = afRequest.interceptor(interceptor)
         }
         
         // Apply server trust evaluation if security policy is set
@@ -392,7 +392,7 @@ public class AlamofireWrapper: NSObject {
             self.removeRequest(id: requestId)
             
             // Get the HTTP response
-            let httpResponse = response.response as? HTTPURLResponse
+            let httpResponse = response.response
             
             if let error = response.error {
                 let nsError = self.createNSError(from: error, response: response.response, data: response.data)
@@ -428,7 +428,7 @@ public class AlamofireWrapper: NSObject {
         
         // Apply interceptors
         for interceptor in requestInterceptors {
-            afRequest = afRequest.interceptor(interceptor) as! UploadRequest
+            afRequest = afRequest.interceptor(interceptor)
         }
         
         // Apply server trust evaluation if security policy is set
@@ -451,7 +451,7 @@ public class AlamofireWrapper: NSObject {
             self.removeRequest(id: requestId)
             
             // Get the HTTP response
-            let httpResponse = response.response as? HTTPURLResponse
+            let httpResponse = response.response
             
             if let error = response.error {
                 let nsError = self.createNSError(from: error, response: response.response, data: response.data)
@@ -485,7 +485,7 @@ public class AlamofireWrapper: NSObject {
         
         // Apply interceptors
         for interceptor in requestInterceptors {
-            afRequest = afRequest.interceptor(interceptor) as! UploadRequest
+            afRequest = afRequest.interceptor(interceptor)
         }
         
         // Apply server trust evaluation if security policy is set
@@ -508,7 +508,7 @@ public class AlamofireWrapper: NSObject {
             self.removeRequest(id: requestId)
             
             // Get the HTTP response
-            let httpResponse = response.response as? HTTPURLResponse
+            let httpResponse = response.response
             
             if let error = response.error {
                 let nsError = self.createNSError(from: error, response: response.response, data: response.data)
@@ -579,7 +579,7 @@ public class AlamofireWrapper: NSObject {
         
         // Apply interceptors
         for interceptor in requestInterceptors {
-            downloadRequest = downloadRequest.interceptor(interceptor) as! DownloadRequest
+            downloadRequest = downloadRequest.interceptor(interceptor)
         }
         
         // Apply server trust evaluation if security policy is set
@@ -602,7 +602,7 @@ public class AlamofireWrapper: NSObject {
             self.removeRequest(id: requestId)
             
             // Get the HTTP response
-            let httpResponse = response.response as? HTTPURLResponse
+            let httpResponse = response.response
             
             if let error = response.error {
                 let nsError = self.createNSError(from: error, response: response.response, data: nil)
@@ -668,7 +668,7 @@ public class AlamofireWrapper: NSObject {
         
         // Apply interceptors
         for interceptor in requestInterceptors {
-            downloadRequest = downloadRequest.interceptor(interceptor) as! DownloadRequest
+            downloadRequest = downloadRequest.interceptor(interceptor)
         }
         
         // Apply server trust evaluation if security policy is set
@@ -691,7 +691,7 @@ public class AlamofireWrapper: NSObject {
             self.removeRequest(id: requestId)
             
             // Get the HTTP response
-            let httpResponse = response.response as? HTTPURLResponse
+            let httpResponse = response.response
             
             if let error = response.error {
                 let nsError = self.createNSError(from: error, response: response.response, data: nil)
@@ -772,7 +772,7 @@ public class AlamofireWrapper: NSObject {
             
             // Call headersCallback on first response (only once)
             callbackState.callOnce {
-                let httpResponse = response as? HTTPURLResponse
+                let httpResponse = response
                 let contentLength = response.expectedContentLength
                 headersCallback(httpResponse, contentLength)
             }
@@ -810,7 +810,7 @@ public class AlamofireWrapper: NSObject {
             self.removeRequest(id: requestId)
             
             // Get the HTTP response
-            let httpResponse = response.response as? HTTPURLResponse
+            let httpResponse = response.response
             
             if let error = response.error {
                 let nsError = self.createNSError(from: error, response: response.response, data: nil)
@@ -876,7 +876,7 @@ public class AlamofireWrapper: NSObject {
         
         // Apply interceptors
         for interceptor in requestInterceptors {
-            afRequest = afRequest.interceptor(interceptor) as! DataRequest
+            afRequest = afRequest.interceptor(interceptor)
         }
         
         // Apply server trust evaluation if security policy is set
@@ -899,7 +899,7 @@ public class AlamofireWrapper: NSObject {
             self.removeRequest(id: requestId)
             
             // Get the HTTP response
-            let httpResponse = response.response as? HTTPURLResponse
+            let httpResponse = response.response
             
             if let error = response.error {
                 let nsError = self.createNSError(from: error, response: response.response, data: response.data)

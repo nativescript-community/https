@@ -71,7 +71,7 @@ public class AlamofireWrapper: NSObject {
         if let secPolicy = securityPolicy {
             // Create a server trust manager with our security policy
             let evaluators: [String: ServerTrustEvaluating] = [:] // Will be filled dynamically per request
-            let serverTrustManager = ServerTrustManager(evaluators: evaluators)
+            let serverTrustManager = ServerTrustManager(allHostsMustBeEvaluated: false, evaluators: evaluators)
             
             // Create new session with server trust manager
             session = Session(
@@ -131,7 +131,7 @@ public class AlamofireWrapper: NSObject {
         _ headers: NSDictionary?,
         _ uploadProgress: ((Progress) -> Void)?,
         _ downloadProgress: ((Progress) -> Void)?,
-        _ success: @escaping (URLSessionTask, Any?) -> Void,
+        _ success: @escaping (URLSessionTask?, Any?) -> Void,
         _ failure: @escaping (URLSessionTask?, Error) -> Void
     ) -> URLSessionTask? {
         return requestWithThreading(
@@ -158,7 +158,7 @@ public class AlamofireWrapper: NSObject {
         _ progressOnMainThread: NSNumber?, // NSNumber wrapper for optional Bool
         _ uploadProgress: ((Progress) -> Void)?,
         _ downloadProgress: ((Progress) -> Void)?,
-        _ success: @escaping (URLSessionTask, Any?) -> Void,
+        _ success: @escaping (URLSessionTask?, Any?) -> Void,
         _ failure: @escaping (URLSessionTask?, Error) -> Void
     ) -> URLSessionTask? {
         
@@ -223,8 +223,8 @@ public class AlamofireWrapper: NSObject {
             
             // Deserialize response based on responseSerializer
             if let data = response.data {
-                let result = self.responseSerializer.deserialize(data: data, response: response.response)
-                success(task, result)
+//                let result = self.responseSerializer.deserialize(data: data, response: response.response)
+                success(task, data)
             } else {
                 success(task, nil)
             }
@@ -241,7 +241,7 @@ public class AlamofireWrapper: NSObject {
         _ headers: NSDictionary?,
         _ constructingBodyWithBlock: @escaping (MultipartFormDataWrapper) -> Void,
         _ progress: ((Progress) -> Void)?,
-        _ success: @escaping (URLSessionTask, Any?) -> Void,
+        _ success: @escaping (URLSessionTask?, Any?) -> Void,
         _ failure: @escaping (URLSessionTask?, Error) -> Void
     ) -> URLSessionTask? {
         return uploadMultipartWithThreading(
@@ -264,7 +264,7 @@ public class AlamofireWrapper: NSObject {
         _ progressOnMainThread: NSNumber?,
         _ constructingBodyWithBlock: @escaping (MultipartFormDataWrapper) -> Void,
         _ progress: ((Progress) -> Void)?,
-        _ success: @escaping (URLSessionTask, Any?) -> Void,
+        _ success: @escaping (URLSessionTask?, Any?) -> Void,
         _ failure: @escaping (URLSessionTask?, Error) -> Void
     ) -> URLSessionTask? {
         
@@ -325,8 +325,8 @@ public class AlamofireWrapper: NSObject {
             
             // Deserialize response based on responseSerializer
             if let data = response.data {
-                let result = self.responseSerializer.deserialize(data: data, response: response.response)
-                success(task, result)
+//                let result = self.responseSerializer.deserialize(data: data, response: response.response)
+                success(task, data)
             } else {
                 success(task, nil)
             }
@@ -684,7 +684,7 @@ public class AlamofireWrapper: NSObject {
         _ headers: NSDictionary?,
         _ sizeThreshold: Int64,
         _ progress: ((Progress) -> Void)?,
-        _ success: @escaping (URLSessionTask, Any?, String?) -> Void,
+        _ success: @escaping (URLSessionTask?, Any?, String?) -> Void,
         _ failure: @escaping (URLSessionTask?, Error) -> Void
     ) -> URLSessionTask? {
         

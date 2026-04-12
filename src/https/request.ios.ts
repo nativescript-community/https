@@ -366,7 +366,7 @@ class HttpsResponseLegacy implements IHttpsResponseLegacy {
     }
 }
 
-function AFFailure(resolve, reject, task: NSURLSessionDataTask, error: NSError, useLegacy: boolean, url) {
+function AFFailure(resolve, reject, task: NSURLSessionTask, error: NSError, useLegacy: boolean, url) {
     if (error.code === -999) {
         return reject(error);
     }
@@ -445,7 +445,7 @@ function bodyToNative(cont) {
     return dict;
 }
 
-const runningRequests: { [k: string]: NSURLSessionDataTask } = {};
+const runningRequests: { [k: string]: NSURLSessionTask } = {};
 
 export function cancelRequest(tag: string) {
     if (runningRequests[tag]) {
@@ -524,7 +524,7 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
               }
           }
         : null;
-    let task: NSURLSessionDataTask;
+    let task: NSURLSessionTask;
     const tag = opts.tag;
 
     function clearRunningRequest() {
@@ -538,10 +538,11 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
         },
         cancel: () => task && task.cancel(),
         run(resolve, reject) {
-            const success = function (task: NSURLSessionDataTask, data?: any) {
+            const success = function (task: NSURLSessionTask, data?: any) {
                 clearRunningRequest();
                 // TODO: refactor this code with failure one.
-                const contentLength = task.countOfBytesReceived;
+                const contentLength = task?.countOfBytesReceived;
+                console.log('run done', contentLength);
                 const content = useLegacy ? new HttpsResponseLegacy(data, contentLength, opts.url) : getData(data);
                 let getHeaders = () => ({});
                 const sendi = {
@@ -571,7 +572,7 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                 //     sendi.reason = AFResponse.reason;
                 // }
             };
-            const failure = function (task: NSURLSessionDataTask, error: any) {
+            const failure = function (task: NSURLSessionTask, error: any) {
                 clearRunningRequest();
                 AFFailure(resolve, reject, task, error, useLegacy, opts.url);
             };
@@ -688,7 +689,7 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                             headers,
                             sizeThreshold,
                             progress,
-                            (dataTask: NSURLSessionDataTask, responseData: any, tempFilePath: string) => {
+                            (dataTask: NSURLSessionTask, responseData: any, tempFilePath: string) => {
                                 clearRunningRequest();
 
                                 const httpResponse = dataTask.response as NSHTTPURLResponse;
@@ -725,7 +726,7 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                                 }
                                 resolve(sendi);
                             },
-                            (dataTask: NSURLSessionDataTask, error: NSError) => {
+                            (dataTask: NSURLSessionTask, error: NSError) => {
                                 clearRunningRequest();
                                 failure(dataTask, error);
                             }
@@ -808,7 +809,7 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                             clearRunningRequest();
                             if (error) {
                                 // Convert download task to data task for failure handling
-                                const dataTask = task as any as NSURLSessionDataTask;
+                                const dataTask = task as any as NSURLSessionTask;
                                 failure(dataTask, error);
                                 return;
                             }

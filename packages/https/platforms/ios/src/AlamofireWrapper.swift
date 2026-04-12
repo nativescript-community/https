@@ -82,22 +82,12 @@ public class AlamofireWrapper: NSObject {
     private func recreateSession() {
         let configuration = session.sessionConfiguration
         
-        // Cancel all active requests before recreating session
-        requestsLock.lock()
-        let requests = Array(activeRequests.values)
-        activeRequests.removeAll()
-        requestsLock.unlock()
-        
-        for request in requests {
-            request.cancel()
-        }
-        
         // Create a server trust manager with our security policy
         // Use allHostsMustBeEvaluated: false to allow default trust evaluation for non-pinned hosts
         let serverTrustManager = ServerTrustManager(allHostsMustBeEvaluated: false, evaluators: [:])
         
         // Create new session with server trust manager and interceptors
-        // Store old session temporarily to ensure it doesn't get deallocated immediately
+        // Store old session temporarily to ensure it doesn't get deallocated while requests are active
         let oldSession = session
         session = Session(
             configuration: configuration,
@@ -105,9 +95,10 @@ public class AlamofireWrapper: NSObject {
             eventMonitors: eventMonitors
         )
         
-        // Ensure old session is explicitly invalidated after new one is created
-        DispatchQueue.global(qos: .utility).asyncAfter(deadline: .now() + 0.5) {
-            _ = oldSession // Keep reference until delayed closure executes
+        // Keep old session alive for longer to allow active requests to complete
+        // Active requests on the old session will continue running
+        DispatchQueue.global(qos: .utility).asyncAfter(deadline: .now() + 30.0) {
+            _ = oldSession // Keep reference for 30 seconds to allow requests to complete
         }
     }
     

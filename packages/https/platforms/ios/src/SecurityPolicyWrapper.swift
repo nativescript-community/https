@@ -73,7 +73,7 @@ extension SecurityPolicyWrapper: ServerTrustEvaluating {
             let isValid = SecTrustEvaluateWithError(trust, &error)
             
             if !isValid && !allowInvalidCertificates {
-                throw AFError.serverTrustEvaluationFailed(reason: .defaultEvaluationFailed(output: .init()))
+                throw AFError.serverTrustEvaluationFailed(reason: .trustEvaluationFailed(error: error))
             }
             return
         }
@@ -144,7 +144,7 @@ extension SecurityPolicyWrapper: ServerTrustEvaluating {
             let isValid = SecTrustEvaluateWithError(trust, &error)
             
             if !isValid && !allowInvalidCertificates {
-                throw AFError.serverTrustEvaluationFailed(reason: .defaultEvaluationFailed(output: .init()))
+                throw AFError.serverTrustEvaluationFailed(reason: .trustEvaluationFailed(error: error))
             }
         }
     }

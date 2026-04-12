@@ -12,31 +12,31 @@
                 <StackLayout class="p-20">
                     <!-- GET Requests -->
                     <Label class="h4 mt-20" text="GET Requests" />
-                    <Button text="GET - Simple Request" @tap="testGet" class="btn btn-primary" />
-                    <Button text="GET - With Query Params" @tap="testGetWithParams" class="btn btn-primary" />
-                    <Button text="GET - With Headers" @tap="testGetWithHeaders" class="btn btn-primary" />
-                    <Button text="GET - JSON Response" @tap="testGetJSON" class="btn btn-primary" />
-                    
+                    <Button text="GET - Simple Request" class="btn btn-primary" @tap="testGet" />
+                    <Button text="GET - With Query Params" class="btn btn-primary" @tap="testGetWithParams" />
+                    <Button text="GET - With Headers" class="btn btn-primary" @tap="testGetWithHeaders" />
+                    <Button text="GET - JSON Response" class="btn btn-primary" @tap="testGetJSON" />
+
                     <!-- POST Requests -->
                     <Label class="h4 mt-20" text="POST Requests" />
-                    <Button text="POST - JSON Body" @tap="testPostJSON" class="btn btn-primary" />
-                    <Button text="POST - Form Data" @tap="testPostForm" class="btn btn-primary" />
-                    <Button text="POST - With UTF-8" @tap="testPostUTF8" class="btn btn-primary" />
-                    
+                    <Button text="POST - JSON Body" class="btn btn-primary" @tap="testPostJSON" />
+                    <Button text="POST - Form Data" class="btn btn-primary" @tap="testPostForm" />
+                    <Button text="POST - With UTF-8" class="btn btn-primary" @tap="testPostUTF8" />
+
                     <!-- Other Methods -->
                     <Label class="h4 mt-20" text="Other HTTP Methods" />
-                    <Button text="PUT Request" @tap="testPut" class="btn btn-primary" />
-                    <Button text="PATCH Request" @tap="testPatch" class="btn btn-primary" />
-                    <Button text="DELETE Request" @tap="testDelete" class="btn btn-primary" />
-                    <Button text="HEAD Request" @tap="testHead" class="btn btn-primary" />
-                    <Button text="OPTIONS Request" @tap="testOptions" class="btn btn-primary" />
-                    
+                    <Button text="PUT Request" class="btn btn-primary" @tap="testPut" />
+                    <Button text="PATCH Request" class="btn btn-primary" @tap="testPatch" />
+                    <Button text="DELETE Request" class="btn btn-primary" @tap="testDelete" />
+                    <Button text="HEAD Request" class="btn btn-primary" @tap="testHead" />
+                    <Button text="OPTIONS Request" class="btn btn-primary" @tap="testOptions" />
+
                     <!-- Response Format Tests -->
                     <Label class="h4 mt-20" text="Response Format Tests" />
-                    <Button text="Test toString()" @tap="testToString" class="btn btn-primary" />
-                    <Button text="Test toJSON()" @tap="testToJSON" class="btn btn-primary" />
-                    <Button text="Test toArrayBuffer()" @tap="testToArrayBuffer" class="btn btn-primary" />
-                    
+                    <Button text="Test toString()" class="btn btn-primary" @tap="testToString" />
+                    <Button text="Test toJSON()" class="btn btn-primary" @tap="testToJSON" />
+                    <Button text="Test toArrayBuffer()" class="btn btn-primary" @tap="testToArrayBuffer" />
+
                     <!-- Results -->
                     <Label class="h4 mt-20" text="Results" />
                     <TextView :text="results" class="result-box" editable="false" />
@@ -62,7 +62,7 @@ export default Vue.extend({
             this.results = `[${timestamp}] ${message}\n\n${this.results}`;
             console.log(message);
         },
-        
+
         async testGet() {
             try {
                 this.log('Testing GET request...');
@@ -76,7 +76,7 @@ export default Vue.extend({
                 this.log(`✗ GET failed: ${error}`);
             }
         },
-        
+
         async testGetWithParams() {
             try {
                 this.log('Testing GET with query params...');
@@ -96,7 +96,7 @@ export default Vue.extend({
                 this.log(`✗ GET with params failed: ${error}`);
             }
         },
-        
+
         async testGetWithHeaders() {
             try {
                 this.log('Testing GET with custom headers...');
@@ -106,7 +106,7 @@ export default Vue.extend({
                     headers: {
                         'X-Custom-Header': 'test-value',
                         'X-API-Key': 'dummy-key-123',
-                        'Accept': 'application/json'
+                        Accept: 'application/json'
                     }
                 });
                 this.log(`✓ GET with headers success: ${response.statusCode}`);
@@ -116,7 +116,7 @@ export default Vue.extend({
                 this.log(`✗ GET with headers failed: ${error}`);
             }
         },
-        
+
         async testGetJSON() {
             try {
                 this.log('Testing GET JSON endpoint...');
@@ -131,7 +131,7 @@ export default Vue.extend({
                 this.log(`✗ GET JSON failed: ${error}`);
             }
         },
-        
+
         async testPostJSON() {
             try {
                 this.log('Testing POST with JSON body...');
@@ -155,7 +155,7 @@ export default Vue.extend({
                 this.log(`✗ POST JSON failed: ${error}`);
             }
         },
-        
+
         async testPostForm() {
             try {
                 this.log('Testing POST with form data...');
@@ -177,7 +177,7 @@ export default Vue.extend({
                 this.log(`✗ POST form failed: ${error}`);
             }
         },
-        
+
         async testPostUTF8() {
             try {
                 this.log('Testing POST with UTF-8 characters...');
@@ -200,7 +200,7 @@ export default Vue.extend({
                 this.log(`✗ POST UTF-8 failed: ${error}`);
             }
         },
-        
+
         async testPut() {
             try {
                 this.log('Testing PUT request...');
@@ -218,7 +218,7 @@ export default Vue.extend({
                 this.log(`✗ PUT failed: ${error}`);
             }
         },
-        
+
         async testPatch() {
             try {
                 this.log('Testing PATCH request...');
@@ -235,7 +235,7 @@ export default Vue.extend({
                 this.log(`✗ PATCH failed: ${error}`);
             }
         },
-        
+
         async testDelete() {
             try {
                 this.log('Testing DELETE request...');
@@ -249,7 +249,7 @@ export default Vue.extend({
                 this.log(`✗ DELETE failed: ${error}`);
             }
         },
-        
+
         async testHead() {
             try {
                 this.log('Testing HEAD request...');
@@ -264,7 +264,7 @@ export default Vue.extend({
                 this.log(`✗ HEAD failed: ${error}`);
             }
         },
-        
+
         async testOptions() {
             try {
                 this.log('Testing OPTIONS request...');
@@ -278,7 +278,7 @@ export default Vue.extend({
                 this.log(`✗ OPTIONS failed: ${error}`);
             }
         },
-        
+
         async testToString() {
             try {
                 this.log('Testing toString() method...');
@@ -294,7 +294,7 @@ export default Vue.extend({
                 this.log(`✗ toString() failed: ${error}`);
             }
         },
-        
+
         async testToJSON() {
             try {
                 this.log('Testing toJSON() method...');
@@ -310,7 +310,7 @@ export default Vue.extend({
                 this.log(`✗ toJSON() failed: ${error}`);
             }
         },
-        
+
         async testToArrayBuffer() {
             try {
                 this.log('Testing toArrayBuffer() method...');

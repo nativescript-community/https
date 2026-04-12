@@ -387,7 +387,7 @@ class HttpsResponseLegacy implements IHttpsResponseLegacy {
     }
 }
 
-function AFFailure(resolve, reject, httpResponse: NSHTTPURLResponse, error: NSError, useLegacy: boolean, url) {
+function AFFailure(resolve, reject, httpResponse: NSHTTPURLResponse, error: NSError, url) {
     if (error.code === -999) {
         return reject(error);
     }
@@ -419,40 +419,23 @@ function AFFailure(resolve, reject, httpResponse: NSHTTPURLResponse, error: NSEr
     const data: NSDictionary<string, any> & NSData & NSArray<any> = error.userInfo.valueForKey(AFNetworkingOperationFailingURLResponseDataErrorKey);
     const parsedData = getData(data);
     const failingURL = error.userInfo.objectForKey('NSErrorFailingURLKey');
-    if (useLegacy) {
-        if (!sendi.statusCode) {
-            return reject(error);
-        }
-        const failure: any = {
-            error,
-            description: error.description,
-            reason: error.localizedDescription,
-            url: failingURL ? failingURL.description : url
-        };
-        if (policies.secured === true) {
-            failure.description = '@nativescript-community/https > Invalid SSL certificate! ' + error.description;
-        }
-        sendi.failure = failure;
-        sendi.content = new HttpsResponseLegacy(data, sendi.contentLength, url);
-        resolve(sendi);
-    } else {
-        const response: any = {
-            error,
-            body: parsedData,
-            contentLength: sendi.contentLength,
-            description: error.description,
-            reason: error.localizedDescription,
-            url: failingURL ? failingURL.description : url
-        };
-
-        if (policies.secured === true) {
-            response.description = '@nativescript-community/https > Invalid SSL certificate! ' + response.description;
-        }
-        sendi.content = parsedData;
-        sendi.response = response;
-
-        resolve(sendi);
+    
+    // Always use legacy response
+    if (!sendi.statusCode) {
+        return reject(error);
     }
+    const failure: any = {
+        error,
+        description: error.description,
+        reason: error.localizedDescription,
+        url: failingURL ? failingURL.description : url
+    };
+    if (policies.secured === true) {
+        failure.description = '@nativescript-community/https > Invalid SSL certificate! ' + error.description;
+    }
+    sendi.failure = failure;
+    sendi.content = new HttpsResponseLegacy(data, sendi.contentLength, url);
+    resolve(sendi);
 }
 
 function bodyToNative(cont) {
@@ -490,7 +473,7 @@ export function clearCookies() {
         storage.deleteCookie(cookie);
     });
 }
-export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = true): HttpsRequest {
+export function createRequest(opts: HttpsRequestOptions): HttpsRequest {
     const type = opts.headers?.['Content-Type'] ?? 'application/json';
     if (type.startsWith('application/json')) {
         manager.requestSerializerWrapper.httpShouldHandleCookies = opts.cookiesEnabled !== false;
@@ -572,7 +555,7 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                 clearRunningRequest();
                 const contentLength = response?.expectedContentLength ?? 0;
                 console.log('run done', contentLength);
-                const content = useLegacy ? new HttpsResponseLegacy(data, contentLength, opts.url) : getData(data);
+                const content = new HttpsResponseLegacy(data, contentLength, opts.url);
                 let getHeaders = () => ({});
                 const sendi = {
                     content,
@@ -602,7 +585,7 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
             };
             const failure = function (response: NSHTTPURLResponse, error: any) {
                 clearRunningRequest();
-                AFFailure(resolve, reject, response, error, useLegacy, opts.url);
+                AFFailure(resolve, reject, response, error, opts.url);
             };
             if (type.startsWith('multipart/form-data')) {
                 switch (opts.method) {
@@ -659,14 +642,10 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                     Object.keys(heads).forEach((k) => {
                         request.setValueForHTTPHeaderField(heads[k], k);
                     });
-                    task = manager.uploadFile(request, NSURL.fileURLWithPath(opts.body.path), progress, (response: NSURLResponse, responseObject: any, error: NSError) => {
-                        if (error) {
-                            failure(task, error);
-                        } else {
-                            success(task, responseObject);
-                        }
-                    });
-                    task.resume();
+                    if (tag) {
+                        runningRequests[tag] = requestId;
+                    }
+                    manager.uploadFile(request, NSURL.fileURLWithPath(opts.body.path), requestId, progress, success, failure);
                 } else {
                     let data: NSData;
                     // TODO: add support for Buffers
@@ -682,14 +661,10 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                     Object.keys(heads).forEach((k) => {
                         request.setValueForHTTPHeaderField(heads[k], k);
                     });
-                    task = manager.uploadData(request, data, progress, (response: NSURLResponse, responseObject: any, error: NSError) => {
-                        if (error) {
-                            failure(task, error);
-                        } else {
-                            success(task, responseObject);
-                        }
-                    });
-                    task.resume();
+                    if (tag) {
+                        runningRequests[tag] = requestId;
+                    }
+                    manager.uploadData(request, data, requestId, progress, success, failure);
                 }
             } else {
                 let dict = null;
@@ -732,11 +707,9 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
 
                                 // If we got a temp file path, response was saved to file (large)
                                 // If we got responseData, response is in memory (small)
-                                const content = useLegacy
-                                    ? tempFilePath
-                                        ? new HttpsResponseLegacy(null, contentLength, opts.url, tempFilePath)
-                                        : new HttpsResponseLegacy(responseData, contentLength, opts.url)
-                                    : tempFilePath || responseData;
+                                const content = tempFilePath
+                                    ? new HttpsResponseLegacy(null, contentLength, opts.url, tempFilePath)
+                                    : new HttpsResponseLegacy(responseData, contentLength, opts.url);
 
                                 let getHeaders = () => ({});
                                 const sendi = {
@@ -792,10 +765,8 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                                 const httpResponse = response as NSHTTPURLResponse;
 
                                 // Create response WITHOUT temp file path (download still in progress)
-                                if (useLegacy) {
-                                    responseContent = new HttpsResponseLegacy(null, contentLength, opts.url, undefined, downloadCompletionPromise);
-                                }
-                                const content = useLegacy ? responseContent : undefined;
+                                responseContent = new HttpsResponseLegacy(null, contentLength, opts.url, undefined, downloadCompletionPromise);
+                                const content = responseContent;
 
                                 let getHeaders = () => ({});
                                 const sendi = {
@@ -852,7 +823,7 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                             const contentLength = httpResponse?.expectedContentLength || 0;
 
                             // Create response with temp file path (no data loaded in memory yet)
-                            const content = useLegacy ? new HttpsResponseLegacy(null, contentLength, opts.url, tempFilePath) : tempFilePath;
+                            const content = new HttpsResponseLegacy(null, contentLength, opts.url, tempFilePath);
 
                             let getHeaders = () => ({});
                             const sendi = {
@@ -891,10 +862,10 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
         }
     };
 }
-export function request(opts: HttpsRequestOptions, useLegacy: boolean = true) {
+export function request(opts: HttpsRequestOptions) {
     return new Promise((resolve, reject) => {
         try {
-            createRequest(opts, useLegacy).run(resolve, reject);
+            createRequest(opts).run(resolve, reject);
         } catch (error) {
             reject(error);
         }

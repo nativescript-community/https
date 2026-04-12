@@ -12,7 +12,7 @@ declare class AlamofireWrapper extends NSObject {
     
     setDataTaskWillCacheResponseBlock(block: (session: NSURLSession, task: NSURLSessionDataTask, cacheResponse: NSCachedURLResponse) => NSCachedURLResponse): void;
     
-    // New clean API methods
+    // New clean API methods - updated to use NSURLSessionTask for flexibility
     request(
         method: string,
         urlString: string,
@@ -20,32 +20,58 @@ declare class AlamofireWrapper extends NSObject {
         headers: NSDictionary<string, any>,
         uploadProgress: (progress: NSProgress) => void,
         downloadProgress: (progress: NSProgress) => void,
-        success: (task: NSURLSessionDataTask, data: any) => void,
-        failure: (task: NSURLSessionDataTask, error: NSError) => void
-    ): NSURLSessionDataTask;
+        success: (task: NSURLSessionTask, data: any) => void,
+        failure: (task: NSURLSessionTask, error: NSError) => void
+    ): NSURLSessionTask;
+    
+    // Extended API with threading options
+    requestWithThreading(
+        method: string,
+        urlString: string,
+        parameters: NSDictionary<string, any>,
+        headers: NSDictionary<string, any>,
+        responseOnMainThread: NSNumber,  // optional boolean
+        progressOnMainThread: NSNumber,  // optional boolean  
+        uploadProgress: (progress: NSProgress) => void,
+        downloadProgress: (progress: NSProgress) => void,
+        success: (task: NSURLSessionTask, data: any) => void,
+        failure: (task: NSURLSessionTask, error: NSError) => void
+    ): NSURLSessionTask;
     
     uploadMultipart(
         urlString: string,
         headers: NSDictionary<string, any>,
         constructingBodyWithBlock: (formData: MultipartFormDataWrapper) => void,
         progress: (progress: NSProgress) => void,
-        success: (task: NSURLSessionDataTask, data: any) => void,
-        failure: (task: NSURLSessionDataTask, error: NSError) => void
-    ): NSURLSessionDataTask;
+        success: (task: NSURLSessionTask, data: any) => void,
+        failure: (task: NSURLSessionTask, error: NSError) => void
+    ): NSURLSessionTask;
+    
+    // Extended API with threading options
+    uploadMultipartWithThreading(
+        urlString: string,
+        headers: NSDictionary<string, any>,
+        responseOnMainThread: NSNumber,  // optional boolean
+        progressOnMainThread: NSNumber,  // optional boolean
+        constructingBodyWithBlock: (formData: MultipartFormDataWrapper) => void,
+        progress: (progress: NSProgress) => void,
+        success: (task: NSURLSessionTask, data: any) => void,
+        failure: (task: NSURLSessionTask, error: NSError) => void
+    ): NSURLSessionTask;
     
     uploadFile(
         request: NSMutableURLRequest,
         fileURL: NSURL,
         progress: (progress: NSProgress) => void,
         completionHandler: (response: NSURLResponse, responseObject: any, error: NSError) => void
-    ): NSURLSessionDataTask;
+    ): NSURLSessionTask;
     
     uploadData(
         request: NSMutableURLRequest,
         bodyData: NSData,
         progress: (progress: NSProgress) => void,
         completionHandler: (response: NSURLResponse, responseObject: any, error: NSError) => void
-    ): NSURLSessionDataTask;
+    ): NSURLSessionTask;
     
     downloadToTemp(
         method: string,
@@ -63,6 +89,28 @@ declare class AlamofireWrapper extends NSObject {
         progress: (progress: NSProgress) => void,
         completionHandler: (response: NSURLResponse, filePath: string, error: NSError) => void
     ): NSURLSessionDownloadTask;
+    
+    downloadToTempWithEarlyHeaders(
+        method: string,
+        urlString: string,
+        parameters: NSDictionary<string, any>,
+        headers: NSDictionary<string, any>,
+        sizeThreshold: number,
+        progress: (progress: NSProgress) => void,
+        headersCallback: (response: NSURLResponse, contentLength: number) => void,
+        completionHandler: (response: NSURLResponse, tempFilePath: string, error: NSError) => void
+    ): NSURLSessionDownloadTask;
+    
+    requestWithConditionalDownload(
+        method: string,
+        urlString: string,
+        parameters: NSDictionary<string, any>,
+        headers: NSDictionary<string, any>,
+        sizeThreshold: number,
+        progress: (progress: NSProgress) => void,
+        success: (task: NSURLSessionTask, data: any, tempFilePath: string) => void,
+        failure: (task: NSURLSessionTask, error: NSError) => void
+    ): NSURLSessionTask;
 }
 
 declare class RequestSerializer extends NSObject {

@@ -3,7 +3,6 @@ import Alamofire
 
 @objc(SecurityPolicyWrapper)
 @objcMembers
-@unchecked Sendable
 public class SecurityPolicyWrapper: NSObject {
     
     private var pinnedCertificatesData: [Data] = []

@@ -366,20 +366,22 @@ class HttpsResponseLegacy implements IHttpsResponseLegacy {
     }
 }
 
-function AFFailure(resolve, reject, task: NSURLSessionTask, error: NSError, useLegacy: boolean, url) {
+function AFFailure(resolve, reject, httpResponse: NSHTTPURLResponse, error: NSError, useLegacy: boolean, url) {
     if (error.code === -999) {
         return reject(error);
     }
     let getHeaders = () => ({});
     const sendi = {
-        task,
-        contentLength: task?.countOfBytesReceived,
+        httpResponse,
+        contentLength: httpResponse?.expectedContentLength ?? 0,
         reason: error.localizedDescription,
         get headers() {
             return getHeaders();
         }
     } as any as HttpsResponse;
-    const response = error.userInfo.valueForKey(AFNetworkingOperationFailingURLResponseErrorKey) as NSHTTPURLResponse;
+    
+    // Try to get response from error or use the one passed in
+    const response = httpResponse || (error.userInfo.valueForKey(AFNetworkingOperationFailingURLResponseErrorKey) as NSHTTPURLResponse);
     if (!Utils.isNullOrUndefined(response)) {
         sendi.statusCode = response.statusCode;
         getHeaders = function () {
@@ -445,17 +447,18 @@ function bodyToNative(cont) {
     return dict;
 }
 
-const runningRequests: { [k: string]: NSURLSessionTask } = {};
+const runningRequests: { [k: string]: string } = {};  // Maps tag to request ID
 
 export function cancelRequest(tag: string) {
-    if (runningRequests[tag]) {
-        runningRequests[tag].cancel();
+    const requestId = runningRequests[tag];
+    if (requestId) {
+        manager.cancelRequest(requestId);
     }
 }
 
 export function cancelAllRequests() {
-    Object.values(runningRequests).forEach((request) => {
-        request.cancel();
+    Object.values(runningRequests).forEach((requestId) => {
+        manager.cancelRequest(requestId);
     });
 }
 
@@ -524,8 +527,9 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
               }
           }
         : null;
-    let task: NSURLSessionTask;
     const tag = opts.tag;
+    // Generate request ID for tracking
+    const requestId = tag || `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
     function clearRunningRequest() {
         if (tag) {
@@ -534,14 +538,18 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
     }
     return {
         get nativeRequest() {
-            return task;
+            return null;  // We no longer expose the task
         },
-        cancel: () => task && task.cancel(),
+        cancel: () => {
+            const rid = runningRequests[tag];
+            if (rid) {
+                manager.cancelRequest(rid);
+            }
+        },
         run(resolve, reject) {
-            const success = function (task: NSURLSessionTask, data?: any) {
+            const success = function (response: NSHTTPURLResponse, data?: any) {
                 clearRunningRequest();
-                // TODO: refactor this code with failure one.
-                const contentLength = task?.countOfBytesReceived;
+                const contentLength = response?.expectedContentLength ?? 0;
                 console.log('run done', contentLength);
                 const content = useLegacy ? new HttpsResponseLegacy(data, contentLength, opts.url) : getData(data);
                 let getHeaders = () => ({});
@@ -553,7 +561,6 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                     }
                 } as any as HttpsResponse;
 
-                const response = task.response as NSHTTPURLResponse;
                 if (!Utils.isNullOrUndefined(response)) {
                     sendi.statusCode = response.statusCode;
                     getHeaders = function () {
@@ -572,18 +579,22 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                 //     sendi.reason = AFResponse.reason;
                 // }
             };
-            const failure = function (task: NSURLSessionTask, error: any) {
+            const failure = function (response: NSHTTPURLResponse, error: any) {
                 clearRunningRequest();
-                AFFailure(resolve, reject, task, error, useLegacy, opts.url);
+                AFFailure(resolve, reject, response, error, useLegacy, opts.url);
             };
             if (type.startsWith('multipart/form-data')) {
                 switch (opts.method) {
                     case 'POST':
                         // we need to remove the Content-Type or the boundary wont be set correctly
                         headers.removeObjectForKey('Content-Type');
-                        task = manager.uploadMultipart(
+                        if (tag) {
+                            runningRequests[tag] = requestId;
+                        }
+                        manager.uploadMultipart(
                             opts.url,
                             headers,
+                            requestId,
                             (formData) => {
                                 (opts.body as HttpsFormDataParam[]).forEach((param) => {
                                     if (param.fileName && param.contentType) {
@@ -682,17 +693,20 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
 
                     if (useConditionalDownload) {
                         // Use conditional download: check size and decide memory vs file
-                        task = manager.requestWithConditionalDownload(
+                        if (tag) {
+                            runningRequests[tag] = requestId;
+                        }
+                        manager.requestWithConditionalDownload(
                             opts.method,
                             opts.url,
                             dict,
                             headers,
+                            requestId,
                             sizeThreshold,
                             progress,
-                            (dataTask: NSURLSessionTask, responseData: any, tempFilePath: string) => {
+                            (httpResponse: NSHTTPURLResponse, responseData: any, tempFilePath: string) => {
                                 clearRunningRequest();
 
-                                const httpResponse = dataTask.response as NSHTTPURLResponse;
                                 const contentLength = httpResponse?.expectedContentLength || 0;
 
                                 // If we got a temp file path, response was saved to file (large)
@@ -726,12 +740,11 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                                 }
                                 resolve(sendi);
                             },
-                            (dataTask: NSURLSessionTask, error: NSError) => {
+                            (httpResponse: NSHTTPURLResponse, error: NSError) => {
                                 clearRunningRequest();
-                                failure(dataTask, error);
+                                failure(httpResponse, error);
                             }
                         );
-                        task.resume();
                     } else if (earlyResolve) {
                         // Use early resolution: resolve when headers arrive, continue download in background
                         let downloadCompletionResolve: () => void;
@@ -848,12 +861,11 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                     }
                 } else {
                     // For non-GET requests, use regular request (loads into memory)
-                    task = manager.request(opts.method, opts.url, dict, headers, progress, progress, success, failure);
-                    task.resume();
+                    if (tag) {
+                        runningRequests[tag] = requestId;
+                    }
+                    manager.request(opts.method, opts.url, dict, headers, requestId, progress, progress, success, failure);
                 }
-            }
-            if (task && tag) {
-                runningRequests[tag] = task;
             }
         }
     };

@@ -16,8 +16,8 @@ public class AlamofireWrapper: NSObject {
     private let requestsLock = NSLock()
     
     // Interceptors
-    private var requestInterceptors: [RequestInterceptor] = []
-    private var eventMonitors: [EventMonitor] = []
+    private var requestInterceptors: [RequestInterceptorWrapper] = []
+    private var eventMonitors: [EventMonitorWrapper] = []
     
     @objc public static let shared = AlamofireWrapper()
     
@@ -82,31 +82,47 @@ public class AlamofireWrapper: NSObject {
     private func recreateSession() {
         let configuration = session.sessionConfiguration
         
+        // Cancel all active requests before recreating session
+        requestsLock.lock()
+        let requests = Array(activeRequests.values)
+        activeRequests.removeAll()
+        requestsLock.unlock()
+        
+        for request in requests {
+            request.cancel()
+        }
+        
         // Create a server trust manager with our security policy
         // Use allHostsMustBeEvaluated: false to allow default trust evaluation for non-pinned hosts
         let serverTrustManager = ServerTrustManager(allHostsMustBeEvaluated: false, evaluators: [:])
         
         // Create new session with server trust manager and interceptors
-        // Keep the session alive by replacing it atomically
+        // Store old session temporarily to ensure it doesn't get deallocated immediately
+        let oldSession = session
         session = Session(
             configuration: configuration,
             serverTrustManager: serverTrustManager,
             eventMonitors: eventMonitors
         )
+        
+        // Ensure old session is explicitly invalidated after new one is created
+        DispatchQueue.global(qos: .utility).asyncAfter(deadline: .now() + 0.5) {
+            _ = oldSession // Keep reference until delayed closure executes
+        }
     }
     
     // MARK: - Interceptors
     
     /// Add a request interceptor (for request/response modification)
-    // @objc public func addInterceptor(_ interceptor: RequestInterceptor) {
-    //     requestInterceptors.append(interceptor)
-    // }
+    @objc public func addInterceptor(_ interceptor: RequestInterceptorWrapper) {
+        requestInterceptors.append(interceptor)
+    }
     
-    // /// Add an event monitor (for network-level events like Android's network interceptor)
-    // @objc public func addEventMonitor(_ monitor: EventMonitor) {
-    //     eventMonitors.append(monitor)
-    //     recreateSession() // Recreate session to apply new event monitors
-    // }
+    /// Add an event monitor (for network-level events like Android's network interceptor)
+    @objc public func addEventMonitor(_ monitor: EventMonitorWrapper) {
+        eventMonitors.append(monitor)
+        recreateSession() // Recreate session to apply new event monitors
+    }
     
     // MARK: - Request Management
     
@@ -1046,5 +1062,142 @@ public class ResponseSerializer: NSObject {
         } else {
             return data
         }
+    }
+}
+
+// MARK: - Event Monitor Wrapper
+
+/// Wrapper around Alamofire's EventMonitor protocol to make it accessible from Objective-C/NativeScript
+@objc(EventMonitorWrapper)
+@objcMembers
+public class EventMonitorWrapper: NSObject, EventMonitor {
+    
+    // Callbacks that can be set from TypeScript
+    public var requestDidResumeCallback: ((URLRequest) -> Void)?
+    public var requestDidSuspendCallback: ((URLRequest) -> Void)?
+    public var requestDidCancelCallback: ((URLRequest) -> Void)?
+    public var requestDidFinishCallback: ((URLRequest) -> Void)?
+    public var requestDidCompleteCallback: ((URLRequest, HTTPURLResponse?, Error?) -> Void)?
+    public var dataTaskDidReceiveDataCallback: ((URLRequest, Data) -> Void)?
+    
+    @objc public override init() {
+        super.init()
+    }
+    
+    // EventMonitor protocol implementation
+    public func request(_ request: Request, didCreateURLRequest urlRequest: URLRequest) {
+        // No-op for now, can be added if needed
+    }
+    
+    public func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
+        if let urlRequest = task.originalRequest {
+            requestDidCompleteCallback?(urlRequest, task.response as? HTTPURLResponse, error)
+        }
+    }
+    
+    public func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
+        if let urlRequest = dataTask.originalRequest {
+            dataTaskDidReceiveDataCallback?(urlRequest, data)
+        }
+    }
+    
+    public func request(_ request: Request, didResumeTask task: URLSessionTask) {
+        if let urlRequest = task.originalRequest {
+            requestDidResumeCallback?(urlRequest)
+        }
+    }
+    
+    public func request(_ request: Request, didSuspendTask task: URLSessionTask) {
+        if let urlRequest = task.originalRequest {
+            requestDidSuspendCallback?(urlRequest)
+        }
+    }
+    
+    public func request(_ request: Request, didCancelTask task: URLSessionTask) {
+        if let urlRequest = task.originalRequest {
+            requestDidCancelCallback?(urlRequest)
+        }
+    }
+    
+    public func request(_ request: Request, didFinishTask task: URLSessionTask, with error: AFError?) {
+        if let urlRequest = task.originalRequest {
+            requestDidFinishCallback?(urlRequest)
+        }
+    }
+    
+    // Setter methods for callbacks (called from TypeScript)
+    @objc public func setRequestDidResume(_ callback: @escaping (URLRequest) -> Void) {
+        requestDidResumeCallback = callback
+    }
+    
+    @objc public func setRequestDidSuspend(_ callback: @escaping (URLRequest) -> Void) {
+        requestDidSuspendCallback = callback
+    }
+    
+    @objc public func setRequestDidCancel(_ callback: @escaping (URLRequest) -> Void) {
+        requestDidCancelCallback = callback
+    }
+    
+    @objc public func setRequestDidFinish(_ callback: @escaping (URLRequest) -> Void) {
+        requestDidFinishCallback = callback
+    }
+    
+    @objc public func setRequestDidComplete(_ callback: @escaping (URLRequest, HTTPURLResponse?, Error?) -> Void) {
+        requestDidCompleteCallback = callback
+    }
+    
+    @objc public func setDataTaskDidReceiveData(_ callback: @escaping (URLRequest, Data) -> Void) {
+        dataTaskDidReceiveDataCallback = callback
+    }
+}
+
+// MARK: - Request Interceptor Wrapper
+
+/// Wrapper around Alamofire's RequestInterceptor protocol to make it accessible from Objective-C/NativeScript
+@objc(RequestInterceptorWrapper)
+@objcMembers
+public class RequestInterceptorWrapper: NSObject, RequestInterceptor {
+    
+    // Callbacks that can be set from TypeScript
+    public var adaptCallback: ((URLRequest) -> URLRequest)?
+    public var retryCallback: ((URLRequest, Error, Int) -> Bool)?
+    
+    @objc public override init() {
+        super.init()
+    }
+    
+    // RequestAdapter protocol
+    public func adapt(_ urlRequest: URLRequest, for session: Session, completion: @escaping (Result<URLRequest, Error>) -> Void) {
+        if let adaptCallback = adaptCallback {
+            let adapted = adaptCallback(urlRequest)
+            completion(.success(adapted))
+        } else {
+            completion(.success(urlRequest))
+        }
+    }
+    
+    // RequestRetrier protocol
+    public func retry(_ request: Request, for session: Session, dueTo error: Error, completion: @escaping (RetryResult) -> Void) {
+        guard let urlRequest = request.request else {
+            completion(.doNotRetry)
+            return
+        }
+        
+        if let retryCallback = retryCallback {
+            let retryCount = request.retryCount
+            let shouldRetry = retryCallback(urlRequest, error, retryCount)
+            completion(shouldRetry ? .retry : .doNotRetry)
+        } else {
+            completion(.doNotRetry)
+        }
+    }
+    
+    // Setter methods for callbacks (called from TypeScript)
+    @objc public func setAdapt(_ callback: @escaping (URLRequest) -> URLRequest) {
+        adaptCallback = callback
+    }
+    
+    @objc public func setRetry(_ callback: @escaping (URLRequest, Error, Int) -> Bool) {
+        retryCallback = callback
     }
 }

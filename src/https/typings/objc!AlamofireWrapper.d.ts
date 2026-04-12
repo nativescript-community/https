@@ -14,8 +14,8 @@ declare class AlamofireWrapper extends NSObject {
     
     // Request management
     cancelRequest(id: string): void;
-    addInterceptor(interceptor: any): void;
-    addEventMonitor(monitor: any): void;
+    addInterceptor(interceptor: RequestInterceptorWrapper): void;
+    addEventMonitor(monitor: EventMonitorWrapper): void;
     
     // New clean API methods - using request IDs and NSHTTPURLResponse callbacks
     request(
@@ -192,4 +192,26 @@ declare const enum AFSSLPinningMode {
     None = 0,
     PublicKey = 1,
     Certificate = 2
+}
+
+declare class EventMonitorWrapper extends NSObject {
+    static alloc(): EventMonitorWrapper;
+    init(): EventMonitorWrapper;
+    
+    // Callback setters
+    setRequestDidResume(callback: (request: NSURLRequest) => void): void;
+    setRequestDidSuspend(callback: (request: NSURLRequest) => void): void;
+    setRequestDidCancel(callback: (request: NSURLRequest) => void): void;
+    setRequestDidFinish(callback: (request: NSURLRequest) => void): void;
+    setRequestDidComplete(callback: (request: NSURLRequest, response: NSHTTPURLResponse, error: NSError) => void): void;
+    setDataTaskDidReceiveData(callback: (request: NSURLRequest, data: NSData) => void): void;
+}
+
+declare class RequestInterceptorWrapper extends NSObject {
+    static alloc(): RequestInterceptorWrapper;
+    init(): RequestInterceptorWrapper;
+    
+    // Callback setters
+    setAdapt(callback: (request: NSURLRequest) => NSURLRequest): void;
+    setRetry(callback: (request: NSURLRequest, error: NSError, retryCount: number) => boolean): void;
 }

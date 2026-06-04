@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.33](https://github.com/nativescript-community/https/compare/v4.1.32...v4.1.33) (2026-06-04)
+
+### Bug Fixes
+
+* encoding support + N 9 support ([3389e11](https://github.com/nativescript-community/https/commit/3389e116bd2b2fdb0e1ecba37e63bce881e046b7))
+
 ## [4.1.32](https://github.com/nativescript-community/https/compare/v4.1.31...v4.1.32) (2026-03-31)
 
 ### Bug Fixes

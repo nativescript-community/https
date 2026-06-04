@@ -8,6 +8,8 @@ import java.io.PipedInputStream;
 import java.io.InputStream;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -409,24 +411,41 @@ public class OkHttpResponse {
         thread.start();
     }
 
-    static String responseBodyToString(OkHttpResponse response) throws IOException {
-        
-        final String responseString = response.responseBody.string();
-        response.closeResponseBody();
-        return responseString;
+    static String responseBodyToString(OkHttpResponse response, String encoding) throws IOException {
+        if (encoding == null) {
+            final String responseString = response.responseBody.string();
+            response.closeResponseBody();
+            return responseString;
+        }
+            byte[] bytes = response.responseBody.bytes(); // consumes the body
+            Charset charset;
+            switch (encoding) {
+                case "GBK":
+                    charset = Charset.forName("GBK");
+                    break;
+                case "ASCII":
+                    charset = StandardCharsets.US_ASCII;
+                    break;
+                default:
+                    charset = StandardCharsets.UTF_8;
+            }
+
+            String responseString = new String(bytes, charset);
+            response.closeResponseBody();
+            return responseString;
     }
 
-    public String asString() throws IOException {
-        return responseBodyToString(this);
+    public String asString(String encoding) throws IOException {
+        return responseBodyToString(this, encoding);
     }
 
-    public void asStringAsync(final OkHttpResponseAsyncCallback callback) {
+    public void asStringAsync(String encoding, final OkHttpResponseAsyncCallback callback) {
         final OkHttpResponse fme = this;
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    final String result = responseBodyToString(fme);
+                    final String result = responseBodyToString(fme, encoding);
                     if (runOnMainThread) {
                         getMainHandler().post(new Runnable() {
                             @Override

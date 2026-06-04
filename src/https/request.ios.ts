@@ -1,7 +1,7 @@
 import { File, ImageSource, Utils } from '@nativescript/core';
 import { CacheOptions, HttpsFormDataParam, HttpsRequest, HttpsRequestOptions, HttpsResponse, HttpsSSLPinningOptions, HttpsResponseLegacy as IHttpsResponseLegacy } from '.';
-import { getFilenameFromUrl, parseJSON } from './request.common';
-export { addInterceptor, addNetworkInterceptor } from './request.common';
+import { getFilenameFromUrl, HttpResponseEncoding, parseJSON } from './request.common';
+export { HttpResponseEncoding, addInterceptor, addNetworkInterceptor } from './request.common';
 
 let cache: NSURLCache;
 
@@ -75,9 +75,23 @@ function nativeToObj(data, encoding?) {
         });
         return content;
     } else if (data instanceof NSData) {
-        return NSString.alloc()
-            .initWithDataEncoding(data, encoding === 'ascii' ? NSASCIIStringEncoding : NSUTF8StringEncoding)
-            .toString();
+        let code = NSUTF8StringEncoding; // long:4
+
+        if (encoding === HttpResponseEncoding.GBK) {
+            code = CFStringEncodings.kCFStringEncodingGB_18030_2000; // long:1586
+        } else if (encoding === HttpResponseEncoding.ASCII) {
+            code = NSASCIIStringEncoding;
+        }
+
+        let encodedString = NSString.alloc().initWithDataEncoding(data, code);
+
+        // If UTF8 string encoding fails try with ISO-8859-1
+        if (!encodedString) {
+            code = NSISOLatin1StringEncoding; // long:5
+            encodedString = NSString.alloc().initWithDataEncoding(data, code);
+        }
+
+        return encodedString.toString();
     } else {
         return data;
     }
@@ -138,7 +152,7 @@ class HttpsResponseLegacy implements IHttpsResponseLegacy {
         return this.arrayBuffer;
     }
     stringResponse: string;
-    toString(encoding?: any) {
+    toString(encoding?: HttpResponseEncoding) {
         if (!this.data) {
             return null;
         }
@@ -163,11 +177,11 @@ class HttpsResponseLegacy implements IHttpsResponseLegacy {
             return this.stringResponse;
         }
     }
-    toStringAsync(encoding?: any) {
+    toStringAsync(encoding?: HttpResponseEncoding) {
         return Promise.resolve(this.toString(encoding));
     }
     jsonResponse: any;
-    toJSON<T>(encoding?: any) {
+    toJSON<T>(encoding?: HttpResponseEncoding) {
         if (!this.data) {
             return null;
         }
@@ -187,8 +201,8 @@ class HttpsResponseLegacy implements IHttpsResponseLegacy {
         this.jsonResponse = data ? parseJSON(data) : null;
         return this.jsonResponse as T;
     }
-    toJSONAsync<T>() {
-        return Promise.resolve<T>(this.toJSON());
+    toJSONAsync<T>(encoding?: HttpResponseEncoding) {
+        return Promise.resolve<T>(this.toJSON(encoding));
     }
     imageSource: ImageSource;
     async toImage(): Promise<ImageSource> {
@@ -340,6 +354,21 @@ export function clearCookies() {
     cookies.enumerateObjectsUsingBlock((cookie) => {
         storage.deleteCookie(cookie);
     });
+}
+export function getCookie(key: string) {
+    const storage = NSHTTPCookieStorage.sharedHTTPCookieStorage;
+    const cookies = storage.cookies;
+    if (cookies) {
+        let result;
+        // TODO: stop when found
+        cookies.enumerateObjectsUsingBlock((cookie: NSHTTPCookie, index, stop: interop.Pointer | interop.Reference<boolean>) => {
+            storage.deleteCookie(cookie);
+            if (cookie.name === key) {
+                result = cookie.value;
+            }
+        });
+        return result;
+    }
 }
 export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = true): HttpsRequest {
     const type = opts.headers && opts.headers['Content-Type'] ? opts.headers['Content-Type'] : 'application/json';

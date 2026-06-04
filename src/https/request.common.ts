@@ -1,5 +1,11 @@
 import { knownFolders, path } from '@nativescript/core';
 
+export enum HttpResponseEncoding {
+    ASCII = 'ASCII',
+    UTF8 = 'UTF-8',
+    GBK = 'GBK'
+}
+
 export function getFilenameFromUrl(url: string) {
     const slashPos = url.lastIndexOf('/') + 1;
     const questionMarkPos = url.lastIndexOf('?');

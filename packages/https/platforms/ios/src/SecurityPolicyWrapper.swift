@@ -3,7 +3,9 @@ import Alamofire
 
 @objc(SecurityPolicyWrapper)
 @objcMembers
-public class SecurityPolicyWrapper: NSObject {
+public class SecurityPolicyWrapper: NSObject, @unchecked Sendable {
+    
+    private let lock = NSLock()
     
     private var pinnedCertificatesData: [Data] = []
     @objc public var allowInvalidCertificates: Bool = false
@@ -26,9 +28,15 @@ public class SecurityPolicyWrapper: NSObject {
     
     @objc public var pinnedCertificates: NSSet? {
         get {
-            return NSSet(array: pinnedCertificatesData)
+            lock.lock()
+            let data = pinnedCertificatesData
+            lock.unlock()
+            return NSSet(array: data)
         }
         set {
+            lock.lock()
+            defer { lock.unlock() }
+
             if let set = newValue {
                 pinnedCertificatesData = set.allObjects.compactMap { $0 as? Data }
             } else {

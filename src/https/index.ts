@@ -1,8 +1,10 @@
 import { ImageSource } from '@nativescript/core';
 import type { HttpsRequestOptions } from './request';
-// eslint-disable-next-line no-duplicate-imports
 import { request } from './request';
 export * from './request';
+
+// for shim to work with N 9
+export { request as requestInternal };
 
 /**
  * Downloads the content from the specified URL as a string.

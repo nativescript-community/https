@@ -1,8 +1,8 @@
-import { File, HttpResponseEncoding, ImageSource, Utils } from '@nativescript/core';
+import { File, ImageSource } from '@nativescript/core';
 import { CacheOptions, HttpsFormDataParam, HttpsRequest, HttpsRequestOptions, HttpsSSLPinningOptions, HttpsResponseLegacy as IHttpsResponseLegacy } from '.';
 
-import { getFilenameFromUrl, interceptors, networkInterceptors, parseJSON } from './request.common';
-export { addNetworkInterceptor, addInterceptor } from './request.common';
+import { HttpResponseEncoding, getFilenameFromUrl, interceptors, networkInterceptors, parseJSON } from './request.common';
+export { HttpResponseEncoding, addInterceptor, addNetworkInterceptor } from './request.common';
 
 interface Ipeer {
     enabled: boolean;
@@ -13,16 +13,7 @@ interface Ipeer {
     certificate?: string;
     x509Certificate?: java.security.cert.Certificate;
 }
-function wrapJavaException(ex) {
-    if (ex instanceof java.lang.Exception) {
-        const err = new Error(ex.toString());
-        err['nativeException'] = ex;
-        //@ts-ignore
-        err['stackTrace'] = com.tns.NativeScriptException.getStackTraceAsString(ex);
-        return err;
-    }
-    return ex;
-}
+
 const peer: Ipeer = {
     enabled: false,
     allowInvalidCertificates: false,
@@ -55,6 +46,10 @@ export function removeCachedResponse(url: string) {
     if (cache) {
         com.nativescript.https.CacheUtils.removeCachedResponse(url, cache);
     }
+}
+
+export function getManager() {
+    return getClient({}, false);
 }
 
 // TODO: rewrite this to not have to handle
@@ -128,36 +123,36 @@ class HttpsResponseLegacy implements IHttpsResponseLegacy {
 
     // cache it because asking it again wont work as the socket is closed
     stringResponse: string;
-    toString(encoding?: string) {
+    toString(encoding?: HttpResponseEncoding) {
         // TODO: handle arraybuffer already stored
-        this.stringResponse = this.stringResponse || this.response.asString();
+        this.stringResponse = this.stringResponse || this.response.asString(encoding);
         return this.stringResponse;
     }
-    async toStringAsync(encoding?: string): Promise<string> {
+    async toStringAsync(encoding?: HttpResponseEncoding): Promise<string> {
         if (this.stringResponse) {
             return this.stringResponse;
         }
         // TODO: handle arraybuffer already stored
         this.stringResponse = await new Promise<string>((resolve, reject) => {
             this.getOrCreateCloseCallback();
-            this.response.asStringAsync(this.getCallback(resolve, reject));
+            this.response.asStringAsync(encoding, this.getCallback(resolve, reject));
         });
         return this.stringResponse;
     }
 
     // cache it because asking it again wont work as the socket is closed
     jsonResponse: any;
-    toJSON(encoding?: string) {
+    toJSON(encoding?: HttpResponseEncoding) {
         if (this.jsonResponse !== undefined) {
             return this.jsonResponse;
         }
         // TODO: handle arraybuffer already stored
-        this.stringResponse = this.stringResponse || this.response.asString();
+        this.stringResponse = this.stringResponse || this.response.asString(encoding);
         this.jsonResponse = this.stringResponse ? parseJSON(this.stringResponse) : null;
         return this.jsonResponse;
     }
 
-    async toJSONAsync<T>() {
+    async toJSONAsync<T>(encoding?: HttpResponseEncoding) {
         if (this.jsonResponse !== undefined) {
             return this.jsonResponse;
         }
@@ -166,7 +161,7 @@ class HttpsResponseLegacy implements IHttpsResponseLegacy {
             return this.jsonResponse;
         }
         // TODO: handle arraybuffer already stored
-        const r = await this.toStringAsync();
+        const r = await this.toStringAsync(encoding);
         this.jsonResponse = r ? parseJSON(r) : null;
         return this.jsonResponse as T;
     }
@@ -253,6 +248,19 @@ const SDKVersion = android.os.Build.VERSION.SDK_INT;
 let Client: okhttp3.OkHttpClient;
 let cookieJar: com.nativescript.https.QuotePreservingCookieJar;
 let cookieManager: java.net.CookieManager;
+
+export function getCookie(key: string) {
+    const cookies = cookieManager?.getCookieStore()?.getCookies();
+    if (cookies) {
+        for (let index = 0; index < cookies.size(); index++) {
+            const cookie = cookies.get(index) as java.net.HttpCookie;
+            const name = cookie.getName();
+            if (name === key) {
+                return cookie.getValue();
+            }
+        }
+    }
+}
 export function getClient(opts: Partial<HttpsRequestOptions> = {}, reload: boolean = false): okhttp3.OkHttpClient {
     if (!Client) {
         // ssl error fix on KitKat. Only need to be done once.
@@ -526,7 +534,7 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                         const typedArray = new Uint8Array(param.data);
                         const nativeBuffer = java.nio.ByteBuffer.wrap(Array.from(typedArray));
                         nData = nativeBuffer.array();
-                    } else if (param.data instanceof Blob) {
+                    } else if (typeof Blob !== 'undefined' && param.data instanceof Blob) {
                         // Stolen from core xhr, not sure if we should use InternalAccessor, but it provides fast access.
                         // @ts-ignore
                         const typedArray = new Uint8Array(Blob.InternalAccessor.getBuffer(param.data).buffer.slice(0) as ArrayBuffer);

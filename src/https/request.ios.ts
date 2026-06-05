@@ -1,6 +1,6 @@
 import { File, ImageSource, Utils } from '@nativescript/core';
 import { CacheOptions, HttpsFormDataParam, HttpsRequest, HttpsRequestOptions, HttpsResponse, HttpsSSLPinningOptions, HttpsResponseLegacy as IHttpsResponseLegacy } from '.';
-import { getFilenameFromUrl, interceptors, networkInterceptors, parseJSON } from './request.common';
+import { HttpResponseEncoding, getFilenameFromUrl, interceptors, networkInterceptors, parseJSON } from './request.common';
 export { addInterceptor, addNetworkInterceptor } from './request.common';
 
 // Error keys used by the Swift wrapper to maintain compatibility with AFNetworking
@@ -81,7 +81,7 @@ export function disableSSLPinning() {
     policies.secured = false;
 }
 
-function nativeToObj(data, encoding?) {
+function nativeToObj(data, encoding?: HttpResponseEncoding) {
     let content: any;
     if (data instanceof NSDictionary) {
         content = {};
@@ -96,9 +96,23 @@ function nativeToObj(data, encoding?) {
         });
         return content;
     } else if (data instanceof NSData) {
-        return NSString.alloc()
-            .initWithDataEncoding(data, encoding === 'ascii' ? NSASCIIStringEncoding : NSUTF8StringEncoding)
-            .toString();
+        let code = NSUTF8StringEncoding; // long:4
+
+        if (encoding === HttpResponseEncoding.GBK) {
+            code = CFStringEncodings.kCFStringEncodingGB_18030_2000; // long:1586
+        } else if (encoding === HttpResponseEncoding.ASCII) {
+            code = NSASCIIStringEncoding;
+        }
+
+        let encodedString = NSString.alloc().initWithDataEncoding(data, code);
+
+        // If UTF8 string encoding fails try with ISO-8859-1
+        if (!encodedString) {
+            code = NSISOLatin1StringEncoding; // long:5
+            encodedString = NSString.alloc().initWithDataEncoding(data, code);
+        }
+
+        return encodedString.toString();
     } else {
         return data;
     }
@@ -253,7 +267,7 @@ class HttpsResponseLegacy implements IHttpsResponseLegacy {
         return this.arrayBuffer;
     }
     stringResponse: string;
-    toString(encoding?: any) {
+    toString(encoding?: HttpResponseEncoding) {
         if (!this.ensureDataLoadedSync()) {
             return null;
         }
@@ -278,11 +292,11 @@ class HttpsResponseLegacy implements IHttpsResponseLegacy {
             return this.stringResponse;
         }
     }
-    toStringAsync(encoding?: any) {
+    toStringAsync(encoding?: HttpResponseEncoding) {
         return this.ensureDataLoaded().then(() => this.toString(encoding));
     }
     jsonResponse: any;
-    toJSON<T>(encoding?: any) {
+    toJSON<T>(encoding?: HttpResponseEncoding) {
         if (!this.ensureDataLoadedSync()) {
             return null;
         }
@@ -302,8 +316,8 @@ class HttpsResponseLegacy implements IHttpsResponseLegacy {
         this.jsonResponse = data ? parseJSON(data) : null;
         return this.jsonResponse as T;
     }
-    toJSONAsync<T>() {
-        return this.ensureDataLoaded().then(() => this.toJSON<T>());
+    toJSONAsync<T>(encoding?: HttpResponseEncoding) {
+        return this.ensureDataLoaded().then(() => this.toJSON<T>(encoding));
     }
     imageSource: ImageSource;
     async toImage(): Promise<ImageSource> {
@@ -602,7 +616,7 @@ export function createRequest(opts: HttpsRequestOptions): HttpsRequest {
                                             } else if (data instanceof ArrayBuffer) {
                                                 const buffer = new Uint8Array(data);
                                                 data = NSData.dataWithData(buffer as any);
-                                            } else if (data instanceof Blob) {
+                                            } else if (typeof Blob !== 'undefined' && data instanceof Blob) {
                                                 // Stolen from core xhr, not sure if we should use InternalAccessor, but it provides fast access.
                                                 // @ts-expect-error missing InternalAccessor typings
                                                 const buffer = new Uint8Array(Blob.InternalAccessor.getBuffer(data).buffer.slice(0) as ArrayBuffer);

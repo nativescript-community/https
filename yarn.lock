@@ -12,17 +12,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@akylas/nativescript@npm:~8.6.4":
-  version: 8.6.5
-  resolution: "@akylas/nativescript@npm:8.6.5"
+"@akylas/nativescript@npm:8.9.10":
+  version: 8.9.10
+  resolution: "@akylas/nativescript@npm:8.9.10"
   dependencies:
+    "@csstools/css-calc": "npm:~2.1.2"
+    "@csstools/css-color-parser": "npm:^3.0.8"
+    "@csstools/css-parser-algorithms": "npm:^3.0.4"
+    "@csstools/css-tokenizer": "npm:^3.0.3"
     "@nativescript/hook": "npm:~2.0.0"
     acorn: "npm:^8.7.0"
     css-tree: "npm:^1.1.2"
-    emoji-regex: "npm:^10.2.1"
-    reduce-css-calc: "npm:^2.1.7"
-    tslib: "npm:^2.0.0"
-  checksum: 10/d86b744be6680c8a66a73a23fcbf63c0c482fb6d62306bd1a973e1113073e818c1b9b2f207d65dd44475594c4e1f878aedc8fca652f37772d6fa75179042eb27
+    css-what: "npm:^6.1.0"
+    emoji-regex: "npm:^10.3.0"
+    reduce-css-calc: "npm:^2.1.8"
+    tslib: "npm:^2.6.3"
+  checksum: 10/c892cbdcadbbcd3d41db50f03455cb553d7a64e3bd0c5d47d9d55dc6e0e4549bfe92d8067e00a6ca2c0400e1c5eb909706a2a7bcf983c6ea66dd2e7c28d77bd4
   languageName: node
   linkType: hard
 
@@ -2001,14 +2006,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nativescript-community/https@npm:4.0.11":
-  version: 4.0.11
-  resolution: "@nativescript-community/https@npm:4.0.11"
-  checksum: 10/b12773ca9002e042898a17d19a691d088a34ea0f9fbeb1004b4d91ff46526f735bf6bfc442b0fd41b4b9b6942aff664c0c4ce991d07285b201bc26eeeec1c398
-  languageName: node
-  linkType: hard
-
-"@nativescript-community/https@workspace:packages/https":
+"@nativescript-community/https@npm:*, @nativescript-community/https@workspace:packages/https":
   version: 0.0.0-use.local
   resolution: "@nativescript-community/https@workspace:packages/https"
   languageName: unknown
@@ -2087,25 +2085,25 @@ __metadata:
 
 "@nativescript-community/template-snippet@file:demo-snippets::locator=root-workspace-0b6124%40workspace%3A.":
   version: 0.0.1
-  resolution: "@nativescript-community/template-snippet@file:demo-snippets#demo-snippets::hash=e2df3e&locator=root-workspace-0b6124%40workspace%3A."
+  resolution: "@nativescript-community/template-snippet@file:demo-snippets#demo-snippets::hash=ba4fb5&locator=root-workspace-0b6124%40workspace%3A."
   dependencies:
-    "@nativescript-community/https": "npm:4.0.11"
-  checksum: 10/e30e2f186981634075f651330748b6060f50de85bfcc5bfe1e3df374ac922d035d7d03c401c781f5d9208e4d65cd5ea59846b56caeb7e32f46b5ebf81acbe96e
+    "@nativescript-community/https": "npm:*"
+  checksum: 10/aee848663356dcc2ca2670864fc38f6bfbbdce5a3946cf34a4d735189a4ef2dcc90e420933d06d70aa339e151ea93b1e572487f11e8e9ad9e192c44241794df3
   languageName: node
   linkType: hard
 
-"@nativescript-community/template-snippet@npm:0.0.1, @nativescript-community/template-snippet@workspace:demo-snippets":
+"@nativescript-community/template-snippet@npm:*, @nativescript-community/template-snippet@workspace:demo-snippets":
   version: 0.0.0-use.local
   resolution: "@nativescript-community/template-snippet@workspace:demo-snippets"
   dependencies:
-    "@nativescript-community/https": "npm:4.0.11"
+    "@nativescript-community/https": "npm:*"
   languageName: unknown
   linkType: soft
 
-"@nativescript/android@npm:~8.6.2":
-  version: 8.6.2
-  resolution: "@nativescript/android@npm:8.6.2"
-  checksum: 10/7e61e1ca84cb1df5d4008a0bd57b6caac067b44b14e8b8a1ab44f15309a11e3d338c36e0ad18b9bb087fe70579cd39519ecd5bb19f86f3c3a4ecf2ca1ae71a94
+"@nativescript/android@npm:8.9.2":
+  version: 8.9.2
+  resolution: "@nativescript/android@npm:8.9.2"
+  checksum: 10/1cfc34f2a90203d62a7638338d817fce43cfdc15ee5273904ec9b0bb405e419eb29365ea87da95be3dd1685a0e2765e2bb4133d0cf48227048bc6f4f9fcd81f8
   languageName: node
   linkType: hard
 
@@ -2138,20 +2136,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nativescript/core@npm:~8.6.2":
-  version: 8.6.2
-  resolution: "@nativescript/core@npm:8.6.2"
-  dependencies:
-    "@nativescript/hook": "npm:~2.0.0"
-    acorn: "npm:^8.7.0"
-    css-tree: "npm:^1.1.2"
-    emoji-regex: "npm:^10.2.1"
-    reduce-css-calc: "npm:^2.1.7"
-    tslib: "npm:^2.0.0"
-  checksum: 10/4c98475439851c6bb3e2528dd9cd779cb6b38873c96eaf35e57fb06a4979a7e25a9cff5e2fa60e97c13996a19f3109b6eee285e0fb32b74527a69bc3c27ef898
-  languageName: node
-  linkType: hard
-
 "@nativescript/hook@npm:~2.0.0":
   version: 2.0.0
   resolution: "@nativescript/hook@npm:2.0.0"
@@ -2162,10 +2146,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nativescript/ios@npm:8.6.3":
-  version: 8.6.3
-  resolution: "@nativescript/ios@npm:8.6.3"
-  checksum: 10/b596dfc08b3a84af2d2ca831a1987a070a8b09a34172a38eebede06e71c6e10808f7329f057dbe2c8b3b102c36a8e0d3fbb6b339b5546e9677732ab66ded121e
+"@nativescript/ios@npm:8.9.5":
+  version: 8.9.5
+  resolution: "@nativescript/ios@npm:8.9.5"
+  checksum: 10/a9a7a2a9133593cd07bc938f8184deb417f6e75b77af37e10f8f17279574a1ca3013bf98e0a55236f655fb29c9f4d4dca223a6854d4fd01719d4dd26f9c038ee
   languageName: node
   linkType: hard
 
@@ -2173,114 +2157,50 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@nativescript/template-blank-vue-ts@workspace:demo-vue"
   dependencies:
-    "@akylas/nativescript": "npm:~8.6.4"
-    "@nativescript-community/template-snippet": "npm:0.0.1"
-    "@nativescript/android": "npm:~8.6.2"
-    "@nativescript/core": "npm:~8.6.2"
-    "@nativescript/ios": "npm:8.6.3"
-    "@nativescript/theme": "npm:~3.0.2"
-    "@nativescript/types": "npm:~8.6.1"
-    "@nativescript/webpack": "npm:5.0.18"
-    "@types/node": "npm:~18.11.19"
-    nativescript-vue: "npm:~2.9.3"
-    nativescript-vue-template-compiler: "npm:~2.9.3"
-    typescript: "npm:5.3.3"
-    vue: "npm:^2.7.16"
+    "@akylas/nativescript": "npm:8.9.10"
+    "@nativescript-community/template-snippet": "npm:*"
+    "@nativescript/android": "npm:8.9.2"
+    "@nativescript/core": "npm:8.9.9"
+    "@nativescript/ios": "npm:8.9.5"
+    "@nativescript/theme": "npm:3.1.0"
+    "@nativescript/types": "npm:8.9.1"
+    "@nativescript/webpack": "npm:5.0.24"
+    "@types/node": "npm:24.7.0"
+    nativescript-vue: "npm:2.9.3"
+    nativescript-vue-template-compiler: "npm:2.9.3"
+    typescript: "npm:5.9.3"
+    vue: "npm:2.7.16"
   languageName: unknown
   linkType: soft
 
-"@nativescript/theme@npm:~3.0.2":
-  version: 3.0.2
-  resolution: "@nativescript/theme@npm:3.0.2"
-  checksum: 10/cde630a282ca9bc1d21b01db2d2d3b131e0468803db5819f93b7e8589430d65c3537f7636ca8bb74c378dc318bb64d46194f8bdd018976c7f3e16684f8f16cbe
+"@nativescript/theme@npm:3.1.0":
+  version: 3.1.0
+  resolution: "@nativescript/theme@npm:3.1.0"
+  checksum: 10/42adad22fc40f3d2b3a66c69976c0917eb21755dfbf859aa2acf83144960f8dc8f8ce0bd781b0cb7004afd86abd27c6fcd634e17d9bbba579dc76b20939ba308
   languageName: node
   linkType: hard
 
-"@nativescript/types-android@npm:8.9.0":
+"@nativescript/types-android@npm:8.9.0, @nativescript/types-android@npm:~8.9.0":
   version: 8.9.0
   resolution: "@nativescript/types-android@npm:8.9.0"
   checksum: 10/c006be3f0a8fa6714bacd868c3dac9ea85e707f5a439631ad7d773492e68ce5d993213e59e205b3c62f07ef796eaadb1260d09271f451c5370104b71d4915949
   languageName: node
   linkType: hard
 
-"@nativescript/types-android@npm:~8.6.0":
-  version: 8.6.1
-  resolution: "@nativescript/types-android@npm:8.6.1"
-  checksum: 10/519ded5548a90b445eb31dee2197498a9081b42515829982cb5b8087f8c6d84eac67c1823dbb6957c7f82a3e6868825fdbc3ec01bff2cbb529fcce14003fb1c2
-  languageName: node
-  linkType: hard
-
-"@nativescript/types-ios@npm:8.9.1":
+"@nativescript/types-ios@npm:8.9.1, @nativescript/types-ios@npm:~8.9.0":
   version: 8.9.1
   resolution: "@nativescript/types-ios@npm:8.9.1"
   checksum: 10/fd8129919a48e65250521516bc18b3201df4f7be0e49be77eb54ed6729088142eb7dcdff6d0d41f57b782b23342d0ffe73152b1dfea06e28a61a62d4dd468514
   languageName: node
   linkType: hard
 
-"@nativescript/types-ios@npm:~8.6.0":
-  version: 8.6.1
-  resolution: "@nativescript/types-ios@npm:8.6.1"
-  checksum: 10/7ff8690861cb028ef1855dd56a52eb7a5ea8a44917227fe8f6bb8dc78090275bcd005cc870c9c8ef1e828e8d3a5be921db82ce5eb9a5e39bebba9b2e9f6882d0
-  languageName: node
-  linkType: hard
-
-"@nativescript/types@npm:~8.6.1":
-  version: 8.6.1
-  resolution: "@nativescript/types@npm:8.6.1"
+"@nativescript/types@npm:8.9.1":
+  version: 8.9.1
+  resolution: "@nativescript/types@npm:8.9.1"
   dependencies:
-    "@nativescript/types-android": "npm:~8.6.0"
-    "@nativescript/types-ios": "npm:~8.6.0"
-  checksum: 10/1084ae7093968697a44a4c35873f096beb04301f8a7cfee886f37cd628bc12a22b6a41979f7dec6af4fb71f4291a03eeb3b75988544cb349af9d786f69bb75ef
-  languageName: node
-  linkType: hard
-
-"@nativescript/webpack@npm:5.0.18":
-  version: 5.0.18
-  resolution: "@nativescript/webpack@npm:5.0.18"
-  dependencies:
-    "@babel/core": "npm:^7.0.0"
-    "@pmmmwh/react-refresh-webpack-plugin": "npm:~0.5.7"
-    acorn: "npm:^8.0.0"
-    acorn-stage3: "npm:^4.0.0"
-    ansi-colors: "npm:^4.1.3"
-    babel-loader: "npm:^8.0.0"
-    cli-highlight: "npm:^2.0.0"
-    commander: "npm:^8.0.0"
-    copy-webpack-plugin: "npm:^9.0.0"
-    css: "npm:^3.0.0"
-    css-loader: "npm:^6.0.0"
-    dotenv-webpack: "npm:^7.0.0"
-    fork-ts-checker-webpack-plugin: "npm:^7.0.0"
-    loader-utils: "npm:^2.0.0 || ^3.0.0"
-    lodash.get: "npm:^4.0.0"
-    micromatch: "npm:^4.0.0"
-    postcss: "npm:^8.0.0"
-    postcss-import: "npm:^14.0.0"
-    postcss-loader: "npm:^7.0.0"
-    raw-loader: "npm:^4.0.0"
-    react-refresh: "npm:~0.14.0"
-    sass: "npm:^1.0.0"
-    sass-loader: "npm:^13.0.0"
-    sax: "npm:^1.0.0"
-    source-map: "npm:^0.7.0"
-    terser-webpack-plugin: "npm:^5.0.0"
-    ts-dedent: "npm:^2.0.0"
-    ts-loader: "npm:^9.0.0"
-    vue-loader: "npm:^15.0.0 <= 15.9.8"
-    webpack: "npm:^5.30.0 <= 5.50.0 || ^5.51.2"
-    webpack-bundle-analyzer: "npm:^4.0.0"
-    webpack-chain: "npm:^6.0.0"
-    webpack-cli: "npm:^4.0.0"
-    webpack-merge: "npm:^5.0.0"
-    webpack-virtual-modules: "npm:^0.4.0"
-  peerDependencies:
-    nativescript-vue-template-compiler: ^2.8.1
-  peerDependenciesMeta:
-    nativescript-vue-template-compiler:
-      optional: true
-  bin:
-    nativescript-webpack: dist/bin/index.js
-  checksum: 10/11d367dafb4c80da05444a590a71554207e55086dfb863367c48f69e5cbd4cb0ede6232ee59f792db53869a0248471715d7a8a113d2ff0c5f11698619062f4d1
+    "@nativescript/types-android": "npm:~8.9.0"
+    "@nativescript/types-ios": "npm:~8.9.0"
+  checksum: 10/cad6dbb69ffbf544df0a865b34647494e7b44f66ddd8d880f934d576272170f083f6380fb0038104a64b43b558476d1345926e062fbed2926d2cf72c5a2c5188
   languageName: node
   linkType: hard
 
@@ -3495,13 +3415,6 @@ __metadata:
   dependencies:
     undici-types: "npm:~6.21.0"
   checksum: 10/a0e8632a3eeeed3986f3b0b170187f67c0f0bb0d4fbbf9627af5c9bf81e2836bb64aa6f3bdab1c00658cb7911d8c231d7d6db853ae643edcd41f383c86f349e6
-  languageName: node
-  linkType: hard
-
-"@types/node@npm:~18.11.19":
-  version: 18.11.19
-  resolution: "@types/node@npm:18.11.19"
-  checksum: 10/07e946d7573e66db30bdc9bac012cf4db4eac94a1ecdb1aafb59d3acd3f31c9518303ae310f363da932419fba307614f53dcddb6b0bdfbb189e6c0b8f68a5f63
   languageName: node
   linkType: hard
 
@@ -11262,7 +11175,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nativescript-vue-template-compiler@npm:~2.9.3":
+"nativescript-vue-template-compiler@npm:2.9.3":
   version: 2.9.3
   resolution: "nativescript-vue-template-compiler@npm:2.9.3"
   dependencies:
@@ -11287,7 +11200,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nativescript-vue@npm:2.9.3, nativescript-vue@npm:~2.9.3":
+"nativescript-vue@npm:2.9.3":
   version: 2.9.3
   resolution: "nativescript-vue@npm:2.9.3"
   checksum: 10/bcb09adaa7d8757bb7933b9926c9a20b4df68472c84be825d99d698a227ecc54a8e7867f4b8feb37022e66612f9d98c9f5ce97bc1b78f4149e5e3b0c0345666c
@@ -13072,7 +12985,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"reduce-css-calc@npm:^2.1.7":
+"reduce-css-calc@npm:^2.1.8":
   version: 2.1.8
   resolution: "reduce-css-calc@npm:2.1.8"
   dependencies:
@@ -15014,7 +14927,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:2.8.1":
+"tslib@npm:2.8.1, tslib@npm:^2.6.3":
   version: 2.8.1
   resolution: "tslib@npm:2.8.1"
   checksum: 10/3e2e043d5c2316461cb54e5c7fe02c30ef6dccb3384717ca22ae5c6b5bc95232a6241df19c622d9c73b809bea33b187f6dbc73030963e29950c2141bc32a79f7
@@ -15312,16 +15225,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:5.3.3":
-  version: 5.3.3
-  resolution: "typescript@npm:5.3.3"
-  bin:
-    tsc: bin/tsc
-    tsserver: bin/tsserver
-  checksum: 10/6e4e6a14a50c222b3d14d4ea2f729e79f972fa536ac1522b91202a9a65af3605c2928c4a790a4a50aa13694d461c479ba92cedaeb1e7b190aadaa4e4b96b8e18
-  languageName: node
-  linkType: hard
-
 "typescript@npm:5.8.3":
   version: 5.8.3
   resolution: "typescript@npm:5.8.3"
@@ -15329,6 +15232,16 @@ __metadata:
     tsc: bin/tsc
     tsserver: bin/tsserver
   checksum: 10/65c40944c51b513b0172c6710ee62e951b70af6f75d5a5da745cb7fab132c09ae27ffdf7838996e3ed603bb015dadd099006658046941bd0ba30340cc563ae92
+  languageName: node
+  linkType: hard
+
+"typescript@npm:5.9.3":
+  version: 5.9.3
+  resolution: "typescript@npm:5.9.3"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: 10/c089d9d3da2729fd4ac517f9b0e0485914c4b3c26f80dc0cffcb5de1719a17951e92425d55db59515c1a7ddab65808466debb864d0d56dcf43f27007d0709594
   languageName: node
   linkType: hard
 
@@ -15342,16 +15255,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>":
-  version: 5.3.3
-  resolution: "typescript@patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"
-  bin:
-    tsc: bin/tsc
-    tsserver: bin/tsserver
-  checksum: 10/c93786fcc9a70718ba1e3819bab56064ead5817004d1b8186f8ca66165f3a2d0100fee91fa64c840dcd45f994ca5d615d8e1f566d39a7470fc1e014dbb4cf15d
-  languageName: node
-  linkType: hard
-
 "typescript@patch:typescript@npm%3A5.8.3#optional!builtin<compat/typescript>":
   version: 5.8.3
   resolution: "typescript@patch:typescript@npm%3A5.8.3#optional!builtin<compat/typescript>::version=5.8.3&hash=5786d5"
@@ -15359,6 +15262,16 @@ __metadata:
     tsc: bin/tsc
     tsserver: bin/tsserver
   checksum: 10/b9b1e73dabac5dc730c041325dbd9c99467c1b0d239f1b74ec3b90d831384af3e2ba973946232df670519147eb51a2c20f6f96163cea2b359f03de1e2091cc4f
+  languageName: node
+  linkType: hard
+
+"typescript@patch:typescript@npm%3A5.9.3#optional!builtin<compat/typescript>":
+  version: 5.9.3
+  resolution: "typescript@patch:typescript@npm%3A5.9.3#optional!builtin<compat/typescript>::version=5.9.3&hash=5786d5"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: 10/696e1b017bc2635f4e0c94eb4435357701008e2f272f553d06e35b494b8ddc60aa221145e286c28ace0c89ee32827a28c2040e3a69bdc108b1a5dc8fb40b72e3
   languageName: node
   linkType: hard
 
@@ -15771,7 +15684,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vue@npm:2.7.16, vue@npm:^2.7.16":
+"vue@npm:2.7.16":
   version: 2.7.16
   resolution: "vue@npm:2.7.16"
   dependencies:

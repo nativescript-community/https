@@ -1,1 +1,24 @@
 pod 'AFNetworking',  :git => 'https://github.com/nativescript-community/AFNetworking'
+
+post_install do |installer|
+  # Remove private netinet6/in6.h header (conflicts in iPhoneSimulator SDK >= 26.4s).
+  # netinet/in.h already covers the needed IPv6 definitions.
+  reachability_m = File.join(File.dirname(__FILE__), 'Pods', 'AFNetworking/AFNetworking', 'AFNetworkReachabilityManager.m')
+  puts "[post_install] Patching #{reachability_m} — exists: #{File.exist?(reachability_m)}"
+  if File.exist?(reachability_m)
+    File.chmod(0644, reachability_m)
+    content = File.read(reachability_m)
+    patched = content.gsub("#import <netinet6/in6.h>\n", "")
+    File.write(reachability_m, patched)
+    puts "[post_install] Patch applied: #{!patched.include?('netinet6')}"
+  end
+  sessionManager_m = File.join(File.dirname(__FILE__), 'Pods', 'AFNetworking/AFNetworking', 'AFHTTPSessionManager.m')
+  puts "[post_install] Patching #{sessionManager_m} — exists: #{File.exist?(sessionManager_m)}"
+  if File.exist?(sessionManager_m)
+    File.chmod(0644, sessionManager_m)
+    content = File.read(sessionManager_m)
+    patched = content.gsub("#import <netinet6/in6.h>\n", "")
+    File.write(sessionManager_m, patched)
+    puts "[post_install] Patch applied: #{!patched.include?('netinet6')}"
+  end
+end

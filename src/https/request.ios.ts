@@ -534,7 +534,6 @@ export function createRequest(opts: HttpsRequestOptions): HttpsRequest {
         },
         cancel: () => {
             const rid = runningRequests[tag];
-            console.log('cancel', tag, rid);
             if (rid) {
                 manager.cancelRequest(rid);
             }
@@ -543,7 +542,6 @@ export function createRequest(opts: HttpsRequestOptions): HttpsRequest {
             const success = function (response: NSHTTPURLResponse, data?: any) {
                 clearRunningRequest();
                 const contentLength = response?.expectedContentLength ?? 0;
-                console.log('run done', contentLength);
                 const content = new HttpsResponseLegacy(data, contentLength, opts.url);
                 let getHeaders = () => ({});
                 const sendi = {
@@ -591,9 +589,7 @@ export function createRequest(opts: HttpsRequestOptions): HttpsRequest {
                             NSNumber.numberWithBool(opts.responseOnMainThread) as any as NSNumber,
                             NSNumber.numberWithBool(opts.progressOnMainThread) as any as NSNumber,
                             (formData) => {
-                                    console.log('formData1', opts.body);
                                 (opts.body as HttpsFormDataParam[]).forEach((param) => {
-                                    console.log('formData', param.fileName, param.contentType, param.data);
                                     if (param.fileName && param.contentType) {
                                         if (param.data instanceof NSURL) {
                                             formData.appendPartWithFileURLNameFileNameMimeTypeError(param.data, param.parameterName, param.fileName, param.contentType);
@@ -608,7 +604,7 @@ export function createRequest(opts: HttpsRequestOptions): HttpsRequest {
                                                 data = NSData.dataWithData(buffer as any);
                                             } else if (data instanceof Blob) {
                                                 // Stolen from core xhr, not sure if we should use InternalAccessor, but it provides fast access.
-                                                // @ts-ignore
+                                                // @ts-expect-error missing InternalAccessor typings
                                                 const buffer = new Uint8Array(Blob.InternalAccessor.getBuffer(data).buffer.slice(0) as ArrayBuffer);
                                                 data = NSData.dataWithData(buffer as any);
                                             }

@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.0](https://github.com/nativescript-community/https/compare/v4.1.34...v5.0.0) (2026-06-05)
+
+### Features
+
+* **https:** iOS migration to Alamofire ([242f230](https://github.com/nativescript-community/https/commit/242f23010a7082a2427c42543f615f8623172d0e))
+
 ## [4.1.34](https://github.com/nativescript-community/https/compare/v4.1.33...v4.1.34) (2026-06-05)
 
 ### Bug Fixes

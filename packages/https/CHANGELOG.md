@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.34](https://github.com/nativescript-community/https/compare/v4.1.33...v4.1.34) (2026-06-05)
+
+### Bug Fixes
+
+* **ios:** netinet6 header conflict on sdk >= 26.4 ([c28fd8e](https://github.com/nativescript-community/https/commit/c28fd8e0b04c2707fa2c6a25a1f52c02df5a09b5))
+
 ## [4.1.33](https://github.com/nativescript-community/https/compare/v4.1.32...v4.1.33) (2026-06-04)
 
 ### Bug Fixes

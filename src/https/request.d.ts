@@ -32,7 +32,7 @@ export interface Headers {
     [k: string]: string;
 }
 
-export type CachePolicy = 'noCache' | 'onlyCache' | 'ignoreCache';
+export type CachePolicy = 'noCache' | 'offlineCache' | 'onlyCache' | 'ignoreCache';
 export interface HttpsRequestOptions extends HttpRequestOptions {
     url: string;
     tag?: string; // optional request tag to allow to cancel it
@@ -68,6 +68,7 @@ export interface HttpsRequestOptions extends HttpRequestOptions {
     progressOnMainThread?: boolean;
 
     cachePolicy?: CachePolicy;
+    nativeCachePolicy?: any;
 
     /**
      * default to true. Android and iOS only store cookies in memory! it will be cleared after an app restart

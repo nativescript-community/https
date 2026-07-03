@@ -496,11 +496,16 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
             case 'onlyCache':
                 cacheControlBuilder = cacheControlBuilder.onlyIfCached();
                 break;
+            case 'offlineCache':
+                cacheControlBuilder = cacheControlBuilder.onlyIfCached().maxStale(Number.MAX_VALUE, java.util.concurrent.TimeUnit.SECONDS);
+                break;
             case 'ignoreCache':
                 cacheControlBuilder = cacheControlBuilder.noCache();
                 break;
         }
         request.cacheControl(cacheControlBuilder.build());
+    } else if (opts.nativeCachePolicy) {
+        request.cacheControl(opts.nativeCachePolicy);
     }
 
     // const methods = {

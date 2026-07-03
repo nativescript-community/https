@@ -1,6 +1,6 @@
 import { File, ImageSource, Utils } from '@nativescript/core';
 import { CacheOptions, HttpsFormDataParam, HttpsRequest, HttpsRequestOptions, HttpsResponse, HttpsSSLPinningOptions, HttpsResponseLegacy as IHttpsResponseLegacy } from '.';
-import { getFilenameFromUrl, HttpResponseEncoding, parseJSON } from './request.common';
+import { HttpResponseEncoding, getFilenameFromUrl, parseJSON } from './request.common';
 export { HttpResponseEncoding, addInterceptor, addNetworkInterceptor } from './request.common';
 
 let cache: NSURLCache;
@@ -388,6 +388,7 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
             case 'noCache':
                 manager.setDataTaskWillCacheResponseBlock((session, task, cacheResponse) => null);
                 break;
+            case 'offlineCache':
             case 'onlyCache':
                 manager.requestSerializer.cachePolicy = NSURLRequestCachePolicy.ReturnCacheDataDontLoad;
                 break;
@@ -395,6 +396,8 @@ export function createRequest(opts: HttpsRequestOptions, useLegacy: boolean = tr
                 manager.requestSerializer.cachePolicy = NSURLRequestCachePolicy.ReloadIgnoringLocalCacheData;
                 break;
         }
+    } else if (opts.nativeCachePolicy) {
+        manager.requestSerializer.cachePolicy = opts.nativeCachePolicy;
     } else {
         manager.requestSerializer.cachePolicy = NSURLRequestCachePolicy.UseProtocolCachePolicy;
     }

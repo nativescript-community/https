@@ -1,5 +1,6 @@
 {
     "uses": [
+        "dev.lysine.okhttp:ForbiddenCertificatesHostnameVerifier",
         "android.os:StrictMode",
         "android.os:StrictMode.ThreadPolicy",
         "okhttp3:Call",

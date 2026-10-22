@@ -307,7 +307,9 @@ export function getClient(opts: Partial<HttpsRequestOptions> = {}, reload: boole
         }
     }
     const builder = new okhttp3.OkHttpClient.Builder();
-
+    // to mitigate CVE-2026-111943 https://publicobject.com/2026/10/20/mitigating-bad-roots-in-okhttp/
+    // @ts-expect-error missing typings for dev.lysine.okhttp
+    builder.hostnameVerifier(new dev.lysine.okhttp.ForbiddenCertificatesHostnameVerifier());
     _cookiesEnabled = cookiesEnabled;
     if (cookiesEnabled) {
         if (!cookieJar) {

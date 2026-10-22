@@ -493,6 +493,7 @@ export function createRequest(opts: HttpsRequestOptions): HttpsRequest {
                 manager.setDataTaskWillCacheResponseBlock((session, task, cacheResponse) => null);
                 manager.requestSerializerWrapper.cachePolicy = NSURLRequestCachePolicy.ReloadIgnoringLocalCacheData;
                 break;
+            case 'offlineCache':
             case 'onlyCache':
                 manager.requestSerializerWrapper.cachePolicy = NSURLRequestCachePolicy.ReturnCacheDataDontLoad;
                 break;
@@ -500,6 +501,8 @@ export function createRequest(opts: HttpsRequestOptions): HttpsRequest {
                 manager.requestSerializerWrapper.cachePolicy = NSURLRequestCachePolicy.ReloadIgnoringLocalCacheData;
                 break;
         }
+    } else if (opts.nativeCachePolicy) {
+        manager.requestSerializerWrapper.cachePolicy = opts.nativeCachePolicy;
     } else {
         manager.requestSerializerWrapper.cachePolicy = NSURLRequestCachePolicy.UseProtocolCachePolicy;
     }

@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.36](https://github.com/nativescript-community/https/compare/v4.1.35...v4.1.36) (2026-10-22)
+
+### Bug Fixes
+
+* android fix for CVE-2026-111943 ([b1e9b23](https://github.com/nativescript-community/https/commit/b1e9b234e2cf4fa0df3c25922cd452b022bb7497))
+
 ## [4.1.35](https://github.com/nativescript-community/https/compare/v4.1.34...v4.1.35) (2026-07-03)
 
 ### Features

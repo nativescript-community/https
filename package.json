@@ -3,7 +3,7 @@
     "description": "Nativescript plugin for https requests",
     "scripts": {
         "tsc": "cp src/index.d.ts src/request.d.ts plugin && tsc -skipLibCheck -d",
-        "clean": "rimraf -g 'packages/**/*.d.ts' 'packages/**/*.tsbuildinfo' 'packages/**/*.js' 'packages/**/*.mjs' 'packages/**/*.js.map' 'packages/**/*.mjs.map' 'packages/**/*.metada' 'packages/**/angular/ng-package.json'",
+        "clean": "rimraf -g 'packages/**/*.d.ts' 'packages/**/*.tsbuildinfo' 'packages/*/*.js' 'packages/*/!(platforms)/**/*.js' 'packages/**/*.mjs' 'packages/**/*.js.map' 'packages/**/*.mjs.map' 'packages/**/*.metada' 'packages/**/angular/ng-package.json'",
         "build.plugin": " cp README.md plugin/ && rm -f .tsbuildinfo && npm run tsc",
         "build.android": "bash src-native/android/build.sh",
         "build.ios": "bash src-native/ios/build.sh",
@@ -20,7 +20,7 @@
         "publish.major": "npm run build && lerna publish major --create-release=github --force-publish",
         "sync": "node ./tools/sync.mjs",
         "commitmsg": "commitlint -e $GIT_PARAMS",
-        "build.all": "lerna run build.all",
+        "build.all": "npm run build.native --if-present && lerna run build.all",
         "fullclean": "npm run clean && rimraf -g 'packages/**/node_modules' 'demo-*/hooks' 'demo-*/node_modules' 'package-lock.json' 'pnpm-lock.yaml' 'node_modules'",
         "demo.vue.android": "cd ./demo-vue && ns run android --no-hmr --env.watchNodeModules",
         "demo.vue.clean": "cd ./demo-vue && ns clean",
@@ -32,7 +32,7 @@
         "start": "./node_modules/.bin/ntl -A -s 15 -o",
         "submodules": "git submodule update --init",
         "update": "node ./tools/update.js",
-        "commit_readme_doc_changes": "git add docs/** *.md ; git commit -m \"readme/doc\" ; echo \"commit readme doc done\""
+        "commit_readme_doc_changes": "git add docs *.md ; git commit -m \"readme/doc\" ; echo \"commit readme doc done\""
     },
     "keywords": [
         "secure",
